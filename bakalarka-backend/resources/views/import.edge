@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Import</title>
+</head>
+<body>
+    <form action="/api/import/Attendance" method="POST"  enctype="multipart/form-data">
+        {{ csrfField() }}
+        <input type="file" name="xlsxFile">
+        <input type="submit" value="Odoslať">
+    </form>
+</body>
+</html>
