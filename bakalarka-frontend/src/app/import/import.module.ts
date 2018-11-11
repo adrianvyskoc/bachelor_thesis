@@ -1,7 +1,8 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ImportComponent } from './import.component';
+import { DataTablesComponent } from './data-tables/data-tables.component';
 
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { 
   MatInputModule, 
   MatPaginatorModule, 
@@ -16,21 +17,11 @@ import {
   MatDividerModule,
   MatCheckboxModule,
 } from "@angular/material";
-
-
-import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { ImportRoutingModule } from './import-routing.module';
 import { FormsModule } from '@angular/forms';
-import { CoreModule } from './core/core.module';
-import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
   imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
     MatInputModule,
     MatTableModule,
     MatPaginatorModule,
@@ -44,12 +35,13 @@ import { AppRoutingModule } from './app-routing.module';
     MatCheckboxModule,
     MatProgressSpinnerModule,
 
-    HttpClientModule,
+    CommonModule,
     FormsModule,
-    CoreModule,
-    AppRoutingModule
+    ImportRoutingModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  declarations: [
+    ImportComponent,
+    DataTablesComponent
+  ]
 })
-export class AppModule { }
+export class ImportModule { }

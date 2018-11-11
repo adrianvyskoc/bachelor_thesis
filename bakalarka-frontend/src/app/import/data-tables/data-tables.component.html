@@ -4,6 +4,11 @@
       Niekde nastala chyba!
     </div>
     <mat-spinner *ngIf="dataService.loading"></mat-spinner>
+
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+
     <table mat-table [dataSource]="attendance" matSort *ngIf="!dataService.loading">
       
         <ng-container matColumnDef="AIS_ID">
@@ -54,7 +59,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedAttendanceColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedAttendanceColumns;"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons *ngIf="!dataService.loading"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons *ngIf="!dataService.loading" #attPaginator></mat-paginator>
   </mat-tab>
   <mat-tab label="Študijné výsledky"> 
     <mat-spinner *ngIf="dataService.loading"></mat-spinner>
@@ -103,19 +108,12 @@
       <tr mat-header-row *matHeaderRowDef="displayedGradesColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedGradesColumns;"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons *ngIf="!dataService.loading"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons *ngIf="!dataService.loading" #grdPaginator></mat-paginator>
   </mat-tab>
   <mat-tab label="Študenti">
     <mat-spinner *ngIf="dataService.loading"></mat-spinner>
     <table mat-table [dataSource]="students" *ngIf="!dataService.loading">
       
-      <!--<ng-container 
-        ngFor="let student of students; i = index"
-        matColumnDef="{{ displayedStudentsColumns[i] }}">
-        <th mat-header-cell *matHeaderCellDef> {{ displayedStudentsColumns[i] }} </th>
-        <td mat-cell *matCellDef="let element"> {{ element[displayedStudentsColumns[i]] }} </td>
-      </ng-container>-->
-
       <ng-container matColumnDef="AIS_ID">
         <th mat-header-cell *matHeaderCellDef> AIS_ID </th>
         <td mat-cell *matCellDef="let element"> {{element.AIS_ID}} </td>
@@ -144,6 +142,6 @@
       <tr mat-header-row *matHeaderRowDef="displayedStudentsColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedStudentsColumns;"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons *ngIf="!dataService.loading"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons *ngIf="!dataService.loading" #stdPaginator></mat-paginator>
   </mat-tab>
 </mat-tab-group>

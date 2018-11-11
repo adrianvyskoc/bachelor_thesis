@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { DataService } from '../data.service';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { DataService } from 'src/app/data.service';
 
 export interface AttendanceElement {
   AIS_ID: number;
@@ -40,7 +40,6 @@ export interface GradeElement {
   styleUrls: ['./data-tables.component.css']
 })
 export class DataTablesComponent implements OnInit, OnDestroy {
-  @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   attendanceSubscription: Subscription;
@@ -48,14 +47,17 @@ export class DataTablesComponent implements OnInit, OnDestroy {
   gradesSubscription: Subscription;
 
   // Attendance table
+  @ViewChild('attPaginator') attendancePaginator: MatPaginator;
   displayedAttendanceColumns: string[] = ['AIS_ID', 'KOD', 'OBDOBIE', 'PORADI', 'PREDMET', 'ROZVRHOVA_AKCIA', 'ROZVRHOVA_AKCIA_ID', 'UCAST', 'UCAST_ID'];
   attendance;
 
   // Students table
+  @ViewChild('stdPaginator') studentsPaginator: MatPaginator;
   displayedStudentsColumns: string[] = ['AIS_ID', 'MENO', 'PRIEZVISKO', 'STUDIUM', 'ROCNIK'];
   students;
 
   // Grades table
+  @ViewChild('grdPaginator') gradesPaginator: MatPaginator;
   displayedGradesColumns: string[] = ['AIS_ID', 'RCS', 'KOD', 'PREDMET', 'ZAP_VYSLEDOK', 'PREDMET_VYSLEDOK', 'POCET_ZAPISOV', 'KREDITY'];
   grades;
 
@@ -70,7 +72,7 @@ export class DataTablesComponent implements OnInit, OnDestroy {
       .subscribe(
         (data: AttendanceElement[]) => {
           this.attendance = new MatTableDataSource<AttendanceElement>(data);
-          this.attendance.paginator = this.paginator;
+          this.attendance.paginator = this.attendancePaginator;
           this.attendance.sort = this.sort;
         }
       );
@@ -79,7 +81,7 @@ export class DataTablesComponent implements OnInit, OnDestroy {
       .subscribe(
         (data: GradeElement[]) => {
           this.grades = new MatTableDataSource<GradeElement>(data);
-          this.grades.paginator = this.paginator;
+          this.grades.paginator = this.gradesPaginator;
           this.grades.sort = this.sort;
         }
       );
@@ -88,10 +90,15 @@ export class DataTablesComponent implements OnInit, OnDestroy {
         .subscribe(
           (data: StudentElement[]) => {
             this.students = new MatTableDataSource<StudentElement>(data);
-            this.students.paginator = this.paginator;
+            this.students.paginator = this.studentsPaginator;
             this.students.sort = this.sort;
           }
         );
+  }
+
+  applyFilter(filterValue: string) {
+    console.log(filterValue)
+    this.attendance.filter = filterValue.trim().toLowerCase();
   }
 
   ngOnDestroy() {

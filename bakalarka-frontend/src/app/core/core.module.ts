@@ -13,9 +13,8 @@ import {
   ],
   imports: [
     MatToolbarModule,
-
+    
     CommonModule,
-
   ],
   exports: [
     HeaderComponent

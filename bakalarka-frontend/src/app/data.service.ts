@@ -54,11 +54,11 @@ export class DataService {
     return this.gradesChanged.asObservable();
   }
 
-  async uploadData(selectedFile, selectedImport) {
+  async uploadData(selectedFile, selectedImport, selectedAction) {
     const fd = new FormData();
     fd.append(selectedImport, selectedFile, selectedFile.name);
 
-    await this.http.post('http://localhost:3333/api/import/' + selectedImport, fd)
+    await this.http.post('http://localhost:3333/api/import/' + selectedImport + '/' + selectedAction, fd)
       .subscribe(
         res => {
           console.log(res);
@@ -71,15 +71,5 @@ export class DataService {
           this.showErrorMessage = true;
         }
       )
-  }
-
-  test () {
-    console.log("lol");
-    this.http.get("http://localhost:3333/api/test")
-      .subscribe(
-        (res) => {
-          console.log(res);
-        }
-      );
   }
 }

@@ -25,10 +25,13 @@ Route
         Route.get('test', 'ImportController.read')
 
         // imports
-        Route.post('import/:selectedImport', 'ImportController.import')
+        Route.post('import/:selectedImport/:selectedAction', 'ImportController.import')
 
         Route.get('getStudents', 'GetController.getStudents')
         Route.get('getAttendance', 'GetController.getAttendance')
         Route.get('getGrades', 'GetController.getGrades')
+
+        Route.get('codebook/getAttendanceTypes', 'GetController.getAttendanceTypes')
+        Route.post('codebook/attendanceType', 'SettingController.createAttendanceType')
     })
     .prefix('/api')

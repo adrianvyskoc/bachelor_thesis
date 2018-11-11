@@ -2,6 +2,7 @@
 
 const Student = use('App/Models/Student')
 const Attendance = use('App/Models/Attendance')
+const AttendanceType = use('App/Models/AttendanceType')
 const Grade = use('App/Models/Grade')
 
 
@@ -22,6 +23,12 @@ class GetController {
         const grades = await Grade.all()
 
         return response.send(grades)
+    }
+
+    async getAttendanceTypes ({ response }) {
+        const attendanceTypes = await AttendanceType.all()
+
+        return response.send(attendanceTypes)
     }
 }
 

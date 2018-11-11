@@ -1,0 +1,44 @@
+.ng-hide {
+    display: none;
+}
+
+.file-input {
+    margin-bottom: 20px;
+}
+
+.file-input span {
+    margin-left: 1rem;
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+}
+
+section {
+    padding: 20px 0;
+}
+
+.float-right {
+    float: right;
+}
+
+mat-sidenav {
+    width: 250px;
+    padding: 10px;
+    background-color: #fafafa;
+}
+
+mat-sidenav-content {
+    padding: 20px;
+    background-color: white;
+}
+
+mat-radio-group {
+    display: block;
+    margin-bottom: 20px;
+}
+
+mat-radio-button {
+    margin-right: 20px;
+}
+
+.jumbotron {
+    margin: 0;
+}

@@ -1,0 +1,37 @@
+<h1 class="display-4">Nastavenie číselníkov</h1>
+
+<h3>Dochádzka <button mat-raised-button color="primary" (click)="newAttendanceType = !newAttendanceType">Nový typ dochádzky</button></h3>
+
+<form (ngSubmit)="onAttendanceTypeAdd(attendance)" #attendance="ngForm">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Názov</th>
+        <th scope="col">Dátum vytvorenia</th>
+        <th scope="col">Akcie</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of attendanceTypes">
+        <th scope="row">{{ item.id }}</th>
+        <td>{{ item.name }}</td>
+        <td>{{ item.created_at }}</td>
+      </tr>
+      
+      <tr *ngIf="newAttendanceType">
+        <th>
+          <input type="text" name="id" ngModel>
+        </th>
+        <td>
+          <input type="text" name="name" ngModel>
+        </td>
+        <td>
+        </td>
+        <td>
+          <button type="submit" mat-button color="primary">Uložiť</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>
