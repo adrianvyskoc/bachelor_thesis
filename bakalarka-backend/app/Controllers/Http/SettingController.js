@@ -1,20 +1,37 @@
 'use strict'
 
+const HighSchoolType = use('App/Models/HighSchoolType')
 const AttendanceType = use('App/Models/AttendanceType')
+const StudyForm = use('App/Models/StudyForm')
 
 class SettingController {
-    async createAttendanceType ({ request }) {
+    async createCodebookRecord ({ request, params }) {
         const data = await request.all()
 
-        console.log(data);
+        var record 
+        switch (params.type) {
+            case 'attendanceTypes':
+                record = new AttendanceType()
+                break
+        
+            case 'studyForms':
+                record  = new StudyForm()
+                break
 
-        const attendanceType = new AttendanceType()
-        attendanceType.id = data.id
-        attendanceType.name = data.name
-        attendanceType.created_at = new Date()
-        attendanceType.updated_at = new Date()
+            case 'highSchoolTypes':
+                record = new HighSchoolType()
+                break
 
-        try { await attendanceType.save() }
+            default:
+                break
+        }
+
+        record.id = data.id
+        record.name = data.name
+        record.created_at = new Date()
+        record.updated_at = new Date()
+
+        try { await record.save() }
         catch(err) {
             console.log(err)
         }

@@ -8,25 +8,24 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit {
-  attendanceTypes = [];
-
-  newAttendanceType = false;
+  attendanceTypes = []
+  newAttendanceType = false
 
   constructor(private settingsService: SettingsService) { }
 
   ngOnInit() {
-    this.settingsService.getCodebookData('AttendanceTypes')
+    this.settingsService.getCodebookData('attendanceTypes')
+    this.settingsService.getAttendanceTypesUpdateListener()
       .subscribe(
-        (attendanceTypes: []) => {
-          console.log(attendanceTypes);
-          this.attendanceTypes = attendanceTypes;
+        (attendanceTypes:any[]) => {
+          this.attendanceTypes = attendanceTypes
         }
-      );
+      )      
   }
 
   onAttendanceTypeAdd(form: NgForm) {
-    console.log(form);
-    this.settingsService.createAttendanceType(form.value);
+    this.settingsService.createAttendanceType('attendanceTypes', form.value)
+    this.newAttendanceType = false
   }
 
 }

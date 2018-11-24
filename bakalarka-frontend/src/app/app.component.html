@@ -1,6 +1,7 @@
 <app-header></app-header>
-<mat-sidenav-container>
-  <mat-sidenav mode="side" opened>
+<mat-sidenav-container full-height>
+  
+  <mat-sidenav mode="side" opened padding>
     <nav>
       <h6>Číselníky</h6>
 
@@ -10,7 +11,9 @@
       </ul>
     </nav>
   </mat-sidenav>
-  <mat-sidenav-content>
-      <router-outlet></router-outlet>
+
+  <mat-sidenav-content padding>
+    <router-outlet></router-outlet>
   </mat-sidenav-content>
+
 </mat-sidenav-container>

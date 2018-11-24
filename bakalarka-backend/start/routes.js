@@ -26,12 +26,13 @@ Route
 
         // imports
         Route.post('import/:selectedImport/:selectedAction', 'ImportController.import')
+        Route.post('codebook/:type', 'SettingController.createCodebookRecord')
 
+        // api endpoints
         Route.get('getStudents', 'GetController.getStudents')
         Route.get('getAttendance', 'GetController.getAttendance')
         Route.get('getGrades', 'GetController.getGrades')
-
-        Route.get('codebook/getAttendanceTypes', 'GetController.getAttendanceTypes')
-        Route.post('codebook/attendanceType', 'SettingController.createAttendanceType')
+        Route.get('getSubjects', 'GetController.getSubjects')
+        Route.get('codebook/:type', 'GetController.getCodebook')
     })
     .prefix('/api')

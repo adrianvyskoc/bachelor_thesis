@@ -3,7 +3,10 @@
 const Student = use('App/Models/Student')
 const Attendance = use('App/Models/Attendance')
 const AttendanceType = use('App/Models/AttendanceType')
+const StudyForm = use('App/Models/StudyForm')
+const HighSchoolType = use('App/Models/HighSchoolType')
 const Grade = use('App/Models/Grade')
+const Subject = use('App/Models/Subject')
 
 
 class GetController {
@@ -25,10 +28,32 @@ class GetController {
         return response.send(grades)
     }
 
-    async getAttendanceTypes ({ response }) {
-        const attendanceTypes = await AttendanceType.all()
+    async getSubjects({ response }) {
+        const subjects = await Subject.all()
 
-        return response.send(attendanceTypes)
+        return response.send(subjects)
+    }
+
+    async getCodebook ({ response, params }) {
+        var codebook
+        switch (params.type) {
+            case 'attendanceTypes':
+                codebook = await AttendanceType.all()
+                break
+
+            case 'studyForms':
+                codebook = await StudyForm.all()
+                break
+
+            case 'highSchoolTypes':
+                codebook = await HighSchoolType.all()
+                break
+        
+            default:
+                break
+        }
+
+        return response.send(codebook)
     }
 }
 

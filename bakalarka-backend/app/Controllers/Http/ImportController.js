@@ -17,16 +17,28 @@ const Admission = use('App/Models/Admission')
 class ImportController {
 
     async read ({ request, response }) {
-        var workbook = new Excel.Workbook();
-        await workbook.xlsx.readFile("/Users/adrianvyskoc/Desktop/datasety/zoznam_skol.xlsx")
+        const config = {
+            sheetRows: 11,
+            type: "string",
+            cellFormula: false,		// formula format
+            cellHTML: false,		// html format
+            cellText: false			// formatted text format
+        }
+
+
+        const workbook = xlsx.readFile(`tmp/uploads/scenar_komisii.xlsx`, config)
+        const sheet_name_list = workbook.SheetNames
+        const rows = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
+        
+        return response.send(rows)
     }
 
-    async import ({ request, response, params }) {
+    async import ({ request, params }) {
         const config = {
             //sheetRows: 11,
             type: "string",
             cellFormula: false,		// formula format
-            cellHTML: false,		// html format
+            cellHTML: false,		// html formats
             cellText: false			// formatted text format
         }
 
@@ -43,6 +55,7 @@ class ImportController {
         const workbook = xlsx.readFile(`tmp/uploads/${params.selectedImport}.xlsx`, config)
         const sheet_name_list = workbook.SheetNames
         const rows = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
+
         // delete old data
         if(params.selectedAction == "delete") {
             switch(params.selectedImport) {
@@ -54,8 +67,14 @@ class ImportController {
                     break
             }
         }
+
         
-        // import rows
+        /*
+         *  import rows start ------------------------------------------------------------------------------------------
+         */
+
+        // ATTENDANCES IMPORT
+
         if(params.selectedImport == 'Attendance') {
             for (let row of rows) {
                 const { STUDENT, STUDIUM, ...attendanceRow } = row
@@ -84,6 +103,9 @@ class ImportController {
                 attendance.updated_at = null
                 await attendance.save()
             } 
+
+        // GRADES IMPORT
+
         } else if (params.selectedImport == 'Grades') {
             for (let row of rows) {
                 const { PRIEZVISKO, MENO, STUDIUM, ROCNIK, ...gradeRow } = row
@@ -114,6 +136,9 @@ class ImportController {
                 grade.updated_at = null
                 await grade.save()
             } 
+
+        // SCHOOLS IMPORT
+        
         } else if (params.selectedImport == 'Schools') {
             for (let row of rows) {
                 for (const prop of Object.keys(row)) {
@@ -128,8 +153,10 @@ class ImportController {
                     await school.save()
                 } catch(err) {}
             } 
+
+        // ADMISSIONS IMPORT
+
         } else if (params.selectedImport == 'Admissions') {
-            //return response.send(rows)
             for (let row of rows) {
                 row = adjustKeys(row);
 
@@ -140,8 +167,14 @@ class ImportController {
                 try {
                     await admission.save()
                 } catch(err) {}
+
+                await saveRecord(row)
             } 
         }
+
+        /*
+         *  import rows end ------------------------------------------------------------------------------------------
+         */
 
         // delete uploaded xlsx file
         deleteFile(Helpers.tmpPath('uploads'), params.selectedImport);

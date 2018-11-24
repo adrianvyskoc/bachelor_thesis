@@ -10,18 +10,27 @@ export class SettingsService {
 
   constructor(private http: HttpClient) { }
 
+  getAttendanceTypesUpdateListener() {
+    return this.attendanceTypesChanged.asObservable();
+  }
+
   getCodebookData(type) {
     switch(type) {
-      case 'AttendanceTypes': 
-        return this.http.get(`http://localhost:3333/api/codebook/get${type}`);
+      case 'attendanceTypes': 
+        this.http.get(`http://localhost:3333/api/codebook/${type}`) 
+          .subscribe(
+            (attendanceTypes: []) => {
+              this.attendanceTypesChanged.next(attendanceTypes)
+            }
+          )
     }
   }
 
-  createAttendanceType(newAttendanceType) {
-    this.http.post('http://localhost:3333/api/codebook/attendanceType', newAttendanceType)
+  createAttendanceType(type , newAttendanceType) {
+    this.http.post(`http://localhost:3333/api/codebook/${type}`, newAttendanceType)
       .subscribe(
-        (data) => {
-          console.log(data)
+        () => {
+          this.getCodebookData(type)
         },
         (err) => {
           console.log(err)
