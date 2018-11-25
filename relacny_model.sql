@@ -1,11 +1,13 @@
 CREATE TABLE attendances_types { -- ucast
 	ID Serial,
+	name varchar(256),
 
 	PRIMARY KEY(ID)
 }
 
 CREATE TABLE high_school_type { -- druh SŠ
 	ID Serial,
+	name varchar(256),
 
 	PRIMARY KEY(ID)
 }

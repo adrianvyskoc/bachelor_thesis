@@ -7,23 +7,39 @@ import { Subject } from 'rxjs';
 })
 export class SettingsService {
   private attendanceTypesChanged = new Subject();
+  private highSchoolTypesChanged = new Subject();
 
   constructor(private http: HttpClient) { }
 
-  getAttendanceTypesUpdateListener() {
-    return this.attendanceTypesChanged.asObservable();
+  getUpdateListener(type) {
+    switch (type) {
+      case 'attendanceTypes':
+        return this.attendanceTypesChanged.asObservable()
+  
+      case 'highSchoolTypes':
+        return this.highSchoolTypesChanged.asObservable()
+
+    }
   }
 
   getCodebookData(type) {
-    switch(type) {
-      case 'attendanceTypes': 
-        this.http.get(`http://localhost:3333/api/codebook/${type}`) 
-          .subscribe(
-            (attendanceTypes: []) => {
-              this.attendanceTypesChanged.next(attendanceTypes)
-            }
-          )
-    }
+    this.http.get(`http://localhost:3333/api/codebook/${type}`) 
+      .subscribe(
+        (data: []) => {
+          switch(type) {
+            case 'attendanceTypes': 
+              this.attendanceTypesChanged.next(data)
+              break
+      
+            case 'highSchoolTypes':
+              this.highSchoolTypesChanged.next(data)
+              break
+          }
+        }
+      )
+
+
+    
   }
 
   createAttendanceType(type , newAttendanceType) {

@@ -97,7 +97,6 @@ export class DataTablesComponent implements OnInit, OnDestroy {
   }
 
   applyFilter(filterValue: string) {
-    console.log(filterValue)
     this.attendance.filter = filterValue.trim().toLowerCase();
   }
 
