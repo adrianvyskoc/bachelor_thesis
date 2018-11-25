@@ -7,6 +7,7 @@ const StudyForm = use('App/Models/StudyForm')
 const HighSchoolType = use('App/Models/HighSchoolType')
 const Grade = use('App/Models/Grade')
 const Subject = use('App/Models/Subject')
+const School = use('App/Models/School')
 
 
 class GetController {
@@ -32,6 +33,12 @@ class GetController {
         const subjects = await Subject.all()
 
         return response.send(subjects)
+    }
+
+    async getSchools({ response }) {
+        const schools = await School.all()
+
+        return response.send(schools)
     }
 
     async getCodebook ({ response, params }) {
