@@ -20,6 +20,7 @@ export class CodebookTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.settingsService.getCodebookData(this.codebookType)
+
     this.subscription = this.settingsService.getUpdateListener(this.codebookType)
       .subscribe(
         (data:any[]) => {

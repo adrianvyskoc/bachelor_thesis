@@ -5,7 +5,7 @@
     color="primary" 
     (click)="newRecord = !newRecord"
   >
-    Nový typ dochádzky
+    <i class="fas fa-plus"></i> Nový typ dochádzky
   </button>
 </h3>
 
@@ -24,6 +24,10 @@
         <th scope="row">{{ item.id }}</th>
         <td>{{ item.name }}</td>
         <td>{{ item.created_at }}</td>
+        <td>
+          <button mat-button color="warn"><i class="fas fa-trash-alt"></i> Zmazať</button>
+          <button mat-button color="primary"><i class="fas fa-edit"></i> Upraviť</button>
+        </td>
       </tr>
       
       <tr *ngIf="newRecord">
@@ -37,6 +41,7 @@
         </td>
         <td>
           <button type="submit" mat-button color="primary">Uložiť</button>
+          <button type="submit" mat-button color="warn" (click)="newRecord = !newRecord">Zavrieť</button>
         </td>
       </tr>
     </tbody>

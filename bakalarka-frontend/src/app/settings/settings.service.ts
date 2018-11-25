@@ -6,8 +6,9 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class SettingsService {
-  private attendanceTypesChanged = new Subject();
-  private highSchoolTypesChanged = new Subject();
+  private attendanceTypesChanged = new Subject()
+  private highSchoolTypesChanged = new Subject()
+  private studyFormsChanged = new Subject()
 
   constructor(private http: HttpClient) { }
 
@@ -19,6 +20,8 @@ export class SettingsService {
       case 'highSchoolTypes':
         return this.highSchoolTypesChanged.asObservable()
 
+      case 'studyForms':
+        return this.studyFormsChanged.asObservable()
     }
   }
 
@@ -34,12 +37,13 @@ export class SettingsService {
             case 'highSchoolTypes':
               this.highSchoolTypesChanged.next(data)
               break
+            
+            case 'studyForms': 
+              this.studyFormsChanged.next(data)
+              break
           }
         }
       )
-
-
-    
   }
 
   createAttendanceType(type , newAttendanceType) {

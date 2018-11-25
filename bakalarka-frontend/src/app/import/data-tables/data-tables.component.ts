@@ -4,34 +4,34 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { DataService } from 'src/app/data.service';
 
 export interface AttendanceElement {
-  AIS_ID: number;
-  KOD: string;
-  OBDOBIE: string;
-  PREDMET: string;
-  PORADI: number;
-  ROZVRHOVA_AKCIA: string;
-  ROZVRHOVA_AKCIA_ID: number;
-  UCAST: string;
-  UCAST_ID: number;
+  AIS_ID: number
+  KOD: string
+  OBDOBIE: string
+  PREDMET: string
+  PORADI: number
+  ROZVRHOVA_AKCIA: string
+  ROZVRHOVA_AKCIA_ID: number
+  UCAST: string
+  UCAST_ID: number
 }
 
 export interface StudentElement {
-  AIS_ID: number;
-  PRIEZVISKO: string;
-  MENO: string;
-  STUDIUM: string;
-  ROCNIK: number;
+  AIS_ID: number
+  PRIEZVISKO: string
+  MENO: string
+  STUDIUM: string
+  ROCNIK: number
 }
 
 export interface GradeElement {
-  AIS_ID: number;
-  RCS: string;
-  KOD: string;
-  PREDMET: string;
-  ZAP_VYSLEDOK: string;
-  PREDMET_VYSLEDOK: string;
-  POCET_ZAPISOV: number;
-  KREDITY: number;
+  AIS_ID: number
+  RCS: string
+  KOD: string
+  PREDMET: string
+  ZAP_VYSLEDOK: string
+  PREDMET_VYSLEDOK: string
+  POCET_ZAPISOV: number
+  KREDITY: number
 }
 
 @Component({
@@ -40,69 +40,69 @@ export interface GradeElement {
   styleUrls: ['./data-tables.component.css']
 })
 export class DataTablesComponent implements OnInit, OnDestroy {
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort) sort: MatSort
 
-  attendanceSubscription: Subscription;
-  studentsSubscription: Subscription;
-  gradesSubscription: Subscription;
+  attendanceSubscription: Subscription
+  studentsSubscription: Subscription
+  gradesSubscription: Subscription
 
   // Attendance table
-  @ViewChild('attPaginator') attendancePaginator: MatPaginator;
-  displayedAttendanceColumns: string[] = ['AIS_ID', 'KOD', 'OBDOBIE', 'PORADI', 'PREDMET', 'ROZVRHOVA_AKCIA', 'ROZVRHOVA_AKCIA_ID', 'UCAST', 'UCAST_ID'];
-  attendance;
+  @ViewChild('attPaginator') attendancePaginator: MatPaginator
+  displayedAttendanceColumns: string[] = ['AIS_ID', 'KOD', 'OBDOBIE', 'PORADI', 'PREDMET', 'ROZVRHOVA_AKCIA', 'ROZVRHOVA_AKCIA_ID', 'UCAST', 'UCAST_ID']
+  attendance
 
   // Students table
-  @ViewChild('stdPaginator') studentsPaginator: MatPaginator;
-  displayedStudentsColumns: string[] = ['AIS_ID', 'MENO', 'PRIEZVISKO', 'STUDIUM', 'ROCNIK'];
-  students;
+  @ViewChild('stdPaginator') studentsPaginator: MatPaginator
+  displayedStudentsColumns: string[] = ['AIS_ID', 'MENO', 'PRIEZVISKO', 'STUDIUM', 'ROCNIK']
+  students
 
   // Grades table
-  @ViewChild('grdPaginator') gradesPaginator: MatPaginator;
-  displayedGradesColumns: string[] = ['AIS_ID', 'RCS', 'KOD', 'PREDMET', 'ZAP_VYSLEDOK', 'PREDMET_VYSLEDOK', 'POCET_ZAPISOV', 'KREDITY'];
-  grades;
+  @ViewChild('grdPaginator') gradesPaginator: MatPaginator
+  displayedGradesColumns: string[] = ['AIS_ID', 'RCS', 'KOD', 'PREDMET', 'ZAP_VYSLEDOK', 'PREDMET_VYSLEDOK', 'POCET_ZAPISOV', 'KREDITY']
+  grades
 
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
-    this.dataService.getData('Attendance');
-    this.dataService.getData('Students');
-    this.dataService.getData('Grades');
+    this.dataService.getData('Attendance')
+    this.dataService.getData('Students')
+    this.dataService.getData('Grades')
 
     this.attendanceSubscription = this.dataService.getAttendanceUpdateListener()
       .subscribe(
         (data: AttendanceElement[]) => {
-          this.attendance = new MatTableDataSource<AttendanceElement>(data);
-          this.attendance.paginator = this.attendancePaginator;
-          this.attendance.sort = this.sort;
+          this.attendance = new MatTableDataSource<AttendanceElement>(data)
+          this.attendance.paginator = this.attendancePaginator
+          this.attendance.sort = this.sort
         }
       );
 
     this.gradesSubscription = this.dataService.getGradesUpdateListener()
       .subscribe(
         (data: GradeElement[]) => {
-          this.grades = new MatTableDataSource<GradeElement>(data);
-          this.grades.paginator = this.gradesPaginator;
-          this.grades.sort = this.sort;
+          this.grades = new MatTableDataSource<GradeElement>(data)
+          this.grades.paginator = this.gradesPaginator
+          this.grades.sort = this.sort
         }
       );
 
     this.studentsSubscription = this.dataService.getStudentsUpdateListener()
         .subscribe(
           (data: StudentElement[]) => {
-            this.students = new MatTableDataSource<StudentElement>(data);
-            this.students.paginator = this.studentsPaginator;
-            this.students.sort = this.sort;
+            this.students = new MatTableDataSource<StudentElement>(data)
+            this.students.paginator = this.studentsPaginator
+            this.students.sort = this.sort
           }
         );
   }
 
   applyFilter(filterValue: string) {
-    this.attendance.filter = filterValue.trim().toLowerCase();
+    this.attendance.filter = filterValue.trim().toLowerCase()
   }
 
   ngOnDestroy() {
-    this.attendanceSubscription.unsubscribe();
-    this.studentsSubscription.unsubscribe();
-    this.gradesSubscription.unsubscribe();
+    this.attendanceSubscription.unsubscribe()
+    this.studentsSubscription.unsubscribe()
+    this.gradesSubscription.unsubscribe()
   }
 }

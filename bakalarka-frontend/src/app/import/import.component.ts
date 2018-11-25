@@ -8,32 +8,33 @@ import { DataService } from '../data.service';
   styleUrls: ['./import.component.css']
 })
 export class ImportComponent implements OnInit {
-
   @ViewChild('fileInput') fileInput: ElementRef;
 
+  selectedFile: File = null
+  selectedImport: string = ""
+  selectedAction: string = ""
+  fileName: string
 
-  selectedFile: File = null;
-  selectedImport: string = "";
-  selectedAction: string = "";
-  fileName: string;
-
-  constructor(private http: HttpClient, private dataService: DataService) {}
+  constructor(
+    private http: HttpClient, 
+    private dataService: DataService
+  ) {}
 
   ngOnInit() {
   }
 
   addFile() {
-    this.fileInput.nativeElement.click();
+    this.fileInput.nativeElement.click()
   }
 
   onUpload() {
-    this.dataService.uploadData(this.selectedFile, this.selectedImport, this.selectedAction);
-    this.dataService.loading = true;
+    this.dataService.uploadData(this.selectedFile, this.selectedImport, this.selectedAction)
+    this.dataService.loading = true
   }
 
   onFileSelected(event) {
-    this.selectedFile = <File>event.target.files[0];
-    this.fileName = event.target.files[0].name;
+    this.selectedFile = <File>event.target.files[0]
+    this.fileName = event.target.files[0].name
   }
 
 }

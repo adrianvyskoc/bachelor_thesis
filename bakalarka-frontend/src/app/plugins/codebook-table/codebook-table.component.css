@@ -1,0 +1,7 @@
+td button {
+    display: none;
+}
+
+tr:hover button {
+    display: inline;
+}
