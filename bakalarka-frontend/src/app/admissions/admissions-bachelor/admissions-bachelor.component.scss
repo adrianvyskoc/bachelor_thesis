@@ -1,0 +1,49 @@
+.tab {
+  border: 1px solid #dfdfdf;
+  padding: 20px;
+  margin-top: -1px;
+  border-radius: 2px;
+
+  .label {
+    border: 1px solid #dfdfdf;
+    padding: 5px 10px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    border-radius: 2px;
+
+    &.active {
+      background-color: rgba(1,168,152, 0.1);
+      border: 1px solid #01a898;
+    }
+  }
+
+  .label:hover {
+    transition: 0.3s ease;
+    background-color: rgba(1,168,152, 0.1);
+  }
+}
+
+.tabs-control {
+  &__button {
+    border: 1px solid #dfdfdf;
+    padding: 10px 20px;
+    margin-top: -1px;
+    border-radius: 2px;
+
+    &.active {
+      border-bottom: 1px solid #fff;
+      font-weight: bold;
+    }
+  }
+}
+
+tr:hover {
+  background-color: #efefef;
+  cursor: pointer;
+}
+
+tr td:last-child {
+  border-left: 1px solid #e0e0e0;
+  padding-left: 15px;
+}

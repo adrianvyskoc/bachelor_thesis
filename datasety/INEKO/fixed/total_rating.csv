@@ -1,0 +1,5 @@
+<br />
+<b>Warning</b>:  mysqli_num_fields() expects parameter 1 to be mysqli_result, boolean given in <b>/home/py003200/_sub/skoly/metodika/export.php</b> on line <b>22</b><br />
+<br />
+<b>Warning</b>:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in <b>/home/py003200/_sub/skoly/metodika/export.php</b> on line <b>38</b><br />
+

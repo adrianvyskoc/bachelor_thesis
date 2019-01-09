@@ -6,25 +6,25 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit {
-
-  codebooks: object[] = [
-    {
-      title: 'Dochádzka',
-      type: 'attendanceTypes'
-    },
-    {
-      title: 'Typ strednej školy',
-      type: 'highSchoolTypes'
-    },
-    {
-      title: 'Typ štúdia',
-      type: 'studyForms'
-    },
-  ]
+  codebooks = []
 
   constructor() { }
 
-  ngOnInit() {  
+  ngOnInit() {
+    this.codebooks = [
+      {
+        title: 'Dochádzka',
+        type: 'attendanceTypes'
+      },
+      {
+        title: 'Typ strednej školy',
+        type: 'highSchoolTypes'
+      },
+      {
+        title: 'Typ štúdia',
+        type: 'studyForms'
+      },
+    ]
   }
 
 }

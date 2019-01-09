@@ -7,10 +7,12 @@ import { HttpClient } from '@angular/common/http';
 })
 export class DataService {
   private attendance = []
+  private admissions = []
   private students = []
   private schools = []
   private grades = []
   private attendanceChanged = new Subject<{}>()
+  private admissionsChanged = new Subject<{}>()
   private studentsChanged = new Subject<{}>()
   private schoolsChanged = new Subject<{}>()
   private gradesChanged = new Subject<{}>()
@@ -29,6 +31,11 @@ export class DataService {
             case 'Attendance':
               this.attendance = data
               this.attendanceChanged.next([...this.attendance])
+              break
+
+            case 'Admissions':
+              this.admissions = data
+              this.admissionsChanged.next([...this.admissions])
               break
 
             case 'Students':
@@ -54,6 +61,10 @@ export class DataService {
     return this.attendanceChanged.asObservable()
   }
 
+  getAdmissionsUpdateListener() {
+    return this.admissionsChanged.asObservable()
+  }
+
   getStudentsUpdateListener() {
     return this.studentsChanged.asObservable()
   }
@@ -66,11 +77,11 @@ export class DataService {
     return this.gradesChanged.asObservable()
   }
 
-  async uploadData(selectedFile, selectedImport, selectedAction) {
+  async uploadData(selectedFile, selectedImport, selectedSource) {
     const fd = new FormData()
     fd.append(selectedImport, selectedFile, selectedFile.name)
 
-    await this.http.post('http://localhost:3333/api/import/' + selectedImport + '/' + selectedAction, fd)
+    await this.http.post('http://localhost:3333/api/import/' + selectedSource + '/' + selectedImport, fd)
       .subscribe(
         res => {
           console.log(res);
@@ -83,5 +94,9 @@ export class DataService {
           this.showErrorMessage = true
         }
       )
+  }
+
+  loadColumnMeaning(type) {
+    return this.http.get(`http://localhost:3333/api/column-meaning/${type}`)
   }
 }

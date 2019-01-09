@@ -1,0 +1,25 @@
+<h1 class="display-4">Prijímacie konanie</h1>
+<hr>
+
+<div class="row">
+  <div class="col-lg-6">
+    <app-chart
+      [title]="'Počet prihlášok na jednotlivé stupne'"
+      [data]="[657, 234, 54]"
+      [labels]="['Bakalársky stupeň', 'Inžiniersky stupeň', 'Doktorandský stupeň']"
+      [type]="'doughnut'"
+      [legend]="false"
+    ></app-chart>
+  </div>
+  <div class="col-lg-6">
+    <app-chart
+      [title]="'Znázornenie pomeru prihlásených, prijatých a neprijatých študentov celkovo na škole'"
+      [data]="[1475, 1043, 432]"
+      [labels]="['Prihlásený', 'Prijatý', 'Neprijatý']"
+      [type]="'bar'"
+      [legend]="false"
+    ></app-chart>
+  </div>
+</div>
+
+

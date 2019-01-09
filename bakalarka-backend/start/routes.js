@@ -16,23 +16,30 @@
 /** @type {import('@adonisjs/framework/src/Route/Manager'} */
 const Route = use('Route')
 
-
-
-
 Route
     .group(() => {
         // test
-        Route.get('test', 'ImportController.read')
+        Route.get('test', 'ImportAisController.read')
 
-        // imports
-        Route.post('import/:selectedImport/:selectedAction', 'ImportController.import')
+        // import ais
+        Route.post('import/ais/:selectedImport', 'ImportAisController.import')
+
+        // import ineko
+        Route.post('import/ineko/:selectedImport', 'ImportInekoController.import')
+
+        // import codebooks
         Route.post('codebook/:type', 'SettingController.createCodebookRecord')
 
         // api endpoints
         Route.get('getStudents', 'GetController.getStudents')
         Route.get('getAttendance', 'GetController.getAttendance')
+        Route.get('getAdmissions', 'GetController.getAdmissions')
         Route.get('getGrades', 'GetController.getGrades')
+        Route.get('getSchools', 'GetController.getSchools')
         Route.get('getSubjects', 'GetController.getSubjects')
         Route.get('codebook/:type', 'GetController.getCodebook')
+        Route.get('column-meaning/:type', 'GetController.getColumnMeaning')
+
+        Route.get('getAdmission/:id', 'GetController.getAdmission')
     })
     .prefix('/api')

@@ -29,6 +29,7 @@
     "@adonisjs/shield": "^1.0.6",
     "exceljs": "^1.6.2",
     "fs": "0.0.1-security",
+    "pem": "^1.13.2",
     "xlsx": "^0.14.0"
   },
   "devDependencies": {},

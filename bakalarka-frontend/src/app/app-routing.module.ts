@@ -4,11 +4,20 @@ import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
+    loadChildren: './dashboard/dashboard.module#DashboardModule',
+    pathMatch: 'full'
+  },
+  {
+    path: 'import',
     loadChildren: './import/import.module#ImportModule'
   },
   {
     path: 'settings',
     loadChildren: './settings/settings.module#SettingsModule'
+  },
+  {
+    path: 'admissions',
+    loadChildren: './admissions/admissions.module#AdmissionsModule'
   }
 ];
 

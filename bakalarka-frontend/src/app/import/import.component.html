@@ -3,43 +3,69 @@
   <p class="lead">Údaje označené symbolom <strong>*</strong> sú povinné.</p>
   <mat-divider></mat-divider>
 
-  <mat-radio-group [(ngModel)]="selectedImport" class="mt-4">
-    <mat-radio-button value="Attendance">Dochádzka</mat-radio-button>
-    <mat-radio-button value="Grades">Študijné výsledky</mat-radio-button> 
-    <mat-radio-button value="Students">Študenti</mat-radio-button> 
-    <mat-radio-button value="Schools">Školy</mat-radio-button> 
-    <mat-radio-button value="Admissions">Prijímačky</mat-radio-button> 
+  <mat-radio-group [(ngModel)]="selectedSource" class="mt-4">
+    <mat-radio-button value="ais">AIS</mat-radio-button>
+    <mat-radio-button value="ineko">INEKO</mat-radio-button>
   </mat-radio-group>
 
   <mat-divider></mat-divider>
 
-  <mat-radio-group [(ngModel)]="selectedAction" class="mt-4">
-    <mat-radio-button value="delete">Vymazať staré dáta</mat-radio-button>
-    <mat-radio-button value="update">Nahradiť staré dáta novými</mat-radio-button> 
-  </mat-radio-group>
+  <ng-template [ngIf]="selectedSource">
 
-  <mat-divider></mat-divider>
+      <div *ngIf="selectedSource == 'ais'">
+        <mat-radio-group [(ngModel)]="selectedImport" class="mt-4">
+          <mat-radio-button value="Attendance">Dochádzka</mat-radio-button>
+          <mat-radio-button value="Grades">Študijné výsledky</mat-radio-button>
+          <mat-radio-button value="Admissions">Prijímačky</mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <div *ngIf="selectedSource == 'ineko'">
+        <mat-radio-group [(ngModel)]="selectedImport" class="mt-4">
+          <mat-radio-button value="Schools">Školy</mat-radio-button>
+          <mat-radio-button value="Percentils">Percentily</mat-radio-button>
+          <mat-radio-button value="TotalRating">Celkové hodnotenie</mat-radio-button>
+          <mat-radio-button value="Pointers">Jednotlivé ukazovatele</mat-radio-button>
+          <mat-radio-button value="AdditionalData">Doplňkové informácie</mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+    <mat-divider></mat-divider>
+  </ng-template>
+
+  <ng-template [ngIf]="selectedImport && selectedSource == 'ais' && selectedImport != 'Admissions'">
+    <mat-radio-group [(ngModel)]="semester" class="mt-4">
+      <mat-radio-button value="winter">Zimný semester</mat-radio-button>
+      <mat-radio-button value="summer">Letný semester</mat-radio-button>
+    </mat-radio-group>
+    <mat-divider></mat-divider>
+  </ng-template>
+
+  <ng-template [ngIf]="selectedImport && selectedImport != 'Schools'">
+    <mat-form-field>
+      <input matInput placeholder="Školský rok" [(ngModel)]="schoolYear">
+    </mat-form-field>
+    <mat-divider></mat-divider>
+  </ng-template>
 
   <section class="file-input">
     <input id="fileInput" name="file" type="file" class="ng-hide" #fileInput (change)="onFileSelected($event)">
-    <button 
-      mat-raised-button 
-      color="primary" 
+    <button
+      mat-raised-button
+      color="primary"
       (click)="addFile()"
       [disabled]="selectedImport == ''">Vybrať súbor
     </button>
     <span>{{ fileName }}</span>
   </section>
 
-  <button 
+  <button
     class="btn-lg float-right"
-    mat-raised-button 
-    color="primary" 
+    mat-raised-button
+    color="primary"
     (click)="onUpload()"
     [disabled]="selectedFile == null">Importovať
   </button>
-
-  <button routerLink="/api/test">TEST</button>
 </div>
 
 <app-data-tables></app-data-tables>

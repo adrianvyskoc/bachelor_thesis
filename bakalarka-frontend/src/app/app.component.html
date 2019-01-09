@@ -1,17 +1,7 @@
-<app-header></app-header>
-<mat-sidenav-container full-height>
-  
-  <mat-sidenav mode="side" opened padding>
-    <nav>
-      <ul>
-        <li><a routerLink="/">Importovanie dát</a></li>
-        <li><a routerLink="/settings">Číselníky</a></li>
-      </ul>
-    </nav>
-  </mat-sidenav>
-
-  <mat-sidenav-content padding>
+<app-sidenav></app-sidenav>
+<div>
+  <app-header></app-header>
+  <main>
     <router-outlet></router-outlet>
-  </mat-sidenav-content>
-
-</mat-sidenav-container>
+  </main>
+</div>

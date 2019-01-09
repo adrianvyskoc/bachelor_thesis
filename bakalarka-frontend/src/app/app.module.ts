@@ -3,18 +3,6 @@ import { NgModule } from '@angular/core';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { 
-  MatInputModule, 
-  MatPaginatorModule, 
-  MatProgressSpinnerModule, 
-  MatSortModule, 
-  MatTableModule,
-  MatButtonModule,
-  MatRadioModule,
-  MatListModule,
-  MatTabsModule,
-  MatSidenavModule,
-  MatDividerModule,
-  MatCheckboxModule,
 } from "@angular/material";
 
 
@@ -31,18 +19,6 @@ import { AppRoutingModule } from './app-routing.module';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    MatInputModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatButtonModule,
-    MatRadioModule,
-    MatListModule,
-    MatTabsModule,
-    MatSidenavModule,
-    MatDividerModule,
-    MatCheckboxModule,
-    MatProgressSpinnerModule,
 
     HttpClientModule,
     FormsModule,

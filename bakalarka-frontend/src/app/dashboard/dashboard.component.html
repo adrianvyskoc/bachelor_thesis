@@ -1,0 +1,26 @@
+<h1 class="display-4">Dashboard</h1>
+
+<hr>
+
+<div class="row">
+  <div class="col-lg-6">
+    <app-chart 
+      [title]="'Typy škôl v systéme'"
+      [data]="[schoolsData.sos.length, schoolsData.gym.length, schoolsData.konz.length, schoolsData.ssp.length]"
+      [labels]="['Stredná odborná škola', 'Gymnázium', 'Konzervatórium', 'Špeciálna stredná škola']"
+      [type]="'pie'"
+      [legend]="false"
+    ></app-chart>
+  </div>
+
+  <div class="col-lg-6">
+    <app-chart 
+      [title]="'Počet prihlášok na jednotlivé študijné programy'"
+      [data]="[this.admissionsData.info.length, this.admissionsData.info4.length, this.admissionsData.pkss.length, this.admissionsData.pkss4.length]"
+      [labels]="['INFO', 'INFO4', 'IT', 'IT4']"
+      [type]="'bar'"
+      [legend]="false"
+    ></app-chart>
+  </div>
+</div>
+

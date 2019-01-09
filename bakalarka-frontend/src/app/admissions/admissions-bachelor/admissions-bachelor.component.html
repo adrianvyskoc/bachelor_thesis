@@ -1,0 +1,96 @@
+<div class="jumbotron">
+  <h1 class="display-4">Prijímacie konanie</h1>
+  <p class="lead">Bakalársky stupeň</p>
+  <hr class="my-4">
+  <button
+    class="btn btn-primary"
+    type="button"
+    (click)="exportAll()"
+  >Exportovať údaje</button>
+</div>
+
+<div>
+
+  <button
+    [ngClass]="{ 'active': showFilter }"
+    class="tabs-control__button"
+    (click)="switchTabs()"
+  >
+    Filter
+  </button>
+  <button
+    [ngClass]="{ 'active': showLabels }"
+    class="tabs-control__button"
+    (click)="switchTabs()"
+  >
+    Upravovať stĺpce
+  </button>
+
+  <div *ngIf="showLabels" class="tab">
+    <button class="btn btn-raised btn-primary" margin-right (click)="selectAll()">Označiť všetky</button>
+    <button class="btn btn-raised btn-primary" (click)="deselectAll()">Odznačiť všetky</button>
+    <hr>
+
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        placeholder="Vyhľadávanie v stĺpcoch"
+        (input)="filterLabels($event.target.value)"
+      >
+    </mat-form-field>
+
+    <div flex flex-wrap>
+      <div
+        *ngFor="let col of filteredColumns"
+        [ngClass]="{ active: displayedAdmissionsColumns.indexOf(col) > -1 }"
+        class="label"
+        (click)="toggleColumn(col)"
+      >
+        {{ col }}
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="showFilter" class="tab">
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        placeholder="Vyhľadávanie"
+        (input)="applyFilter($event.target.value)"
+      >
+    </mat-form-field>
+  </div>
+
+</div>
+
+<table mat-table matSort [dataSource]="admissions" full-width>
+  <ng-container [matColumnDef]="column" *ngFor="let column of displayedAdmissionsColumns">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> {{column}} </th>
+    <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="Akcie" stickyEnd>
+    <th mat-header-cell *matHeaderCellDef> Akcie </th>
+    <td mat-cell *matCellDef="let element">
+      <button class="btn btn-primary" [routerLink]="[element.id]" no-margin>Detail</button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumnsAndActions()"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumnsAndActions();"></tr>
+</table>
+<mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons #paginator></mat-paginator>
+
+<div class="row">
+  <div class="col-lg-6">
+    <app-chart
+      [title]="'Počet prihlášok na jednotlivé študijné programy'"
+      [data]="[this.admissionsData.info.length, this.admissionsData.info4.length, this.admissionsData.pkss.length, this.admissionsData.pkss4.length, this.admissionsData.ib.length]"
+      [labels]="['INFO', 'INFO4', 'IT', 'IT4', 'IB']"
+      [type]="'bar'"
+      [legend]="false"
+    ></app-chart>
+  </div>
+</div>

@@ -1,5 +1,4 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { DataService } from '../data.service';
 
 @Component({
@@ -11,12 +10,14 @@ export class ImportComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
 
   selectedFile: File = null
+  selectedSource: string = ""
   selectedImport: string = ""
-  selectedAction: string = ""
   fileName: string
 
+  schoolYear
+  semester 
+
   constructor(
-    private http: HttpClient, 
     private dataService: DataService
   ) {}
 
@@ -28,7 +29,7 @@ export class ImportComponent implements OnInit {
   }
 
   onUpload() {
-    this.dataService.uploadData(this.selectedFile, this.selectedImport, this.selectedAction)
+    this.dataService.uploadData(this.selectedFile, this.selectedImport, this.selectedSource)
     this.dataService.loading = true
   }
 
