@@ -8,6 +8,7 @@ import { MatTableModule, MatPaginatorModule, MatSortModule, MatTooltipModule, Ma
 import { AdmissionComponent } from './admission/admission.component';
 import { ChartModule } from '../plugins/chart/chart.module';
 import { FormsModule } from '@angular/forms';
+import { MapModule } from '../plugins/map/map.module';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { FormsModule } from '@angular/forms';
     MatIconModule,
 
     ChartModule,
+    MapModule,
     CommonModule,
     FormsModule,
     AdmissionsRoutingModule

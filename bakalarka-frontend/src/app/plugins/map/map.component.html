@@ -1,0 +1,16 @@
+<agm-map
+  [ngStyle]="{ 'height.px': height }"
+  [latitude]="lat"
+  [longitude]="lng"
+>
+  <agm-marker
+    *ngIf="singleMarker"
+    [latitude]="marker.sur_y"
+    [longitude]="marker.sur_x"
+  ></agm-marker>
+  <agm-marker
+    *ngFor="let mark of markers"
+    [latitude]="mark.sur_y"
+    [longitude]="mark.sur_x"
+  ></agm-marker>
+</agm-map>

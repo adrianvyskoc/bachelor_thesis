@@ -2,9 +2,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { 
+import {
 } from "@angular/material";
 
+import { AgmCoreModule } from '@agm/core';
 
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -19,6 +20,10 @@ import { AppRoutingModule } from './app-routing.module';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDOsr37PY7B5MvA8TqYjqL1IAf5c6qranc'
+    }),
 
     HttpClientModule,
     FormsModule,
