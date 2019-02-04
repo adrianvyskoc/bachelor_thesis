@@ -1,7 +1,9 @@
-<agm-map *ngIf="markers.length"
+<agm-map
+  *ngIf="markers.length"
   [ngStyle]="{ 'height.px': height }"
   [latitude]="lat"
   [longitude]="lng"
+  [styles]="styles.silver"
   (mapReady)="onMapLoad($event)"
 >
   <agm-marker
