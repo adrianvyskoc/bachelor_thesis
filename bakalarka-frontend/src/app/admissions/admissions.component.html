@@ -1,8 +1,7 @@
 <h1 class="display-4">Prijímacie konanie</h1>
 <hr>
 
-<app-map [markers]="schools" [height]="600"></app-map>
-
+<h2>Všeobecné informácie</h2>
 <div class="row">
   <div class="col-lg-6">
     <app-chart
@@ -23,5 +22,57 @@
     ></app-chart>
   </div>
 </div>
+
+<h2>Prehľad škôl v krajine</h2>
+<div flex>
+  <app-map
+    [markers]="schools"
+    [height]="500"
+    (selectMarker)="onSelectedMarker($event)"
+  ></app-map>
+  <div
+    *ngIf="chosenSchool"
+    class="school-detail"
+    padding
+  >
+    <h3>{{ chosenSchool.nazov }}</h3>
+    <hr>
+    <table class="table table-borderless table-sm">
+      <thead>
+        <tr>
+          <th colspan="2" scope="col">Všeobecné informácie o škole</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Kód školy</th>
+          <td>{{ chosenSchool.kod_kodsko }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Typ školy</th>
+          <td>{{ chosenSchool.typ_skoly }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Email</th>
+          <td>{{ chosenSchool.email }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Počet prihlášok z danej školy</th>
+          <td>{{ chosenSchool.admissions.length }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <app-chart
+      [legend]="false"
+      [type]="'bar'"
+      [data]="[chosenSchool.approved, chosenSchool.rejected]"
+      [labels]="['Prijatý', 'Neprijatý']"
+    ></app-chart>
+  </div>
+</div>
+
+
+
 
 

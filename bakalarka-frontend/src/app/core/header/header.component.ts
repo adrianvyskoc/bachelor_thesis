@@ -7,7 +7,7 @@ import { DataService } from 'src/app/data.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  selectedYear
+  selectedYear: string
 
   constructor(private dataService: DataService) { }
 
@@ -16,7 +16,6 @@ export class HeaderComponent implements OnInit {
   }
 
   onYearSelect() {
-    console.log("znenený rok", this.selectedYear)
     this.dataService.setYear(this.selectedYear)
   }
 

@@ -13,6 +13,8 @@ export class AdmissionsComponent implements OnInit {
   admissions
   schools
 
+  chosenSchool
+
   constructor(
     private dataService: DataService
   ) { }
@@ -35,5 +37,18 @@ export class AdmissionsComponent implements OnInit {
           this.schools = schools
         }
       )
+  }
+
+  onSelectedMarker(event) {
+    this.chosenSchool = event
+    this.chosenSchool.rejected = 0
+    this.chosenSchool.approved = 0
+    this.chosenSchool.admissions = this.admissions.reduce((acc, nextVal) => {
+      if(nextVal.school_id == this.chosenSchool.kod_kodsko) {
+        acc.push(nextVal)
+        nextVal.Rozh != 45 ? this.chosenSchool.approved++ : this.chosenSchool.rejected++
+      }
+      return acc
+    }, [])
   }
 }

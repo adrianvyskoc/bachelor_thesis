@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 
 @Component({
@@ -10,7 +10,10 @@ export class MapComponent implements OnInit {
   @Input() singleMarker: boolean = false
   @Input() marker: {} = {}
   @Input() markers: [] = []
-  @Input() height: number;
+  @Input() height: number
+  @Input() heatMap: boolean = false
+
+  @Output() selectMarker = new EventEmitter()
 
   lat: number = 48.633
   lng: number = 19.467
@@ -24,15 +27,20 @@ export class MapComponent implements OnInit {
   }
 
   onMapLoad(mapInstance: google.maps.Map) {
-    this.map = mapInstance;
+    if(!this.heatMap) return
 
-    // here our in other method after you get the coords; but make sure map is loaded
-
-    const coords: google.maps.LatLng[] = this.markers; // can also be a google.maps.MVCArray with LatLng[] inside
+    this.map = mapInstance
+    const coords: google.maps.LatLng[] = this.markers.map(
+      mrk => new google.maps.LatLng(mrk['sur_y'], mrk['sur_x'])
+    )
     this.heatmap = new google.maps.visualization.HeatmapLayer({
         map: this.map,
-        data: coords
-    });
+        data: coords,
+        radius: 50
+    })
   }
 
+  onSelectMarker(markerData) {
+    this.selectMarker.emit(markerData)
+  }
 }

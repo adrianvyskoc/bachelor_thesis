@@ -1,4 +1,4 @@
-<agm-map
+<agm-map *ngIf="markers.length"
   [ngStyle]="{ 'height.px': height }"
   [latitude]="lat"
   [longitude]="lng"
@@ -9,11 +9,10 @@
     [latitude]="marker.sur_y"
     [longitude]="marker.sur_x"
   ></agm-marker>
-  <agm-marker (markerClick)="click()"
+  <agm-marker
     *ngFor="let mark of markers"
     [latitude]="mark.sur_y"
     [longitude]="mark.sur_x"
+    (markerClick)="onSelectMarker(mark)"
   ></agm-marker>
 </agm-map>
-
-<div class="lol">dsds</div>
