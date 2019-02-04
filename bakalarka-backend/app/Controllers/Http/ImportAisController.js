@@ -31,6 +31,9 @@ class ImportAisController {
     }
 
     async import ({ request, params }) {
+
+        console.log(params.year)
+
         const config = {
             //sheetRows: 11,
             type: "string",
@@ -66,6 +69,8 @@ class ImportAisController {
                 const { STUDENT, STUDIUM, ...attendanceRow } = row
                 const [ PRIEZVISKO, MENO ] = STUDENT.split(" ");
 
+                attendanceRow.OBDOBIE = params.year
+
                 const studentData = {
                     AIS_ID: attendanceRow.AIS_ID,
                     PRIEZVISKO,
@@ -100,6 +105,8 @@ class ImportAisController {
         if (params.selectedImport == 'Grades') {
             for (let row of rows) {
                 const { PRIEZVISKO, MENO, STUDIUM, ROCNIK, ...gradeRow } = row
+
+                gradeRow.OBDOBIE = params.year
 
                 const studentData = {
                     AIS_ID: gradeRow.AIS_ID,
@@ -167,6 +174,7 @@ class ImportAisController {
                 row.č_d = String(row.č_d)
                 row.č_d_1 = String(row.č_d_1)
                 row.Odbor_SŠ = String(row.Odbor_SŠ)
+                row.OBDOBIE = params.year
 
                 delete row['Druh_SŠ']
                 delete row['Používateľ_podľa_RČ'] // z tohto ziskat ais ID

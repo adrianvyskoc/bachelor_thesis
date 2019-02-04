@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
 import { RouterModule } from '@angular/router';
 import { SidenavComponent } from './sidenav/sidenav.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -11,8 +12,9 @@ import { SidenavComponent } from './sidenav/sidenav.component';
     SidenavComponent
   ],
   imports: [
-    RouterModule,    
+    RouterModule,
     CommonModule,
+    FormsModule
   ],
   exports: [
     HeaderComponent,

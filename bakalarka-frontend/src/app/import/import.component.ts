@@ -15,7 +15,7 @@ export class ImportComponent implements OnInit {
   fileName: string
 
   schoolYear
-  semester 
+  semester
 
   constructor(
     private dataService: DataService
@@ -29,7 +29,7 @@ export class ImportComponent implements OnInit {
   }
 
   onUpload() {
-    this.dataService.uploadData(this.selectedFile, this.selectedImport, this.selectedSource)
+    this.dataService.uploadData(this.selectedFile, this.selectedImport, this.selectedSource, this.schoolYear)
     this.dataService.loading = true
   }
 

@@ -31,8 +31,12 @@ class GetController {
         return response.send(attendance)
     }
 
-    async getAdmissions ({ response }) {
-        const admissions = await Admission.all()
+    async getAdmissions ({ response, params }) {
+        let admissions
+        if(params.year == 'all')
+          admissions = await Admission.all()
+        else
+          admissions = await Database.table('ais_admissions').where('OBDOBIE', params.year)
 
         return response.send(admissions)
     }

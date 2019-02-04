@@ -22,7 +22,7 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserAnimationsModule,
 
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDOsr37PY7B5MvA8TqYjqL1IAf5c6qranc'
+      apiKey: 'AIzaSyDOsr37PY7B5MvA8TqYjqL1IAf5c6qranc' + '&libraries=visualization'
     }),
 
     HttpClientModule,

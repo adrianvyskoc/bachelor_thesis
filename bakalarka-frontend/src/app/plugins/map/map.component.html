@@ -2,15 +2,18 @@
   [ngStyle]="{ 'height.px': height }"
   [latitude]="lat"
   [longitude]="lng"
+  (mapReady)="onMapLoad($event)"
 >
   <agm-marker
     *ngIf="singleMarker"
     [latitude]="marker.sur_y"
     [longitude]="marker.sur_x"
   ></agm-marker>
-  <agm-marker
+  <agm-marker (markerClick)="click()"
     *ngFor="let mark of markers"
     [latitude]="mark.sur_y"
     [longitude]="mark.sur_x"
   ></agm-marker>
 </agm-map>
+
+<div class="lol">dsds</div>

@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AdmissionsService } from '../admissions.service';
 import { ActivatedRoute } from '@angular/router';
 import { ExportService } from 'src/app/plugins/utils/export.service';
 import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
+import { DataService } from 'src/app/data.service';
 
 @Component({
   selector: 'app-admission',
@@ -22,13 +22,13 @@ export class AdmissionComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private admissionsService: AdmissionsService,
+    private dataService: DataService,
     private exportService: ExportService
   ) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id')
-    this.admissionsService.getAdmission(this.id)
+    this.dataService.getAdmission(this.id)
       .subscribe(data=> {
         this.admission = data['admission']
         this.school = data['school']

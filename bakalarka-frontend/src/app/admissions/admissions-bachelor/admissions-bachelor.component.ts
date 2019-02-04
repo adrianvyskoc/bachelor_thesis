@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { AdmissionsService } from '../admissions.service';
 import { Subscription } from 'rxjs';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { ExportService } from 'src/app/plugins/utils/export.service';
+import { DataService } from 'src/app/data.service';
 
 @Component({
   selector: 'app-admissions-bachelor',
@@ -36,13 +36,13 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   admissionsData:{ info: any, info4: any, pkss: any, pkss4: any, ib: any } = { info: [], info4: [], pkss: [], pkss4: [], ib: [] }
 
   constructor(
-    private admissionsService: AdmissionsService,
+    private dataService: DataService,
     private exportService: ExportService
   ) { }
 
   ngOnInit() {
-    this.admissionsService.getAdmissions()
-    this.subscription = this.admissionsService.getAdmissionsUpdateListener()
+    this.dataService.getData('Admissions')
+    this.subscription = this.dataService.getAdmissionsUpdateListener()
       .subscribe(
         (admissions:any[]) => {
           this.admissions = new MatTableDataSource<any[]>(admissions)

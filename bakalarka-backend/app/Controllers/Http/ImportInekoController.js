@@ -99,7 +99,7 @@ class ImportInekoController {
                     emptySchoolFK.push(row.nazov)
                 }
 
-                row.OBDOBIE = "ZS 2017/2018"
+                row.OBDOBIE = params.year
                 row.typ = "KONCOROCNE"
 
                 for(const prop of toDeleteAttrs) {

@@ -22,21 +22,21 @@ Route
         Route.get('test', 'ImportAisController.read')
 
         // import ais
-        Route.post('import/ais/:selectedImport', 'ImportAisController.import')
+        Route.post('import/ais/:selectedImport/:year', 'ImportAisController.import')
 
         // import ineko
-        Route.post('import/ineko/:selectedImport', 'ImportInekoController.import')
+        Route.post('import/ineko/:selectedImport/:year', 'ImportInekoController.import')
 
         // import codebooks
         Route.post('codebook/:type', 'SettingController.createCodebookRecord')
 
         // api endpoints
-        Route.get('getStudents', 'GetController.getStudents')
-        Route.get('getAttendance', 'GetController.getAttendance')
-        Route.get('getAdmissions', 'GetController.getAdmissions')
-        Route.get('getGrades', 'GetController.getGrades')
+        Route.get('getStudents/:year', 'GetController.getStudents')
+        Route.get('getAttendance/:year', 'GetController.getAttendance')
+        Route.get('getAdmissions/:year', 'GetController.getAdmissions')
+        Route.get('getGrades/:year', 'GetController.getGrades')
         Route.get('getSchools', 'GetController.getSchools')
-        Route.get('getSubjects', 'GetController.getSubjects')
+        Route.get('getSubjects/:year', 'GetController.getSubjects')
         Route.get('codebook/:type', 'GetController.getCodebook')
         Route.get('column-meaning/:type', 'GetController.getColumnMeaning')
 

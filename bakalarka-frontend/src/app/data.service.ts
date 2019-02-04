@@ -6,6 +6,8 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class DataService {
+  private year = 'all'
+
   private attendance = []
   private admissions = []
   private students = []
@@ -22,8 +24,22 @@ export class DataService {
 
   constructor(private http: HttpClient) { }
 
+  setYear(year) {
+    this.year = year
+    this.getData('Admissions')
+  }
+
+  getYear() {
+    return this.year
+  }
+
   getData(selectedImport) {
-    this.http.get<Object[]>(`http://localhost:3333/api/get${selectedImport}`)
+    const url = selectedImport ==
+      'Schools' ?
+        `http://localhost:3333/api/get${selectedImport}` :
+        `http://localhost:3333/api/get${selectedImport}/${this.year}`
+
+    this.http.get<Object[]>(url)
       .subscribe(
         data => {
           switch(selectedImport) {
@@ -48,13 +64,17 @@ export class DataService {
               this.gradesChanged.next([...this.grades])
               break
 
-            case 'Schools': 
+            case 'Schools':
               this.schools = data
               this.schoolsChanged.next([...this.schools])
               break
           }
         }
       )
+  }
+
+  getAdmission(id) {
+    return this.http.get(`http://localhost:3333/api/getAdmission/${id}`)
   }
 
   getAttendanceUpdateListener() {
@@ -77,11 +97,11 @@ export class DataService {
     return this.gradesChanged.asObservable()
   }
 
-  async uploadData(selectedFile, selectedImport, selectedSource) {
+  async uploadData(selectedFile, selectedImport, selectedSource, year) {
     const fd = new FormData()
     fd.append(selectedImport, selectedFile, selectedFile.name)
 
-    await this.http.post('http://localhost:3333/api/import/' + selectedSource + '/' + selectedImport, fd)
+    await this.http.post('http://localhost:3333/api/import/' + selectedSource + '/' + selectedImport + '/' + year, fd)
       .subscribe(
         res => {
           console.log(res);

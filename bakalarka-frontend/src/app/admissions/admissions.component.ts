@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AdmissionsService } from './admissions.service';
 import { Subscription } from 'rxjs';
 import { DataService } from '../data.service';
 
@@ -15,13 +14,12 @@ export class AdmissionsComponent implements OnInit {
   schools
 
   constructor(
-    private admissionsService: AdmissionsService,
     private dataService: DataService
   ) { }
 
   ngOnInit() {
-    this.admissionsService.getAdmissions()
-    this.subscription = this.admissionsService.getAdmissionsUpdateListener()
+    this.dataService.getData('Admissions')
+    this.subscription = this.dataService.getAdmissionsUpdateListener()
       .subscribe(
         (admissions:any[]) => {
           console.log(admissions)
@@ -38,5 +36,4 @@ export class AdmissionsComponent implements OnInit {
         }
       )
   }
-
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from 'src/app/data.service';
 
 @Component({
   selector: 'app-header',
@@ -6,10 +7,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  selectedYear
 
-  constructor() { }
+  constructor(private dataService: DataService) { }
 
   ngOnInit() {
+    this.selectedYear = this.dataService.getYear()
+  }
+
+  onYearSelect() {
+    console.log("znenený rok", this.selectedYear)
+    this.dataService.setYear(this.selectedYear)
   }
 
 }
