@@ -33,10 +33,10 @@ export class AdmissionsComponent implements OnInit {
     this.dataService.getSchoolsUpdateListener()
       .subscribe(
         (schools: any[]) => {
-          console.log(schools)
           this.schools = schools
         }
       )
+
   }
 
   onSelectedMarker(event) {

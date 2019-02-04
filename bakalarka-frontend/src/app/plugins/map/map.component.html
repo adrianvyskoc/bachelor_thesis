@@ -3,18 +3,21 @@
   [ngStyle]="{ 'height.px': height }"
   [latitude]="lat"
   [longitude]="lng"
-  [styles]="styles.silver"
+  [styles]="styles[theme]"
   (mapReady)="onMapLoad($event)"
 >
-  <agm-marker
-    *ngIf="singleMarker"
-    [latitude]="marker.sur_y"
-    [longitude]="marker.sur_x"
-  ></agm-marker>
-  <agm-marker
-    *ngFor="let mark of markers"
-    [latitude]="mark.sur_y"
-    [longitude]="mark.sur_x"
-    (markerClick)="onSelectMarker(mark)"
-  ></agm-marker>
+  <ng-template [ngIf]="showMarkers">
+    <agm-marker
+      *ngFor="let mark of markers"
+      [latitude]="mark.sur_y"
+      [longitude]="mark.sur_x"
+      (markerClick)="onSelectMarker(mark)"
+    ></agm-marker>
+  </ng-template>
 </agm-map>
+
+<select [(ngModel)]="theme" name="theme">
+  <option value="default">Predvolené</option>
+  <option value="silver">Silver</option>
+  <option value="nightMode">Nočný režim</option>
+</select>

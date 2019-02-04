@@ -34,9 +34,18 @@ class GetController {
     async getAdmissions ({ response, params }) {
         let admissions
         if(params.year == 'all')
-          admissions = await Admission.all()
+          admissions = await Database
+            .select('*')
+            .from('ais_admissions')
+            .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
+          //admissions = await Admission.all()
         else
-          admissions = await Database.table('ais_admissions').where('OBDOBIE', params.year)
+          admissions = await Database
+            .select('*')
+            .from('ais_admissions')
+            .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
+            .where('OBDOBIE', params.year)
+          //admissions = await Database.table('ais_admissions').where('OBDOBIE', params.year)
 
         return response.send(admissions)
     }
