@@ -9,6 +9,7 @@ import { AdmissionComponent } from './admission/admission.component';
 import { ChartModule } from '../plugins/chart/chart.module';
 import { FormsModule } from '@angular/forms';
 import { MapModule } from '../plugins/map/map.module';
+import { GeoChartModule } from '../plugins/geo-chart/geo-chart.module';
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { MapModule } from '../plugins/map/map.module';
     MatIconModule,
 
     ChartModule,
+    GeoChartModule,
     MapModule,
     CommonModule,
     FormsModule,
