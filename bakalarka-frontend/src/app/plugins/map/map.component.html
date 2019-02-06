@@ -22,5 +22,19 @@
   <option value="nightMode">Nočný režim</option>
 </select>
 
-<input type="range" name="radius">
-<input type="range" name="intensity">
+<input
+  [(ngModel)]="radius"
+  type="range"
+  name="radius"
+  min="10"
+  max="200"
+  (input)="changeRadius()"
+>
+<input
+  [(ngModel)]="intensity"
+  type="range"
+  name="intensity"
+  min="10"
+  max="200"
+  (input)="changeIntensity()"
+>

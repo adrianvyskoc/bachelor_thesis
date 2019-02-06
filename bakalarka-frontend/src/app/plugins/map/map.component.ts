@@ -6,7 +6,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit {
+export class MapComponent {
   @Input() markers
   @Input() height: number
   @Input() showHeatMap: boolean = false
@@ -14,18 +14,19 @@ export class MapComponent implements OnInit {
 
   @Output() selectMarker = new EventEmitter()
 
+  private map: google.maps.Map = null
+  private heatmap: google.maps.visualization.HeatmapLayer = null
+
+  // map settings
+  theme: string = 'default'
+  radius: number = 20
+  intensity: number = 40
+
+  // initial coordinates
   lat: number = 48.633
   lng: number = 19.467
 
-  theme: string = 'default'
-
-  private map: google.maps.Map = null;
-  private heatmap: google.maps.visualization.HeatmapLayer = null;
-
   constructor() { }
-
-  ngOnInit() {
-  }
 
   onMapLoad(mapInstance: google.maps.Map) {
     if(!this.showHeatMap) return
@@ -37,8 +38,8 @@ export class MapComponent implements OnInit {
     this.heatmap = new google.maps.visualization.HeatmapLayer({
         map: this.map,
         data: coords,
-        radius: 20,
-        maxIntensity: 40,
+        radius: this.radius,
+        maxIntensity: this.intensity,
         dissipating: true
     })
   }
@@ -47,6 +48,7 @@ export class MapComponent implements OnInit {
     this.selectMarker.emit(markerData)
   }
 
+  // map themes
   styles = {
     silver: [
       {
@@ -218,4 +220,11 @@ export class MapComponent implements OnInit {
     ]
   }
 
+  changeIntensity() {
+    this.heatmap.set('maxIntensity', this.intensity)
+  }
+
+  changeRadius() {
+    this.heatmap.set('radius', this.radius)
+  }
 }
