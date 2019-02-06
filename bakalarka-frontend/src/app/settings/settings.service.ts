@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
+import { google } from '@google/maps';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class SettingsService {
     switch (type) {
       case 'attendanceTypes':
         return this.attendanceTypesChanged.asObservable()
-  
+
       case 'highSchoolTypes':
         return this.highSchoolTypesChanged.asObservable()
 
@@ -26,19 +27,19 @@ export class SettingsService {
   }
 
   getCodebookData(type) {
-    this.http.get(`http://localhost:3333/api/codebook/${type}`) 
+    this.http.get(`http://localhost:3333/api/codebook/${type}`)
       .subscribe(
         (data: []) => {
           switch(type) {
-            case 'attendanceTypes': 
+            case 'attendanceTypes':
               this.attendanceTypesChanged.next(data)
               break
-      
+
             case 'highSchoolTypes':
               this.highSchoolTypesChanged.next(data)
               break
-            
-            case 'studyForms': 
+
+            case 'studyForms':
               this.studyFormsChanged.next(data)
               break
           }

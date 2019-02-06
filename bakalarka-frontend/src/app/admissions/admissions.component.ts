@@ -10,8 +10,8 @@ import { DataService } from '../data.service';
 export class AdmissionsComponent implements OnInit {
   subscription: Subscription
 
-  admissions
-  schools
+  admissions = []
+  schools = []
 
   chosenSchool
 
@@ -24,7 +24,6 @@ export class AdmissionsComponent implements OnInit {
     this.subscription = this.dataService.getAdmissionsUpdateListener()
       .subscribe(
         (admissions:any[]) => {
-          console.log(admissions)
           this.admissions = admissions
         }
       )

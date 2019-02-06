@@ -7,7 +7,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit {
-  @Input() markers: [] = []
+  @Input() markers
   @Input() height: number
   @Input() showHeatMap: boolean = false
   @Input() showMarkers: boolean = true
