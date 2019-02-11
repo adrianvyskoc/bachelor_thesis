@@ -16,25 +16,32 @@
   </ng-template>
 </agm-map>
 
-<select [(ngModel)]="theme" name="theme">
-  <option value="default">Predvolené</option>
-  <option value="silver">Silver</option>
-  <option value="nightMode">Nočný režim</option>
-</select>
+<button (click)="showSettings = !showSettings">Nastavenia</button>
 
-<input
-  [(ngModel)]="radius"
-  type="range"
-  name="radius"
-  min="10"
-  max="200"
-  (input)="changeRadius()"
->
-<input
-  [(ngModel)]="intensity"
-  type="range"
-  name="intensity"
-  min="10"
-  max="200"
-  (input)="changeIntensity()"
->
+<div *ngIf="showSettings" class="map__options">
+  <div>
+    <input
+      [(ngModel)]="radius"
+      type="range"
+      name="radius"
+      min="10"
+      max="200"
+      (input)="changeRadius()"
+    >
+    <input
+      [(ngModel)]="intensity"
+      type="range"
+      name="intensity"
+      min="10"
+      max="200"
+      (input)="changeIntensity()"
+    >
+  </div>
+
+  <select [(ngModel)]="theme" name="theme">
+      <option value="default">Predvolené</option>
+      <option value="silver">Silver</option>
+      <option value="nightMode">Nočný režim</option>
+  </select>
+</div>
+

@@ -1,0 +1,97 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+body, html {
+    margin: 0;
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto,Helvetica,Arial,sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #212529;
+    text-align: left;
+    background-color: #fafafa;
+}
+
+[flex] {
+    display: flex;
+}
+
+[flex-wrap] {
+  flex-wrap: wrap;
+}
+
+[justify-content-between] {
+    justify-content: space-between;
+}
+
+[padding] {
+    padding: 16px;
+}
+
+[padding-left] {
+  padding-left: 16px;
+}
+
+[padding-right] {
+  padding-right: 16px;
+}
+
+[padding-bottom] {
+  padding-bottom: 16px;
+}
+
+[padding-top] {
+  padding-top: 16px;
+}
+
+
+[full-width] {
+    width: 100%;
+}
+
+[full-height] {
+    height: 100%;
+}
+
+[no-margin] {
+    margin: 0 !important;
+}
+
+.sidebar .nav-link .feather {
+    margin-right: 4px;
+    color: #999;
+}
+
+svg:not(:root) {
+    overflow: hidden;
+}
+.feather {
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+}
+
+[margin] {
+  margin: 16px;
+}
+
+[margin-left] {
+  margin-left: 16px;
+}
+
+[margin-right] {
+  margin-right: 16px;
+}
+
+[margin-bottom] {
+  margin-bottom: 16px;
+}
+
+[margin-top] {
+  margin-top: 16px;
+}
+

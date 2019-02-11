@@ -64,6 +64,7 @@
     </table>
 
     <app-chart
+      *ngIf="chosenSchool.admissions.length"
       [legend]="false"
       [type]="'bar'"
       [data]="[chosenSchool.approved, chosenSchool.rejected]"

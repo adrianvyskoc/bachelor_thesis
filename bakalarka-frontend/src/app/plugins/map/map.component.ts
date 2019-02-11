@@ -14,6 +14,8 @@ export class MapComponent {
 
   @Output() selectMarker = new EventEmitter()
 
+  showSettings: boolean = false
+
   private map: google.maps.Map = null
   private heatmap: google.maps.visualization.HeatmapLayer = null
 
