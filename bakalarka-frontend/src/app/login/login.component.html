@@ -1,0 +1,9 @@
+<form (ngSubmit)="submitForm()">
+    <mat-form-field>
+      <input matInput type="text" name="email" placeholder="AIS e-mail" [(ngModel)]="_email">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="password" name="password" placeholder="Heslo" [(ngModel)]="_password">
+    </mat-form-field>
+  <button [disabled]="!(_email && _password)" mat-raised-button>Prihlasit</button>
+</form>

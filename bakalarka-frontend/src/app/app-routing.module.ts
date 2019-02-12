@@ -1,23 +1,32 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
     loadChildren: './dashboard/dashboard.module#DashboardModule',
-    pathMatch: 'full'
+    pathMatch: 'full',
+    canActivate: [AuthGuard]
   },
   {
     path: 'import',
-    loadChildren: './import/import.module#ImportModule'
+    loadChildren: './import/import.module#ImportModule',
+    canActivate: [AuthGuard]
   },
   {
     path: 'settings',
-    loadChildren: './settings/settings.module#SettingsModule'
+    loadChildren: './settings/settings.module#SettingsModule',
+    canActivate: [AuthGuard]
   },
   {
     path: 'admissions',
-    loadChildren: './admissions/admissions.module#AdmissionsModule'
+    loadChildren: './admissions/admissions.module#AdmissionsModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'login',
+    loadChildren: './login/login.module#LoginModule'
   }
 ];
 

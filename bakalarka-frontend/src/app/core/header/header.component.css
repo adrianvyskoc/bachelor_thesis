@@ -2,3 +2,40 @@
     padding-left: 200px;
     z-index: 10;
 }
+
+mat-toolbar {
+    justify-content: space-between;
+  }
+  
+  nav {
+    position: relative;
+    height: 100%;
+  }
+  
+  ul {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+  
+  ul li {
+    height: 100%;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  
+  ul li a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 10px;
+    color: #ffffff;
+    transition: all 0.4s linear;
+  }
+  
+  ul li a:hover {
+    background: #ffffff;
+    color: #3f51b5;
+  }

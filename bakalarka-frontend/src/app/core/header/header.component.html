@@ -25,6 +25,9 @@
           <a class="dropdown-item" routerLink="/admissions/master">Inžiniersky stupeň</a>
         </div>
       </li>
+
+      <li *ngIf="!authService.loggedIn"><a routerLink="/login">Prihlasenie</a></li>
+      <li *ngIf="authService.loggedIn"><a (click)="logoutUser()">Odhlasenie</a></li>
     </ul>
 
     <form class="form-inline my-2 my-lg-0">

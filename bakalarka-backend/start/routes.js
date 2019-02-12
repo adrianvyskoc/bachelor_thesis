@@ -41,5 +41,9 @@ Route
         Route.get('column-meaning/:type', 'GetController.getColumnMeaning')
 
         Route.get('getAdmission/:id', 'GetController.getAdmission')
+
+        // login ldap
+        Route.post('login', 'UserController.loginWithLDAP')
+
     })
     .prefix('/api')

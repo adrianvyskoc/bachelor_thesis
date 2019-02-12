@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from 'src/app/data.service';
+import { AuthService } from 'src/app/login/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -9,7 +10,10 @@ import { DataService } from 'src/app/data.service';
 export class HeaderComponent implements OnInit {
   selectedYear: string
 
-  constructor(private dataService: DataService) { }
+  constructor(
+    private dataService: DataService,
+    private authService: AuthService
+  ) { }
 
   ngOnInit() {
     this.selectedYear = this.dataService.getYear()
@@ -17,6 +21,11 @@ export class HeaderComponent implements OnInit {
 
   onYearSelect() {
     this.dataService.setYear(this.selectedYear)
+  }
+
+  
+  logoutUser() {
+    this.authService.logoutUser()
   }
 
 }
