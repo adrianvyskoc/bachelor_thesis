@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { SettingsService } from 'src/app/settings/settings.service';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { SettingsService } from 'src/app/pages/settings/settings.service';
 
 @Component({
   selector: 'app-codebook-table',
@@ -12,7 +12,7 @@ export class CodebookTableComponent implements OnInit, OnDestroy {
   @Input() codebookType
   @Input() title
   subscription: Subscription
- 
+
   codebookData = []
   newRecord = false
 
@@ -26,7 +26,7 @@ export class CodebookTableComponent implements OnInit, OnDestroy {
         (data:any[]) => {
           this.codebookData = data
         }
-      )  
+      )
   }
 
   ngOnDestroy() {
