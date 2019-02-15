@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { ExportService } from 'src/app/plugins/utils/export.service';
-import { DataService } from 'src/app/data.service';
+import { DataService } from 'src/app/shared/data.service';
 
 @Component({
   selector: 'app-admissions-bachelor',

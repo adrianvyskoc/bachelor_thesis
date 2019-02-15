@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
-import { DataService } from 'src/app/data.service';
+import { DataService } from 'src/app/shared/data.service';
 
 export interface AttendanceElement {
   AIS_ID: number

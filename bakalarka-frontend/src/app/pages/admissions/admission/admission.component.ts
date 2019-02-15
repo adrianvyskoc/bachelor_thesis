@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ExportService } from 'src/app/plugins/utils/export.service';
 import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
-import { DataService } from 'src/app/data.service';
+import { DataService } from 'src/app/shared/data.service';
 
 @Component({
   selector: 'app-admission',

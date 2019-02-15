@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
-import { google } from '@google/maps';
 
 @Injectable({
   providedIn: 'root'
