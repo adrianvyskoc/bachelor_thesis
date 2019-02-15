@@ -29,7 +29,7 @@ export class SettingsService {
   getCodebookData(type) {
     this.http.get(`http://localhost:3333/api/codebook/${type}`)
       .subscribe(
-        (data: []) => {
+        (data) => {
           switch(type) {
             case 'attendanceTypes':
               this.attendanceTypesChanged.next(data)

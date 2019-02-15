@@ -39,8 +39,10 @@ Route
         Route.get('getSubjects/:year', 'GetController.getSubjects')
         Route.get('codebook/:type', 'GetController.getCodebook')
         Route.get('column-meaning/:type', 'GetController.getColumnMeaning')
-
         Route.get('getAdmission/:id', 'GetController.getAdmission')
+
+        // Admissions overview
+        Route.get('admissionsOverview/:year', 'GetController.getAdmissionsOverview')
 
         // login ldap
         Route.post('login', 'UserController.loginWithLDAP')

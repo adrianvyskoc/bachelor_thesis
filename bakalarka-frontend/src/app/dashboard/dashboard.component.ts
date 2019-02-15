@@ -20,7 +20,7 @@ export class DashboardComponent implements OnInit {
         this.schoolsData.sos = this.schoolsData.raw.filter(school => school.typ_skoly == 'Stredná odborná škola')
         this.schoolsData.gym = this.schoolsData.raw.filter(school => school.typ_skoly == 'Gymnázium')
         this.schoolsData.konz = this.schoolsData.raw.filter(school => school.typ_skoly == 'Konzervatórium')
-        this.schoolsData.ssp = this.schoolsData.raw.filter(school => school.typ_skoly == 'Špeciálna stredná škola')   
+        this.schoolsData.ssp = this.schoolsData.raw.filter(school => school.typ_skoly == 'Špeciálna stredná škola')
       })
 
     this.dataService.getData('Admissions')

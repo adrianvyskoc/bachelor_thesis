@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-  private year = 'all'
 
   private attendance = []
   private admissions = []
@@ -19,14 +18,21 @@ export class DataService {
   private schoolsChanged = new Subject<{}>()
   private gradesChanged = new Subject<{}>()
 
+  private admissionsOverviewChanged = new Subject<{}>()
+
+  private year = new BehaviorSubject('all')
+
   loading = false
   showErrorMessage = false
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+  ) { }
 
   setYear(year) {
-    this.year = year
+    this.year.next(year)
     this.getData('Admissions')
+    this.loadAdmissionsOverview()
   }
 
   getYear() {
@@ -37,7 +43,7 @@ export class DataService {
     const url = selectedImport ==
       'Schools' ?
         `http://localhost:3333/api/get${selectedImport}` :
-        `http://localhost:3333/api/get${selectedImport}/${this.year}`
+        `http://localhost:3333/api/get${selectedImport}/${this.year.value}`
 
     this.http.get<Object[]>(url)
       .subscribe(
@@ -75,6 +81,17 @@ export class DataService {
 
   getAdmission(id) {
     return this.http.get(`http://localhost:3333/api/getAdmission/${id}`)
+  }
+
+  loadAdmissionsOverview() {
+    this.http.get(`http://localhost:3333/api/admissionsOverview/${this.year.value}`)
+      .subscribe(
+        data => this.admissionsOverviewChanged.next(data)
+      )
+  }
+
+  getAdmissionsOverviewUpdateListener() {
+    return this.admissionsOverviewChanged.asObservable()
   }
 
   getAttendanceUpdateListener() {

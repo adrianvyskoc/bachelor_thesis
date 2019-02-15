@@ -17,6 +17,7 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   showLabels = false
   subscription: Subscription
   admissions
+
   displayedAdmissionsColumns = ['id', 'Meno', 'Priezvisko', 'E_mail']
   allColumns = [
     "AIS_ID", "school_id", "Por", "Priezvisko", "Meno", "Absolvovaná_VŠ", "Abs_VŠ_program_odbor_text", "Abs_VŠ_program_odbor",

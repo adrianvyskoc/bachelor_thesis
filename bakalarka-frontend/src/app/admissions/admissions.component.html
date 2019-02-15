@@ -24,11 +24,28 @@
 </div>
 
 <h2>Prehľad škôl v krajine</h2>
+
+<div margin-bottom>
+  <select [(ngModel)]="schoolsToShow" name="schoolsToShow" (change)="filterSchools($event)">
+    <option value="all">Všetky školy</option>
+    <option value="some">Máme prihlášky</option>
+    <option value="none">Nemáme prihlášky</option>
+  </select>
+
+  <select [(ngModel)]="schoolQuality" name="schoolQuality" (change)="filterSchools($event)">
+    <option value="all">Všetky</option>
+    <option value="high">Výborné výsledky žiakov</option>
+    <option value="medium">Priemerné výsledky žiakov</option>
+    <option value="low">Zlé výsledky žiakov</option>
+    <option value="none">Neuvedené</option>
+  </select>
+</div>
+
 <div flex>
   <app-map
-    [markers]="schools"
+    [markers]="filteredSchools"
     [height]="500"
-    (selectMarker)="onSelectedMarker($event)"
+    (selectMarker)="chosenSchool = $event"
   ></app-map>
   <div
     *ngIf="chosenSchool"
@@ -59,6 +76,10 @@
         <tr>
           <th scope="row">Počet prihlášok z danej školy</th>
           <td>{{ chosenSchool.admissions.length }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Celkové hodnotenie školy</th>
+          <td>{{ chosenSchool.celkove_hodnotenie ? chosenSchool.celkove_hodnotenie : 'Neuvedené' }}</td>
         </tr>
       </tbody>
     </table>

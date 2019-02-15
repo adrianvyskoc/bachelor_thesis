@@ -104,8 +104,26 @@ class GetController {
         return response.send(codebook)
     }
 
-    async getColumnMeaning({ response, params }) {
-        return response.send(colMeaning[params.type])
+    // API endpoints for usecases
+    async getAdmissionsOverview ({ response, params }) {
+      const schools = await Database
+        .select('*')
+        .from('ineko_schools')
+        .leftJoin('ineko_total_ratings', 'ineko_total_ratings.school_id', 'ineko_schools.kod_kodsko')
+      let admissions
+      if(params.year == 'all')
+        admissions = await Database
+          .select('*')
+          .from('ais_admissions')
+          .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
+      else
+        admissions = await Database
+          .select('*')
+          .from('ais_admissions')
+          .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
+          .where('OBDOBIE', params.year)
+
+      return { schools, admissions }
     }
 }
 
