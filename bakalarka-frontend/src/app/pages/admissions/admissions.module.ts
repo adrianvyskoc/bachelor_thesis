@@ -6,7 +6,7 @@ import { AdmissionsBachelorComponent } from './admissions-bachelor/admissions-ba
 import { AdmissionsMasterComponent } from './admissions-master/admissions-master.component';
 import { MatTableModule, MatPaginatorModule, MatSortModule, MatTooltipModule, MatInputModule, MatIconModule } from '@angular/material';
 import { AdmissionComponent } from './admission/admission.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartModule } from 'src/app/plugins/chart/chart.module';
 import { GeoChartModule } from 'src/app/plugins/geo-chart/geo-chart.module';
 import { MapModule } from 'src/app/plugins/map/map.module';
@@ -25,6 +25,7 @@ import { MapModule } from 'src/app/plugins/map/map.module';
     MapModule,
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     AdmissionsRoutingModule
   ],
   declarations: [

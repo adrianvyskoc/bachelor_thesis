@@ -1,7 +1,79 @@
-<h1 class="display-4">Prijímacie konanie</h1>
-<hr>
+<div class="jumbotron">
+  <h1 class="display-3">Prijímacie konanie</h1>
+  <hr class="my-4">
 
-<h2>Všeobecné informácie</h2>
+  <div class="row">
+    <div class="col-lg-4">
+      <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
+        <select
+          class="custom-select"
+          formControlName="studyType"
+          margin-bottom
+          (change)="onStudyTypeChange()"
+        >
+          <option value="all">Všetky typy</option>
+          <option value="3">Trojročné štúdium</option>
+          <option value="4">Štvorročné štúdium</option>
+        </select>
+        <select
+          class="custom-select"
+          formControlName="schoolType"
+          margin-bottom
+          (change)="onSchoolTypeChange()"
+        >
+          <option value="all">Všetky typy škôl</option>
+          <option value="gymnasium">Gymnáziá</option>
+          <option value="technical">Odborné školy</option>
+          <option value="other">Ostatné</option>
+        </select>
+        <div
+          flex
+          margin-bottom
+        >
+          <div class="custom-control custom-radio" margin-right>
+            <input
+              id="customRadio3"
+              class="custom-control-input"
+              type="radio"
+              formControlName="gender"
+              value="all"
+            >
+            <label class="custom-control-label" for="customRadio3">Obe pohlavia</label>
+          </div>
+          <div class="custom-control custom-radio" margin-right>
+            <input
+              id="customRadio1"
+              class="custom-control-input"
+              type="radio"
+              formControlName="gender"
+              value="muž"
+            >
+            <label class="custom-control-label" for="customRadio1">Muži</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input
+              id="customRadio2"
+              class="custom-control-input"
+              type="radio"
+              formControlName="gender"
+              value="žena"
+            >
+            <label class="custom-control-label" for="customRadio2">Ženy</label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-raised btn-primary">Filtrovať</button>
+      </form>
+    </div>
+
+    <div class="col-lg-4">
+      Počet prihlášok pre zvolené filtre: <strong>{{ filteredAdmissions.length }}</strong> z {{ admissions.length }}.
+    </div>
+  </div>
+
+
+</div>
+
+<h2 class="display-4" padding>Všeobecné informácie</h2>
 <div class="row">
   <div class="col-lg-6">
     <app-chart
@@ -23,85 +95,101 @@
   </div>
 </div>
 
-<h2>Prehľad škôl v krajine</h2>
+<h2 class="display-4" padding>Prehľad škôl v krajine</h2>
 
-<div margin-bottom>
-  <select [(ngModel)]="schoolsToShow" name="schoolsToShow" (change)="filterSchools($event)">
-    <option value="all">Všetky školy</option>
-    <option value="some">Máme prihlášky</option>
-    <option value="none">Nemáme prihlášky</option>
-  </select>
+<div class="schoolMap">
 
-  <select [(ngModel)]="schoolQuality" name="schoolQuality" (change)="filterSchools($event)">
-    <option value="all">Všetky</option>
-    <option value="high">Výborné výsledky žiakov</option>
-    <option value="medium">Priemerné výsledky žiakov</option>
-    <option value="low">Zlé výsledky žiakov</option>
-    <option value="none">Neuvedené</option>
-  </select>
-</div>
+  <div class="schoolMap__filter" margin-bottom>
+    <select
+      [(ngModel)]="schoolsToShow"
+      class="custom-select"
+      name="schoolsToShow"
+      margin-right
+      (change)="filterSchools($event)"
+    >
+      <option value="all">Všetky školy</option>
+      <option value="some">Máme prihlášky</option>
+      <option value="none">Nemáme prihlášky</option>
+    </select>
 
-<div flex>
-  <app-map
-    [markers]="filteredSchools"
-    [height]="500"
-    (selectMarker)="chosenSchool = $event"
-  ></app-map>
-  <div
-    *ngIf="chosenSchool"
-    class="school-detail"
-    padding
-  >
-    <h3>{{ chosenSchool.nazov }}</h3>
-    <hr>
-    <table class="table table-borderless table-sm">
-      <thead>
-        <tr>
-          <th colspan="2" scope="col">Všeobecné informácie o škole</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row">Kód školy</th>
-          <td>{{ chosenSchool.kod_kodsko }}</td>
-        </tr>
-        <tr>
-          <th scope="row">Typ školy</th>
-          <td>{{ chosenSchool.typ_skoly }}</td>
-        </tr>
-        <tr>
-          <th scope="row">Email</th>
-          <td>{{ chosenSchool.email }}</td>
-        </tr>
-        <tr>
-          <th scope="row">Počet prihlášok z danej školy</th>
-          <td>{{ chosenSchool.admissions.length }}</td>
-        </tr>
-        <tr>
-          <th scope="row">Celkové hodnotenie školy</th>
-          <td>{{ chosenSchool.celkove_hodnotenie ? chosenSchool.celkove_hodnotenie : 'Neuvedené' }}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <app-chart
-      *ngIf="chosenSchool.admissions.length"
-      [legend]="false"
-      [type]="'bar'"
-      [data]="[chosenSchool.approved, chosenSchool.rejected]"
-      [labels]="['Prijatý', 'Neprijatý']"
-    ></app-chart>
+    <select
+      [(ngModel)]="schoolQuality"
+      class="custom-select"
+      name="schoolQuality"
+      margin-right
+      (change)="filterSchools($event)"
+    >
+      <option value="all">Všetky</option>
+      <option value="high">Výborné výsledky žiakov</option>
+      <option value="medium">Priemerné výsledky žiakov</option>
+      <option value="low">Zlé výsledky žiakov</option>
+      <option value="none">Neuvedené</option>
+    </select>
   </div>
+
+  <div flex>
+    <app-map
+      [markers]="filteredSchools"
+      [height]="500"
+      (selectMarker)="chosenSchool = $event"
+    ></app-map>
+    <div
+      *ngIf="chosenSchool"
+      class="schoolMap__schoolDetail"
+      padding
+    >
+      <h3>{{ chosenSchool.nazov }}</h3>
+      <hr>
+      <table class="table table-borderless table-sm">
+        <thead>
+          <tr>
+            <th colspan="2" scope="col">Všeobecné informácie o škole</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Kód školy</th>
+            <td>{{ chosenSchool.kod_kodsko }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Typ školy</th>
+            <td>{{ chosenSchool.typ_skoly }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Email</th>
+            <td>{{ chosenSchool.email }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Počet prihlášok z danej školy</th>
+            <td>{{ chosenSchool.admissions.length }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Celkové hodnotenie školy</th>
+            <td>{{ chosenSchool.celkove_hodnotenie ? chosenSchool.celkove_hodnotenie : 'Neuvedené' }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <app-chart
+        *ngIf="chosenSchool.admissions.length"
+        [legend]="false"
+        [type]="'bar'"
+        [data]="[chosenSchool.approved, chosenSchool.rejected]"
+        [labels]="['Prijatý', 'Neprijatý']"
+      ></app-chart>
+    </div>
+  </div>
+
 </div>
 
-<h2>Pôvod študentov</h2>
+<h2 class="display-4" padding>Pôvod študentov</h2>
 <div class="row">
   <div class="col-lg-4">
 
   </div>
   <div class="col-lg-8">
     <app-map
-      [markers]="admissions"
+      [markers]="filteredAdmissions"
       [height]="500"
       [showHeatMap]="true"
       [showMarkers]="false"
@@ -109,6 +197,6 @@
   </div>
 </div>
 
-<h2>Regióny</h2>
-<app-geo-chart></app-geo-chart>
+<h2 class="display-4" padding>Regióny</h2>
+<app-geo-chart *ngIf="filteredAdmissions.length" [data]="filteredAdmissions"></app-geo-chart>
 

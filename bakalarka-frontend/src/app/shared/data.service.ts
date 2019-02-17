@@ -84,7 +84,7 @@ export class DataService {
   }
 
   loadAdmissionsOverview() {
-    this.http.get(`http://localhost:3333/api/admissionsOverview/${this.year.value}`)
+    this.http.get(`http://localhost:3333/api/admissionsOverview?year=${this.year.value}`)
       .subscribe(
         data => this.admissionsOverviewChanged.next(data)
       )

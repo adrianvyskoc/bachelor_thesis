@@ -3,11 +3,24 @@ app-map {
 }
 
 h2 {
-  padding: 10px;
-  background-color: #F0F0F0;
+  margin: 16px -16px;
+  background-color: #e9ecef;
 }
 
-.school-detail {
-  width: 30%;
-  background-color: #F0F0F0;
+.jumbotron {
+  margin: 0;
 }
+
+.schoolMap {
+  &__filter {
+    & > select {
+      width: auto;
+    }
+  }
+
+  &__schoolDetail {
+    width: 30%;
+    background-color: #e9ecef;
+  }
+}
+

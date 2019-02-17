@@ -42,7 +42,7 @@ Route
         Route.get('getAdmission/:id', 'GetController.getAdmission')
 
         // Admissions overview
-        Route.get('admissionsOverview/:year', 'GetController.getAdmissionsOverview')
+        Route.get('admissionsOverview', 'GetController.getAdmissionsOverview')
 
         // login ldap
         Route.post('login', 'UserController.loginWithLDAP')

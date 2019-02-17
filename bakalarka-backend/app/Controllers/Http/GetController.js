@@ -105,13 +105,15 @@ class GetController {
     }
 
     // API endpoints for usecases
-    async getAdmissionsOverview ({ response, params }) {
+    async getAdmissionsOverview ({ request, response, params }) {
+      const queryParams = await request.all()
+
       const schools = await Database
         .select('*')
         .from('ineko_schools')
         .leftJoin('ineko_total_ratings', 'ineko_total_ratings.school_id', 'ineko_schools.kod_kodsko')
       let admissions
-      if(params.year == 'all')
+      if(queryParams.year == 'all')
         admissions = await Database
           .select('*')
           .from('ais_admissions')
@@ -121,9 +123,9 @@ class GetController {
           .select('*')
           .from('ais_admissions')
           .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
-          .where('OBDOBIE', params.year)
+          .where('OBDOBIE', queryParams.year)
 
-      return { schools, admissions }
+      return response.send({ schools, admissions })
     }
 }
 
