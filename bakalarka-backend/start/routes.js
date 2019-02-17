@@ -41,6 +41,9 @@ Route
         Route.get('column-meaning/:type', 'GetController.getColumnMeaning')
         Route.get('getAdmission/:id', 'GetController.getAdmission')
 
+        // imported years
+        Route.get('importedYears', 'GetController.getImportedYears')
+
         // Admissions overview
         Route.get('admissionsOverview', 'GetController.getAdmissionsOverview')
 

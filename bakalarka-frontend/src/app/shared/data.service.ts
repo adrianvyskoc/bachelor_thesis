@@ -17,6 +17,7 @@ export class DataService {
   private studentsChanged = new Subject<{}>()
   private schoolsChanged = new Subject<{}>()
   private gradesChanged = new Subject<{}>()
+  private importedYearsChanged = new Subject<{}>()
 
   private admissionsOverviewChanged = new Subject<{}>()
 
@@ -37,6 +38,11 @@ export class DataService {
 
   getYear() {
     return this.year
+  }
+
+  getImportedYears() {
+    return this.http.get(`http://localhost:3333/api/importedYears`)
+      .subscribe(years => this.importedYearsChanged.next(years))
   }
 
   getData(selectedImport) {
@@ -114,6 +120,10 @@ export class DataService {
     return this.gradesChanged.asObservable()
   }
 
+  getImportedYearsUpdateListener() {
+    return this.importedYearsChanged.asObservable()
+  }
+
   async uploadData(selectedFile, selectedImport, selectedSource, year) {
     const fd = new FormData()
     fd.append(selectedImport, selectedFile, selectedFile.name)
@@ -121,8 +131,9 @@ export class DataService {
     await this.http.post('http://localhost:3333/api/import/' + selectedSource + '/' + selectedImport + '/' + year, fd)
       .subscribe(
         res => {
-          console.log(res);
+          console.log(res)
           this.getData(selectedImport)
+          this.getImportedYears()
           this.loading = false
         },
         error => {

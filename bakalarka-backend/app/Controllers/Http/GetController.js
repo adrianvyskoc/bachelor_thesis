@@ -1,6 +1,7 @@
 'use strict'
 
 const Database = use('Database')
+const Redis = use('Redis')
 
 const Student = use('App/Models/Student')
 const Attendance = use('App/Models/Attendance')
@@ -13,12 +14,29 @@ const Subject = use('App/Models/Subject')
 const School = use('App/Models/School')
 const Pointer = use('App/Models/Pointer')
 
-const colMeaning = require('../../../public/db_columns_meaning.json')
-
-//import colMeaning from 'publiv/'
-
-
 class GetController {
+    async getImportedYears ({ response }) {
+        // INEKO
+        const AdditionalData = JSON.parse(await Redis.get('AdditionalData'))
+        const TotalRating = JSON.parse(await Redis.get('TotalRating'))
+        const Percentils = JSON.parse(await Redis.get('Percentils'))
+        const Pointers = JSON.parse(await Redis.get('Pointers'))
+
+        // AIS
+
+        return response.send({
+          'ineko': {
+            TotalRating,
+            Percentils,
+            Pointers,
+            AdditionalData
+          },
+          'ais': {
+
+          }
+        })
+    }
+
     async getStudents ({ response }) {
         const students = await Student.all()
 

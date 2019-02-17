@@ -9,6 +9,8 @@ import { DataService } from 'src/app/shared/data.service';
 export class ImportComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
 
+  importedYears
+
   selectedFile: File = null
   selectedSource: string = ""
   selectedImport: string = ""
@@ -22,6 +24,9 @@ export class ImportComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.dataService.getImportedYears()
+    this.dataService.getImportedYearsUpdateListener()
+      .subscribe(years => this.importedYears = years)
   }
 
   addFile() {

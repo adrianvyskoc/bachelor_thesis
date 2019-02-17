@@ -45,6 +45,19 @@
     <mat-form-field>
       <input matInput placeholder="Školský rok" [(ngModel)]="schoolYear">
     </mat-form-field>
+
+    <div
+      *ngIf="importedYears[selectedSource][selectedImport] && importedYears[selectedSource][selectedImport].length"
+      class="alert alert-warning"
+      role="alert"
+    >
+      <p font-weight-bold>Pre nasledujúce roky bol daný import už vykonaný:</p>
+      <ul>
+        <li *ngFor="let year of importedYears[selectedSource][selectedImport]">{{ year }}</li>
+      </ul>
+      <hr>
+      <p class="mb-0">Opätovným importovaním s daným obdobím vzniká riziko, že si prepíšete existujúce dáta.</p>
+    </div>
     <mat-divider></mat-divider>
   </ng-template>
 
