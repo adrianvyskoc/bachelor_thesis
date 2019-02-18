@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/shared/data.service';
 import { AdmissionsFilterService } from './admissions-filter.service';
 import { FormGroup, FormControl } from '@angular/forms';
+import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-admissions',
@@ -10,6 +11,9 @@ import { FormGroup, FormControl } from '@angular/forms';
   styleUrls: ['./admissions.component.scss']
 })
 export class AdmissionsComponent implements OnInit {
+  @ViewChild('paginator') paginator: MatPaginator
+  @ViewChild(MatSort) sort: MatSort
+
   subscription: Subscription
 
   admissions = []
@@ -18,6 +22,7 @@ export class AdmissionsComponent implements OnInit {
   filteredSchools = []
 
   chosenSchool
+  displayedAdmissionsColumns = ['id', 'Meno', 'Priezvisko', 'E_mail']
   schoolsToShow: string = 'all'
   schoolQuality: string = 'all'
 
@@ -52,7 +57,6 @@ export class AdmissionsComponent implements OnInit {
   // GENERAL FILTERING
 
   onFilter() {
-    console.log(this.filterForm.value)
     this.filteredAdmissions = this.admissions
 
     if(this.filterForm.value.studyType !== 'all')
@@ -94,6 +98,13 @@ export class AdmissionsComponent implements OnInit {
     this.chosenSchool = null
   }
 
+  onSchoolChoose(event) {
+    this.chosenSchool = event
+    this.chosenSchool.admissions = new MatTableDataSource<any[]>(this.chosenSchool.admissions)
+    this.chosenSchool.admissions.paginator = this.paginator
+    this.chosenSchool.admissions.sort = this.sort
+  }
+
   _getSchoolsAdmissions() {
     this.schools = this.schools.map((school) => {
       school.approved = 0
@@ -108,5 +119,9 @@ export class AdmissionsComponent implements OnInit {
 
       return school
     })
+  }
+
+  _displayedColumnsAndActions() {
+    return [...this.displayedAdmissionsColumns, 'Akcie']
   }
 }

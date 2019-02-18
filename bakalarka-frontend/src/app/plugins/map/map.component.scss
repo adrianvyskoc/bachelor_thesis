@@ -1,9 +1,6 @@
-:host {
-  position: relative;
-}
-
 .map {
   &__options {
+    color: white;
     position: absolute;
     top: 0;
 
@@ -11,13 +8,30 @@
     align-items: center;
     justify-content: space-between;
 
-    height: 50px;
+    height: 75px;
     width: 100%;
     background-color: rgba(0,0,0,0.3);
-    padding: 0 10px;
 
     & > * {
       padding-top: 0;
     }
+
+    input[type="range"] {
+      display: block;
+    }
+
+    select {
+      width: auto;
+    }
+  }
+
+  &__settingsBtn {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+  }
+
+  &__wrapper {
+    position: relative;
   }
 }

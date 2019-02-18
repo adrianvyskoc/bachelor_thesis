@@ -1,46 +1,61 @@
-<agm-map
-  *ngIf="markers.length"
-  [ngStyle]="{ 'height.px': height }"
-  [latitude]="lat"
-  [longitude]="lng"
-  [styles]="styles[theme]"
-  (mapReady)="onMapLoad($event)"
->
-  <ng-template [ngIf]="showMarkers">
-    <agm-marker
-      *ngFor="let mark of markers"
-      [latitude]="mark.sur_y"
-      [longitude]="mark.sur_x"
-      (markerClick)="onSelectMarker(mark)"
-    ></agm-marker>
-  </ng-template>
-</agm-map>
+<div *ngIf="markers.length" class="map__wrapper">
 
-<button (click)="showSettings = !showSettings">Nastavenia</button>
+  <agm-map
+    [ngStyle]="{ 'height.px': height }"
+    [latitude]="lat"
+    [longitude]="lng"
+    [styles]="styles[theme]"
+    (mapReady)="onMapLoad($event)"
+  >
+    <ng-template [ngIf]="showMarkers">
+      <agm-marker
+        *ngFor="let mark of markers"
+        [latitude]="mark.sur_y"
+        [longitude]="mark.sur_x"
+        (markerClick)="onSelectMarker(mark)"
+      ></agm-marker>
+    </ng-template>
+  </agm-map>
 
-<div *ngIf="showSettings" class="map__options">
-  <div>
-    <input
-      [(ngModel)]="radius"
-      type="range"
-      name="radius"
-      min="10"
-      max="200"
-      (input)="changeRadius()"
-    >
-    <input
-      [(ngModel)]="intensity"
-      type="range"
-      name="intensity"
-      min="10"
-      max="200"
-      (input)="changeIntensity()"
-    >
+  <button
+    class="map__settingsBtn btn btn-outline-primary btn-lg"
+    type="button"
+    (click)="showSettings = !showSettings"
+  >
+    <i class="fas fa-sliders-h"></i>
+  </button>
+
+  <div *ngIf="showSettings" class="map__options" padding>
+    <div *ngIf="showHeatMap" flex>
+      <div margin-right>
+        <label>Radius</label>
+        <input
+          [(ngModel)]="radius"
+          type="range"
+          name="radius"
+          min="10"
+          max="200"
+          (input)="changeRadius()"
+        >
+      </div>
+      <div>
+        <label>Intensity</label>
+        <input
+          [(ngModel)]="intensity"
+          type="range"
+          name="intensity"
+          min="10"
+          max="200"
+          (input)="changeIntensity()"
+        >
+      </div>
+    </div>
+
+    <select [(ngModel)]="theme" class="custom-select" name="theme">
+        <option value="default">Predvolené</option>
+        <option value="silver">Silver</option>
+        <option value="nightMode">Nočný režim</option>
+    </select>
   </div>
 
-  <select [(ngModel)]="theme" name="theme">
-      <option value="default">Predvolené</option>
-      <option value="silver">Silver</option>
-      <option value="nightMode">Nočný režim</option>
-  </select>
 </div>

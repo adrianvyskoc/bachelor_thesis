@@ -17,7 +17,6 @@ export class GeoChartComponent implements OnInit {
 
   ngOnInit() {
     this._calculateRegionAdmissionCounts()
-    console.log(this.regionAdmissionCounts)
 
     google['charts'].load('current', {
       'packages':['geochart'],
@@ -25,15 +24,15 @@ export class GeoChartComponent implements OnInit {
       callback: () => {
         new google['visualization'].GeoChart(document.getElementById('regions_div')).draw(
           google['visualization'].arrayToDataTable([
-            ['Destination', 'Počet študentov', 'Pocet'],
-            ['SK-BL', this.regionAdmissionCounts['SK-BL'], 100],
-            ['SK-TA', this.regionAdmissionCounts['SK-TA'], 100],
-            ['SK-TC', this.regionAdmissionCounts['SK-TC'], 100],
-            ['SK-NI', this.regionAdmissionCounts['SK-NI'], 100],
-            ['SK-PV', this.regionAdmissionCounts['SK-PV'], 100],
-            ['SK-ZI', this.regionAdmissionCounts['SK-ZI'], 100],
-            ['SK-KI', this.regionAdmissionCounts['SK-KI'], 100],
-            ['SK-BC', this.regionAdmissionCounts['SK-BC'], 100]
+            ['Destination', 'Počet študentov'],
+            ['SK-BL', this.regionAdmissionCounts['SK-BL']],
+            ['SK-TA', this.regionAdmissionCounts['SK-TA']],
+            ['SK-TC', this.regionAdmissionCounts['SK-TC']],
+            ['SK-NI', this.regionAdmissionCounts['SK-NI']],
+            ['SK-PV', this.regionAdmissionCounts['SK-PV']],
+            ['SK-ZI', this.regionAdmissionCounts['SK-ZI']],
+            ['SK-KI', this.regionAdmissionCounts['SK-KI']],
+            ['SK-BC', this.regionAdmissionCounts['SK-BC']]
           ]),
           {
             colorAxis: {colors: ['red', 'green']},

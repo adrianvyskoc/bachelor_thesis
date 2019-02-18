@@ -9,9 +9,8 @@
           class="custom-select"
           formControlName="studyType"
           margin-bottom
-          (change)="onStudyTypeChange()"
         >
-          <option value="all">Všetky typy</option>
+          <option value="all">Všetky typy štúdia</option>
           <option value="3">Trojročné štúdium</option>
           <option value="4">Štvorročné štúdium</option>
         </select>
@@ -19,7 +18,6 @@
           class="custom-select"
           formControlName="schoolType"
           margin-bottom
-          (change)="onSchoolTypeChange()"
         >
           <option value="all">Všetky typy škôl</option>
           <option value="gymnasium">Gymnáziá</option>
@@ -131,7 +129,7 @@
     <app-map
       [markers]="filteredSchools"
       [height]="500"
-      (selectMarker)="chosenSchool = $event"
+      (selectMarker)="onSchoolChoose($event)"
     ></app-map>
     <div
       *ngIf="chosenSchool"
@@ -161,7 +159,7 @@
           </tr>
           <tr>
             <th scope="row">Počet prihlášok z danej školy</th>
-            <td>{{ chosenSchool.admissions.length }}</td>
+            <td>{{ chosenSchool.admissions.data.length }}</td>
           </tr>
           <tr>
             <th scope="row">Celkové hodnotenie školy</th>
@@ -171,7 +169,7 @@
       </table>
 
       <app-chart
-        *ngIf="chosenSchool.admissions.length"
+        *ngIf="chosenSchool.admissions.data.length"
         [legend]="false"
         [type]="'bar'"
         [data]="[chosenSchool.approved, chosenSchool.rejected]"
@@ -180,23 +178,54 @@
     </div>
   </div>
 
+  <div *ngIf="chosenSchool && chosenSchool.admissions.data.length" margin-top>
+    <table mat-table matSort [dataSource]="chosenSchool.admissions" full-width>
+      <ng-container [matColumnDef]="column" *ngFor="let column of ['id', 'Meno', 'Priezvisko', 'E_mail']">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{column}} </th>
+        <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Akcie" stickyEnd>
+        <th mat-header-cell *matHeaderCellDef> Akcie </th>
+        <td mat-cell *matCellDef="let element">
+          <button class="btn btn-primary" [routerLink]="['bachelor', element.id]" no-margin>Detail</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="_displayedColumnsAndActions()"></tr>
+      <tr mat-row *matRowDef="let row; columns: _displayedColumnsAndActions();"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons #paginator></mat-paginator>
+  </div>
+
+  <div
+    *ngIf="chosenSchool && !chosenSchool.admissions.data.length"
+    margin-top
+    text-center
+  >
+    <hr>
+    Z tejto školy zatiaľ neexistujú žiadne prihlášky.
+  </div>
+
 </div>
 
 <h2 class="display-4" padding>Pôvod študentov</h2>
-<div class="row">
-  <div class="col-lg-4">
+<app-map
+  [markers]="filteredAdmissions"
+  [height]="500"
+  [showHeatMap]="true"
+  [showMarkers]="false"
+></app-map>
 
+<h2 class="display-4" padding>Regióny</h2>
+
+<div class="row">
+  <div class="col-lg-5">
+    <app-geo-chart *ngIf="filteredAdmissions.length" [data]="filteredAdmissions"></app-geo-chart>
   </div>
-  <div class="col-lg-8">
-    <app-map
-      [markers]="filteredAdmissions"
-      [height]="500"
-      [showHeatMap]="true"
-      [showMarkers]="false"
-    ></app-map>
+  <div class="col-lg-7">
+
   </div>
 </div>
 
-<h2 class="display-4" padding>Regióny</h2>
-<app-geo-chart *ngIf="filteredAdmissions.length" [data]="filteredAdmissions"></app-geo-chart>
 
