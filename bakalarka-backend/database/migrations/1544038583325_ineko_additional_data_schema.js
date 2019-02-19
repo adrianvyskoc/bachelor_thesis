@@ -5,7 +5,7 @@ const Schema = use('Schema')
 class InekoAdditionalDataSchema extends Schema {
   up () {
     this.create('ineko_additional_data', (table) => {
-      table.increments('ID')
+      table.increments()
 			table.integer("school_id").references('kod_kodsko').inTable('ineko_schools')
 
 			table.timestamps()

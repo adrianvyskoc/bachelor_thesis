@@ -32,8 +32,6 @@ class ImportAisController {
 
     async import ({ request, params }) {
 
-        console.log(params.year)
-
         const config = {
             //sheetRows: 11,
             type: "string",
@@ -88,25 +86,30 @@ class ImportAisController {
                     }
                 }
 
-                let attendance = new Attendance()
-                attendance.fill(attendanceRow)
-                attendance.created_at = null
-                attendance.updated_at = null
+                attendanceRow.created_at = null
+                attendanceRow.updated_at = null
 
                 try {
-                    await attendance.save()
-                } catch(err) { console.log(err) }            }
+                    await Database.table('ais_attendances').insert(attendanceRow)
+                } catch(err) { console.log(err) }
+            }
         }
 
         // -------------------------------------------------------------------
         // Grades
         // -------------------------------------------------------------------
 
+        const attrsToDeleteGrades = [ 'KOD', 'KREDITY', 'STAV_ZAPISU', 'UKONCENIE', 'PREDMET' ]
+
         if (params.selectedImport == 'Grades') {
             for (let row of rows) {
                 const { PRIEZVISKO, MENO, STUDIUM, ROCNIK, ...gradeRow } = row
 
                 gradeRow.OBDOBIE = params.year
+
+                for(const prop of attrsToDeleteGrades) {
+                    delete gradeRow[prop]
+                }
 
                 const studentData = {
                     AIS_ID: gradeRow.AIS_ID,
@@ -123,18 +126,11 @@ class ImportAisController {
                 } catch(err) {
                     if(params.selectedAction == "update") {
                         await Database.table('students').where('AIS_ID', studentData.AIS_ID).update(studentData)
-                    } else {
-                        console.log("tu som")
                     }
                 }
 
-                let grade = new Grade()
-                grade.fill(gradeRow)
-                grade.created_at = null
-                grade.updated_at = null
-
                 try {
-                    await grade.save()
+                    await Database.table('ais_grades').insert(gradeRow)
                 } catch(err) { console.log(err) }
             }
         }

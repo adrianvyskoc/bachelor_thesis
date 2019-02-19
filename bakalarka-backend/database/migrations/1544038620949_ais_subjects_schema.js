@@ -10,7 +10,7 @@ class AisSubjectsSchema extends Schema {
       table.string("PREDMET")
       table.string("KOD")
       table.integer("KREDITY")
-
+      table.string("UKONCENIE")
     })
   }
 

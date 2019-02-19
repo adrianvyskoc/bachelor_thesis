@@ -5,7 +5,7 @@ const Schema = use('Schema')
 class InekoIndividualPointerValuesSchema extends Schema {
   up () {
     this.create('ineko_individual_pointer_values', (table) => {
-      table.increments('ID')
+      table.increments()
 			table.integer("school_id").references('kod_kodsko').inTable('ineko_schools')
 
 			table.timestamps()

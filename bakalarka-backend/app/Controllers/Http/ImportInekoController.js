@@ -7,10 +7,6 @@ const fs = use('fs')
 const Redis = use('Redis')
 
 // Models
-const AdditionalData = use('App/Models/AdditionalData')
-const TotalRating    = use('App/Models/TotalRating')
-const Percentil      = use('App/Models/Percentil')
-const Pointer        = use('App/Models/Pointer')
 const School         = use('App/Models/School')
 
 class ImportInekoController {
@@ -45,7 +41,7 @@ class ImportInekoController {
  */
 
         // pole názvov atribútov, ktoré môžeme vymazať vo všetkých tabuĽkách okrem zoznamu škôl
-        const toDeleteAttrs = [ 'kraj', 'okres', 'zriadovatel', 'druh_skoly', 'jazyk', 'typ_skoly', 'nazov', 'ulica', 'obec', 'PSC' ]
+        const toDeleteAttrs = [ 'ID', 'kraj', 'okres', 'zriadovatel', 'druh_skoly', 'jazyk', 'typ_skoly', 'nazov', 'ulica', 'obec', 'PSC' ]
 
         // errory, ktoré vrátime frontendu
         let emptySchoolFK = [];
@@ -107,31 +103,30 @@ class ImportInekoController {
                     delete row[prop]
                 }
 
-                let record
+                let dbName
                 switch (params.selectedImport) {
                     case 'Percentils':
-                        record = new Percentil()
+                        dbName = 'ineko_percentils'
                         break;
 
                     case 'TotalRating':
-                        record = new TotalRating()
+                        dbName = 'ineko_total_ratings'
                         break
 
                     case 'AdditionalData':
-                        record = new AdditionalData()
+                        dbName = 'ineko_additional_data'
                         break
 
                     case 'Pointers':
-                        record = new Pointer()
+                        dbName = 'ineko_individual_pointer_values'
                         break
 
                     default:
                         break
                 }
-                record.fill(row)
 
                 try {
-                    await record.save()
+                    await Database.table(dbName).insert(row)
                 } catch(err) { console.log(err) }
             }
 
