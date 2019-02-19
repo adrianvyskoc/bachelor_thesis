@@ -76,7 +76,7 @@ export class DataTablesComponent implements OnInit, OnDestroy {
 
   // Grades table
   @ViewChild('grdPaginator') gradesPaginator: MatPaginator
-  displayedGradesColumns: string[] = ['AIS_ID', 'RCS', 'KOD', 'PREDMET', 'ZAP_VYSLEDOK', 'PREDMET_VYSLEDOK', 'POCET_ZAPISOV', 'KREDITY']
+  displayedGradesColumns: string[] = ['AIS_ID', 'RCS', 'KOD', 'PREDMET', 'ZAP_VYSLEDOK', 'PREDMET_VYSLEDOK', 'POCET_ZAPISOV']
   grades
 
   constructor(private dataService: DataService) { }
@@ -108,6 +108,7 @@ export class DataTablesComponent implements OnInit, OnDestroy {
     this.gradesSubscription = this.dataService.getGradesUpdateListener()
       .subscribe(
         (data: GradeElement[]) => {
+          console.log(data)
           this.grades = new MatTableDataSource<GradeElement>(data)
           this.grades.paginator = this.gradesPaginator
           this.grades.sort = this.sort
