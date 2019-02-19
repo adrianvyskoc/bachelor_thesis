@@ -11,8 +11,11 @@ export class ChartComponent implements OnChanges {
   @Input() data: any[]
   @Input() title: string
   @Input() labels: string[]
+  @Input() groupLabels: string[]
   @Input() legend: boolean
   @Input() saveButton: boolean = true
+
+  @Input() group: boolean = false
 
   @ViewChild('canvas') canvas
   @ViewChild('download') download
@@ -49,12 +52,7 @@ export class ChartComponent implements OnChanges {
       type: this.type,
       data: {
         labels: this.labels,
-        datasets: [{
-          data: this.data,
-          backgroundColor: this.backgroundColors.slice(0, this.data.length),
-          borderColor: this.borderColors.slice(0, this.data.length),
-          borderWidth: 1
-        }]
+        datasets: this._createDatasets()
       },
       options: {
         title: {
@@ -86,5 +84,31 @@ export class ChartComponent implements OnChanges {
         }
       }
     })
+  }
+
+  _createDatasets() {
+    if(this.group) {
+
+      return this.data.reduce((acc, nextVal, idx) => {
+        acc.push({
+          data: nextVal,
+          label: this.groupLabels[idx],
+          backgroundColor: this.backgroundColors[idx],
+          borderColor: this.borderColors[idx],
+          borderWidth: 1,
+        })
+        return acc
+      }, [])
+
+    } else {
+
+      return [{
+        data: this.data,
+        backgroundColor: this.backgroundColors.slice(0, this.data.length),
+        borderColor: this.borderColors.slice(0, this.data.length),
+        borderWidth: 1
+      }]
+
+    }
   }
 }

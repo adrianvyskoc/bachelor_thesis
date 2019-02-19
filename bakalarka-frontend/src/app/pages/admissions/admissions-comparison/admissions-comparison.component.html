@@ -13,6 +13,16 @@
 
 -->
 
+<app-chart
+  [title]="'Počet prijatých/neprijatých uchádzačov za školské roky'"
+  [data]="admCountsPerYear"
+  [labels]="['2015-2016', '2016-2017', '2017-2018', '2018-2019']"
+  [groupLabels]="['Neprijatý', 'Prijatý']"
+  [type]="'bar'"
+  [legend]="true"
+  [group]="true"
+></app-chart>
+
 <!--
 
   TODO:

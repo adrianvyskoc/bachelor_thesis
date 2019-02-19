@@ -47,6 +47,9 @@ Route
         // Admissions overview
         Route.get('admissionsOverview', 'GetController.getAdmissionsOverview')
 
+        // Admissions year comparison
+        Route.get('admissionsYearComparison', 'GetController.getAdmissionsYearComparison')
+
         // login ldap
         Route.post('login', 'UserController.loginWithLDAP')
 

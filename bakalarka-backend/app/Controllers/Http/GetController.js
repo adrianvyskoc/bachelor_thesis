@@ -23,6 +23,7 @@ class GetController {
         const Pointers = JSON.parse(await Redis.get('Pointers'))
 
         // AIS
+        const Admissions = await Redis.get('Admissions')
 
         return response.send({
           'ineko': {
@@ -32,7 +33,7 @@ class GetController {
             AdditionalData
           },
           'ais': {
-
+            Admissions
           }
         })
     }
@@ -56,14 +57,12 @@ class GetController {
             .select('*')
             .from('ais_admissions')
             .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
-          //admissions = await Admission.all()
         else
           admissions = await Database
             .select('*')
             .from('ais_admissions')
             .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
             .where('OBDOBIE', params.year)
-          //admissions = await Database.table('ais_admissions').where('OBDOBIE', params.year)
 
         return response.send(admissions)
     }
@@ -123,7 +122,7 @@ class GetController {
     }
 
     // API endpoints for usecases
-    async getAdmissionsOverview ({ request, response, params }) {
+    async getAdmissionsOverview ({ request, response }) {
       const queryParams = await request.all()
 
       const schools = await Database
@@ -144,6 +143,13 @@ class GetController {
           .where('OBDOBIE', queryParams.year)
 
       return response.send({ schools, admissions })
+    }
+
+    async getAdmissionsYearComparison ({ response }) {
+      const years = await Redis.get('Admissions')
+      const admissions = await Admission.all()
+
+      return response.send({ admissions, years })
     }
 }
 
