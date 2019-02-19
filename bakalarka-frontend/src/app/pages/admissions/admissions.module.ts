@@ -10,6 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartModule } from 'src/app/plugins/chart/chart.module';
 import { GeoChartModule } from 'src/app/plugins/geo-chart/geo-chart.module';
 import { MapModule } from 'src/app/plugins/map/map.module';
+import { AdmissionsComparisonComponent } from './admissions-comparison/admissions-comparison.component';
+import { AdmissionsYearBlockComponent } from './admissions-comparison/admissions-year-block/admissions-year-block.component';
 
 @NgModule({
   imports: [
@@ -32,7 +34,9 @@ import { MapModule } from 'src/app/plugins/map/map.module';
     AdmissionsComponent,
     AdmissionsBachelorComponent,
     AdmissionsMasterComponent,
-    AdmissionComponent
+    AdmissionComponent,
+    AdmissionsComparisonComponent,
+    AdmissionsYearBlockComponent
   ]
 })
 export class AdmissionsModule { }
