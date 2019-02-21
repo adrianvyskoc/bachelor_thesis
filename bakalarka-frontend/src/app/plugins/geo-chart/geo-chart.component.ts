@@ -12,6 +12,7 @@ export class GeoChartComponent implements OnInit {
   @Input() data = []
 
   regionAdmissionCounts = {}
+  pointCounts = {}
 
   constructor() { }
 
@@ -24,15 +25,15 @@ export class GeoChartComponent implements OnInit {
       callback: () => {
         new google['visualization'].GeoChart(document.getElementById('regions_div')).draw(
           google['visualization'].arrayToDataTable([
-            ['Destination', 'Počet študentov'],
-            ['SK-BL', this.regionAdmissionCounts['SK-BL']],
-            ['SK-TA', this.regionAdmissionCounts['SK-TA']],
-            ['SK-TC', this.regionAdmissionCounts['SK-TC']],
-            ['SK-NI', this.regionAdmissionCounts['SK-NI']],
-            ['SK-PV', this.regionAdmissionCounts['SK-PV']],
-            ['SK-ZI', this.regionAdmissionCounts['SK-ZI']],
-            ['SK-KI', this.regionAdmissionCounts['SK-KI']],
-            ['SK-BC', this.regionAdmissionCounts['SK-BC']]
+            ['Destination', 'Počet študentov', 'Priemer bodov'],
+            ['SK-BL', this.regionAdmissionCounts['SK-BL'], this.pointCounts['SK-BL'] / this.regionAdmissionCounts['SK-BL']],
+            ['SK-TA', this.regionAdmissionCounts['SK-TA'], this.pointCounts['SK-TA'] / this.regionAdmissionCounts['SK-TA']],
+            ['SK-TC', this.regionAdmissionCounts['SK-TC'], this.pointCounts['SK-TC'] / this.regionAdmissionCounts['SK-TC']],
+            ['SK-NI', this.regionAdmissionCounts['SK-NI'], this.pointCounts['SK-NI'] / this.regionAdmissionCounts['SK-NI']],
+            ['SK-PV', this.regionAdmissionCounts['SK-PV'], this.pointCounts['SK-PV'] / this.regionAdmissionCounts['SK-PV']],
+            ['SK-ZI', this.regionAdmissionCounts['SK-ZI'], this.pointCounts['SK-ZI'] / this.regionAdmissionCounts['SK-ZI']],
+            ['SK-KI', this.regionAdmissionCounts['SK-KI'], this.pointCounts['SK-KI'] / this.regionAdmissionCounts['SK-KI']],
+            ['SK-BC', this.regionAdmissionCounts['SK-BC'], this.pointCounts['SK-BC'] / this.regionAdmissionCounts['SK-BC']]
           ]),
           {
             colorAxis: {colors: ['red', 'green']},
@@ -61,5 +62,28 @@ export class GeoChartComponent implements OnInit {
       acc[regions[nextVal.kraj] || 'notprovided'] = ++acc[regions[nextVal.kraj] || 'notprovided'] || 0
       return acc
     }, {})
+
+    this.pointCounts = this.data.reduce((acc, nextVal) => {
+      if(!acc[regions[nextVal.kraj] || 'notprovided'])
+        acc[regions[nextVal.kraj] || 'notprovided'] = 0
+
+      acc[regions[nextVal.kraj] || 'notprovided'] += Number(nextVal.Body_celkom)
+      return acc
+    }, {})
+  }
+
+  _median(values) {
+      values.sort(function(a,b){
+      return a-b;
+    });
+
+    if(values.length ===0) return 0
+
+    var half = Math.floor(values.length / 2);
+
+    if (values.length % 2)
+      return values[half];
+    else
+      return (values[half - 1] + values[half]) / 2.0;
   }
 }

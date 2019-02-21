@@ -130,19 +130,47 @@ class GetController {
         .from('ineko_schools')
         .leftJoin('ineko_total_ratings', 'ineko_total_ratings.school_id', 'ineko_schools.kod_kodsko')
       let admissions
-      if(queryParams.year == 'all')
+      let regionMetrics
+      if(queryParams.year == 'all') {
         admissions = await Database
           .select('*')
           .from('ais_admissions')
           .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
-      else
+        regionMetrics = await Database.raw(`
+          SELECT
+            COUNT(ais_admissions.id),
+            AVG(ais_admissions."Body_celkom") as mean,
+            percentile_disc(0.5) within group (order by ais_admissions."Body_celkom") as median,
+            ineko_schools.kraj
+          FROM ais_admissions
+          JOIN ineko_schools ON ais_admissions.school_id = ineko_schools.kod_kodsko
+          GROUP BY ineko_schools.kraj
+          `
+        )
+      }
+      else {
         admissions = await Database
           .select('*')
           .from('ais_admissions')
           .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
           .where('OBDOBIE', queryParams.year)
+        regionMetrics = await Database.raw(`
+          SELECT
+            COUNT(ais_admissions.id),
+            AVG(ais_admissions."Body_celkom") as mean,
+            percentile_disc(0.5) within group (order by ais_admissions."Body_celkom") as median,
+            ineko_schools.kraj
+          FROM ais_admissions
+          JOIN ineko_schools ON ais_admissions.school_id = ineko_schools.kod_kodsko
+          WHERE ais_admissions."OBDOBIE" = ?
+          GROUP BY ineko_schools.kraj
+          `, [queryParams.year]
+        )
+      }
 
-      return response.send({ schools, admissions })
+
+
+      return response.send({ schools, admissions, regionMetrics: regionMetrics.rows })
     }
 
     async getAdmissionsYearComparison ({ response }) {

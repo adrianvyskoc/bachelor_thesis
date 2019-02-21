@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { ExportService } from 'src/app/plugins/utils/export.service';
 import { DataService } from 'src/app/shared/data.service';
+import { NullInjector } from '@angular/core/src/di/injector';
 
 @Component({
   selector: 'app-admissions-bachelor',
@@ -17,6 +18,10 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   showLabels = false
   subscription: Subscription
   admissions
+
+  // groups properties
+  numberOfGroups: number = 10
+  groups = []
 
   displayedAdmissionsColumns = ['id', 'Meno', 'Priezvisko', 'E_mail']
   allColumns = [
@@ -55,16 +60,14 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
           this.admissionsData.pkss = this.admissions.data.filter(admission => admission.Program_1 == 'B-IT')
           this.admissionsData.pkss4 = this.admissions.data.filter(admission => admission.Program_1 == 'B-IT4')
           this.admissionsData.ib = this.admissions.data.filter(admission => admission.Program_1 == 'B-IB')
+
+          this._calculateGroups()
         }
       )
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe()
-  }
-
-  displayedColumnsAndActions() {
-    return [...this.displayedAdmissionsColumns, 'Akcie']
   }
 
   applyFilter(value: string) {
@@ -101,5 +104,50 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   exportAll() {
     const tables = document.querySelector('table')
     this.exportService.exportTableToExcel(tables, 'admissions')
+  }
+
+  _displayedColumnsAndActions() {
+    return [...this.displayedAdmissionsColumns, 'Akcie']
+  }
+
+  _calculateGroups() {
+    this.groups = []
+    let inOneGroup = Math.floor(this.admissions.data.length / this.numberOfGroups)
+    let group = { mean: 0, arr: [] }
+
+    this.admissions.data.forEach((admission, index) => {
+      let points = Number(admission.Body_celkom)
+
+      group.mean += points
+      group.arr = this._insertionSort([points, ...group.arr])
+
+      if(index == this.admissions.data.length - 1 && group.arr.length < inOneGroup) {
+        group.arr.forEach((adm, idx) => {
+          this.groups[idx % this.numberOfGroups].arr = this._insertionSort([adm, ...this.groups[idx % this.numberOfGroups].arr])
+        })
+      }
+
+      if(group.arr.length == inOneGroup) {
+        this.groups.push(group)
+        group = { mean: 0, arr: [] }
+      }
+    })
+
+    this.groups.map((group) => {
+      group.mean /= group.arr.length
+      group.median = group.arr.length / 2 !== 0 ? group.arr[Math.floor(group.arr.length / 2)] : (group.arr[(group.arr.length/2) - 1] + group.arr[group.arr.length/2]) / 2
+      return group
+    })
+  }
+
+  _insertionSort(arr) {
+    for (let i = 1; i < arr.length; i++) {
+        let currentVal = arr[i];
+        for (var j = i - 1; j >= 0 && arr[j] > currentVal; j--) {
+             arr[j + 1] = arr[j];
+        }
+    arr[j + 1] = currentVal;
+    }
+    return arr;
   }
 }
