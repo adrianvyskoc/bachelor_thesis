@@ -135,11 +135,16 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
 
     this.groups.map((group) => {
       group.mean /= group.arr.length
-      group.median = group.arr.length / 2 !== 0 ? group.arr[Math.floor(group.arr.length / 2)] : (group.arr[(group.arr.length/2) - 1] + group.arr[group.arr.length/2]) / 2
+      group.median =
+        group.arr.length / 2 !== 0 ?
+        group.arr[Math.floor(group.arr.length / 2)] :
+        (group.arr[(group.arr.length/2) - 1] + group.arr[group.arr.length/2]) / 2
       return group
     })
   }
 
+  // insertion sort is best option of sorting in this usecase, because we are keeping our
+  // array sorted with every insert, so we only need to find a right place for new value
   _insertionSort(arr) {
     for (let i = 1; i < arr.length; i++) {
         let currentVal = arr[i];
