@@ -83,11 +83,12 @@
 </table>
 <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons #paginator></mat-paginator>
 
+<h2 padding>Štatistiky</h2>
 
 <div class="groups" margin-top>
 
   <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-6">
       <label for="numberOfGroups">Počet skupín</label>
       <input
         id="numberOfGroups"
@@ -95,30 +96,28 @@
         class="form-control"
         type="number"
         name="numberOfGroups"
-        (change)="_calculateGroups()"
+        min="1"
+      >
+
+      <label for="graduationYear" margin-top>Rok maturity</label>
+      <input
+        [(ngModel)]="graduationYear"
+        class="form-control"
+        type="number"
+        name="numberOfGroups"
+        min="0"
+        (change)="filterByGraduationYear()"
       >
     </div>
-    <div class="col-lg-8">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Rozpätie bodov</th>
-            <th scope="col">Priemer bodov</th>
-            <th scope="col">Median</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let group of groups; let i = index">
-            <th>{{ i + 1 }}</th>
-            <td>{{ group.arr[0] }} - {{ group.arr[group.arr.length-1] }}</td>
-            <td>{{ group.mean }}</td>
-            <td>{{ group.median }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
+
+  <hr>
+
+  <app-statistics-table
+    *ngIf="admissions"
+    [numberOfGroups]="numberOfGroups"
+    [data]="filteredAdmissions"
+  ></app-statistics-table>
 
 </div>
 

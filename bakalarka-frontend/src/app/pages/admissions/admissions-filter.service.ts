@@ -17,11 +17,21 @@ export class AdmissionsFilterService {
   }
 
   filterByStudyType(admissions, value) {
-    return admissions.filter(admission => admission.Program_1.substr(admission.Program_1.length - 1) == value)
+    if(value == 4)
+      return admissions.filter(admission => admission.Program_1[admission.Program_1.length - 1] == "4")
+    else
+      return admissions.filter(admission => admission.Program_1[admission.Program_1.length - 1] !== "4")
   }
 
   filterByGender(admissions, value) {
     return admissions.filter(admission => admission.Pohlavie == value)
+  }
+
+  filterByGraduationYear(admissions, value) {
+    if(!value || value == 'all')
+      return admissions
+
+    return admissions.filter(admission => admission.Maturita_1 == value)
   }
 
   filterBySchoolQuality(admissions) {

@@ -12,6 +12,7 @@ import { GeoChartModule } from 'src/app/plugins/geo-chart/geo-chart.module';
 import { MapModule } from 'src/app/plugins/map/map.module';
 import { AdmissionsComparisonComponent } from './admissions-comparison/admissions-comparison.component';
 import { AdmissionsYearBlockComponent } from './admissions-comparison/admissions-year-block/admissions-year-block.component';
+import { StatisticsTableComponent } from './admissions-bachelor/statistics-table/statistics-table.component';
 
 @NgModule({
   imports: [
@@ -36,7 +37,8 @@ import { AdmissionsYearBlockComponent } from './admissions-comparison/admissions
     AdmissionsMasterComponent,
     AdmissionComponent,
     AdmissionsComparisonComponent,
-    AdmissionsYearBlockComponent
+    AdmissionsYearBlockComponent,
+    StatisticsTableComponent
   ]
 })
 export class AdmissionsModule { }
