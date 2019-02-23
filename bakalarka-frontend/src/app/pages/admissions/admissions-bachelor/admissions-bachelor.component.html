@@ -108,16 +108,28 @@
         min="0"
         (change)="filterByGraduationYear()"
       >
+
+      <hr>
+
+      <app-statistics-table
+        *ngIf="admissions"
+        [numberOfGroups]="numberOfGroups"
+        [data]="filteredAdmissions"
+        [type]="'groups'"
+      ></app-statistics-table>
+    </div>
+
+    <div class="col-lg-6">
+      <app-statistics-table
+        *ngIf="admissions"
+        [data]="filteredAdmissions"
+        [type]="'intervals'"
+        [intervalsUpperLimits]="[40,50,70]"
+      ></app-statistics-table>
     </div>
   </div>
 
-  <hr>
 
-  <app-statistics-table
-    *ngIf="admissions"
-    [numberOfGroups]="numberOfGroups"
-    [data]="filteredAdmissions"
-  ></app-statistics-table>
 
 </div>
 

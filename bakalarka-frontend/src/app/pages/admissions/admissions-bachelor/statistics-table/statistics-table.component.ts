@@ -5,24 +5,71 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
   templateUrl: './statistics-table.component.html',
   styleUrls: ['./statistics-table.component.scss']
 })
-export class StatisticsTableComponent implements OnInit, OnChanges {
+export class StatisticsTableComponent implements OnChanges {
 
   @Input() attributesToShow = []
   @Input() data = []
   @Input() numberOfGroups = 10
+  @Input() intervalsUpperLimits = [40, 50, 60, 70, 80, 90, 100]
+  @Input() type
 
   groups = []
+  intervals = {}
   summary
+
+  // table header
+  header = []
 
   constructor() { }
 
-  ngOnInit() {
-  }
-
   ngOnChanges() {
     this.data = this.data
-    if(this.data)
+    if(!this.data)
+      return
+
+    if(this.type == 'groups')
       this._calculateGroups()
+    else
+      this._calculateIntervals()
+  }
+
+  _calculateIntervals() {
+    this.intervals = {}
+
+    // create intervals object
+    for(let i = 0; i < this.intervalsUpperLimits.length; i++) {
+      let limit = this.intervalsUpperLimits[i]
+      let label = `${!i ? '0' : this.intervalsUpperLimits[i-1] + 1}-${limit}`
+
+      this.intervals[label] = {}
+    }
+    this.intervals[`${this.intervalsUpperLimits[this.intervalsUpperLimits.length-1]}+`] = {}
+
+    this.data.forEach((admission) => {
+      let points = Number(admission.Body_celkom)
+
+      for(let i = 0; i < this.intervalsUpperLimits.length; i++) {
+        let limit = this.intervalsUpperLimits[i]
+
+        if(points <= limit) {
+          let label = `${!i ? '0' : this.intervalsUpperLimits[i-1] + 1}-${limit}`
+          this.intervals[label].count = ++this.intervals[label].count || 0
+
+          if((admission.Rozh == 10 || admission.Rozh == 11) && admission.Štúdium == "áno")
+            this.intervals[label].beganStudy = ++this.intervals[label].beganStudy || 0
+          break
+        }
+
+        if(i == this.intervalsUpperLimits.length - 1) {
+          this.intervals[`${limit}+`].count = ++this.intervals[`${limit}+`].count || 0
+
+          if((admission.Rozh == 10 || admission.Rozh == 11) && admission.Štúdium == "áno")
+            this.intervals[`${limit}+`].beganStudy = ++this.intervals[`${limit}+`].beganStudy || 0
+        }
+      }
+    })
+
+    this.header = ['Decibely', 'Kvantita', 'Nastúpil', 'Nastúpil (%)']
   }
 
   // TODO: simplify
@@ -72,11 +119,14 @@ export class StatisticsTableComponent implements OnInit, OnChanges {
       return group
     })
 
+    // calculate mean and median for summary
     this.summary.mean /= this.summary.arr.length
       this.summary.median =
         this.summary.arr.length / 2 !== 0 ?
         this.summary.arr[Math.floor(this.summary.arr.length / 2)] :
         (this.summary.arr[(this.summary.arr.length/2) - 1] + this.summary.arr[this.summary.arr.length/2]) / 2
+
+    this.header = ['#', 'Kvantita', 'Nastúpil', 'Nastúpil (%)', 'Rozpätie bodov', 'Priemer bodov', 'Medián']
   }
 
   // insertion sort is best option of sorting in this usecase, because we are keeping our

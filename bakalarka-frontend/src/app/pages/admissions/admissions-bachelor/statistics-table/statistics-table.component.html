@@ -1,33 +1,39 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">Kvantita</th>
-      <th scope="col">Nastupil</th>
-      <th scope="col">Nastupil (%)</th>
-      <th scope="col">Rozpätie bodov</th>
-      <th scope="col">Priemer bodov</th>
-      <th scope="col">Median</th>
+      <th *ngFor="let item of header" scope="col">{{ item }}</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let group of groups; let i = index">
-      <th>{{ i + 1 }}</th>
-      <td>{{ group.adm.length }}</td>
-      <td>{{ group.beganStudy }}</td>
-      <td>{{ group.beganStudy / (group.adm.length / 100) }}</td>
-      <td>{{ group.arr[0] }} - {{ group.arr[group.arr.length-1] }}</td>
-      <td>{{ group.mean }}</td>
-      <td>{{ group.median }}</td>
-    </tr>
-    <tr class="table-secondary">
-      <th>Sumár</th>
-      <td>{{ data.length }}</td>
-      <td>{{ summary.beganStudy }}</td>
-      <td>{{ summary.beganStudy / (data.length / 100) }}</td>
-      <td>{{ summary.arr[0] }} - {{ summary.arr[summary.arr.length-1] }}</td>
-      <td>{{ summary.mean }}</td>
-      <td>{{ summary.median }}</td>
-    </tr>
+    <ng-template [ngIf]="type == 'groups'">
+      <tr *ngFor="let group of groups; let i = index">
+        <th>{{ i + 1 }}</th>
+        <td>{{ group.adm.length }}</td>
+        <td>{{ group.beganStudy }}</td>
+        <td>{{ group.beganStudy / (group.adm.length / 100) }}</td>
+        <td>{{ group.arr[0] }} - {{ group.arr[group.arr.length-1] }}</td>
+        <td>{{ group.mean }}</td>
+        <td>{{ group.median }}</td>
+      </tr>
+
+      <tr class="table-secondary">
+        <th>Sumár</th>
+        <td>{{ data.length }}</td>
+        <td>{{ summary.beganStudy }}</td>
+        <td>{{ summary.beganStudy / (data.length / 100) }}</td>
+        <td>{{ summary.arr[0] }} - {{ summary.arr[summary.arr.length-1] }}</td>
+        <td>{{ summary.mean }}</td>
+        <td>{{ summary.median }}</td>
+      </tr>
+    </ng-template>
+
+    <ng-template  [ngIf]="type == 'intervals'">
+      <tr *ngFor="let interval of intervals | keyvalue">
+        <th>{{ interval.key }}</th>
+        <td>{{ interval.value.count }}</td>
+        <td>{{ interval.value.beganStudy }}</td>
+        <td>{{ interval.value.beganStudy / (interval.value.count / 100) }}</td>
+      </tr>
+    </ng-template>
   </tbody>
 </table>
