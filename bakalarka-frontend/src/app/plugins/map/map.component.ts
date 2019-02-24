@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 
 
 @Component({
@@ -6,7 +6,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent {
+export class MapComponent implements OnChanges {
   @Input() markers
   @Input() height: number
   @Input() showHeatMap: boolean = false
@@ -30,13 +30,21 @@ export class MapComponent {
 
   constructor() { }
 
+  ngOnChanges() {
+    if(this.map)
+      this.onMapLoad(this.map)
+  }
+
   onMapLoad(mapInstance: google.maps.Map) {
     if(!this.showHeatMap) return
+
+    if(this.heatmap) this.heatmap.setMap(null)
 
     this.map = mapInstance
     const coords: google.maps.LatLng[] = this.markers.map(
       mrk => new google.maps.LatLng(mrk['sur_y'], mrk['sur_x'])
     )
+
     this.heatmap = new google.maps.visualization.HeatmapLayer({
         map: this.map,
         data: coords,

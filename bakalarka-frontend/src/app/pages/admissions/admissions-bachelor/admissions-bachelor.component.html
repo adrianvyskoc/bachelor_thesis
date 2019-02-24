@@ -87,7 +87,17 @@
 
 <div class="groups" margin-top>
 
-  <div class="row">
+  <label for="graduationYear" margin-top>Rok maturity</label>
+  <input
+    [(ngModel)]="graduationYear"
+    class="form-control"
+    type="number"
+    name="numberOfGroups"
+    min="0"
+    (change)="filterByGraduationYear()"
+  >
+
+  <div class="row" padding-top>
     <div class="col-lg-6">
       <label for="numberOfGroups">Počet skupín</label>
       <input
@@ -98,19 +108,6 @@
         name="numberOfGroups"
         min="1"
       >
-
-      <label for="graduationYear" margin-top>Rok maturity</label>
-      <input
-        [(ngModel)]="graduationYear"
-        class="form-control"
-        type="number"
-        name="numberOfGroups"
-        min="0"
-        (change)="filterByGraduationYear()"
-      >
-
-      <hr>
-
       <app-statistics-table
         *ngIf="admissions"
         [numberOfGroups]="numberOfGroups"
@@ -120,11 +117,19 @@
     </div>
 
     <div class="col-lg-6">
+      <label for="decibels">Horné ohraničenia intervalov</label>
+      <input
+        id="decibels"
+        class="form-control"
+        type="text"
+        name="decibels"
+        (change)="onDecibelsChange($event)"
+      >
       <app-statistics-table
         *ngIf="admissions"
         [data]="filteredAdmissions"
         [type]="'intervals'"
-        [intervalsUpperLimits]="[40,50,70]"
+        [intervalsUpperLimits]="decibels"
       ></app-statistics-table>
     </div>
   </div>

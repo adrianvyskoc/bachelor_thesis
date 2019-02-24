@@ -4,7 +4,7 @@ import { AdmissionsComponent } from './admissions.component';
 import { AdmissionsRoutingModule } from './admissions-routing.module';
 import { AdmissionsBachelorComponent } from './admissions-bachelor/admissions-bachelor.component';
 import { AdmissionsMasterComponent } from './admissions-master/admissions-master.component';
-import { MatTableModule, MatPaginatorModule, MatSortModule, MatTooltipModule, MatInputModule, MatIconModule } from '@angular/material';
+import { MatTableModule, MatPaginatorModule, MatSortModule, MatTooltipModule, MatInputModule, MatIconModule, MatProgressSpinnerModule } from '@angular/material';
 import { AdmissionComponent } from './admission/admission.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartModule } from 'src/app/plugins/chart/chart.module';
@@ -22,6 +22,7 @@ import { StatisticsTableComponent } from './admissions-bachelor/statistics-table
     MatTooltipModule,
     MatInputModule,
     MatIconModule,
+    MatProgressSpinnerModule,
 
     ChartModule,
     GeoChartModule,

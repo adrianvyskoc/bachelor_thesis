@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { ExportService } from 'src/app/plugins/utils/export.service';
 import { DataService } from 'src/app/shared/data.service';
-import { NullInjector } from '@angular/core/src/di/injector';
 import { AdmissionsFilterService } from '../admissions-filter.service';
 
 @Component({
@@ -21,9 +20,10 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   admissions
   filteredAdmissions = []
 
-  // groups properties
-  numberOfGroups: number = 10
   graduationYear: number
+  numberOfGroups: number = 10
+  decibels = [40,50,60,70,80,90,100]
+
 
   displayedAdmissionsColumns = ['id', 'Meno', 'Priezvisko', 'E_mail', 'Rozhodnutie_o_prijatí']
   allColumns = [
@@ -70,6 +70,15 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe()
+  }
+
+  onDecibelsChange(event) {
+    let val = event.target.value.split(",")
+
+    if(val[0] == "")
+      this.decibels = [40,50,60,70,80,90,100]
+    else
+      this.decibels = val.map(item => Number(item))
   }
 
   applyFilter(value: string) {
