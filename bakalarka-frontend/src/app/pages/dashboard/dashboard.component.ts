@@ -4,7 +4,7 @@ import { DataService } from 'src/app/shared/data.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
   schoolsData:{raw: any, sos: any, gym: any, konz: any, ssp: any} = { raw: [], sos: [], gym: [], konz: [], ssp: [] }

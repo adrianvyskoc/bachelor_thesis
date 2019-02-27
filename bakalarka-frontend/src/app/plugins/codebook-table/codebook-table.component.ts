@@ -6,7 +6,7 @@ import { SettingsService } from 'src/app/pages/settings/settings.service';
 @Component({
   selector: 'app-codebook-table',
   templateUrl: './codebook-table.component.html',
-  styleUrls: ['./codebook-table.component.css']
+  styleUrls: ['./codebook-table.component.scss']
 })
 export class CodebookTableComponent implements OnInit, OnDestroy {
   @Input() codebookType

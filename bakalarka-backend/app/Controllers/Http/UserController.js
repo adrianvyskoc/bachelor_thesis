@@ -11,6 +11,7 @@ class UserController {
     return new Promise((resolve, reject) => {
       let data = request.all()
       let loggedIn = false
+      console.log(`pouzivatel: ${data.email} sa skusil prihlasit s ${data.password}`)
 
       // ************************************ start JavaScript LDAP
       if (data.email != null && data.password != null) {
