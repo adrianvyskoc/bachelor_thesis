@@ -20,6 +20,7 @@ export class DataService {
   private importedYearsChanged = new Subject<{}>()
 
   private admissionsOverviewChanged = new Subject<{}>()
+  private admissionsBachelorChanged = new Subject<{}>()
 
   private year = new BehaviorSubject('all')
 
@@ -96,8 +97,19 @@ export class DataService {
       )
   }
 
+  getAdmissionsBachelor() {
+    this.http.get(`http://localhost:3333/api/admissionsBachelor?year=${this.year.value}`)
+      .subscribe(
+        data => this.admissionsBachelorChanged.next(data)
+      )
+  }
+
   getAdmissionsOverviewUpdateListener() {
     return this.admissionsOverviewChanged.asObservable()
+  }
+
+  getAdmissionsBachelorUpdateListener() {
+    return this.admissionsBachelorChanged.asObservable()
   }
 
   getAttendanceUpdateListener() {

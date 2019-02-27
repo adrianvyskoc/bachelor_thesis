@@ -18,12 +18,14 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   showLabels = false
   subscription: Subscription
   admissions
+  schools
   filteredAdmissions = []
 
   graduationYear: number
   numberOfGroups: number = 10
   decibels = [40,50,60,70,80,90,100]
 
+  displayedSchoolsColumns = ['kod_kodsko', 'nazov', 'pocet_prihlasok', 'pocet_nastupenych', 'pocet_prijatych', 'prijaty/prihlasky', 'nastupeny/prijaty', 'nastupeny_prihlasky']
 
   displayedAdmissionsColumns = ['id', 'Meno', 'Priezvisko', 'E_mail', 'Rozhodnutie_o_prijatí']
   allColumns = [
@@ -41,8 +43,6 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   ]
   filteredColumns = this.allColumns
 
-  admissionsData:{ info: any, info4: any, pkss: any, pkss4: any, ib: any } = { info: [], info4: [], pkss: [], pkss4: [], ib: [] }
-
   constructor(
     private dataService: DataService,
     private exportService: ExportService,
@@ -50,20 +50,16 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.dataService.getData('Admissions')
-    this.subscription = this.dataService.getAdmissionsUpdateListener()
+    this.dataService.getAdmissionsBachelor()
+    this.subscription = this.dataService.getAdmissionsBachelorUpdateListener()
       .subscribe(
-        (admissions:any[]) => {
-          this.filteredAdmissions = admissions
-          this.admissions = new MatTableDataSource<any[]>(admissions)
+        (data:any[]) => {
+          this.filteredAdmissions = data['admissions']
+          this.schools = data['schools']
+          this.admissions = new MatTableDataSource<any[]>(data['admissions'])
           this.admissions.paginator = this.paginator
           this.admissions.sort = this.sort
-
-          this.admissionsData.info = this.admissions.data.filter(admission => admission.Program_1 == 'B-INFO')
-          this.admissionsData.info4 = this.admissions.data.filter(admission => admission.Program_1 == 'B-INFO4')
-          this.admissionsData.pkss = this.admissions.data.filter(admission => admission.Program_1 == 'B-IT')
-          this.admissionsData.pkss4 = this.admissions.data.filter(admission => admission.Program_1 == 'B-IT4')
-          this.admissionsData.ib = this.admissions.data.filter(admission => admission.Program_1 == 'B-IB')
+          this._getSchoolsData()
         }
       )
   }
@@ -123,5 +119,35 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
 
   _displayedColumnsAndActions() {
     return [...this.displayedAdmissionsColumns, 'Akcie']
+  }
+
+  _getSchoolsData() {
+    let schoolMap = {}
+
+    this.schools.map(school => {
+      schoolMap[school.kod_kodsko] = {}
+      schoolMap[school.kod_kodsko].kod_kodsko = school.kod_kodsko
+      schoolMap[school.kod_kodsko].nazov = school.nazov
+      schoolMap[school.kod_kodsko].pocet_nastupenych = 0
+      schoolMap[school.kod_kodsko].pocet_prijatych = 0
+      schoolMap[school.kod_kodsko].pocet_prihlasok = 0
+    })
+    schoolMap['neuvedené'] = { pocet_prihlasok: 0, pocet_nastupenych: 0, pocet_prijatych: 0 }
+
+    this.admissions.data.forEach(admission => {
+      if(schoolMap[admission.school_id])
+        schoolMap[admission.school_id].pocet_prihlasok++
+      else
+        schoolMap['neuvedené'].pocet_prihlasok++
+
+      if((admission.Rozh == 10 || admission.Rozh == 11)) {
+        if(schoolMap[admission.school_id])
+          admission.Štúdium == "áno" ? schoolMap[admission.school_id].pocet_nastupenych++ : schoolMap[admission.school_id].pocet_prijatych++
+        else
+          admission.Štúdium == "áno" ? schoolMap['neuvedené'].pocet_nastupenych++ : schoolMap['neuvedené'].pocet_prijatych++
+      }
+    })
+
+    this.schools = Object.values(schoolMap)
   }
 }

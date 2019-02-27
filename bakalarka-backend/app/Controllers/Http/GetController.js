@@ -179,6 +179,47 @@ class GetController {
 
       return response.send({ admissions, years })
     }
+
+    async getAdmissionsBachelor ({ request, response }) {
+      const queryParams = await request.all()
+
+      let schools
+      if(queryParams.year !== 'all') {
+        schools = await Database.raw(
+            `
+              SELECT sch.nazov, sch.druh_skoly, sch.kod_kodsko, COUNT(adm.school_id) FROM ineko_schools AS sch
+              LEFT JOIN ineko_total_ratings AS tr ON tr.school_id = sch.kod_kodsko
+              LEFT JOIN ais_admissions AS adm ON adm.school_id = sch.kod_kodsko
+              WHERE adm."OBDOBIE" = ?
+              GROUP BY sch.kod_kodsko
+            `, [queryParams.year]
+        )
+      } else {
+        schools = await Database.raw(
+            `
+              SELECT sch.nazov, sch.druh_skoly, sch.kod_kodsko, tr.celkove_hodnotenie FROM ineko_schools AS sch
+              JOIN ineko_total_ratings AS tr ON tr.school_id = sch.kod_kodsko
+            `
+        )
+      }
+
+      let admissions
+      if(queryParams.year == 'all') {
+        admissions = await Database
+          .select('*')
+          .from('ais_admissions')
+          .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
+      }
+      else {
+        admissions = await Database
+          .select('*')
+          .from('ais_admissions')
+          .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
+          .where('OBDOBIE', queryParams.year)
+      }
+
+      return response.send({ schools: schools.rows, admissions })
+    }
 }
 
 module.exports = GetController
