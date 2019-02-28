@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+
   loggedIn: boolean
 
-  constructor( private http: HttpClient ) {
+  constructor( private http: HttpClient) {
     this.loggedIn = false
     
     if(localStorage.getItem('user')) {
@@ -26,7 +28,7 @@ export class AuthService {
       email: email,
       password: password
     }
-
+    console.log(user);
     this.http.post(`http://localhost:3333/api/login`, requestData)
     .subscribe(
       response => {
@@ -47,6 +49,6 @@ export class AuthService {
 
   logoutUser() {
     localStorage.removeItem('user')
-    this.loggedIn = false
+    this.loggedIn = false;
   }
 }

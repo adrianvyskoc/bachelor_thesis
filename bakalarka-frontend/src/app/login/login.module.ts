@@ -20,6 +20,7 @@ import { LoginComponent } from './login.component';
     MatInputModule,
     FormsModule
   ],
-  declarations: [LoginComponent]
+  declarations: [LoginComponent],
+  exports: [LoginComponent]
 })
 export class LoginModule { }

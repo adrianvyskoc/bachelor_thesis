@@ -10,6 +10,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CoreModule } from './core/core.module';
 import { AppRoutingModule } from './app-routing.module';
+import { LoginComponent } from './login/login.component';
+
+import { 
+  MatButtonModule,
+  MatFormFieldModule,
+  MatInputModule,
+} from "@angular/material";
+import { LoginModule } from './login/login.module';
 
 @NgModule({
   declarations: [
@@ -26,9 +34,14 @@ import { AppRoutingModule } from './app-routing.module';
     HttpClientModule,
     FormsModule,
     CoreModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    LoginModule
   ],
   providers: [],
   bootstrap: [AppComponent]
+  // bootstrap: [LoginComponent]
 })
 export class AppModule { }
