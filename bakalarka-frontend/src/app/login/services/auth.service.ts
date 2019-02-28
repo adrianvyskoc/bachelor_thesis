@@ -11,8 +11,8 @@ export class AuthService {
   loggedIn: boolean
 
   constructor( private http: HttpClient) {
-    this.loggedIn = false
-    
+    this.loggedIn = true
+
     if(localStorage.getItem('user')) {
       this.loggedIn = true
     }

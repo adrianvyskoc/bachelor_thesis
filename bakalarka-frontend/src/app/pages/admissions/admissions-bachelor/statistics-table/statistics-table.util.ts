@@ -54,6 +54,10 @@ export class StatisticsTableUtil {
     let inOneGroup = Math.floor(data.length / numberOfGroups)
     let group = { mean: 0, arr: [], adm: [], beganStudy: 0 }
 
+    data.sort(function(a, b) {
+      return Number(a.Body_celkom) - Number(b.Body_celkom);
+    })
+
     data.forEach((admission, index) => {
       let points = Number(admission.Body_celkom)
 
@@ -65,12 +69,14 @@ export class StatisticsTableUtil {
         group.beganStudy++
 
       if(index == data.length - 1 && group.arr.length < inOneGroup) {
-        group.adm.forEach((adm, idx) => {
-          groups[idx % numberOfGroups].mean += Number(adm.Body_celkom)
-          if(adm.Rozh == 10 && adm.Štúdium == "áno")
-            groups[idx % numberOfGroups].beganStudy++
-          groups[idx % numberOfGroups].adm.push(adm)
-          groups[idx % numberOfGroups].arr = this.SortingUtil._insertionSort([Number(adm.Body_celkom), ...groups[idx % numberOfGroups].arr])
+        const lastGroupIndex = groups.length - 1
+
+        group.adm.forEach((adm) => {
+          groups[lastGroupIndex].mean += Number(adm.Body_celkom)
+          if((adm.Rozh == 10 || adm.Rozh == 11) && adm.Štúdium == "áno")
+            groups[lastGroupIndex].beganStudy++
+          groups[lastGroupIndex].adm.push(adm)
+          groups[lastGroupIndex].arr = this.SortingUtil._insertionSort([Number(adm.Body_celkom), ...groups[lastGroupIndex].arr])
         })
       }
 

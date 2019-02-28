@@ -127,10 +127,11 @@
       >
       <app-statistics-table
         *ngIf="admissions"
+        [numberOfGroups]="numberOfGroups"
         [data]="filteredAdmissions"
-        [type]="'intervals'"
-        [intervalsUpperLimits]="decibels"
+        [type]="'groups'"
       ></app-statistics-table>
+
     </div>
   </div>
 </div>

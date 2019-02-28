@@ -36,7 +36,7 @@ export class GeoChartComponent implements OnInit {
             ['SK-BC', this.regionAdmissionCounts['SK-BC'], this.pointCounts['SK-BC'] / this.regionAdmissionCounts['SK-BC']]
           ]),
           {
-            colorAxis: {colors: ['red', 'green']},
+            colorAxis: {colors: ['yellow', 'green']},
             displayMode: 'regions',
             region: 'SK',
             resolution: 'provinces'

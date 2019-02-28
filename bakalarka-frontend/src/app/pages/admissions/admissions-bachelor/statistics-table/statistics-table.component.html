@@ -10,9 +10,9 @@
         <th>{{ i + 1 }}</th>
         <td>{{ group.adm.length }}</td>
         <td>{{ group.beganStudy }}</td>
-        <td>{{ group.beganStudy / (group.adm.length / 100) }}</td>
+        <td>{{ (group.beganStudy / (group.adm.length / 100)).toFixed(2) }}</td>
         <td>{{ group.arr[0] }} - {{ group.arr[group.arr.length-1] }}</td>
-        <td>{{ group.mean }}</td>
+        <td>{{ group.mean.toFixed(2) }}</td>
         <td>{{ group.median }}</td>
       </tr>
 
@@ -20,19 +20,19 @@
         <th>Sumár</th>
         <td>{{ data.length }}</td>
         <td>{{ summary.beganStudy }}</td>
-        <td>{{ summary.beganStudy / (data.length / 100) }}</td>
+        <td>{{ (summary.beganStudy / (data.length / 100)).toFixed(2) }}</td>
         <td>{{ summary.arr[0] }} - {{ summary.arr[summary.arr.length-1] }}</td>
-        <td>{{ summary.mean }}</td>
+        <td>{{ summary.mean.toFixed(2) }}</td>
         <td>{{ summary.median }}</td>
       </tr>
     </ng-template>
 
-    <ng-template  [ngIf]="type == 'intervals'">
+    <ng-template [ngIf]="type == 'intervals'">
       <tr *ngFor="let interval of intervals | keyvalue">
         <th>{{ interval.key }}</th>
         <td>{{ interval.value.count }}</td>
         <td>{{ interval.value.beganStudy }}</td>
-        <td>{{ interval.value.beganStudy / (interval.value.count / 100) }}</td>
+        <td>{{ (interval.value.beganStudy / (interval.value.count / 100)).toFixed(2) }}</td>
       </tr>
     </ng-template>
   </tbody>
