@@ -116,6 +116,11 @@ class AisAdmissionsSchema extends Schema {
       table.string("Zapl")
       table.string("Zvol_predmet")
       table.string("Zvol_predmet_1")
+
+      table.integer("Externá_maturita_z_cudzieho_jazyka_ECJ")
+      table.integer("Externá_maturita_z_matematiky_EM")
+      table.integer("Písomný_test_z_matematiky_SCIO_PTM")
+      table.integer("Všeobecné_študijné_predpoklady_SCIO_VŠP")
     })
   }
 

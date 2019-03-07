@@ -143,7 +143,7 @@ class ImportAisController {
 
         if (params.selectedImport == 'Admissions') {
             for (let row of rows) {
-                row = adjustKeys(row);
+                row = adjustKeys(row)
 
                 /*if(row['Prijatie_na_program']) {
                   let student = new Student()
@@ -192,6 +192,35 @@ class ImportAisController {
 
             if(importedYears.indexOf(params.year) == -1)
               await Redis.set(params.selectedImport, JSON.stringify([...importedYears, params.year]))
+        }
+
+        if(params.selectedImport == 'AdmissionsPoints') {
+          for (let row of rows) {
+            row = adjustKeys(row)
+
+            var {
+              Externá_maturita_z_cudzieho_jazyka_ECJ,
+              Externá_maturita_z_matematiky_EM,
+              Písomný_test_z_matematiky_SCIO_PTM,
+              Všeobecné_študijné_predpoklady_SCIO_VŠP
+            } = row
+
+            if(row.SŠ_kód) {
+              const schools = await Database.table('ineko_schools').where('kod_kodsko', row.SŠ_kód).count()
+              row.school_id = schools[0].count != '0' ? row.SŠ_kód : null
+            }
+
+            // find admissions with this birth number
+            const admissions = await Database
+              .table('ais_admissions')
+              .where({ 'Rodné_číslo': row.Rodné_číslo, OBDOBIE: params.year })
+              .update({
+                Externá_maturita_z_cudzieho_jazyka_ECJ,
+                Externá_maturita_z_matematiky_EM,
+                Písomný_test_z_matematiky_SCIO_PTM,
+                Všeobecné_študijné_predpoklady_SCIO_VŠP
+              })
+          }
         }
 
 /*
