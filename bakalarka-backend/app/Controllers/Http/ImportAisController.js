@@ -8,9 +8,7 @@ const Redis = use('Redis')
 
 
 // Models
-const Attendance = use('App/Models/Attendance')
 const Student = use('App/Models/Student')
-const Grade = use('App/Models/Grade')
 const Admission = use('App/Models/Admission')
 
 class ImportAisController {
@@ -23,7 +21,6 @@ class ImportAisController {
             cellHTML: false,		// html format
             cellText: false			// formatted text format
         }
-
 
         const workbook = xlsx.readFile(`tmp/uploads/scenar_komisii.xlsx`, config)
         const sheet_name_list = workbook.SheetNames
@@ -194,6 +191,10 @@ class ImportAisController {
               await Redis.set(params.selectedImport, JSON.stringify([...importedYears, params.year]))
         }
 
+        // -------------------------------------------------------------------
+        // Admissions points
+        // -------------------------------------------------------------------
+
         if(params.selectedImport == 'AdmissionsPoints') {
           for (let row of rows) {
             row = adjustKeys(row)
@@ -223,6 +224,49 @@ class ImportAisController {
           }
         }
 
+        // -------------------------------------------------------------------
+        // StateExamsOverviews
+        // -------------------------------------------------------------------
+
+        if(params.selectedImport == 'StateExamsOverviews') {
+          for(let row of rows) {
+            row = adjustKeys(row)
+
+            row['AIS_ID'] = row['ID']
+            row['OBDOBIE'] = params.year
+
+            delete row['ID']
+            delete row['Por']
+
+            row['VŠP_štúdium'] = toNumber(row['VŠP_štúdium'])
+            row['VŠP_štud_bpo'] = toNumber(row['VŠP_štud_bpo'])
+
+            try {
+              await Database.table('ais_state_exams_overviews').insert(row)
+            } catch(err) { console.log(err) }
+          }
+        }
+
+        // -------------------------------------------------------------------
+        // StateExamsScenarios
+        // -------------------------------------------------------------------
+
+        if(params.selectedImport == 'StateExamsScenarios') {
+          for(let row of rows) {
+            for (const prop of Object.keys(row)) {
+              if(prop.indexOf('__EMPTY') > -1) delete row[prop];
+            }
+
+            row = adjustKeys(row)
+
+            row['OBDOBIE'] = params.year
+
+            try {
+              await Database.table('ais_state_exams_scenarios').insert(row)
+            } catch(err) { console.log(err) }
+          }
+        }
+
 /*
  *  import rows end ------------------------------------------------------------------------------------------
  */
@@ -239,19 +283,25 @@ function deleteFile(path, selectedImport) {
 }
 
 function adjustKeys(obj) {
-    let newObj = {}
-    for (let key in obj) {
-        let newKey = key
-            .split(".").join("")
-            .split(" ").join("_")
-            .split("-").join("_")
-            .split("(").join("")
-            .split(")").join("")
-            .replace(/_+/g, '_')
-        newObj[newKey] = obj[key]
-    }
+  let newObj = {}
+  for (let key in obj) {
+    let newKey = key
+      .trim()
+      .split(".").join("")
+      .split(":").join("")
+      .split(" ").join("_")
+      .split("-").join("_")
+      .split("(").join("")
+      .split(")").join("")
+      .replace(/_+/g, '_')
+      .replace(/\s/g, "_")
+    newObj[newKey] = obj[key]
+  }
+  return newObj;
+}
 
-    return newObj;
+function toNumber(num) {
+  return Number(num.trim().replace(",", "."))
 }
 
 module.exports = ImportAisController
