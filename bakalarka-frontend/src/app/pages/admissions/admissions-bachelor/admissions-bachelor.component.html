@@ -85,6 +85,15 @@
 
 <h2 padding>Štatistiky</h2>
 
+<app-time-chart
+  *ngIf="admissionsTimes.length"
+  [title]="'Počet prihlášok na jednotlivé študijné programy'"
+  [data]="admissionsTimes"
+  [labels]="['INFO', 'INFO4', 'IT', 'IT4']"
+  [type]="'line'"
+  [legend]="false"
+></app-time-chart>
+
 <div class="groups" margin-top>
 
   <label for="graduationYear" margin-top>Rok maturity</label>
@@ -136,6 +145,8 @@
   </div>
 </div>
 
+<h2 padding>Rebríček škôl</h2>
+
 <div class="schoolsQualityBar">
   <table mat-table matSort [dataSource]="schools" full-width>
     <ng-container [matColumnDef]="column" *ngFor="let column of displayedSchoolsColumns">
@@ -153,4 +164,5 @@
     <tr mat-header-row *matHeaderRowDef="displayedSchoolsColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedSchoolsColumns;"></tr>
   </table>
+  <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons #schoolsPaginator></mat-paginator>
 </div>

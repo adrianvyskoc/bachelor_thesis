@@ -12,7 +12,9 @@ import { AdmissionsFilterService } from '../admissions-filter.service';
 })
 export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   @ViewChild('paginator') paginator: MatPaginator
+  @ViewChild('schoolsPaginator') schoolsPaginator: MatPaginator
   @ViewChild(MatSort) sort: MatSort
+  @ViewChild(MatSort) schoolsSort: MatSort
 
   showFilter = true
   showLabels = false
@@ -20,6 +22,8 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   admissions
   schools
   filteredAdmissions = []
+
+  admissionsTimes = []
 
   graduationYear: number
   numberOfGroups: number = 10
@@ -60,6 +64,7 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
           this.admissions.paginator = this.paginator
           this.admissions.sort = this.sort
           this._getSchoolsData()
+          this._getAdmissionsDates()
         }
       )
   }
@@ -148,6 +153,40 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
       }
     })
 
-    this.schools = Object.values(schoolMap)
+    this.schools = new MatTableDataSource<any[]>(Object.values(schoolMap))
+    this.schools.paginator = this.schoolsPaginator
+    this.admissions.sort = this.sort
+  }
+
+  _getAdmissionsDates() {
+    var admissionsTimes = this.admissions.data.reduce((acc, admission) => {
+      if(admission['Prevedené']) {
+        acc.push(admission['Prevedené'].split(".").join("/"))
+      }
+      return acc
+    }, [])
+
+    function sortFunction(a,b) {
+      let [add, amm, ayyyy] = a.split("/")
+      let [bdd, bmm, byyyy] = b.split("/")
+
+      var dateA = new Date()
+      var dateB = new Date()
+
+      dateA.setFullYear(ayyyy); dateB.setFullYear(byyyy);
+      dateA.setMonth(amm); dateB.setMonth(bmm);
+      dateA.setDate(add); dateB.setDate(bdd);
+      return dateA.getTime() > dateB.getTime() ? 1 : -1;
+    };
+
+    admissionsTimes.sort(sortFunction);​
+
+    var admissionsTimes = admissionsTimes.reduce((acc, admission, idx) => {
+      acc.push({x: admission, y: idx})
+
+      return acc
+    }, [])
+
+    this.admissionsTimes = admissionsTimes
   }
 }

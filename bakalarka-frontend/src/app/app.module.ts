@@ -12,7 +12,7 @@ import { CoreModule } from './core/core.module';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './login/login.component';
 
-import { 
+import {
   MatButtonModule,
   MatFormFieldModule,
   MatInputModule,

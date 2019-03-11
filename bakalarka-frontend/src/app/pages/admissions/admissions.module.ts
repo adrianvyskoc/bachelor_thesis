@@ -13,6 +13,7 @@ import { MapModule } from 'src/app/plugins/map/map.module';
 import { AdmissionsComparisonComponent } from './admissions-comparison/admissions-comparison.component';
 import { AdmissionsYearBlockComponent } from './admissions-comparison/admissions-year-block/admissions-year-block.component';
 import { StatisticsTableComponent } from './admissions-bachelor/statistics-table/statistics-table.component';
+import { TimeChartModule } from 'src/app/plugins/time-chart/time-chart.module';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { StatisticsTableComponent } from './admissions-bachelor/statistics-table
     MatProgressSpinnerModule,
 
     ChartModule,
+    TimeChartModule,
     GeoChartModule,
     MapModule,
     CommonModule,
@@ -39,7 +41,7 @@ import { StatisticsTableComponent } from './admissions-bachelor/statistics-table
     AdmissionComponent,
     AdmissionsComparisonComponent,
     AdmissionsYearBlockComponent,
-    StatisticsTableComponent
+    StatisticsTableComponent,
   ]
 })
 export class AdmissionsModule { }
