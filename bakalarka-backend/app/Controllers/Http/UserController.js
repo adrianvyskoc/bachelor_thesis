@@ -14,7 +14,7 @@ class UserController {
       console.log(`pouzivatel: ${data.email} sa skusil prihlasit s ${data.password}`)
 
       // ************************************ start JavaScript LDAP
-      if (data.email != null && data.password != null) {
+      if (data.email && data.password) {
         const client = ldap.createClient({
           url: 'ldaps://ldap.stuba.sk'
         });
@@ -25,11 +25,7 @@ class UserController {
         })
 
         client.bind(`uid=${data.email}, ou=People, DC=stuba, DC=sk`, `${data.password}`, function (err) {
-          if (err == null) {
-            resolve(true)
-          } else {
-            resolve(false)
-          }
+          err ? resolve(false) : resolve(true)
         })
       } else {
         console.log("Musis zadat meno a heslo $ node ldap_validator meno heslo");
@@ -37,7 +33,7 @@ class UserController {
     })
     .then((res) => {
       console.log(res)
-      return response.send(res)
+      return response.status(200).send(res)
     })
     // ************************************
   }

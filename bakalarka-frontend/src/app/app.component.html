@@ -1,6 +1,6 @@
-<app-sidenav ></app-sidenav>
-<div>
-  <app-header></app-header>
+<app-sidenav *ngIf="this.authService.loggedIn"></app-sidenav>
+<div class="main-content" [class.unauthorized]="!this.authService.loggedIn">
+  <app-header *ngIf="this.authService.loggedIn"></app-header>
   <main padding>
     <router-outlet></router-outlet>
   </main>

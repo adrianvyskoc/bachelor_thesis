@@ -1,5 +1,14 @@
-div {
+.main-content {
     padding-left: 185px;
+    
+    &.unauthorized {
+        padding-left: 0;
+        display: flex;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
 main {

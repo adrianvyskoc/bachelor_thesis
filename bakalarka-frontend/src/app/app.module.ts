@@ -42,6 +42,5 @@ import { LoginModule } from './login/login.module';
   ],
   providers: [],
   bootstrap: [AppComponent]
-  // bootstrap: [LoginComponent]
 })
 export class AppModule { }

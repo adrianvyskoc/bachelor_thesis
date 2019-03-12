@@ -1,9 +1,21 @@
-form {
-  display: inline-block;
-  min-width: 300px;
-}
+.loginpage {
+  // background: #034F50;
+  background: #50A5A6;
+  padding: 120px;
+  border-radius: 5px;
+  
+  h1 {
+    padding-bottom: 20px;
+  }
 
-mat-form-field {
-  display: block;
-  width: 100%;
+  form {
+    display: inline-block;
+    min-width: 300px;
+  }
+
+  mat-form-field {
+    display: block;
+    width: 100%;
+  }
+
 }

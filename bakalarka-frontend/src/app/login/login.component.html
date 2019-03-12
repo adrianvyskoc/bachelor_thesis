@@ -1,5 +1,6 @@
-<div *ngIf="!authService.loggedIn">
+<div class="loginpage" *ngIf="!authService.loggedIn">
 
+  <h1>Prihlásenie</h1>
   <form (ngSubmit)="submitForm()">
     <mat-form-field>
       <input matInput type="text" name="email" placeholder="AIS e-mail" [(ngModel)]="_email">
