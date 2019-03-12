@@ -38,7 +38,7 @@ export class TimeChartComponent implements OnChanges {
         data:    {
             datasets: [
                 {
-                    label: "US Dates",
+                    label: this.labels,
                     data: this.data,
                     fill: false,
                     borderColor: 'red'
@@ -46,11 +46,22 @@ export class TimeChartComponent implements OnChanges {
             ]
         },
         options: {
-            responsive: true,
-            title:      {
-                display: true,
-                text:    "Chart.js Time Scale"
+            title: {
+              display: !!this.title,
+              text: this.title
             },
+            legend: {
+              display: this.legend,
+              labels: {
+                  fontColor: 'rgb(255, 99, 132)'
+              }
+            },
+            animation: {
+              onComplete: () => {
+                this.download.nativeElement.href = this.chart.toBase64Image();
+              }
+            },
+            responsive: true,
             scales:     {
                 xAxes: [{
                     type:       "time",
@@ -73,6 +84,6 @@ export class TimeChartComponent implements OnChanges {
         }
     }
 
-    this.chart = new Chart(this.canvas.nativeElement.getContext('2d'), config);
+    this.chart = new Chart(this.canvas.nativeElement.getContext('2d'), config)
   }
 }

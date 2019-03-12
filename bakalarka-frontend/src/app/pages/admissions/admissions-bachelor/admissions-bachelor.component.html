@@ -87,8 +87,17 @@
 
 <app-time-chart
   *ngIf="admissionsTimes.length"
-  [title]="'Počet prihlášok na jednotlivé študijné programy'"
+  [title]="'Dátumy zadávania jednotlivých prihlášok'"
   [data]="admissionsTimes"
+  [labels]="['INFO', 'INFO4', 'IT', 'IT4']"
+  [type]="'line'"
+  [legend]="false"
+></app-time-chart>
+
+<app-time-chart
+  *ngIf="admissionsTimes.length"
+  [title]="'Počet prihlášok za konkrétne dni'"
+  [data]="admissionsPerDay"
   [labels]="['INFO', 'INFO4', 'IT', 'IT4']"
   [type]="'line'"
   [legend]="false"
