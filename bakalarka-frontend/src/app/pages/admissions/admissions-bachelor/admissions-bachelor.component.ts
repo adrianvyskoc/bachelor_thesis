@@ -4,6 +4,7 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { ExportService } from 'src/app/plugins/utils/export.service';
 import { DataService } from 'src/app/shared/data.service';
 import { AdmissionsFilterService } from '../admissions-filter.service';
+import { AdmissionsUtil } from '../admissions.util';
 
 @Component({
   selector: 'app-admissions-bachelor',
@@ -50,7 +51,8 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   constructor(
     private dataService: DataService,
     private exportService: ExportService,
-    private admissionsFilterService: AdmissionsFilterService
+    private admissionsFilterService: AdmissionsFilterService,
+    private admissionsUtil: AdmissionsUtil
   ) { }
 
   ngOnInit() {
@@ -63,9 +65,9 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
           this.admissions = new MatTableDataSource<any[]>(data['admissions'])
           this.admissions.paginator = this.paginator
           this.admissions.sort = this.sort
+          this.admissionsTimes = this.admissionsUtil._getAdmissionsDates(this.admissions.data)
+          this.admissionsPerDay = this.admissionsUtil._getAdmissionsPerDay(this.admissions.data)
           this._getSchoolsData()
-          this._getAdmissionsDates()
-          this._getAdmissionsPerDay()
         }
       )
   }
@@ -172,77 +174,5 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
     this.schools = new MatTableDataSource<any[]>(Object.values(schoolMap))
     this.schools.paginator = this.schoolsPaginator
     this.admissions.sort = this.sort
-  }
-
-  /**
-   * Vytvorí usporiadané pole dátumov prihlášok. Toto pole nám slúži na zobrazenie grafu,
-   * ktorý nám dáva informáciu o tom, kedy si študenti začali podávať prihlášky.
-   */
-
-  _getAdmissionsDates() {
-    let admissionsTimes = this.admissions.data.reduce((acc, admission) => {
-      if(admission['Prevedené']) {
-        acc.push(admission['Prevedené'].split(".").join("/"))
-      }
-      return acc
-    }, [])
-
-    admissionsTimes.sort(this._sortByDate);​
-
-    admissionsTimes = admissionsTimes.reduce((acc, admission, idx) => {
-      acc.push({x: admission, y: idx})
-      return acc
-    }, [])
-
-    this.admissionsTimes = admissionsTimes
-  }
-
-  /**
-   * Vytvorí pole objektov, kde jeden objekt obsahuje dátum (x) a číslo (y), ktoré reprezentuje počet prihlášok podaných v daný deň.
-   */
-
-  _getAdmissionsPerDay() {
-    let admissionsPerDayObj = this.admissions.data.reduce((acc, admission) => {
-      acc[admission['Prevedené']] = ++acc[admission['Prevedené']] || 0
-      return acc
-    }, {})
-
-    for(let day in admissionsPerDayObj) {
-      if(day == "null") continue
-
-      this.admissionsPerDay.push({
-        x: day.split(".").join("/"),
-        y: admissionsPerDayObj[day]
-      })
-    }
-    this.admissionsPerDay.sort(this._sortByDateByKey);​
-  }
-
-
-
-  _sortByDateByKey(a,b) {
-    let [add, amm, ayyyy] = a.x.split("/")
-    let [bdd, bmm, byyyy] = b.x.split("/")
-
-    var dateA = new Date()
-    var dateB = new Date()
-
-    dateA.setFullYear(ayyyy); dateB.setFullYear(byyyy)
-    dateA.setMonth(amm); dateB.setMonth(bmm)
-    dateA.setDate(add); dateB.setDate(bdd)
-    return dateA.getTime() > dateB.getTime() ? 1 : -1
-  }
-
-  _sortByDate(a,b) {
-    let [add, amm, ayyyy] = a.split("/")
-    let [bdd, bmm, byyyy] = b.split("/")
-
-    var dateA = new Date()
-    var dateB = new Date()
-
-    dateA.setFullYear(ayyyy); dateB.setFullYear(byyyy)
-    dateA.setMonth(amm); dateB.setMonth(bmm)
-    dateA.setDate(add); dateB.setDate(bdd)
-    return dateA.getTime() > dateB.getTime() ? 1 : -1
   }
 }

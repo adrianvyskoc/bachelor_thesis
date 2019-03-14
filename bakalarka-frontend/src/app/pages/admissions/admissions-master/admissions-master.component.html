@@ -1,2 +1,49 @@
-<h1 class="display-4">Prijímacie konanie - inžiniersky stupeň</h1>
-<hr>
+<div class="jumbotron">
+  <h1 class="display-4">Prijímacie konanie</h1>
+  <p class="lead">Inžiniersky stupeň</p>
+  <hr class="my-4">
+  <button
+    class="btn btn-primary"
+    type="button"
+    (click)="exportAll()"
+  >Exportovať údaje</button>
+</div>
+
+<table mat-table matSort [dataSource]="admissions" full-width>
+  <ng-container [matColumnDef]="column" *ngFor="let column of displayedAdmissionsColumns">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> {{column}} </th>
+    <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+  </ng-container>
+  <ng-container matColumnDef="Akcie" stickyEnd>
+    <th mat-header-cell *matHeaderCellDef> Akcie </th>
+    <td mat-cell *matCellDef="let element">
+      <button class="btn btn-primary" [routerLink]="[element.id]" no-margin>Detail</button>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="_displayedColumnsAndActions()"></tr>
+  <tr mat-row *matRowDef="let row; columns: _displayedColumnsAndActions();"></tr>
+</table>
+<mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons #paginator></mat-paginator>
+
+<h2 padding>Štatistiky</h2>
+
+<div class="row">
+  <div class="col-lg-6 col-sm-6">
+      <app-time-chart
+      *ngIf="admissionsTimes.length"
+      [title]="'Dátumy zadávania jednotlivých prihlášok'"
+      [data]="admissionsTimes"
+      [type]="'line'"
+      [legend]="false"
+    ></app-time-chart>
+  </div>
+  <div class="col-lg-6 col-sm-6">
+      <app-time-chart
+      *ngIf="admissionsPerDay.length"
+      [title]="'Počet prihlášok za konkrétne dni'"
+      [data]="admissionsPerDay"
+      [type]="'line'"
+      [legend]="false"
+    ></app-time-chart>
+  </div>
+</div>

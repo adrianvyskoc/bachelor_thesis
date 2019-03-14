@@ -220,6 +220,26 @@ class GetController {
 
       return response.send({ schools: schools.rows, admissions })
     }
+
+    async getAdmissionsMaster({ request, response }) {
+      const queryParams = await request.all()
+
+      let admissions
+      if(queryParams.year == 'all') {
+        admissions = await Database
+          .select('*')
+          .from('ais_admissions')
+          .where('stupen_studia', 'Inžiniersky')
+      } else {
+        admissions = await Database
+          .select('*')
+          .from('ais_admissions')
+          .where('OBDOBIE', queryParams.year)
+          .where('stupen_studia', 'Inžiniersky')
+      }
+
+      return response.send({ admissions })
+    }
 }
 
 module.exports = GetController

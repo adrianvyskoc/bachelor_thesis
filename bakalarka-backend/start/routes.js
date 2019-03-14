@@ -50,8 +50,11 @@ Route
         // Admissions year comparison
         Route.get('admissionsYearComparison', 'GetController.getAdmissionsYearComparison')
 
-        // Admiissions bachelor
+        // Admissions bachelor
         Route.get('admissionsBachelor', 'GetController.getAdmissionsBachelor')
+
+        // Admissions master
+        Route.get('admissionsMaster', 'GetController.getAdmissionsMaster')
 
         // login ldap
         Route.post('login', 'UserController.loginWithLDAP')

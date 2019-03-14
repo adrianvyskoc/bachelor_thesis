@@ -115,4 +115,80 @@ export class AdmissionsUtil {
 
     return summary
   }
+
+  /**
+   * Vytvorí usporiadané pole dátumov prihlášok. Toto pole nám slúži na zobrazenie grafu,
+   * ktorý nám dáva informáciu o tom, kedy si študenti začali podávať prihlášky.
+   * @param admissions pole prihlášok, z ktorých chceme vypočítať dané údaje
+   */
+  _getAdmissionsDates(admissions) {
+    let admissionsTimes = admissions.reduce((acc, admission) => {
+      if(admission['Prevedené']) {
+        acc.push(admission['Prevedené'].split(".").join("/"))
+      }
+      return acc
+    }, [])
+
+    admissionsTimes.sort(sortByDate);​
+
+    admissionsTimes = admissionsTimes.reduce((acc, admission, idx) => {
+      acc.push({x: admission, y: idx})
+      return acc
+    }, [])
+
+    return admissionsTimes
+
+    function sortByDate(a, b) {
+      let [add, amm, ayyyy] = a.split("/")
+      let [bdd, bmm, byyyy] = b.split("/")
+
+      var dateA = new Date()
+      var dateB = new Date()
+
+      dateA.setFullYear(ayyyy); dateB.setFullYear(byyyy)
+      dateA.setMonth(amm); dateB.setMonth(bmm)
+      dateA.setDate(add); dateB.setDate(bdd)
+
+      return dateA.getTime() > dateB.getTime() ? 1 : -1
+    }
+  }
+
+  /**
+   * Vytvorí pole objektov, kde jeden objekt obsahuje dátum (x) a číslo (y), ktoré reprezentuje počet prihlášok podaných v daný deň.
+   * @param admissions pole prihlášok, z ktorých chceme vypočítať dané údaje
+   */
+  _getAdmissionsPerDay(admissions) {
+    let admissionsPerDayObj = admissions.reduce((acc, admission) => {
+      acc[admission['Prevedené']] = ++acc[admission['Prevedené']] || 0
+      return acc
+    }, {})
+
+    let admissionsPerDay = []
+    for(let day in admissionsPerDayObj) {
+      if(day == "null") continue
+
+      admissionsPerDay.push({
+        x: day.split(".").join("/"),
+        y: admissionsPerDayObj[day]
+      })
+    }
+
+    admissionsPerDay.sort(sortByDateByKey)
+
+    return admissionsPerDay;​
+
+    function sortByDateByKey(a, b) {
+      let [add, amm, ayyyy] = a.x.split("/")
+      let [bdd, bmm, byyyy] = b.x.split("/")
+
+      var dateA = new Date()
+      var dateB = new Date()
+
+      dateA.setFullYear(ayyyy); dateB.setFullYear(byyyy)
+      dateA.setMonth(amm); dateB.setMonth(bmm)
+      dateA.setDate(add); dateB.setDate(bdd)
+
+      return dateA.getTime() > dateB.getTime() ? 1 : -1
+    }
+  }
 }
