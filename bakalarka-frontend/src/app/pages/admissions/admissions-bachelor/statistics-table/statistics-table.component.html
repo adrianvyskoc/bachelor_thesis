@@ -1,4 +1,15 @@
-<table class="table">
+<label for="graduationYear" margin-top>Rok maturity</label>
+<input
+  id="graduationYear"
+  [(ngModel)]="graduationYear"
+  class="form-control"
+  type="number"
+  name="numberOfGroups"
+  min="0"
+  (change)="filterByGraduationYear()"
+>
+
+<table *ngIf="filtered.length else noData" class="table">
   <thead>
     <tr>
       <th *ngFor="let item of header" scope="col">{{ item }}</th>
@@ -18,9 +29,9 @@
 
       <tr class="table-secondary">
         <th>Sumár</th>
-        <td>{{ data.length }}</td>
+        <td>{{ filtered.length }}</td>
         <td>{{ summary.beganStudy }}</td>
-        <td>{{ (summary.beganStudy / (data.length / 100)).toFixed(2) }}</td>
+        <td>{{ (summary.beganStudy / (filtered.length / 100)).toFixed(2) }}</td>
         <td>{{ summary.arr[0] }} - {{ summary.arr[summary.arr.length-1] }}</td>
         <td>{{ summary.mean.toFixed(2) }}</td>
         <td>{{ summary.median }}</td>
@@ -37,3 +48,7 @@
     </ng-template>
   </tbody>
 </table>
+
+<ng-template #noData>
+  <h4 margin-top text-center>Žiadne dáta</h4>
+</ng-template>

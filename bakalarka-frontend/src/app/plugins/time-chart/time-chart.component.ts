@@ -40,12 +40,14 @@ export class TimeChartComponent implements OnChanges {
                 {
                     label: this.labels,
                     data: this.data,
+                    pointRadius: 0,
                     fill: false,
                     borderColor: 'red'
                 }
             ]
         },
         options: {
+          bezierCurve : true,
             title: {
               display: !!this.title,
               text: this.title

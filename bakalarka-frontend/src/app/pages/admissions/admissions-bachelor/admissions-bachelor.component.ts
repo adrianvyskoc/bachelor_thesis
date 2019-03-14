@@ -28,9 +28,8 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
 
   graduationYear: number
   numberOfGroups: number = 10
-  decibels = [40,50,60,70,80,90,100]
 
-  displayedSchoolsColumns = ['kod_kodsko', 'nazov', 'pocet_prihlasok', 'pocet_nastupenych', 'pocet_prijatych', 'prijaty/prihlasky', 'nastupeny/prijaty', 'nastupeny_prihlasky']
+  displayedSchoolsColumns = ['kod_kodsko', 'nazov', 'pocet_prihlasok', 'pocet_nastupenych', 'pocet_prijatych', 'prijaty/prihlasky', 'nastupeny/prihlasky', 'nastupeny/prijaty']
 
   displayedAdmissionsColumns = ['id', 'Meno', 'Priezvisko', 'E_mail', 'Rozhodnutie_o_prijatí']
   allColumns = [
@@ -44,7 +43,7 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
     "Rozh", "Stredná_škola", "Stredná_škola_adresa", "Stredná_škola_1", "Stredná_škola_cudzinci", "Súčasné_štúdium", "Súhlas_ZS",
     "Študijný_odbor", "Termín", "Čas", "Dátum", "Miestnosť", "Titul", "Titul_za", "Adresa_trvalého_pobytu", "č_d_1", "Trvalý_pobyt_obec",
     "Trv_pobyt_obec", "Trv_pobyt_okres", "Trv_pobyt_pozn", "PSČ_1", "Trv_pobyt_štát", "Trv_pobyt_ulica", "Trv_pobyt_ulica_1", "Predmety",
-    "Zameranie", "Zapl", "Zvol_predmet", "Zvol_predmet_1"
+    "Zameranie", "Zapl", "Zvol_predmet", "Zvol_predmet_1", 'stupen_studia'
   ]
   filteredColumns = this.allColumns
 
@@ -73,15 +72,6 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe()
-  }
-
-  onDecibelsChange(event) {
-    let val = event.target.value.split(",")
-
-    if(val[0] == "")
-      this.decibels = [40,50,60,70,80,90,100]
-    else
-      this.decibels = val.map(item => Number(item))
   }
 
   applyFilter(value: string) {
@@ -128,9 +118,13 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
     return [...this.displayedAdmissionsColumns, 'Akcie']
   }
 
+  /**
+   * Výpočet dát, ktoré hovoria o počte prihlášok, nastúpených a prijatých uchádzačoch a pomermi medzi týmito hodnotami
+   */
   _getSchoolsData() {
     let schoolMap = {}
 
+    // tvorba mapy škôl (objekt, kde key je school_id a jeho hodnotu je objekt s jednotlivými počtami a pomermi)
     this.schools.map(school => {
       schoolMap[school.kod_kodsko] = {}
       schoolMap[school.kod_kodsko].kod_kodsko = school.kod_kodsko
@@ -141,6 +135,7 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
     })
     schoolMap['neuvedené'] = { pocet_prihlasok: 0, pocet_nastupenych: 0, pocet_prijatych: 0 }
 
+    // výpočet počtu prihlášok, nastúpených a prijatých
     this.admissions.data.forEach(admission => {
       if(schoolMap[admission.school_id])
         schoolMap[admission.school_id].pocet_prihlasok++
@@ -148,12 +143,31 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
         schoolMap['neuvedené'].pocet_prihlasok++
 
       if((admission.Rozh == 10 || admission.Rozh == 11)) {
-        if(schoolMap[admission.school_id])
-          admission.Štúdium == "áno" ? schoolMap[admission.school_id].pocet_nastupenych++ : schoolMap[admission.school_id].pocet_prijatych++
-        else
-          admission.Štúdium == "áno" ? schoolMap['neuvedené'].pocet_nastupenych++ : schoolMap['neuvedené'].pocet_prijatych++
+        if(schoolMap[admission.school_id]) {
+          if(admission.Štúdium == "áno")
+            schoolMap[admission.school_id].pocet_nastupenych++
+          schoolMap[admission.school_id].pocet_prijatych++
+        }
+        else {
+          if(admission.Štúdium == "áno")
+            schoolMap['neuvedené'].pocet_nastupenych++
+          schoolMap['neuvedené'].pocet_prijatych++
+        }
       }
     })
+
+    // Výpočet pomerov
+    for(let school in schoolMap) {
+      schoolMap[school]['prijaty/prihlasky'] = schoolMap[school].pocet_prijatych ?
+        (100 * schoolMap[school].pocet_prijatych / schoolMap[school].pocet_prihlasok).toFixed(2) :
+        0
+      schoolMap[school]['nastupeny/prihlasky'] = schoolMap[school].pocet_nastupenych ?
+        (100 * schoolMap[school].pocet_nastupenych / schoolMap[school].pocet_prihlasok).toFixed(2) :
+        0
+      schoolMap[school]['nastupeny/prijaty'] = schoolMap[school].pocet_prijatych ?
+        (100 * schoolMap[school].pocet_nastupenych / schoolMap[school].pocet_prijatych).toFixed(2) :
+        0
+    }
 
     this.schools = new MatTableDataSource<any[]>(Object.values(schoolMap))
     this.schools.paginator = this.schoolsPaginator

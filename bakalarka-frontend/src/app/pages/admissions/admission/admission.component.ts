@@ -29,7 +29,7 @@ export class AdmissionComponent implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id')
     this.dataService.getAdmission(this.id)
-      .subscribe(data=> {
+      .subscribe(data => {
         this.admission = data['admission']
         this.school = data['school']
         this.pointers = data['pointers'][0]

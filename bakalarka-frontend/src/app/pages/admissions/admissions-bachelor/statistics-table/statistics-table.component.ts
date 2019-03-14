@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { StatisticsTableUtil } from './statistics-table.util';
+import { AdmissionsUtil } from '../../admissions.util';
+import { AdmissionsFilterService } from '../../admissions-filter.service';
 
 @Component({
   selector: 'app-statistics-table',
@@ -18,20 +19,35 @@ export class StatisticsTableComponent implements OnChanges {
   intervals = {}
   summary = {}
 
+  filtered = []
+
+  graduationYear: number
+
   // table header
   header = []
 
   constructor(
-    private Util: StatisticsTableUtil
+    private AdmissionsUtil: AdmissionsUtil,
+    private admissionsFilterService: AdmissionsFilterService
   ) { }
 
   ngOnChanges() {
+    this.filtered = this.data
+    this._calculateData()
+  }
+
+  filterByGraduationYear() {
+    this.filtered = this.admissionsFilterService.filterByGraduationYear(this.data, this.graduationYear)
+    this._calculateData()
+  }
+
+  _calculateData() {
     if(this.type == 'groups') {
-      this.groups = this.Util._calculateGroups(this.data, this.numberOfGroups)
-      this.summary = this.Util._calculateSummary(this.groups)
+      this.groups = this.AdmissionsUtil._calculateGroups(this.filtered, this.numberOfGroups)
+      this.summary = this.AdmissionsUtil._calculateSummary(this.groups)
       this.header = ['#', 'Kvantita', 'Nastúpil', 'Nastúpil (%)', 'Rozpätie bodov', 'Priemer bodov', 'Medián']
     } else {
-      this.intervals = this.Util._calculateIntervals(this.data, this.intervalsUpperLimits)
+      this.intervals = this.AdmissionsUtil._calculateIntervals(this.filtered, this.intervalsUpperLimits)
       this.header = ['Decibely', 'Kvantita', 'Nastúpil', 'Nastúpil (%)']
     }
   }

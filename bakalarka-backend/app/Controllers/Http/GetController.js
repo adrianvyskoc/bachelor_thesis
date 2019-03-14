@@ -188,10 +188,8 @@ class GetController {
         schools = await Database.raw(
             `
               SELECT sch.nazov, sch.druh_skoly, sch.kod_kodsko, COUNT(adm.school_id) FROM ineko_schools AS sch
-              LEFT JOIN ineko_total_ratings AS tr ON tr.school_id = sch.kod_kodsko
-              LEFT JOIN ais_admissions AS adm ON adm.school_id = sch.kod_kodsko
+              JOIN ineko_total_ratings AS tr ON tr.school_id = sch.kod_kodsko
               WHERE adm."OBDOBIE" = ?
-              GROUP BY sch.kod_kodsko
             `, [queryParams.year]
         )
       } else {
@@ -209,6 +207,7 @@ class GetController {
           .select('*')
           .from('ais_admissions')
           .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
+          .where('stupen_studia', 'Bakalársky')
       }
       else {
         admissions = await Database
@@ -216,6 +215,7 @@ class GetController {
           .from('ais_admissions')
           .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
           .where('OBDOBIE', queryParams.year)
+          .where('stupen_studia', 'Bakalársky')
       }
 
       return response.send({ schools: schools.rows, admissions })

@@ -170,6 +170,7 @@ class ImportAisController {
                 row.č_d_1 = String(row.č_d_1)
                 row.Odbor_SŠ = String(row.Odbor_SŠ)
                 row.OBDOBIE = params.year
+                row.stupen_studia = row.Program_1[0] == 'B' ? 'Bakalársky' : 'Inžiniersky'
 
                 delete row['Druh_SŠ']
                 delete row['Používateľ_podľa_RČ'] // z tohto ziskat ais ID

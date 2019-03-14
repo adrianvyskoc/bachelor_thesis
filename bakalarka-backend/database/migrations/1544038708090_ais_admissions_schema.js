@@ -10,6 +10,7 @@ class AisAdmissionsSchema extends Schema {
       table.integer("school_id").references("kod_kodsko").inTable("ineko_schools")
 
       table.timestamps()
+      table.string("stupen_studia")
       table.string("OBDOBIE")
       table.integer("Por")
       table.string("Priezvisko")
