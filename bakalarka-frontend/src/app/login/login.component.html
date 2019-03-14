@@ -1,4 +1,5 @@
-<div class="loginpage" *ngIf="!authService.loggedIn">
+<!-- Ak je user prihlaseny nezobrazi sa loin page -->
+<div class="loginpage"  *ngIf="!authService.loggedIn">
 
   <h1>Prihlásenie</h1>
   <form (ngSubmit)="submitForm()">

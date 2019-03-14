@@ -10,7 +10,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="/">Dashboard</a>
+          <a class="nav-link" routerLink="/dashboard">Dashboard</a>
         </li>
         <li class="nav-item" routerLinkActive="active">
           <a class="nav-link" routerLink="/import">Import</a>
@@ -23,9 +23,7 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" routerLink="/admissions">Všeobecné</a>
             <a class="dropdown-item" routerLink="/admissions/comparison">Porovnanie školských rokov</a>
-
             <div class="dropdown-divider"></div>
-
             <a class="dropdown-item" routerLink="/admissions/bachelor">Bakalársky stupeň</a>
             <a class="dropdown-item" routerLink="/admissions/master">Inžiniersky stupeň</a>
           </div>
@@ -34,12 +32,15 @@
           <a class="nav-link" routerLink="/statnice">ŠZS</a>
         </li>
 
-        <!-- <li *ngIf="!authService.loggedIn" class="nav-item">
-      <a class="nav-link" routerLink="/login">Prihlasenie</a>
-    </li> -->
         <!-- *ngIf="authService.loggedIn" -->
         <li class="nav-item">
           <a class="nav-link" (click)="logoutUser()">Odhlásenie</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/account">
+            <!-- <i class="fas fa-lock"></i> -->
+            <i class="fas fa-unlock-alt"></i>
+          </a>
         </li>
       </ul>
 

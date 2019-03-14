@@ -8,7 +8,10 @@ import { Router } from '@angular/router';
 export class AuthService {
   loggedIn: boolean
 
-  constructor( private http: HttpClient) {
+  constructor( 
+    private http: HttpClient,
+    private router: Router
+  ) {
     this.loggedIn = false
 
     if(localStorage.getItem('user')) {
@@ -26,6 +29,8 @@ export class AuthService {
       email: email,
       password: password
     }
+
+    // console.log(requestData)
     this.http.post(`http://localhost:3333/api/login`, requestData)
     .subscribe(
       response => {
@@ -33,6 +38,7 @@ export class AuthService {
         if(response) {
           this.loggedIn = true
           localStorage.setItem('user', JSON.stringify(user))
+          this.router.navigate(['dashboard'])
         }
         else {
           this.loggedIn = false
