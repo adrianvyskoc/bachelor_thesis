@@ -29,10 +29,15 @@ const routes: Routes = [
     path: 'login',
     loadChildren: './login/login.module#LoginModule'
   },
-  { 
-    path: '**', 
+  {
+    path: 'accounts',
+    loadChildren: './pages/accounts/accounts.module#AccountsModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: '**',
     loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
-    canActivate: [AuthGuard] 
+    canActivate: [AuthGuard]
   }
 ];
 

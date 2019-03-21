@@ -40,6 +40,11 @@ Route
         Route.get('codebook/:type', 'GetController.getCodebook')
         Route.get('column-meaning/:type', 'GetController.getColumnMeaning')
         Route.get('getAdmission/:id', 'GetController.getAdmission')
+        // ---
+        Route.get('administrators', 'GetController.getAdmins')
+        Route.get('administrators/add/:name', 'GetController.addAdmin')
+        Route.get('administrators/remove/:name', 'GetController.removeAdmin')
+        // ---
 
         // imported years
         Route.get('importedYears', 'GetController.getImportedYears')

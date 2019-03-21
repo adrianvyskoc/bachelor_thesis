@@ -4,7 +4,7 @@ const xlsx = use('xlsx')
 const Helpers = use('Helpers')
 const Database = use('Database')
 const fs = use('fs')
-const Redis = use('Redis')
+// const Redis = use('Redis')
 
 // Models
 const School         = use('App/Models/School')
@@ -130,13 +130,13 @@ class ImportInekoController {
                 } catch(err) { console.log(err) }
             }
 
-            let importedYears = await Redis.get(params.selectedImport)
-            importedYears = JSON.parse(importedYears)
+            // let importedYears = await Redis.get(params.selectedImport)
+            // importedYears = JSON.parse(importedYears)
 
-            if(!importedYears) importedYears = []
+            // if(!importedYears) importedYears = []
 
-            if(importedYears.indexOf(params.year) == -1)
-              await Redis.set(params.selectedImport, JSON.stringify([...importedYears, params.year]))
+            // if(importedYears.indexOf(params.year) == -1)
+            //   await Redis.set(params.selectedImport, JSON.stringify([...importedYears, params.year]))
         }
 
 /*

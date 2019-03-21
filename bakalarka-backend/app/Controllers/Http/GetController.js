@@ -1,7 +1,7 @@
 'use strict'
 
 const Database = use('Database')
-const Redis = use('Redis')
+//const Redis = use('Redis')
 
 const Student = use('App/Models/Student')
 const Attendance = use('App/Models/Attendance')
@@ -13,28 +13,32 @@ const Grade = use('App/Models/Grade')
 const Subject = use('App/Models/Subject')
 const School = use('App/Models/School')
 const Pointer = use('App/Models/Pointer')
+const Admin = use('App/Models/Admin')
 
 class GetController {
     async getImportedYears ({ response }) {
         // INEKO
-        const AdditionalData = JSON.parse(await Redis.get('AdditionalData'))
-        const TotalRating = JSON.parse(await Redis.get('TotalRating'))
-        const Percentils = JSON.parse(await Redis.get('Percentils'))
-        const Pointers = JSON.parse(await Redis.get('Pointers'))
+        // const AdditionalData = JSON.parse(await Redis.get('AdditionalData'))
+        // const TotalRating = JSON.parse(await Redis.get('TotalRating'))
+        // const Percentils = JSON.parse(await Redis.get('Percentils'))
+        // const Pointers = JSON.parse(await Redis.get('Pointers'))
 
         // AIS
-        const Admissions = await Redis.get('Admissions')
+        // const Admissions = await Redis.get('Admissions')
 
+        // return response.send({
+        //   'ineko': {
+        //     TotalRating,
+        //     Percentils,
+        //     Pointers,
+        //     AdditionalData
+        //   },
+        //   'ais': {
+        //     Admissions
+        //   }
+        // })
         return response.send({
-          'ineko': {
-            TotalRating,
-            Percentils,
-            Pointers,
-            AdditionalData
-          },
-          'ais': {
-            Admissions
-          }
+
         })
     }
 
@@ -79,6 +83,66 @@ class GetController {
             pointers,
             otherAdmissions
         })
+    }
+
+    async getAdmins({ response }) {
+      try {
+        const data = await Database
+          .table('admins')
+          .where({admin: 'true'})
+
+          return response
+          .status(200)
+          .send(data)
+      } catch(e) {
+        return response
+          .status(500)
+          .send(e)
+      }
+    }
+
+    async addAdmin({ response, params }) {
+      const user = params.name
+
+      try {
+        const existingRecords = await Admin
+          .query()
+          .where('email', user)
+          .getCount()
+
+        if(existingRecords > 0) {
+          await Database.table('admins')
+            .where({email: user})
+            .update({admin: 'true'})
+        } else {
+          await Database.table('admins')
+            .insert({email: user, admin: 'true'})
+        }
+        return response
+          .status(200)
+          .send(true)
+      } catch(e) {
+        return response
+          .status(500)
+          .send(e)
+      }
+    }
+
+    async removeAdmin({ response, params }) {
+      const user = params.name
+      try {
+        await Database.table('admins')
+          .where({email: user})
+          .update({admin: 'false'})
+
+          return response
+            .status(200)
+            .send(true)
+      } catch(e) {
+        return response
+          .status(500)
+          .send(e)
+      }
     }
 
     async getGrades ({ response }) {
@@ -174,7 +238,8 @@ class GetController {
     }
 
     async getAdmissionsYearComparison ({ response }) {
-      const years = await Redis.get('Admissions')
+      //const years = await Redis.get('Admissions')
+      const years = []
       const admissions = await Admission.all()
 
       return response.send({ admissions, years })
@@ -200,6 +265,8 @@ class GetController {
             `
         )
       }
+
+      console.log(schools)
 
       let admissions
       if(queryParams.year == 'all') {

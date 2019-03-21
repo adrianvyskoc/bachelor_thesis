@@ -158,6 +158,8 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
       }
     })
 
+    debugger
+
     // Výpočet pomerov
     for(let school in schoolMap) {
       schoolMap[school]['prijaty/prihlasky'] = schoolMap[school].pocet_prijatych ?
