@@ -29,6 +29,28 @@
           <option value="technical">Odborné školy</option>
           <option value="other">Ostatné</option>
         </select>
+
+        <div flex margin-bottom>
+          <select
+            class="custom-select"
+            formControlName="pointsType"
+          >
+            <option value="all">Všetci</option>
+            <option value="Všeobecné_študijné_predpoklady_SCIO_VŠP">SCIO - Všeobecné študijné predpoklady</option>
+            <option value="Písomný_test_z_matematiky_SCIO_PTM">SCIO - Matematika</option>
+            <option value="Externá_maturita_z_matematiky_EM">Externá maturita - Matematika</option>
+            <option value="Externá_maturita_z_cudzieho_jazyka_ECJ">Externá maturita - Cudzie jazyky</option>
+            <option value="notprovided">Neuvedené hodnoty</option>
+          </select>
+
+          <input
+            *ngIf="filterForm.value.pointsType !== 'all'"
+            formControlName="pointsValue"
+            type="range" min="0" max="100"
+            margin-left
+          >
+        </div>
+
         <div
           flex
           margin-bottom

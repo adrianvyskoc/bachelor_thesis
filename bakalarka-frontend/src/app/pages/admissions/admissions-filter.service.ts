@@ -39,4 +39,18 @@ export class AdmissionsFilterService {
 
     return admissions
   }
+
+  filterByPoints(admissions, value, type) {
+    if(type == "notprovided") {
+      return admissions.filter(admission => {
+        return admission['Všeobecné_študijné_predpoklady_SCIO_VŠP'] == null && admission['Písomný_test_z_matematiky_SCIO_PTM'] == null && admission['Externá_maturita_z_matematiky_EM'] == null && admission['Externá_maturita_z_cudzieho_jazyka_ECJ'] == null
+      })
+    }
+
+    return admissions.filter(admission => {
+      if(admission[type] == null)
+        return false
+      return Number(admission[type]) >= value
+    })
+  }
  }

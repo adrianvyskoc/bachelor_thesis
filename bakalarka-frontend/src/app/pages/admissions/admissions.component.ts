@@ -38,7 +38,9 @@ export class AdmissionsComponent implements OnInit {
     this.filterForm = new FormGroup({
       'studyType': new FormControl('all'),
       'schoolType': new FormControl('all'),
-      'gender': new FormControl('all')
+      'gender': new FormControl('all'),
+      'pointsType': new FormControl('all'),
+      'pointsValue': new FormControl(50)
     })
 
     this.dataService.loadAdmissionsOverview()
@@ -67,6 +69,10 @@ export class AdmissionsComponent implements OnInit {
 
     if(this.filterForm.value.gender !== 'all')
       this.filteredAdmissions = this.admissionsFilterService.filterByGender(this.filteredAdmissions, this.filterForm.value.gender)
+
+    if(this.filterForm.value.pointsType !== 'all')
+      this.filteredAdmissions = this.admissionsFilterService.filterByPoints(this.filteredAdmissions, this.filterForm.value.pointsValue, this.filterForm.value.pointsType)
+
 
     this._getSchoolsAdmissions()
     this.filterSchools()

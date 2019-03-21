@@ -200,7 +200,6 @@ class ImportAisController {
 
         if(params.selectedImport == 'AdmissionsPoints') {
           for (let row of rows) {
-            console.log("dsd")
             row = adjustKeys(row)
 
             var {
@@ -210,19 +209,36 @@ class ImportAisController {
               Všeobecné_študijné_predpoklady_SCIO_VŠP
             } = row
 
-            console.log("ttu")
-            // find admissions with this birth number
+            var obj = {
+              Externá_maturita_z_cudzieho_jazyka_ECJ,
+              Externá_maturita_z_matematiky_EM,
+              Písomný_test_z_matematiky_SCIO_PTM,
+              Všeobecné_študijné_predpoklady_SCIO_VŠP
+            }
+
+            let attrs = ['Externá_maturita_z_cudzieho_jazyka_ECJ', 'Externá_maturita_z_matematiky_EM', 'Písomný_test_z_matematiky_SCIO_PTM', 'Všeobecné_študijné_predpoklady_SCIO_VŠP']
+
+            attrs.forEach((attr) => {
+              if(typeof obj[attr] == "number")
+                return
+
+              if(typeof obj[attr] !== "string") {
+                obj[attr] = null
+              } else {
+                if(obj[attr].trim().length)
+                  obj[attr] = Number(obj[attr])
+                else
+                  obj[attr] = null
+              }
+            })
+
+            console.log(obj)
 
             try {
-              const admissions = await Database
+              await Database
               .table('ais_admissions')
               .where({ 'Reg_č': row['Reg_č'], OBDOBIE: params.year })
-              .update({
-                Externá_maturita_z_cudzieho_jazyka_ECJ,
-                Externá_maturita_z_matematiky_EM,
-                Písomný_test_z_matematiky_SCIO_PTM,
-                Všeobecné_študijné_predpoklady_SCIO_VŠP
-              })
+              .update(obj)
             } catch (err) { console.log(err) }
 
           }
