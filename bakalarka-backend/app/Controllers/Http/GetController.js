@@ -239,10 +239,25 @@ class GetController {
 
     async getAdmissionsYearComparison ({ response }) {
       //const years = await Redis.get('Admissions')
-      const years = []
-      const admissions = await Admission.all()
+      const admissions = await Database
+        .select('*')
+        .from('ais_admissions')
+        .where('stupen_studia', 'Bakalársky')
 
-      return response.send({ admissions, years })
+      let studyProgrammes = await Database.raw(`
+        SELECT DISTINCT "Program_1" FROM ais_admissions
+        WHERE stupen_studia = ?
+      `, ['Bakalársky'])
+
+      let years = await Database.raw(`
+        SELECT DISTINCT "OBDOBIE" FROM ais_admissions
+        WHERE stupen_studia = ?
+      `, ['Bakalársky'])
+
+      studyProgrammes = studyProgrammes.rows.map(programme => programme.Program_1)
+      years = years.rows.map(year => year.OBDOBIE)
+
+      return response.send({ admissions, years, studyProgrammes })
     }
 
     async getAdmissionsBachelor ({ request, response }) {
@@ -252,7 +267,8 @@ class GetController {
       if(queryParams.year !== 'all') {
         schools = await Database.raw(
             `
-              SELECT sch.nazov, sch.druh_skoly, sch.kod_kodsko, COUNT(adm.school_id) FROM ineko_schools AS sch
+              SELECT sch.nazov, sch.druh_skoly, sch.kod_kodsko, tr.celkove_hodnotenie FROM ineko_schools AS sch
+              JOIN ais_admissions AS adm ON adm.school_id = sch.kod_kodsko
               JOIN ineko_total_ratings AS tr ON tr.school_id = sch.kod_kodsko
               WHERE adm."OBDOBIE" = ?
             `, [queryParams.year]
@@ -265,8 +281,6 @@ class GetController {
             `
         )
       }
-
-      console.log(schools)
 
       let admissions
       if(queryParams.year == 'all') {
