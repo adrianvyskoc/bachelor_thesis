@@ -22,6 +22,7 @@ export class DataService {
   private admissionsOverviewChanged = new Subject<{}>()
   private admissionsBachelorChanged = new Subject<{}>()
   private admissionsMasterChanged = new Subject<{}>()
+  private admissionsYearComparisonChanged = new Subject<{}>()
 
   private year = new BehaviorSubject('all')
 
@@ -106,8 +107,17 @@ export class DataService {
       .subscribe(data => this.admissionsMasterChanged.next(data))
   }
 
+  getAdmissionsYearComparison() {
+    this.http.get(`http://localhost:3333/api/admissionsYearComparison`)
+      .subscribe(data => this.admissionsYearComparisonChanged.next(data))
+  }
+
   getAdmissionsOverviewUpdateListener() {
     return this.admissionsOverviewChanged.asObservable()
+  }
+
+  getAdmissionsYearComparisonUpdateListener() {
+    return this.admissionsYearComparisonChanged.asObservable()
   }
 
   getAdmissionsBachelorUpdateListener() {

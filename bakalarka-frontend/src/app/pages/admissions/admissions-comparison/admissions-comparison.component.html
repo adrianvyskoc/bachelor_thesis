@@ -32,6 +32,25 @@
 
 -->
 
+<h2 padding>Počty prohlášok na jednotlivé študijné programy za jednotlivé roky (Bakalársky stupeň)</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Študijný program</th>
+      <th *ngFor="let year of schoolYears" scope="col">{{ year }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let programme of studyProgrammesMap | keyvalue">
+      <th scope="row">{{ programme.key }}</th>
+      <td *ngFor="let year of schoolYears">
+        {{ programme.value[year] ? programme.value[year] : "-" }}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 <div flex>
 
 </div>

@@ -9,17 +9,24 @@ import { DataService } from 'src/app/shared/data.service';
 export class AdmissionsComparisonComponent implements OnInit {
 
   admissions
+  studyProgrammes = []
+  schoolYears = []
+  studyProgrammesMap = {}
   admCountsPerYear = {}
+
 
   constructor(
     private dataService: DataService
   ) { }
 
   ngOnInit() {
-    this.dataService.getData('Admissions')
-    this.dataService.getAdmissionsUpdateListener()
-      .subscribe(admissions => {
-        this.admissions = admissions
+    this.dataService.getAdmissionsYearComparison()
+    this.dataService.getAdmissionsYearComparisonUpdateListener()
+      .subscribe(data => {
+        this.admissions = data['admissions']
+        this.schoolYears = data['years']
+        this.studyProgrammes = data['studyProgrammes']
+        this.studyProgrammesMap = this._calculateCountsPerProgrammeForEachYear()
         this._calculateCountsForEachYear()
       })
   }
@@ -40,5 +47,18 @@ export class AdmissionsComparisonComponent implements OnInit {
     this.admCountsPerYear = Object.keys(admCountsPerYear).reduce((acc, nextVal) => {
       return [ [...acc[0], admCountsPerYear[nextVal].rejected ], [...acc[1], admCountsPerYear[nextVal].approved ] ]
     }, [[], []])
+  }
+
+  _calculateCountsPerProgrammeForEachYear() {
+    let programmesMap = this.studyProgrammes.reduce((acc, programme) => {
+      acc[programme] = {}
+      return acc
+    }, {})
+
+    this.admissions.forEach(admission => {
+      programmesMap[admission.Program_1][admission.OBDOBIE] = ++programmesMap[admission.Program_1][admission.OBDOBIE] || 1
+    })
+
+    return programmesMap
   }
 }
