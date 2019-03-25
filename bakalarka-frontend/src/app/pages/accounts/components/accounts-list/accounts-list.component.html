@@ -1,0 +1,10 @@
+<app-accounts-item
+    class="account"
+    *ngFor="let account of this.accounts"
+    [account]="account"
+    (onRemoveClickNotifier)="onRemoveClickNotify($event)">
+</app-accounts-item>
+<hr>
+<h3>Zoznam účtov</h3>
+<p>...ktoré by mali mať prístup do appky</p>
+<!-- TODO: vypísať všetky účty a znázorniť ktoré maju a ktore nemaju ADMIN práva -->
