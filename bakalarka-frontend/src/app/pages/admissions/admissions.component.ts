@@ -21,6 +21,9 @@ export class AdmissionsComponent implements OnInit {
   schools = []
   filteredSchools = []
 
+  // charts data
+  admissionCounts = {}
+
   chosenSchool
   displayedAdmissionsColumns = ['id', 'Meno', 'Priezvisko', 'E_mail']
   schoolsToShow: string = 'all'
@@ -51,6 +54,7 @@ export class AdmissionsComponent implements OnInit {
           this.admissions = data['admissions']
           this.filteredAdmissions = data['admissions']
           this._getSchoolsAdmissions()
+          this._calculateAdmissionsCounts()
           this.filterSchools()
         }
       )
@@ -75,6 +79,7 @@ export class AdmissionsComponent implements OnInit {
 
 
     this._getSchoolsAdmissions()
+    this._calculateAdmissionsCounts()
     this.filterSchools()
   }
 
@@ -129,5 +134,15 @@ export class AdmissionsComponent implements OnInit {
 
   _displayedColumnsAndActions() {
     return [...this.displayedAdmissionsColumns, 'Akcie']
+  }
+
+  _calculateAdmissionsCounts() {
+    this.admissionCounts = this.filteredAdmissions.reduce((acc, admission) => {
+      admission.stupen_studia == "Bakalársky" ? acc.bachelor++ : acc.master++
+      admission.Rozh != 45 ? acc.approved++ : acc.rejected++
+      return acc
+    }, {'bachelor': 0, 'master': 0, 'approved': 0, 'rejected': 0})
+
+    debugger;
   }
 }

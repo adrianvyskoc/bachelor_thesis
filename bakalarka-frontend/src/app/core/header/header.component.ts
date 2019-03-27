@@ -9,7 +9,8 @@ import { AuthService } from 'src/app/login/services/auth.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  selectedYear: string
+  selectedYear: string = 'all'
+  selectedFaculty: string = 'all'
 
   constructor(
     private dataService: DataService,
@@ -24,6 +25,10 @@ export class HeaderComponent implements OnInit {
 
   onYearSelect() {
     this.dataService.setYear(this.selectedYear)
+  }
+
+  onFacultySelect() {
+    // TODO
   }
 
   logoutUser() {

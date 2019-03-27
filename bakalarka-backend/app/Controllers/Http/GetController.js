@@ -269,9 +269,9 @@ class GetController {
             `
               SELECT sch.nazov, sch.druh_skoly, sch.kod_kodsko, tr.celkove_hodnotenie FROM ineko_schools AS sch
               JOIN ais_admissions AS adm ON adm.school_id = sch.kod_kodsko
-              JOIN ineko_total_ratings AS tr ON tr.school_id = sch.kod_kodsko
+              JOIN ineko_total_ratings AS tr ON tr.school_id = sch.kod_kodsko AND tr."OBDOBIE" = ?
               WHERE adm."OBDOBIE" = ?
-            `, [queryParams.year]
+            `, [queryParams.year, queryParams.year]
         )
       } else {
         schools = await Database.raw(

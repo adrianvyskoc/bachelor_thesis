@@ -111,9 +111,17 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
     this.displayedAdmissionsColumns = []
   }
 
-  exportAll() {
+  exportFiltered() {
+    this.exportService.exportArrayOfObjectToExcel(this.admissions.filteredData, 'filtred_admissions');
+  }
+
+  exportVisible() {
     const tables = document.querySelector('table')
     this.exportService.exportTableToExcel(tables, 'admissions')
+  }
+
+  exportAll() {
+    this.exportService.exportArrayOfObjectToExcel(this.admissions.data, 'all_admissions');
   }
 
   _displayedColumnsAndActions() {

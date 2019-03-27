@@ -36,17 +36,20 @@ export class AdmissionsComparisonComponent implements OnInit {
       if(!acc[admission.OBDOBIE])
         acc[admission.OBDOBIE] = {}
 
-      if(admission.Rozh != 45)
-        acc[admission.OBDOBIE].approved = ++acc[admission.OBDOBIE].approved || 0
+      if(admission.Rozh != 45) {
+        if(admission.Štúdium == 'áno')
+          acc[admission.OBDOBIE].beganStudy = ++acc[admission.OBDOBIE].beganStudy || 1
+        acc[admission.OBDOBIE].approved = ++acc[admission.OBDOBIE].approved || 1
+      }
       else
-        acc[admission.OBDOBIE].rejected = ++acc[admission.OBDOBIE].rejected || 0
+        acc[admission.OBDOBIE].rejected = ++acc[admission.OBDOBIE].rejected || 1
 
       return acc
     }, {})
 
     this.admCountsPerYear = Object.keys(admCountsPerYear).reduce((acc, nextVal) => {
-      return [ [...acc[0], admCountsPerYear[nextVal].rejected ], [...acc[1], admCountsPerYear[nextVal].approved ] ]
-    }, [[], []])
+      return [ [...acc[0], admCountsPerYear[nextVal].rejected], [...acc[1], admCountsPerYear[nextVal].approved], [...acc[2], admCountsPerYear[nextVal].beganStudy]]
+    }, [[], [], []])
   }
 
   _calculateCountsPerProgrammeForEachYear() {
