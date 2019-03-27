@@ -29,11 +29,11 @@ const routes: Routes = [
     path: 'login',
     loadChildren: './login/login.module#LoginModule'
   },
-  /*{
+  {
     path: 'accounts',
     loadChildren: './pages/accounts/accounts.module#AccountsModule',
     canActivate: [AuthGuard]
-  },*/
+  },
   {
     path: '**',
     loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
