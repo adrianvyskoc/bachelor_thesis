@@ -85,6 +85,7 @@ class GetController {
         })
     }
 
+    // ---
     async getAdmins({ response }) {
       try {
         const data = await Database
@@ -111,7 +112,8 @@ class GetController {
           .getCount()
 
         if(existingRecords > 0) {
-          await Database.table('admins')
+          await Database
+            .table('admins')
             .where({email: user})
             .update({admin: 'true'})
         } else {
@@ -144,6 +146,7 @@ class GetController {
           .send(e)
       }
     }
+    // ---
 
     async getGrades ({ response }) {
         const grades = await Grade.all()
