@@ -110,8 +110,9 @@ export class AdmissionsComponent implements OnInit {
   }
 
   onSchoolChoose(event) {
+    this.chosenSchool = {}
     this.chosenSchool = event
-    this.chosenSchool.admissions = new MatTableDataSource<any[]>(this.chosenSchool.admissions)
+    this.chosenSchool.admissions = new MatTableDataSource<any[]>(event.admissions.data ? event.admissions.data : event.admissions)
     this.chosenSchool.admissions.paginator = this.paginator
     this.chosenSchool.admissions.sort = this.sort
   }
@@ -142,7 +143,5 @@ export class AdmissionsComponent implements OnInit {
       admission.Rozh != 45 ? acc.approved++ : acc.rejected++
       return acc
     }, {'bachelor': 0, 'master': 0, 'approved': 0, 'rejected': 0})
-
-    debugger;
   }
 }

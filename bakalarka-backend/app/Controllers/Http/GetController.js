@@ -192,15 +192,35 @@ class GetController {
     async getAdmissionsOverview ({ request, response }) {
       const queryParams = await request.all()
 
+      const admissionsAttrs = [
+        'ais_admissions.id',
+        'ais_admissions.Meno',
+        'ais_admissions.Priezvisko',
+        'ais_admissions.E_mail',
+        'ais_admissions.Všeobecné_študijné_predpoklady_SCIO_VŠP',
+        'ais_admissions.Písomný_test_z_matematiky_SCIO_PTM',
+        'ais_admissions.Externá_maturita_z_matematiky_EM',
+        'ais_admissions.Externá_maturita_z_cudzieho_jazyka_ECJ',
+        'ais_admissions.Program_1',
+        'ais_admissions.Pohlavie',
+        'ais_admissions.Maturita_1',
+        'ais_admissions.school_id',
+        'ais_admissions.stupen_studia',
+        'ais_admissions.Body_celkom'
+      ]
+      const schoolsAttrs = ['ineko_schools.typ_skoly', 'ineko_schools.sur_y', 'ineko_schools.sur_x', 'ineko_schools.kraj']
+
       const schools = await Database
-        .select('*')
+        .select(...schoolsAttrs, 'ineko_schools.nazov', 'ineko_schools.kod_kodsko', 'ineko_schools.email', 'ineko_total_ratings.celkove_hodnotenie')
         .from('ineko_schools')
-        .leftJoin('ineko_total_ratings', 'ineko_total_ratings.school_id', 'ineko_schools.kod_kodsko')
+        .join('ineko_total_ratings', 'ineko_total_ratings.school_id', 'ineko_schools.kod_kodsko')
+
       let admissions
       let regionMetrics
+
       if(queryParams.year == 'all') {
         admissions = await Database
-          .select('*')
+          .select(...admissionsAttrs, ...schoolsAttrs)
           .from('ais_admissions')
           .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
         regionMetrics = await Database.raw(`
@@ -217,7 +237,7 @@ class GetController {
       }
       else {
         admissions = await Database
-          .select('*')
+          .select(...admissionsAttrs, ...schoolsAttrs)
           .from('ais_admissions')
           .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
           .where('OBDOBIE', queryParams.year)
@@ -234,8 +254,6 @@ class GetController {
           `, [queryParams.year]
         )
       }
-
-
 
       return response.send({ schools, admissions, regionMetrics: regionMetrics.rows })
     }

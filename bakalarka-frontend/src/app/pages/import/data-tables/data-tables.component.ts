@@ -108,7 +108,6 @@ export class DataTablesComponent implements OnInit, OnDestroy {
     this.gradesSubscription = this.dataService.getGradesUpdateListener()
       .subscribe(
         (data: GradeElement[]) => {
-          console.log(data)
           this.grades = new MatTableDataSource<GradeElement>(data)
           this.grades.paginator = this.gradesPaginator
           this.grades.sort = this.sort

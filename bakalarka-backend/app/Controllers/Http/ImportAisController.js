@@ -232,8 +232,6 @@ class ImportAisController {
               }
             })
 
-            console.log(obj)
-
             try {
               await Database
               .table('ais_admissions')
