@@ -275,10 +275,34 @@ class GetController {
         WHERE stupen_studia = ?
       `, ['Bakalársky'])
 
+      let ratios = {}
+      ratios.approved = await Database.raw(`
+        SELECT "OBDOBIE", COUNT("Rodné_číslo") AS apr FROM (
+          SELECT DISTINCT "OBDOBIE", "Rodné_číslo" FROM ais_admissions
+          WHERE "Rozh" = 10 OR "Rozh" = 11
+        ) AS x
+        GROUP BY "OBDOBIE"
+      `)
+      ratios.began_study = await Database.raw(`
+        SELECT "OBDOBIE", COUNT("Rodné_číslo") AS bs FROM (
+          SELECT DISTINCT "OBDOBIE", "Rodné_číslo" FROM ais_admissions
+          WHERE ("Rozh" = 10 OR "Rozh" = 11) AND "Štúdium" = ?
+        ) AS x
+        GROUP BY "OBDOBIE"
+      `, ['áno'])
+
+      ratios.approved = ratios.approved.rows
+      ratios.began_study = ratios.began_study.rows
+
       studyProgrammes = studyProgrammes.rows.map(programme => programme.Program_1)
       years = years.rows.map(year => year.OBDOBIE)
 
-      return response.send({ admissions, years, studyProgrammes })
+      // zoradenie školských rokov podľa abecedy
+      years.sort(function (item1, item2) {
+        return item1.localeCompare(item2);
+      })
+
+      return response.send({ admissions, years, studyProgrammes, ratios })
     }
 
     async getAdmissionsBachelor ({ request, response }) {

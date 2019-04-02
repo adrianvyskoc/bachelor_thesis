@@ -142,7 +142,7 @@ class ImportAisController {
             for (let row of rows) {
                 row = adjustKeys(row)
 
-                /*if(row['Prijatie_na_program']) {
+                /*if(row['Rozh'] == 11 || row['Rozh'] == 10) {
                   let student = new Student()
 
                   student.fill({
@@ -165,7 +165,9 @@ class ImportAisController {
 
                 let admission = new Admission()
 
-                //row.AIS_ID = row['Používateľ_podľa_RČ'].split(" ")[0]
+                if(row['Používateľ_podľa_RČ'])
+                  row.AIS_ID = Number(row['Používateľ_podľa_RČ'].split(" ")[0])
+
                 row.č_d = String(row.č_d)
                 row.č_d_1 = String(row.č_d_1)
                 row.Odbor_SŠ = String(row.Odbor_SŠ)
