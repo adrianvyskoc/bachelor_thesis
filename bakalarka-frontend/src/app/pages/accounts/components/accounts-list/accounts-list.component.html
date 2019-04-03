@@ -1,10 +1,49 @@
-<app-accounts-item
-    class="account"
-    *ngFor="let account of this.accounts"
-    [account]="account"
-    (onRemoveClickNotifier)="onRemoveClickNotify($event)">
-</app-accounts-item>
+<table mat-table [dataSource]="dataSource">
+  <!-- order -->
+  <ng-container matColumnDef="order">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td mat-cell *matCellDef="let admin">{{ admin.id }}</td>
+  </ng-container>
+
+  <!-- name -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Email</th>
+    <td mat-cell *matCellDef="let admin">{{ admin.email }}</td>
+  </ng-container>
+
+  <!-- useraccess -->
+  <ng-container matColumnDef="userAccess">
+    <th mat-header-cell *matHeaderCellDef>Prístup</th>
+    <td mat-cell *matCellDef="let admin">{{ admin.access }}</td>
+  </ng-container>
+
+  <!-- adminaccess -->
+  <ng-container matColumnDef="adminAccess">
+    <th mat-header-cell *matHeaderCellDef>Admin právo</th>
+    <td mat-cell *matCellDef="let admin">{{ admin.admin }}</td>
+  </ng-container>
+
+  <!-- actions -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Akcie</th>
+    <td mat-cell *matCellDef="let admin">
+      <button type="submit" color="primary" [disabled]="!admin.admin" (click)="onRemoveAdminClickNotify(admin.email)"
+        mat-raised-button>
+        Zmazať admin právo
+      </button>
+
+      <button type="submit" color="primary" [disabled]="admin.admin" (click)="onAddAdminClickNotify(admin.email)"
+        mat-raised-button>
+        Pridať admin právo
+      </button>
+
+      <button type="submit" color="primary" (click)="onRemoveAccountClickNotify(admin.email)" mat-raised-button>
+        Odstrániť prístup
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
 <hr>
-<h3>Zoznam účtov</h3>
-<p>...ktoré by mali mať prístup do appky</p>
-<!-- TODO: vypísať všetky účty a znázorniť ktoré maju a ktore nemaju ADMIN práva -->

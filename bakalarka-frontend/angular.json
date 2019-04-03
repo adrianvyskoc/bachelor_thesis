@@ -54,7 +54,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "bachelor:build"
+            "browserTarget": "bachelor:build",
           },
           "configurations": {
             "production": {

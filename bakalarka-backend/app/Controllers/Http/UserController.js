@@ -1,13 +1,36 @@
 'use strict'
 
 const ldap = require('ldapjs');
+const Admin = use('App/Models/Admin')
+
 
 class UserController {
 
-  async loginWithLDAP({
-    request,
-    response
-  }) {
+  async verifyEmail({ request, response }) {
+    const email = request.body.email
+    let auth = {
+      access: false,
+      admin: false
+    }
+
+    const user = await Admin
+      .query()
+      .where({
+        'email': email,
+      })
+
+    user[0].access ? auth.access = true : null
+    if (user !== undefined && auth.access) {
+      if (await this.loginWithLDAP({ request, response })) {
+        user[0].admin ? auth.admin = true : null
+      }
+    } else {
+      console.log('pouzivatel nie je v databaze')
+    }
+    return response.send(auth)
+  }
+
+  async loginWithLDAP({ request, response }) {
     return new Promise((resolve, reject) => {
       let data = request.all()
       let loggedIn = false
@@ -32,8 +55,9 @@ class UserController {
       }
     })
     .then((res) => {
-      console.log(res)
-      return response.status(200).send(res)
+      return res
+      // console.log(res)
+      // return response.status(200).send(res)
     })
     // ************************************
   }

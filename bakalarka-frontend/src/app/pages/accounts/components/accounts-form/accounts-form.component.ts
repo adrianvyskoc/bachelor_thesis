@@ -1,4 +1,5 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Inject } from '@angular/core';
+import { AccountsService } from '../../services/accounts.service';
 
 @Component({
   selector: 'app-accounts-form',
@@ -6,17 +7,23 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./accounts-form.component.scss']
 })
 export class AccountsFormComponent implements OnInit {
-  @Output() onFormSubmitNotifier: EventEmitter<string> = new EventEmitter<string>()
-  username: string
+  username: string;
 
-  constructor() { }
+  constructor(
+    @Inject(AccountsService) private accountsService: AccountsService
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   submitForm() {
-    this.onFormSubmitNotifier.emit(this.username)
-    this.username = null
+    this.accountsService.addAccount(this.username).subscribe(
+      () => {
+        this.accountsService.loadAllAccounts();
+        this.username = null;
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
-
 }

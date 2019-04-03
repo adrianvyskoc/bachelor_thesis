@@ -41,9 +41,12 @@ Route
         Route.get('column-meaning/:type', 'GetController.getColumnMeaning')
         Route.get('getAdmission/:id', 'GetController.getAdmission')
         // ---
-        Route.get('administrators', 'GetController.getAdmins')
-        Route.get('administrators/add/:name', 'GetController.addAdmin')
-        Route.get('administrators/remove/:name', 'GetController.removeAdmin')
+        // Route.get('administrators/getIfIsAdmin/:user', 'GetController.getIfIsAdmin')
+        Route.get('administrators', 'GetController.getUsers')  // getAllAccounts
+        Route.post('administrators/addUser', 'GetController.addUser')
+        Route.post('administrators/addAdmin', 'GetController.addAdmin')
+        Route.post('administrators/removeAdmin', 'GetController.removeAdmin')
+        Route.post('administrators/removeUser', 'GetController.removeUser')
         // ---
 
         // imported years
@@ -62,7 +65,8 @@ Route
         Route.get('admissionsMaster', 'GetController.getAdmissionsMaster')
 
         // login ldap
-        Route.post('login', 'UserController.loginWithLDAP')
+        // Route.post('login', 'UserController.loginWithLDAP') //originalny LDAP funkcny
+        Route.post('login', 'UserController.verifyEmail') // už aj s overením prístupu
 
     })
     .prefix('/api')

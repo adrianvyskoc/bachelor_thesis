@@ -1,17 +1,11 @@
 <div class=block--account>
   <h1>Správa účtov</h1>
 
-  <app-accounts-form (onFormSubmitNotifier)="onFormSubmitNotify($event)"></app-accounts-form>
+  <app-accounts-form></app-accounts-form>
 
-  <app-accounts-list [accounts]="this.accounts" (onRemoveClickNotifier)="onRemoveClickNotify($event)"></app-accounts-list>
-
-<hr>
-<h5>Prehľad všetkých používateľov v DB</h5>
-<p>
-  <li *ngFor="let account of accounts; let i = index">
-    {{i+1}} {{account.email}} : {{account.admin}}
-  </li>
-</p>
-<hr>
-
+  <div>
+    <h2>Zoznam administrátorov</h2>
+    <app-accounts-list></app-accounts-list>
+  </div>
+  <hr>
 </div>

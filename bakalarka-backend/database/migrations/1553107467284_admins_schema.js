@@ -9,7 +9,8 @@ class AdminsSchema extends Schema {
       table.increments()
 
       table.string("email").unique()
-      table.boolean("admin")
+      table.boolean("admin").notNullable().defaultTo('false')
+      table.boolean("access").notNullable().defaultTo('true')
 
       table.timestamps()
     })

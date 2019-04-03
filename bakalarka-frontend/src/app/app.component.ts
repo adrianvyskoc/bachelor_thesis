@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './login/services/auth.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -7,11 +8,14 @@ import { AuthService } from './login/services/auth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
 export class AppComponent implements OnInit {
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
-  
+
   ngOnInit() {
+    !this.authService.loggedIn ? this.router.navigate(['login']) : null
   }
 }

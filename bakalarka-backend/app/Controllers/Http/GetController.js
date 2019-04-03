@@ -86,11 +86,13 @@ class GetController {
     }
 
     // ---
-    async getAdmins({ response }) {
+    // vrati userov ktori maju pristup do appky
+    async getUsers({ response }) {
       try {
         const data = await Database
           .table('admins')
-          .where({admin: 'true'})
+          .where({access: 'true'})
+          .orderBy('id', 'desc') // zoradim to, aby ked pridam niekoho bol stale na vrchu v tabulke
 
           return response
           .status(200)
@@ -102,8 +104,39 @@ class GetController {
       }
     }
 
-    async addAdmin({ response, params }) {
-      const user = params.name
+    // prida usera a pristup do appky
+    async addUser({ request, response}) {
+      const user = request.body.name
+
+      try {
+        const existingRecords = await Admin
+          .query()
+          .where('email', user)
+          .getCount()
+
+        if(existingRecords > 0) {
+          await Database
+            .table('admins')
+            .where({email: user})
+            .update({access: 'true'})
+        } else {
+          await Database
+            .table('admins')
+            .insert({email: user, admin: 'false'})
+        }
+        return response
+          .status(200)
+          .send(true)
+      } catch(e) {
+        return response
+          .status(500)
+          .send(e)
+      }
+    }
+
+    // prida prava admina
+    async addAdmin({ request, response }) {
+      const user = request.body.name
 
       try {
         const existingRecords = await Admin
@@ -117,7 +150,8 @@ class GetController {
             .where({email: user})
             .update({admin: 'true'})
         } else {
-          await Database.table('admins')
+          await Database
+            .table('admins')
             .insert({email: user, admin: 'true'})
         }
         return response
@@ -130,16 +164,37 @@ class GetController {
       }
     }
 
-    async removeAdmin({ response, params }) {
-      const user = params.name
+    // vymaze prava admina
+    async removeAdmin({ request, response }) {
+      const user = request.body.name
       try {
-        await Database.table('admins')
+        await Database
+          .table('admins')
           .where({email: user})
           .update({admin: 'false'})
 
-          return response
-            .status(200)
-            .send(true)
+        return response
+          .status(200)
+          .send(true)
+      } catch(e) {
+        return response
+          .status(500)
+          .send(e)
+      }
+    }
+
+    // vymaze pristup do appky
+    async removeUser({ request, response}) {
+      const user = request.body.name
+      try {
+        await Database
+        .table('admins')
+        .where({email: user})
+        .update({access: 'false'})
+
+        return response
+          .status(200)
+          .send(true)
       } catch(e) {
         return response
           .status(500)
