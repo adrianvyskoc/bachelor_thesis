@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/shared/data.service';
 import { AdmissionsFilterService } from './admissions-filter.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
+import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 
 @Component({
   selector: 'app-admissions',
@@ -34,10 +35,12 @@ export class AdmissionsComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private admissionsFilterService: AdmissionsFilterService
+    private admissionsFilterService: AdmissionsFilterService,
+    private tocUtil: TocUtil
   ) { }
 
   ngOnInit() {
+    this.tocUtil.createToc()
     this.filterForm = new FormGroup({
       'studyType': new FormControl('all'),
       'schoolType': new FormControl('all'),
