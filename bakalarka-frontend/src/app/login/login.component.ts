@@ -8,8 +8,8 @@ import { AccountsService } from '../pages/accounts/services/accounts.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  _email: string = "xkaderabekova"
-  _password: string = "EssaVanessa13"
+  _email: string = ""
+  _password: string = ""
 
   constructor(
     private authService: AuthService,
