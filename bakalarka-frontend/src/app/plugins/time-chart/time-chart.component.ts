@@ -33,7 +33,7 @@ export class TimeChartComponent implements OnChanges {
   initChart() {
     var timeFormat = 'DD/MM/YYYY';
     var config = {
-        type:    'line',
+        type:    this.type,
         data:    {
             datasets: [
                 {
@@ -41,7 +41,8 @@ export class TimeChartComponent implements OnChanges {
                     data: this.data,
                     pointRadius: 0,
                     fill: false,
-                    borderColor: 'red'
+                    borderColor: 'red',
+                    steppedLine: true
                 }
             ]
         },

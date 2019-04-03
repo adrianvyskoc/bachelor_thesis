@@ -5,6 +5,7 @@ import { ExportService } from 'src/app/plugins/utils/export.service';
 import { DataService } from 'src/app/shared/data.service';
 import { AdmissionsFilterService } from '../admissions-filter.service';
 import { AdmissionsUtil } from '../admissions.util';
+import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 
 @Component({
   selector: 'app-admissions-bachelor',
@@ -52,10 +53,12 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
     private dataService: DataService,
     private exportService: ExportService,
     private admissionsFilterService: AdmissionsFilterService,
-    private admissionsUtil: AdmissionsUtil
+    private admissionsUtil: AdmissionsUtil,
+    private tocUtil: TocUtil
   ) { }
 
   ngOnInit() {
+    this.tocUtil.createToc()
     this.dataService.getAdmissionsBachelor()
     this.subscription = this.dataService.getAdmissionsBachelorUpdateListener()
       .subscribe(

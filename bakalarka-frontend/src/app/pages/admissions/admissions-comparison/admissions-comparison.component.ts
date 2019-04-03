@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { DataService } from 'src/app/shared/data.service';
+import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 
 @Component({
   selector: 'app-admissions-comparison',
@@ -21,10 +22,12 @@ export class AdmissionsComparisonComponent implements OnInit {
   admRatiosPerYearArr = []
 
   constructor(
-    private dataService: DataService
+    private dataService: DataService,
+    private tocUtil: TocUtil
   ) { }
 
   ngOnInit() {
+    this.tocUtil.createToc()
     this.dataService.getAdmissionsYearComparison()
     this.dataService.getAdmissionsYearComparisonUpdateListener()
       .subscribe(data => {
