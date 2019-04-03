@@ -1,8 +1,12 @@
 <nav class="d-none d-md-block bg-light sidebar">
   <div class="sidebar-sticky">
-    <ul class="nav flex-column">
-      <li class="nav-item">
-      </li>
-    </ul>
+
+    <a
+      *ngFor="let heading of toc"
+      class="heading heading-{{ heading.level }}"
+      [href]="heading.path"
+    >
+      {{ heading.text }}
+    </a>
   </div>
 </nav>

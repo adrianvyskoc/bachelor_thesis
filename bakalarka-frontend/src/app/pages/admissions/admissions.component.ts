@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/shared/data.service';
 import { AdmissionsFilterService } from './admissions-filter.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
+import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 
 @Component({
   selector: 'app-admissions',
@@ -21,6 +22,9 @@ export class AdmissionsComponent implements OnInit {
   schools = []
   filteredSchools = []
 
+  // charts data
+  admissionCounts = {}
+
   chosenSchool
   displayedAdmissionsColumns = ['id', 'Meno', 'Priezvisko', 'E_mail']
   schoolsToShow: string = 'all'
@@ -31,10 +35,12 @@ export class AdmissionsComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private admissionsFilterService: AdmissionsFilterService
+    private admissionsFilterService: AdmissionsFilterService,
+    private tocUtil: TocUtil
   ) { }
 
   ngOnInit() {
+    this.tocUtil.createToc()
     this.filterForm = new FormGroup({
       'studyType': new FormControl('all'),
       'schoolType': new FormControl('all'),
@@ -51,6 +57,7 @@ export class AdmissionsComponent implements OnInit {
           this.admissions = data['admissions']
           this.filteredAdmissions = data['admissions']
           this._getSchoolsAdmissions()
+          this._calculateAdmissionsCounts()
           this.filterSchools()
         }
       )
@@ -75,6 +82,7 @@ export class AdmissionsComponent implements OnInit {
 
 
     this._getSchoolsAdmissions()
+    this._calculateAdmissionsCounts()
     this.filterSchools()
   }
 
@@ -105,8 +113,9 @@ export class AdmissionsComponent implements OnInit {
   }
 
   onSchoolChoose(event) {
+    this.chosenSchool = {}
     this.chosenSchool = event
-    this.chosenSchool.admissions = new MatTableDataSource<any[]>(this.chosenSchool.admissions)
+    this.chosenSchool.admissions = new MatTableDataSource<any[]>(event.admissions.data ? event.admissions.data : event.admissions)
     this.chosenSchool.admissions.paginator = this.paginator
     this.chosenSchool.admissions.sort = this.sort
   }
@@ -129,5 +138,13 @@ export class AdmissionsComponent implements OnInit {
 
   _displayedColumnsAndActions() {
     return [...this.displayedAdmissionsColumns, 'Akcie']
+  }
+
+  _calculateAdmissionsCounts() {
+    this.admissionCounts = this.filteredAdmissions.reduce((acc, admission) => {
+      admission.stupen_studia == "Bakalársky" ? acc.bachelor++ : acc.master++
+      admission.Rozh != 45 ? acc.approved++ : acc.rejected++
+      return acc
+    }, {'bachelor': 0, 'master': 0, 'approved': 0, 'rejected': 0})
   }
 }

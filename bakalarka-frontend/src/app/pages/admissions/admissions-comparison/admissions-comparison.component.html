@@ -4,35 +4,42 @@
   <hr class="my-4">
 </div>
 
-<!--
-
-  TODO:
-  Graf, ktorý ukáže počty prijatých/neprijatých uchádzačov na školu za dané roky, z ktorých máme dáta
-
-    - napr. column chart od Google Charts, kde budu dvojice (prijatý, neprijatý) stĺpcov za dané roky
-
--->
-
 <app-chart
   [title]="'Počet prijatých/neprijatých uchádzačov za školské roky'"
-  [data]="admCountsPerYear"
-  [labels]="['2015-2016', '2016-2017', '2017-2018', '2018-2019']"
-  [groupLabels]="['Neprijatý', 'Prijatý']"
+  [data]="admCountsPerYearArr"
+  [labels]="schoolYears"
+  [groupLabels]="['Prijatý', 'Nastúpený']"
   [type]="'bar'"
   [legend]="true"
   [group]="true"
+  [secondYAxis]="true"
+  [secondYAxisData]="admRatiosPerYearArr"
+  [secondYAxisType]="'line'"
 ></app-chart>
 
-<!--
+<h2 padding>Pomery nastúpených a prijatých študentov</h2>
 
-  TODO:
-  Graf, ktorý ukáže počty prijatých na 4 ročné a na 3 ročné štúdium za dané roky, z ktorých máme dáta.
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Školský rok</th>
+      <th scope="col">Prijatý</th>
+      <th scope="col">Nastúpený</th>
+      <th scope="col">Pomer nastúpený/prijatý (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let ratio of admRatiosPerYear | keyvalue">
+      <th scope="row">{{ ratio.key }}</th>
+      <td>{{ admCountsPerYear[ratio.key].approved }}</td>
+      <td>{{ admCountsPerYear[ratio.key].beganStudy }}</td>
+      <td>{{ ratio.value }}</td>
+    </tr>
+  </tbody>
+</table>
 
-    - napr. area chart od Google Charts, kde jedna area bude 3 ročné, druhá 4 ročné a na X budú roky.
 
--->
-
-<h2 padding>Počty prohlášok na jednotlivé študijné programy za jednotlivé roky (Bakalársky stupeň)</h2>
+<h2 padding>Počty prihlášok na jednotlivé študijné programy za jednotlivé roky (Bakalársky stupeň)</h2>
 
 <table class="table">
   <thead>
@@ -50,7 +57,3 @@
     </tr>
   </tbody>
 </table>
-
-<div flex>
-
-</div>

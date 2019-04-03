@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, SimpleChanges, SimpleChange, OnChanges } from '@angular/core'
+import { Component, Input, ViewChild, SimpleChanges, SimpleChange, OnChanges, OnInit } from '@angular/core'
 import { Chart } from 'chart.js'
 
 @Component({
@@ -6,7 +6,7 @@ import { Chart } from 'chart.js'
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.scss']
 })
-export class ChartComponent implements OnChanges {
+export class ChartComponent implements OnInit, OnChanges {
   @Input() type: string
   @Input() data: any[]
   @Input() title: string
@@ -14,12 +14,23 @@ export class ChartComponent implements OnChanges {
   @Input() groupLabels: string[]
   @Input() legend: boolean
   @Input() saveButton: boolean = true
-
   @Input() group: boolean = false
+  @Input() secondYAxis: boolean = false
+  @Input() secondYAxisData = []
+  @Input() secondYAxisType
 
   @ViewChild('canvas') canvas
   @ViewChild('download') download
   chart
+
+  yAxes:any[] = [
+    {
+      ticks: {
+        beginAtZero: true,
+      },
+      id: 'A'
+    }
+  ]
 
   backgroundColors: string[] = [
     'rgba(255, 99, 132, 0.2)',
@@ -39,6 +50,12 @@ export class ChartComponent implements OnChanges {
   ]
 
   constructor() { }
+
+
+  ngOnInit() {
+    if(this.secondYAxis)
+      this.yAxes.push({ ticks: { beginAtZero: true }, position: 'right', id: 'B' })
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     const data: SimpleChange = changes.data
@@ -71,11 +88,7 @@ export class ChartComponent implements OnChanges {
           }
         },
         scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            }
-          }],
+          yAxes: this.yAxes,
           xAxes: [{
             ticks: {
               beginAtZero: true
@@ -87,28 +100,42 @@ export class ChartComponent implements OnChanges {
   }
 
   _createDatasets() {
-    if(this.group) {
+    let data = []
 
-      return this.data.reduce((acc, nextVal, idx) => {
+    if(this.group) {
+      data = this.data.reduce((acc, nextVal, idx) => {
         acc.push({
           data: nextVal,
           label: this.groupLabels[idx],
           backgroundColor: this.backgroundColors[idx],
           borderColor: this.borderColors[idx],
           borderWidth: 1,
+          yAxisID: 'A'
         })
         return acc
       }, [])
-
     } else {
-
-      return [{
+      data = [{
         data: this.data,
         backgroundColor: this.backgroundColors.slice(0, this.data.length),
         borderColor: this.borderColors.slice(0, this.data.length),
-        borderWidth: 1
+        borderWidth: 1,
+        yAxisID: 'A'
       }]
-
     }
+
+    if(this.secondYAxisData.length) {
+      data.push({
+        data: this.secondYAxisData,
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255,99,132,1)',
+        borderWidth: 1,
+        yAxisID: 'B',
+        type: this.secondYAxisType,
+        fill: false
+      })
+    }
+
+    return data
   }
 }

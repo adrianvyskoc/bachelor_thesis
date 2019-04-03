@@ -13,6 +13,7 @@ export class GeoChartComponent implements OnInit {
 
   regionAdmissionCounts = {}
   pointCounts = {}
+  regionMedians = {}
 
   constructor() { }
 
@@ -59,7 +60,7 @@ export class GeoChartComponent implements OnInit {
     }
 
     this.regionAdmissionCounts = this.data.reduce((acc, nextVal) => {
-      acc[regions[nextVal.kraj] || 'notprovided'] = ++acc[regions[nextVal.kraj] || 'notprovided'] || 0
+      acc[regions[nextVal.kraj] || 'notprovided'] = ++acc[regions[nextVal.kraj] || 'notprovided'] || 1
       return acc
     }, {})
 
@@ -70,6 +71,18 @@ export class GeoChartComponent implements OnInit {
       acc[regions[nextVal.kraj] || 'notprovided'] += Number(nextVal.Body_celkom)
       return acc
     }, {})
+
+    this.regionMedians = this.data.reduce((acc, nextVal) => {
+      if(!acc[regions[nextVal.kraj] || 'notprovided'])
+        acc[regions[nextVal.kraj] || 'notprovided'] = [Number(nextVal.Body_celkom)]
+
+      acc[regions[nextVal.kraj] || 'notprovided'].push(Number(nextVal.Body_celkom))
+      return acc
+    }, {})
+
+    Object.keys(this.regionMedians).forEach(region => {
+      this.regionMedians[region] = this._median(this.regionMedians[region])
+    })
   }
 
   _median(values) {

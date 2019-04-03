@@ -6,7 +6,7 @@ class AisAdmissionsSchema extends Schema {
   up () {
     this.create('ais_admissions', (table) => {
       table.increments()
-      table.integer("AIS_ID").references("AIS_ID").inTable("ais_students")
+      table.integer("AIS_ID") //.references("AIS_ID").inTable("ais_students")
       table.integer("school_id").references("kod_kodsko").inTable("ineko_schools")
 
       table.timestamps()

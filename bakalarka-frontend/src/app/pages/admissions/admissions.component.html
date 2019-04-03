@@ -98,13 +98,13 @@
 
 </div>
 
-<h2 class="display-4" padding>Všeobecné informácie</h2>
+<h2 id="general-info" class="display-4" padding>Všeobecné informácie</h2>
 <div class="row">
   <div class="col-lg-6">
     <app-chart
       [title]="'Počet prihlášok na jednotlivé stupne'"
-      [data]="[657, 234, 54]"
-      [labels]="['Bakalársky stupeň', 'Inžiniersky stupeň', 'Doktorandský stupeň']"
+      [data]="[admissionCounts.bachelor, admissionCounts.master]"
+      [labels]="['Bakalársky stupeň', 'Inžiniersky stupeň']"
       [type]="'doughnut'"
       [legend]="false"
     ></app-chart>
@@ -112,7 +112,7 @@
   <div class="col-lg-6">
     <app-chart
       [title]="'Znázornenie pomeru prihlásených, prijatých a neprijatých študentov celkovo na škole'"
-      [data]="[1475, 1043, 432]"
+      [data]="[filteredAdmissions.length, admissionCounts.approved, admissionCounts.rejected]"
       [labels]="['Prihlásený', 'Prijatý', 'Neprijatý']"
       [type]="'bar'"
       [legend]="false"
@@ -120,7 +120,7 @@
   </div>
 </div>
 
-<h2 class="display-4" padding>Prehľad škôl v krajine</h2>
+<h2 id="schools-overview" class="display-4" padding>Prehľad škôl v krajine</h2>
 
 <div class="schoolMap">
 
@@ -236,7 +236,7 @@
 
 </div>
 
-<h2 class="display-4" padding>Pôvod študentov</h2>
+<h2 id="origin" class="display-4" padding>Pôvod študentov</h2>
 <app-map
   [markers]="filteredAdmissions"
   [height]="500"
@@ -244,7 +244,7 @@
   [showMarkers]="false"
 ></app-map>
 
-<h2 class="display-4" padding>Regióny</h2>
+<h2 id="regions" class="display-4" padding>Regióny</h2>
 
 <div class="row">
   <div class="col-lg-5">

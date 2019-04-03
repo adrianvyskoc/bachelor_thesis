@@ -31,7 +31,6 @@ export class TimeChartComponent implements OnChanges {
   }
 
   initChart() {
-    console.log(this.data)
     var timeFormat = 'DD/MM/YYYY';
     var config = {
         type:    'line',

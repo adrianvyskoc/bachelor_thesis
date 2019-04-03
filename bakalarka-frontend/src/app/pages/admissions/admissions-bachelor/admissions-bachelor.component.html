@@ -5,8 +5,20 @@
   <button
     class="btn btn-primary"
     type="button"
+    (click)="exportVisible()"
+  >Exportovať viditeľné údaje</button>
+
+  <button
+    class="btn btn-primary"
+    type="button"
     (click)="exportAll()"
-  >Exportovať údaje</button>
+  >Exportovať všetky údaje</button>
+
+  <button
+    class="btn btn-primary"
+    type="button"
+    (click)="exportFiltered()"
+  >Exportovať vyfiltrované údaje</button>
 </div>
 
 <div>
