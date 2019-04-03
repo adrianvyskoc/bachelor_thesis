@@ -7,21 +7,29 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   loggedIn: boolean
+  isAdmin: boolean
 
   constructor(
     private http: HttpClient,
     private router: Router
   ) {
+    const user: any = JSON.parse(localStorage.getItem('user'))
     this.loggedIn = false
+    this.isAdmin = false
 
-    if(localStorage.getItem('user')) {
+    if (user && user.hasAccess) {
       this.loggedIn = true
+    }
+    if(user && user.isAdmin) {
+      this.isAdmin = true
     }
   }
 
   loginUser(email: string, password: string) {
     let user = {
       email: email,
+      isAdmin: false,
+      hasAccess: false,
       date: new Date()
     }
 
@@ -30,28 +38,33 @@ export class AuthService {
       password: password
     }
 
-    // console.log(requestData)
     this.http.post(`http://localhost:3333/api/login`, requestData)
-    .subscribe(
-      response => {
-        console.log(response)
-        if(response) {
-          this.loggedIn = true
-          localStorage.setItem('user', JSON.stringify(user))
-          this.router.navigate(['dashboard'])
+      .subscribe(
+        response => {
+          let res: any = response
+          if(res.access) {
+            if(res.admin) {
+              this.isAdmin = true
+              user.isAdmin = true
+            }
+            this.loggedIn = true
+            user.hasAccess = true
+            localStorage.setItem('user', JSON.stringify(user))
+            this.router.navigate(['dashboard'])
+          }
+          else {
+            this.loggedIn = false
+          }
+        },
+        err => {
+          console.log(err)
         }
-        else {
-          this.loggedIn = false
-        }
-      },
-      err => {
-        console.log(err)
-      }
-    )
+      )
   }
 
   logoutUser() {
     localStorage.removeItem('user')
     this.loggedIn = false;
+    this.isAdmin = false;
   }
 }

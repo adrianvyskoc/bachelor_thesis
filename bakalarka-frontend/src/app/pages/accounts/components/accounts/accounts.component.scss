@@ -1,10 +1,14 @@
 .block--account {
-  display: flex;
+  // display: flex;
   align-items: center;
   flex-direction: column;
 
   h1 {
     margin: 20px 0;
     font-size: 34px;
+  }
+  h2 {
+    margin: 20px 0;
+    font-size: 28px;
   }
 }

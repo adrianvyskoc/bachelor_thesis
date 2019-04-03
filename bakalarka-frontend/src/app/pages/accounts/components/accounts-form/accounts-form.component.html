@@ -1,11 +1,8 @@
 <form>
   <mat-form-field>
-    <input matInput type="text" name="email" placeholder="AIS e-mail" [(ngModel)]="this.username">
+    <input matInput type="text" name="email" placeholder="AIS e-mail" [(ngModel)]="username">
   </mat-form-field>
-  <button type="submit" [disabled]="!(this.username)" (click)="submitForm()" mat-raised-button>
-    Pridať
-  </button>
-  <button type="submit" disabled (click)="submitForm()" mat-raised-button>
-    Odobrať
+  <button type="submit" [disabled]="!username" (click)="submitForm()" mat-raised-button>
+    Pridať prístup
   </button>
 </form>

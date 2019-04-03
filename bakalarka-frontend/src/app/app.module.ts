@@ -1,10 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
 import { AgmCoreModule } from '@agm/core';
-
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -30,9 +27,6 @@ import { SharedModule } from './shared/modules/shared.module';
     FormsModule,
     CoreModule,
     AppRoutingModule,
-    // MatFormFieldModule,
-    // MatInputModule,
-    // MatButtonModule,
     LoginModule,
     SharedModule
   ],

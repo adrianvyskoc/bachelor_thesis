@@ -5,7 +5,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from 'src/app/shared/modules/shared.module';
 import { AccountsFormComponent } from './components/accounts-form/accounts-form.component';
 import { AccountsListComponent } from './components/accounts-list/accounts-list.component';
-import { AccountsItemComponent } from './components/accounts-item/accounts-item.component';
 
 const routes: Routes = [
   {
@@ -24,7 +23,6 @@ const routes: Routes = [
     AccountsComponent,
     AccountsFormComponent,
     AccountsListComponent,
-    AccountsItemComponent,
   ],
   bootstrap: [
     AccountsComponent,
