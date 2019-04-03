@@ -113,11 +113,20 @@ export class AdmissionsComponent implements OnInit {
   }
 
   onSchoolChoose(event) {
+    console.log(event)
     this.chosenSchool = {}
     this.chosenSchool = event
     this.chosenSchool.admissions = new MatTableDataSource<any[]>(event.admissions.data ? event.admissions.data : event.admissions)
     this.chosenSchool.admissions.paginator = this.paginator
     this.chosenSchool.admissions.sort = this.sort
+  }
+
+  isAccepted(rozh) {
+    if(rozh == 10 || rozh == 11 || rozh == 13) {
+      return "Prijatý"
+    } else {
+      return "Neprijatý"
+    }
   }
 
   _getSchoolsAdmissions() {
@@ -137,7 +146,7 @@ export class AdmissionsComponent implements OnInit {
   }
 
   _displayedColumnsAndActions() {
-    return [...this.displayedAdmissionsColumns, 'Akcie']
+    return [...this.displayedAdmissionsColumns, 'Rozh', 'Akcie']
   }
 
   _calculateAdmissionsCounts() {

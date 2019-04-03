@@ -261,7 +261,8 @@ class GetController {
         'ais_admissions.Maturita_1',
         'ais_admissions.school_id',
         'ais_admissions.stupen_studia',
-        'ais_admissions.Body_celkom'
+        'ais_admissions.Body_celkom',
+        'ais_admissions.Rozh'
       ]
       const schoolsAttrs = ['ineko_schools.typ_skoly', 'ineko_schools.sur_y', 'ineko_schools.sur_x', 'ineko_schools.kraj']
 
