@@ -113,7 +113,6 @@ export class AdmissionsComponent implements OnInit {
   }
 
   onSchoolChoose(event) {
-    console.log(event)
     this.chosenSchool = {}
     this.chosenSchool = event
     this.chosenSchool.admissions = new MatTableDataSource<any[]>(event.admissions.data ? event.admissions.data : event.admissions)

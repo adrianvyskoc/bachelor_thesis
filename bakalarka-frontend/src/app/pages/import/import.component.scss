@@ -42,3 +42,15 @@ mat-radio-button {
 .jumbotron {
     margin: 0;
 }
+
+.icon-wrapper {
+  font-size: 70px;
+
+  &.success {
+    color: green;
+  }
+
+  &.danger {
+    color: red;
+  }
+}

@@ -43,12 +43,15 @@
             <option value="notprovided">Neuvedené hodnoty</option>
           </select>
 
-          <input
-            *ngIf="filterForm.value.pointsType !== 'all'"
-            formControlName="pointsValue"
-            type="range" min="0" max="100"
-            margin-left
-          >
+          <div *ngIf="filterForm.value.pointsType !== 'all'" flex>
+            <input
+              formControlName="pointsValue"
+              type="range" min="0" max="100"
+              margin-left
+            >
+            <span padding-left>od {{ filterForm.get('pointsValue').value }}</span>
+          </div>
+
         </div>
 
         <div
@@ -155,7 +158,7 @@
   <div flex>
     <app-map
       [markers]="filteredSchools"
-      [height]="500"
+      [height]="600"
       (selectMarker)="onSchoolChoose($event)"
     ></app-map>
     <div
@@ -244,6 +247,7 @@
 </div>
 
 <h2 id="origin" class="display-4" padding>Pôvod študentov</h2>
+
 <app-map
   [markers]="filteredAdmissions"
   [height]="500"

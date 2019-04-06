@@ -3,9 +3,9 @@
   <p class="lead">Údaje označené symbolom <strong>*</strong> sú povinné.</p>
   <mat-divider></mat-divider>
 
-  <mat-radio-group [(ngModel)]="selectedSource" class="mt-4">
-    <mat-radio-button value="ais">AIS</mat-radio-button>
-    <mat-radio-button value="ineko">INEKO</mat-radio-button>
+  <mat-radio-group [(ngModel)]="selectedSource" class="mt-4" (ngModelChange)="onFormChange()">
+    <mat-radio-button value="ais" (click)="resetForm()">AIS</mat-radio-button>
+    <mat-radio-button value="ineko" (click)="resetForm()">INEKO</mat-radio-button>
   </mat-radio-group>
 
   <mat-divider></mat-divider>
@@ -13,7 +13,7 @@
   <ng-template [ngIf]="selectedSource">
 
       <div *ngIf="selectedSource == 'ais'">
-        <mat-radio-group [(ngModel)]="selectedImport" class="mt-4">
+        <mat-radio-group [(ngModel)]="selectedImport" class="mt-4" (ngModelChange)="onFormChange()">
           <mat-radio-button value="Attendance">Dochádzka</mat-radio-button>
           <mat-radio-button value="Grades">Študijné výsledky</mat-radio-button>
           <mat-radio-button value="Admissions">Prijímačky</mat-radio-button>
@@ -24,7 +24,7 @@
       </div>
 
       <div *ngIf="selectedSource == 'ineko'">
-        <mat-radio-group [(ngModel)]="selectedImport" class="mt-4">
+        <mat-radio-group [(ngModel)]="selectedImport" class="mt-4" (ngModelChange)="onFormChange()">
           <mat-radio-button value="Schools">Školy</mat-radio-button>
           <mat-radio-button value="Percentils">Percentily</mat-radio-button>
           <mat-radio-button value="TotalRating">Celkové hodnotenie</mat-radio-button>
@@ -36,8 +36,8 @@
     <mat-divider></mat-divider>
   </ng-template>
 
-  <ng-template [ngIf]="selectedImport && selectedSource == 'ais' && selectedImport != 'Admissions'">
-    <mat-radio-group [(ngModel)]="semester" class="mt-4">
+  <ng-template [ngIf]="selectedImport && selectedSource == 'ais' && (selectedImport == 'Attendance' || selectedImport == 'Grades')">
+    <mat-radio-group [(ngModel)]="semester" class="mt-4" (ngModelChange)="onFormChange()">
       <mat-radio-button value="winter">Zimný semester</mat-radio-button>
       <mat-radio-button value="summer">Letný semester</mat-radio-button>
     </mat-radio-group>
@@ -46,7 +46,7 @@
 
   <ng-template [ngIf]="selectedImport && selectedImport != 'Schools'">
     <mat-form-field>
-      <input matInput placeholder="Školský rok" [(ngModel)]="schoolYear">
+      <input matInput placeholder="Školský rok" [(ngModel)]="schoolYear" (ngModelChange)="onFormChange()">
     </mat-form-field>
 
     <!-- <div
@@ -70,7 +70,9 @@
       mat-raised-button
       color="primary"
       (click)="addFile()"
-      [disabled]="selectedImport == ''">Vybrať súbor
+      [disabled]="selectedImport == ''"
+    >
+      Vybrať súbor
     </button>
     <span>{{ fileName }}</span>
   </section>
@@ -80,9 +82,38 @@
     mat-raised-button
     color="primary"
     (click)="onUpload()"
-    [disabled]="selectedFile == null">
+    [disabled]="!!disableImport">
     Importovať
   </button>
 </div>
 
-<app-data-tables></app-data-tables>
+<div flex flex-column margin-top>
+  <div
+    *ngIf="dataService.showErrorMessage"
+    class="alert alert-danger mt-3"
+    role="alert"
+    flex align-items-center
+  >
+    <div class="icon-wrapper danger" margin-right>
+      <i class="far fa-times-circle"></i>
+    </div>
+    Pri importovaní dát nastala chyba. Problémom môže byť nesprávna štruktúra zvoleného xlsx súboru.
+  </div>
+
+  <div
+    *ngIf="dataService.showSuccessMessage"
+    class="alert alert-success mt-3" role="alert"
+    flex align-items-center
+  >
+    <div class="icon-wrapper success" margin-right>
+      <i class="far fa-check-circle"></i>
+    </div>
+    Importovanie dát bolo úspešne dokončené.
+  </div>
+
+  <div *ngIf="dataService.loading" flex flex-column align-items-center>
+    <h4>Prebieha import dát, počkajte prosím.</h4>
+    <mat-spinner></mat-spinner>
+  </div>
+
+</div>

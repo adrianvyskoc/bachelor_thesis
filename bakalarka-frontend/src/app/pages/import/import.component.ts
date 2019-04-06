@@ -16,8 +16,10 @@ export class ImportComponent implements OnInit {
   selectedImport: string = ""
   fileName: string
 
-  schoolYear
-  semester
+  schoolYear = ""
+  semester = ""
+
+  disableImport: boolean = true
 
   constructor(
     private dataService: DataService
@@ -36,11 +38,39 @@ export class ImportComponent implements OnInit {
   onUpload() {
     this.dataService.uploadData(this.selectedFile, this.selectedImport, this.selectedSource, this.schoolYear)
     this.dataService.loading = true
+    this.resetForm()
   }
 
   onFileSelected(event) {
     this.selectedFile = <File>event.target.files[0]
-    this.fileName = event.target.files[0].name
+    this.fileName = event.target.files[0] ? event.target.files[0].name : ""
+    this.onFormChange()
   }
 
+  resetForm() {
+    this.selectedFile = null
+    this.fileName = ""
+    this.selectedSource = ""
+    this.selectedImport = ""
+    this.semester = ""
+    this.schoolYear = ""
+  }
+
+  onFormChange() {
+    if(this.selectedSource == 'ais') {
+      if(this.selectedImport == 'Attendance' || this.selectedImport == 'Grades')
+        this.disableImport = (!this.semester || !this.schoolYear)
+      else
+        this.disableImport = !this.schoolYear
+    } else if(this.selectedSource == 'ineko') {
+      if(this.selectedImport == 'Schools')
+        this.disableImport = false
+      else
+        this.disableImport = !this.schoolYear
+    } else
+      this.disableImport = true
+
+    if(!this.fileName)
+      this.disableImport = true
+  }
 }

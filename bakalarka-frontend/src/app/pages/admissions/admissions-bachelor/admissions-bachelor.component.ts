@@ -15,8 +15,8 @@ import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   @ViewChild('paginator') paginator: MatPaginator
   @ViewChild('schoolsPaginator') schoolsPaginator: MatPaginator
-  @ViewChild(MatSort) sort: MatSort
-  @ViewChild(MatSort) schoolsSort: MatSort
+  @ViewChild('admSort') admSort: MatSort
+  @ViewChild('schoolsSort') schoolsSort: MatSort
 
   showFilter = true
   showLabels = false
@@ -67,7 +67,7 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
           this.schools = data['schools']
           this.admissions = new MatTableDataSource<any[]>(data['admissions'])
           this.admissions.paginator = this.paginator
-          this.admissions.sort = this.sort
+          this.admissions.sort = this.admSort
           this.admissionsTimes = this.admissionsUtil._getAdmissionsDates(this.admissions.data)
           this.admissionsPerDay = this.admissionsUtil._getAdmissionsPerDay(this.admissions.data)
           this._getSchoolsData()
@@ -115,7 +115,7 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   }
 
   exportFiltered() {
-    this.exportService.exportArrayOfObjectToExcel(this.admissions.filteredData, 'filtred_admissions');
+    this.exportService.exportArrayOfObjectToExcel(this.admissions.filteredData, 'filtered_admissions', this.displayedAdmissionsColumns);
   }
 
   exportVisible() {
@@ -184,6 +184,6 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
 
     this.schools = new MatTableDataSource<any[]>(Object.values(schoolMap))
     this.schools.paginator = this.schoolsPaginator
-    this.admissions.sort = this.sort
+    this.schools.sort = this.schoolsSort
   }
 }
