@@ -175,7 +175,7 @@
   <ng-container matColumnDef="created_at">
     <th mat-header-cell *matHeaderCellDef> Akcie </th>
     <td mat-cell *matCellDef="let element">
-      <button class="btn btn-primary" [routerLink]="['/admissions', 'bachelor', element.id]" no-margin>Detail</button>
+      <button class="btn btn-primary" [routerLink]="['/admissions', element.stupen_studia == 'Bakalársky' ? 'bachelor' : 'master', element.id]" no-margin>Detail</button>
     </td>
   </ng-container>
 
