@@ -1,10 +1,15 @@
+h2 {
+  margin: 16px -16px;
+  background-color: #e9ecef;
+}
+
 .admissions-count {
     margin-right: 16px;
     padding: .46875rem 1rem;
     border: 1px solid #dfdfdf;
     transition: 0.3s ease;
-}
 
-.admissions-count:hover {
-  background-color: #dfdfdf;
+    &:hover {
+      background-color: #dfdfdf;
+    }
 }

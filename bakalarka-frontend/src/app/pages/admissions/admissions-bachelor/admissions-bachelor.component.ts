@@ -155,7 +155,7 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
       else
         schoolMap['neuvedené'].pocet_prihlasok++
 
-      if((admission.Rozh == 10 || admission.Rozh == 11)) {
+      if((admission.Rozh == 10 || admission.Rozh == 11 || admission.Rozh == 13)) {
         if(schoolMap[admission.school_id]) {
           if(admission.Štúdium == "áno")
             schoolMap[admission.school_id].pocet_nastupenych++

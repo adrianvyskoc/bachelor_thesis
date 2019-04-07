@@ -127,7 +127,7 @@
 
 <div class="schoolMap">
 
-  <div class="schoolMap__filter" margin-bottom>
+  <div class="schoolMap__filter" flex margin-bottom>
     <select
       [(ngModel)]="schoolsToShow"
       class="custom-select"
@@ -153,9 +153,17 @@
       <option value="low">Zlé výsledky žiakov</option>
       <option value="none">Neuvedené</option>
     </select>
+
+    <input
+      [(ngModel)]="filteredSchoolId"
+      class="form-control"
+      placeholder="Kód školy"
+      type="text"
+      (ngModelChange)="onFilterSchoolsBySchoolId($event)"
+    >
   </div>
 
-  <div flex>
+  <div *ngIf="chartsLoaded" flex>
     <app-map
       [markers]="filteredSchools"
       [height]="600"
@@ -166,6 +174,9 @@
       class="schoolMap__schoolDetail"
       padding
     >
+      <div class="schoolMap__schoolDetail__closeButton" (click)="closeChosenSchoolWindow()">
+          <i class="fas fa-times"></i>
+      </div>
       <h3>{{ chosenSchool.nazov }}</h3>
       <hr>
       <table class="table table-borderless table-sm">
@@ -249,6 +260,7 @@
 <h2 id="origin" class="display-4" padding>Pôvod študentov</h2>
 
 <app-map
+  *ngIf="chartsLoaded"
   [markers]="filteredAdmissions"
   [height]="500"
   [showHeatMap]="true"

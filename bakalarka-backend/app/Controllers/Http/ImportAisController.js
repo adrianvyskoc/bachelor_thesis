@@ -142,7 +142,7 @@ class ImportAisController {
             for (let row of rows) {
                 row = adjustKeys(row)
 
-                /*if(row['Rozh'] == 11 || row['Rozh'] == 10) {
+                /*if(row['Rozh'] == 11 || row['Rozh'] == 10 || row['Rozh'] == 13) {
                   let student = new Student()
 
                   student.fill({

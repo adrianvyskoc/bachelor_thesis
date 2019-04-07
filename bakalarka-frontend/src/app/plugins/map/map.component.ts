@@ -11,6 +11,7 @@ export class MapComponent implements OnChanges {
   @Input() height: number
   @Input() showHeatMap: boolean = false
   @Input() showMarkers: boolean = true
+  @Input() showSettingsButton: boolean = true
 
   @Output() selectMarker = new EventEmitter()
 

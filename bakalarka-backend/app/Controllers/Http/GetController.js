@@ -335,14 +335,14 @@ class GetController {
       ratios.approved = await Database.raw(`
         SELECT "OBDOBIE", COUNT("Rodné_číslo") AS apr FROM (
           SELECT DISTINCT "OBDOBIE", "Rodné_číslo" FROM ais_admissions
-          WHERE "Rozh" = 10 OR "Rozh" = 11
+          WHERE "Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13
         ) AS x
         GROUP BY "OBDOBIE"
       `)
       ratios.began_study = await Database.raw(`
         SELECT "OBDOBIE", COUNT("Rodné_číslo") AS bs FROM (
           SELECT DISTINCT "OBDOBIE", "Rodné_číslo" FROM ais_admissions
-          WHERE ("Rozh" = 10 OR "Rozh" = 11) AND "Štúdium" = ?
+          WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND "Štúdium" = ?
         ) AS x
         GROUP BY "OBDOBIE"
       `, ['áno'])

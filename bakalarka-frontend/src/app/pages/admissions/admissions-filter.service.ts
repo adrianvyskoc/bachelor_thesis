@@ -53,4 +53,8 @@ export class AdmissionsFilterService {
       return Number(admission[type]) >= value
     })
   }
+
+  filterSchoolsBySchoolId(schools, schoolId) {
+    return schools.filter(school => String(school.kod_kodsko).startsWith(schoolId))
+  }
  }
