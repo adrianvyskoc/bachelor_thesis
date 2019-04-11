@@ -7,6 +7,11 @@ export class AdmissionsFilterService {
 
   constructor() {}
 
+  /**
+   * Filtrovanie podľa typu školy (gymnázium, odborné školy, ostatné)
+   * @param admissions - všetky prihlášky, ktoré ideme filtrovať
+   * @param value - hodnota, podľa ktorej ideme filtrovať
+   */
   filterBySchoolType(admissions, value) {
     if(value == 'gymnasium')
       return admissions.filter(admission => ['Gymnázium', 'Športové gymnázium'].indexOf(admission.typ_skoly) > -1)
@@ -16,6 +21,11 @@ export class AdmissionsFilterService {
       return admissions.filter(admission => ['Gymnázium', 'Športové gymnázium', 'Stredná odborná škola'].indexOf(admission.typ_skoly) == -1)
   }
 
+  /**
+   * Filtrovanie podľa typu štúdia (4 ročný, 3 ročný)
+   * @param admissions - všetky prihlášky, ktoré ideme filtrovať
+   * @param value - hodnota, podľa ktorej ideme filtrovať
+   */
   filterByStudyType(admissions, value) {
     if(value == 4)
       return admissions.filter(admission => admission.Program_1[admission.Program_1.length - 1] == "4")
@@ -23,10 +33,20 @@ export class AdmissionsFilterService {
       return admissions.filter(admission => admission.Program_1[admission.Program_1.length - 1] !== "4")
   }
 
+  /**
+   * Filtrovanie podľa pohlavia (muž, žena)
+   * @param admissions - všetky prihlášky, ktoré ideme filtrovať
+   * @param value - hodnota, podľa ktorej ideme filtrovať
+   */
   filterByGender(admissions, value) {
     return admissions.filter(admission => admission.Pohlavie == value)
   }
 
+  /**
+   * Filtrovanie podľa roku maturity
+   * @param admissions - všetky prihlášky, ktoré ideme filtrovať
+   * @param value - hodnota, podľa ktorej ideme filtrovať
+   */
   filterByGraduationYear(admissions, value) {
     if(!value || value == 'all')
       return admissions
@@ -34,12 +54,12 @@ export class AdmissionsFilterService {
     return admissions.filter(admission => admission.Maturita_1 == value)
   }
 
-  filterBySchoolQuality(admissions) {
-    // todo
-
-    return admissions
-  }
-
+  /**
+   * Filtrovanie podľa typu bodov, ktorými bol daný uchádzač prijímaný na štúdium
+   * @param admissions - všetky prihlášky, ktoré ideme filtrovať
+   * @param value - hodnota, podľa ktorej ideme filtrovať - počet bodov
+   * @param type - typ bodov, ktoré berieme do úvahy (SCIO, VŠP, Maturita z ANJ...)
+   */
   filterByPoints(admissions, value, type) {
     if(type == "notprovided") {
       return admissions.filter(admission => {
@@ -54,7 +74,12 @@ export class AdmissionsFilterService {
     })
   }
 
-  filterSchoolsBySchoolId(schools, schoolId) {
-    return schools.filter(school => String(school.kod_kodsko).startsWith(schoolId))
+  /**
+   * Filtrovanie podľa kódu školy - škola sa musí začínať na uvedenú postupnosť znakov
+   * @param schools - všetky školy, ktoré ideme filtrovať
+   * @param value - kód školy, respektíve postupnosť znakov
+   */
+  filterSchoolsBySchoolId(schools, value) {
+    return schools.filter(school => String(school.kod_kodsko).startsWith(value))
   }
  }

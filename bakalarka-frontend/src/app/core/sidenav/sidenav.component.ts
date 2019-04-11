@@ -9,7 +9,7 @@ import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 })
 export class SidenavComponent implements OnInit {
 
-  toc
+  toc = []
   private loggedIn: boolean;
 
   constructor(
@@ -19,9 +19,7 @@ export class SidenavComponent implements OnInit {
 
   ngOnInit() {
     this.tocUtil.getTocUpdateListener()
-      .subscribe(
-        toc => this.toc = toc
-      )
+      .subscribe((toc: any) => this.toc = toc)
 
     this.loggedIn = this.authService.loggedIn;
   }
