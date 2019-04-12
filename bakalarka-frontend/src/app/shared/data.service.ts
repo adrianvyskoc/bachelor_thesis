@@ -159,8 +159,7 @@ export class DataService {
     await this.http.post('http://localhost:3333/api/import/' + selectedSource + '/' + selectedImport + '/' + year, fd)
       .subscribe(
         res => {
-          this.getData(selectedImport)
-          this.getImportedYears()
+          //this.getImportedYears()
           this.loading = false
         },
         error => {

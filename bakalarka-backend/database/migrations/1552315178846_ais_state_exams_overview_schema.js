@@ -18,6 +18,7 @@ class StateExamsOverviewSchema extends Schema {
       table.string("Stav")
       table.decimal("VŠP_štúdium")
       table.decimal("VŠP_štud_bpo")
+      table.decimal("test")
     })
   }
 

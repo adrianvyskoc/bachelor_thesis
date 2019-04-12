@@ -13,7 +13,8 @@ export class AuthService {
     private http: HttpClient,
     private router: Router
   ) {
-    const user: any = JSON.parse(localStorage.getItem('user'))
+    // const user: any = JSON.parse(localStorage.getItem('user'))
+    const user: any = JSON.parse(sessionStorage.getItem('user'))
     this.loggedIn = false
     this.isAdmin = false
 
@@ -49,7 +50,8 @@ export class AuthService {
             }
             this.loggedIn = true
             user.hasAccess = true
-            localStorage.setItem('user', JSON.stringify(user))
+            // localStorage.setItem('user', JSON.stringify(user))
+            sessionStorage.setItem('user', JSON.stringify(user))
             this.router.navigate(['dashboard'])
           }
           else {
@@ -63,7 +65,8 @@ export class AuthService {
   }
 
   logoutUser() {
-    localStorage.removeItem('user')
+    // localStorage.removeItem('user')
+    sessionStorage.removeItem('user')
     this.loggedIn = false;
     this.isAdmin = false;
   }

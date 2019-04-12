@@ -35,6 +35,11 @@ const routes: Routes = [
     canActivate: [AdminGuard]
   },
   {
+    path: 'statefinalexams',
+    loadChildren: './pages/state-final-exams/state-final-exams.module#StateFinalExamsModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
     canActivate: [AuthGuard]

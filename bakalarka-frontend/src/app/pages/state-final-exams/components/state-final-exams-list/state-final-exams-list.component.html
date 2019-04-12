@@ -1,0 +1,188 @@
+<table mat-table [dataSource]="dataSource">
+    <!-- id -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+    </ng-container>
+
+    <!-- uzavrte studium -->
+    <ng-container matColumnDef="uzavreteStudium">
+      <th mat-header-cell *matHeaderCellDef>Uzavrete studium</th>
+      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+    </ng-container>
+
+    <!-- meno -->
+    <ng-container matColumnDef="meno">
+      <th mat-header-cell *matHeaderCellDef>Meno</th>
+      <td mat-cell *matCellDef="let row">{{ row.riesitel }}</td>
+    </ng-container>
+
+    <!-- studProgram -->
+    <ng-container matColumnDef="studProgram">
+      <th mat-header-cell *matHeaderCellDef>štud.program</th>
+      <td mat-cell *matCellDef="let row">{{ row.identifikaciaStudia }}</td>
+    </ng-container>
+
+     <!-- datumSS -->
+     <ng-container matColumnDef="datumSS">
+      <th mat-header-cell *matHeaderCellDef>Dátum ŠS</th>
+      <td mat-cell *matCellDef="let row">{{ row.dna }}</td>
+    </ng-container>
+
+     <!-- komisia -->
+     <ng-container matColumnDef="komisia">
+      <th mat-header-cell *matHeaderCellDef>Komisia č.</th>
+      <td mat-cell *matCellDef="let row">{{ row.komisia }}</td>
+    </ng-container>
+
+     <!-- predsenaKomisie -->
+     <ng-container matColumnDef="predsenaKomisie">
+      <th mat-header-cell *matHeaderCellDef>predseda komisie</th>
+      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+    </ng-container>
+
+     <!-- tajomnik -->
+     <ng-container matColumnDef="tajomnik">
+      <th mat-header-cell *matHeaderCellDef>tajomník</th>
+      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+    </ng-container>
+
+     <!-- nazovBP -->
+     <ng-container matColumnDef="nazovBP">
+      <th mat-header-cell *matHeaderCellDef>názov diplomovej práce</th> 
+      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+    </ng-container>
+
+     <!-- veduci -->
+     <ng-container matColumnDef="veduci">
+      <th mat-header-cell *matHeaderCellDef>vedúci</th>
+      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+    </ng-container>
+
+     <!-- oponent -->
+     <ng-container matColumnDef="oponent">
+      <th mat-header-cell *matHeaderCellDef>oponent</th>
+      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+    </ng-container>
+
+     <!-- OH-veduci -->
+     <ng-container matColumnDef="OH-veduci">
+      <th mat-header-cell *matHeaderCellDef>vedúci</th>
+      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+    </ng-container>
+
+     <!-- OH-oponent -->
+     <ng-container matColumnDef="OH-oponent">
+      <th mat-header-cell *matHeaderCellDef>oponent</th>
+      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+    </ng-container>
+
+     <!-- OH-komisia -->
+     <ng-container matColumnDef="OH-komisia">
+      <th mat-header-cell *matHeaderCellDef>komisia</th>
+      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+    </ng-container>
+
+     <!-- P-vspBez -->
+     <ng-container matColumnDef="P-vspBez">
+      <th mat-header-cell *matHeaderCellDef>VŠP- za  Bc.štúdium bez posledného semestra</th>
+      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+    </ng-container>
+
+     <!-- P-vspCele -->
+     <ng-container matColumnDef="P-vspCele">
+      <th mat-header-cell *matHeaderCellDef>VŠP- za celé Bc.štúdium</th>
+      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+    </ng-container>
+
+     <!-- DI-BP2vAJ -->
+     <ng-container matColumnDef="DI-BP2vAJ">
+      <th mat-header-cell *matHeaderCellDef>BP2 v AJ</th>
+      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+    </ng-container>
+
+    <!-- DI-SSOpravnyTermin -->
+    <ng-container matColumnDef="DI-SSOpravnyTermin">
+      <th mat-header-cell *matHeaderCellDef>ŠS  opravný termín</th>
+      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+    </ng-container>
+
+    <!-- NCA-navrhVKomisii -->
+    <ng-container matColumnDef="NCA-navrhVKomisii">
+      <th mat-header-cell *matHeaderCellDef>návrh v komisii</th>
+      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vzorec"></td>
+    </ng-container>
+
+    <!-- NOKP-navrhVKomisii -->
+    <ng-container matColumnDef="NOKP-navrhVKomisii">
+      <th mat-header-cell *matHeaderCellDef>návrh v komisii - poradie</th>
+      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+    </ng-container>
+
+    <!-- NOKP-skorTeoreticka -->
+    <ng-container matColumnDef="NOKP-skorTeoreticka">
+      <th mat-header-cell *matHeaderCellDef>skôr teoretická</th>
+      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+    </ng-container>
+
+    <!-- NOKP-skorPrakticka -->
+    <ng-container matColumnDef="NOKP-skorPrakticka">
+      <th mat-header-cell *matHeaderCellDef>skôr praktická</th>
+      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+    </ng-container>
+
+    <!-- NOKP-autoNavrh -->
+    <ng-container matColumnDef="NOKP-autoNavrh">
+      <th mat-header-cell *matHeaderCellDef>Automatický návrh</th>
+      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vzorec"></td>
+    </ng-container>
+
+    <!-- NOKP-navrhDoRSP -->
+    <ng-container matColumnDef="NOKP-navrhDoRSP">
+      <th mat-header-cell *matHeaderCellDef>Návrh do RŠP</th>
+      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+    </ng-container>
+
+    <!-- NOKP-konecneRozhodnutie -->
+    <ng-container matColumnDef="NOKP-konecneRozhodnutie">
+      <th mat-header-cell *matHeaderCellDef>Konečné rozhodnutie (RŠP)</th>
+      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+    </ng-container>
+
+    <!-- OP-autoNavrh -->
+    <ng-container matColumnDef="OP-autoNavrh">
+      <th mat-header-cell *matHeaderCellDef>Automatický návrh</th>
+      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vzorec"></td>
+    </ng-container>
+
+    <!-- OP-navrhDoRSP -->
+    <ng-container matColumnDef="OP-navrhDoRSP">
+      <th mat-header-cell *matHeaderCellDef>Návrh do RŠP</th>
+      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+    </ng-container>
+
+    <!-- OP-konecneRozhodnutie -->
+    <ng-container matColumnDef="OP-konecneRozhodnutie">
+      <th mat-header-cell *matHeaderCellDef>Konečné rozhodnutie (RŠP)</th>
+      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+    </ng-container>
+
+    <!-- promocie -->
+    <ng-container matColumnDef="promocie">
+      <th mat-header-cell *matHeaderCellDef>Promócie</th>
+      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+    </ng-container>
+
+    <!-- najhorsiaZnamkaPriCR -->
+    <ng-container matColumnDef="najhorsiaZnamkaPriCR">
+      <th mat-header-cell *matHeaderCellDef>Najhorsia znamka pri CR</th>
+      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+    </ng-container>
+    
+
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <hr>
+  

@@ -6,7 +6,6 @@ const Database = use('Database')
 const fs = use('fs')
 //const Redis = use('Redis')
 
-
 // Models
 const Student = use('App/Models/Student')
 const Admission = use('App/Models/Admission')
@@ -305,6 +304,9 @@ function deleteFile(path, selectedImport) {
 function adjustKeys(obj) {
   let newObj = {}
   for (let key in obj) {
+
+    if(!key) continue
+
     let newKey = key
       .trim()
       .split(".").join("")
@@ -321,6 +323,9 @@ function adjustKeys(obj) {
 }
 
 function toNumber(num) {
+  if(!num)
+    return null
+
   return Number(num.trim().replace(",", "."))
 }
 

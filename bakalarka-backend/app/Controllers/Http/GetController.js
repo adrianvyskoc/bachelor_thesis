@@ -203,6 +203,62 @@ class GetController {
     }
     // ---
 
+    async getStateFinalExams ({ response }) {
+      try {
+        const data = await Database
+          // .select('*', 'Celé_meno_s_titulmi as cmst')
+          .select(
+            'ais_state_exams_overviews.id as id',
+            // 'ais_state_exams_overviews.Celé_meno_s_titulmi as celeMenoSTitulmi',
+            'ais_state_exams_scenarios.Riešiteľ as riesitel',
+            'ais_state_exams_overviews.AIS_ID as aisId',
+            'ais_state_exams_overviews.Identifikácia_štúdia as identifikaciaStudia',
+            'ais_state_exams_overviews.Obhajoba as obhajoba',
+            'ais_state_exams_overviews.Záverečná_práca_názov as zaverecnaPracaNazov',
+            'ais_state_exams_overviews.Vedúci as veduci',
+            'ais_state_exams_overviews.Oponent as oponent',
+            'ais_state_exams_overviews.Stav as stav',
+            'ais_state_exams_overviews.VŠP_štúdium as vspStudium',
+            'ais_state_exams_overviews.VŠP_štud_bpo as vspStudBpo',
+            
+            'ais_state_exams_scenarios.Vedúci as veduciHodnotenie',
+            'ais_state_exams_scenarios.Oponent_1 as oponentHodnotenie',
+            'ais_state_exams_scenarios.Výsledné_hodnotenie as vysledneHodnotenie',
+            // 'ais_state_exams_overviews.test as test',
+
+
+            // 'ais_state_exams_overviews.OBDOBIE as obdobie',
+            // 'Celé_meno_s_titulmi as celeMenoSTitulmi',
+            // 'Typ_proj as typProj',
+            // 'Štud_prog as studProg',
+            // 'Riešiteľ as riesitel',
+            // 'Názov_projektu as nazovProjektu',
+            // 'Vedúci_projektu as veduciProjektu',
+            // 'Oponent_1 as oponent1',
+            // 'Výsledné_hodnotenie as vysledneHodnotenie',
+            'ais_state_exams_scenarios.dňa as dna',
+            'ais_state_exams_scenarios.Komisia as komisia',
+            'ais_state_exams_scenarios.Predseda as predseda',
+            'ais_state_exams_scenarios.Tajomník as tajomnik'
+          )
+          .from('ais_state_exams_overviews')
+          .leftJoin('ais_state_exams_scenarios', 'ais_state_exams_overviews.Záverečná_práca_názov', 'ais_state_exams_scenarios.Názov_projektu' )
+  
+        return response
+          .status(200)
+          .send(data)
+
+      } catch(e) {
+        console.log('error', e);
+        return response
+          .status(500)
+          .send(e)
+      }
+    }
+
+    // ---
+
+
     async getGrades ({ response }) {
         const grades = await Grade.all()
 

@@ -29,7 +29,7 @@
     <td mat-cell *matCellDef="let admin">
       <button type="submit" color="primary" [disabled]="!admin.admin" (click)="onRemoveAdminClickNotify(admin.email)"
         mat-raised-button>
-        Zmazať admin právo
+        Zrušiť admin právo
       </button>
 
       <button type="submit" color="primary" [disabled]="admin.admin" (click)="onAddAdminClickNotify(admin.email)"

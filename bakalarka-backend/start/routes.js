@@ -48,6 +48,8 @@ Route
         Route.post('administrators/removeAdmin', 'GetController.removeAdmin')
         Route.post('administrators/removeUser', 'GetController.removeUser')
         // ---
+        Route.get('statefinalexams', 'getController.getStateFinalExams')
+        // ---
 
         // imported years
         Route.get('importedYears', 'GetController.getImportedYears')
