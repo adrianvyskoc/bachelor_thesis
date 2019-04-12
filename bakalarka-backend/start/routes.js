@@ -67,7 +67,7 @@ Route
         Route.get('admissionsMaster', 'GetController.getAdmissionsMaster')
 
         // login ldap
-        // Route.post('login', 'UserController.loginWithLDAP') //originalny LDAP funkcny
+        //Route.post('login', 'UserController.loginWithLDAP') //originalny LDAP funkcny
         Route.post('login', 'UserController.verifyEmail') // už aj s overením prístupu
 
     })

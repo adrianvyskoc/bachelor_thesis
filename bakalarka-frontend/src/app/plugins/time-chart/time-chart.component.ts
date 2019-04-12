@@ -27,13 +27,17 @@ export class TimeChartComponent implements OnChanges {
     const data: SimpleChange = changes.data
     this.data = data.currentValue
 
-    if(this.data.some(item => item)) this.initChart()
+    if(this.chart)
+      this.chart.destroy()
+
+    if(this.data.some(item => item))
+      this.initChart()
   }
 
   initChart() {
     var timeFormat = 'DD/MM/YYYY';
     var config = {
-        type:    'line',
+        type:    this.type,
         data:    {
             datasets: [
                 {
@@ -41,7 +45,8 @@ export class TimeChartComponent implements OnChanges {
                     data: this.data,
                     pointRadius: 0,
                     fill: false,
-                    borderColor: 'red'
+                    borderColor: 'red',
+                    steppedLine: true
                 }
             ]
         },

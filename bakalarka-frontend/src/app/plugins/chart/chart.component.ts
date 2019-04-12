@@ -18,6 +18,7 @@ export class ChartComponent implements OnInit, OnChanges {
   @Input() secondYAxis: boolean = false
   @Input() secondYAxisData = []
   @Input() secondYAxisType
+  @Input() secondYAxisDataLabel: string
 
   @ViewChild('canvas') canvas
   @ViewChild('download') download
@@ -61,7 +62,11 @@ export class ChartComponent implements OnInit, OnChanges {
     const data: SimpleChange = changes.data
     this.data = data.currentValue
 
-    if(this.data.some(item => item)) this.initChart()
+    if(this.chart)
+      this.chart.destroy()
+
+    if(this.data.some(item => item))
+      this.initChart()
   }
 
   initChart() {
@@ -127,6 +132,7 @@ export class ChartComponent implements OnInit, OnChanges {
     if(this.secondYAxisData.length) {
       data.push({
         data: this.secondYAxisData,
+        label: this.secondYAxisDataLabel,
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
         borderColor: 'rgba(255,99,132,1)',
         borderWidth: 1,

@@ -19,6 +19,7 @@ class UserController {
         'email': email,
       })
 
+    console.log(user)
     user[0].access ? auth.access = true : null
     if (user !== undefined && auth.access) {
       if (await this.loginWithLDAP({ request, response })) {

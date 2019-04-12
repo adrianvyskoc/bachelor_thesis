@@ -5,6 +5,7 @@ import { ExportService } from 'src/app/plugins/utils/export.service';
 import { DataService } from 'src/app/shared/data.service';
 import { AdmissionsFilterService } from '../admissions-filter.service';
 import { AdmissionsUtil } from '../admissions.util';
+import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 
 @Component({
   selector: 'app-admissions-bachelor',
@@ -14,8 +15,8 @@ import { AdmissionsUtil } from '../admissions.util';
 export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   @ViewChild('paginator') paginator: MatPaginator
   @ViewChild('schoolsPaginator') schoolsPaginator: MatPaginator
-  @ViewChild(MatSort) sort: MatSort
-  @ViewChild(MatSort) schoolsSort: MatSort
+  @ViewChild('admSort') admSort: MatSort
+  @ViewChild('schoolsSort') schoolsSort: MatSort
 
   showFilter = true
   showLabels = false
@@ -52,10 +53,12 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
     private dataService: DataService,
     private exportService: ExportService,
     private admissionsFilterService: AdmissionsFilterService,
-    private admissionsUtil: AdmissionsUtil
+    private admissionsUtil: AdmissionsUtil,
+    private tocUtil: TocUtil
   ) { }
 
   ngOnInit() {
+    this.tocUtil.createToc()
     this.dataService.getAdmissionsBachelor()
     this.subscription = this.dataService.getAdmissionsBachelorUpdateListener()
       .subscribe(
@@ -64,7 +67,7 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
           this.schools = data['schools']
           this.admissions = new MatTableDataSource<any[]>(data['admissions'])
           this.admissions.paginator = this.paginator
-          this.admissions.sort = this.sort
+          this.admissions.sort = this.admSort
           this.admissionsTimes = this.admissionsUtil._getAdmissionsDates(this.admissions.data)
           this.admissionsPerDay = this.admissionsUtil._getAdmissionsPerDay(this.admissions.data)
           this._getSchoolsData()
@@ -112,7 +115,7 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   }
 
   exportFiltered() {
-    this.exportService.exportArrayOfObjectToExcel(this.admissions.filteredData, 'filtred_admissions');
+    this.exportService.exportArrayOfObjectToExcel(this.admissions.filteredData, 'filtered_admissions', this.displayedAdmissionsColumns);
   }
 
   exportVisible() {
@@ -152,7 +155,7 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
       else
         schoolMap['neuvedené'].pocet_prihlasok++
 
-      if((admission.Rozh == 10 || admission.Rozh == 11)) {
+      if((admission.Rozh == 10 || admission.Rozh == 11 || admission.Rozh == 13)) {
         if(schoolMap[admission.school_id]) {
           if(admission.Štúdium == "áno")
             schoolMap[admission.school_id].pocet_nastupenych++
@@ -181,6 +184,6 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
 
     this.schools = new MatTableDataSource<any[]>(Object.values(schoolMap))
     this.schools.paginator = this.schoolsPaginator
-    this.admissions.sort = this.sort
+    this.schools.sort = this.schoolsSort
   }
 }

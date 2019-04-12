@@ -25,6 +25,10 @@ const routes: Routes = [
   },
   {
     path: 'bachelor/:id',
+    component: AdmissionComponent,
+  },
+  {
+    path: 'master/:id',
     component: AdmissionComponent
   }
 ];

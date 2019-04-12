@@ -22,8 +22,8 @@ export class ExportService {
       return acc
     }, '')
 
-    var workbook = XLSX.read('<table>' + toExport + '</table>', {type:'string'});
-    XLSX.writeFile(workbook, `${filename}.xlsx`);
+    var workbook = XLSX.read('<table>' + toExport + '</table>', {type:'string'})
+    XLSX.writeFile(workbook, `${filename}.xlsx`)
   }
 
   /**
@@ -32,12 +32,12 @@ export class ExportService {
    * @param filename - názov vytvoreného súboru
    */
   exportTableToExcel(table, filename) {
-    const workbook: XLSX.WorkBook  = XLSX.utils.book_new();
-    const worksheet: XLSX.WorkSheet = XLSX.utils.table_to_sheet(table);
+    const workbook: XLSX.WorkBook  = XLSX.utils.book_new()
+    const worksheet: XLSX.WorkSheet = XLSX.utils.table_to_sheet(table)
 
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1')
 
-    XLSX.writeFile(workbook, `${filename}.xlsx`);
+    XLSX.writeFile(workbook, `${filename}.xlsx`)
   }
 
   /**
@@ -45,12 +45,23 @@ export class ExportService {
    * @param data - pole objektov, ktoré má byť exportované.
    * @param filename - názov vytvoreného súboru.
    */
-  exportArrayOfObjectToExcel(data, filename) {
-    const workbook: XLSX.WorkBook  = XLSX.utils.book_new();
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+  exportArrayOfObjectToExcel(data, filename, attrs = []) {
+    const workbook: XLSX.WorkBook  = XLSX.utils.book_new()
 
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+    let worksheet: XLSX.WorkSheet
+    if(attrs.length) {
+      data = data.map(item => {
+        let newItem = {}
+        attrs.forEach(attr => {
+          newItem[attr] = item[attr]
+        })
+        return newItem
+      })
+    }
 
-    XLSX.writeFile(workbook, `${filename}.xlsx`);
+    worksheet = XLSX.utils.json_to_sheet(data)
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1')
+
+    XLSX.writeFile(workbook, `${filename}.xlsx`)
   }
 }

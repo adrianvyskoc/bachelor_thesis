@@ -32,7 +32,7 @@ export class AdmissionsUtil {
           let label = `${!i ? '0' : intervalsUpperLimits[i-1] + 1}-${limit}`
           intervals[label].count++
 
-          if((admission.Rozh == 10 || admission.Rozh == 11) && admission.Štúdium == "áno")
+          if((admission.Rozh == 10 || admission.Rozh == 11 || admission.Rozh == 13) && admission.Štúdium == "áno")
             intervals[label].beganStudy++
           break
         }
@@ -40,7 +40,7 @@ export class AdmissionsUtil {
         if(i == intervalsUpperLimits.length - 1) {
           intervals[`${limit}+`].count++
 
-          if((admission.Rozh == 10 || admission.Rozh == 11) && admission.Štúdium == "áno")
+          if((admission.Rozh == 10 || admission.Rozh == 11 || admission.Rozh == 13) && admission.Štúdium == "áno")
             intervals[`${limit}+`].beganStudy++
         }
       }
@@ -65,7 +65,7 @@ export class AdmissionsUtil {
       group.arr = this.SortingUtil._insertionSort([points, ...group.arr])
       group.adm.push(admission)
 
-      if((admission.Rozh == 10 || admission.Rozh == 11) && admission.Štúdium == "áno")
+      if((admission.Rozh == 10 || admission.Rozh == 11 || admission.Rozh == 13) && admission.Štúdium == "áno")
         group.beganStudy++
 
       if(index == data.length - 1 && group.arr.length < inOneGroup) {
@@ -73,7 +73,7 @@ export class AdmissionsUtil {
 
         group.adm.forEach((adm) => {
           groups[lastGroupIndex].mean += Number(adm.Body_celkom)
-          if((adm.Rozh == 10 || adm.Rozh == 11) && adm.Štúdium == "áno")
+          if((adm.Rozh == 10 || adm.Rozh == 11 || admission.Rozh == 11) && adm.Štúdium == "áno")
             groups[lastGroupIndex].beganStudy++
           groups[lastGroupIndex].adm.push(adm)
           groups[lastGroupIndex].arr = this.SortingUtil._insertionSort([Number(adm.Body_celkom), ...groups[lastGroupIndex].arr])

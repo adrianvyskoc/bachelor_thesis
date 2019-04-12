@@ -317,7 +317,8 @@ class GetController {
         'ais_admissions.Maturita_1',
         'ais_admissions.school_id',
         'ais_admissions.stupen_studia',
-        'ais_admissions.Body_celkom'
+        'ais_admissions.Body_celkom',
+        'ais_admissions.Rozh'
       ]
       const schoolsAttrs = ['ineko_schools.typ_skoly', 'ineko_schools.sur_y', 'ineko_schools.sur_x', 'ineko_schools.kraj']
 
@@ -390,14 +391,14 @@ class GetController {
       ratios.approved = await Database.raw(`
         SELECT "OBDOBIE", COUNT("Rodné_číslo") AS apr FROM (
           SELECT DISTINCT "OBDOBIE", "Rodné_číslo" FROM ais_admissions
-          WHERE "Rozh" = 10 OR "Rozh" = 11
+          WHERE "Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13
         ) AS x
         GROUP BY "OBDOBIE"
       `)
       ratios.began_study = await Database.raw(`
         SELECT "OBDOBIE", COUNT("Rodné_číslo") AS bs FROM (
           SELECT DISTINCT "OBDOBIE", "Rodné_číslo" FROM ais_admissions
-          WHERE ("Rozh" = 10 OR "Rozh" = 11) AND "Štúdium" = ?
+          WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND "Štúdium" = ?
         ) AS x
         GROUP BY "OBDOBIE"
       `, ['áno'])

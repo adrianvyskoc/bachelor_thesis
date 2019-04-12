@@ -23,7 +23,8 @@ const routes: Routes = [
   {
     path: 'admissions',
     loadChildren: './pages/admissions/admissions.module#AdmissionsModule',
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'login',
@@ -48,7 +49,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, onSameUrlNavigation: 'reload' })
   ],
   exports: [
     RouterModule

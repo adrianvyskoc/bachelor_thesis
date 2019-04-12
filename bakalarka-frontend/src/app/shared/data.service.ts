@@ -28,6 +28,7 @@ export class DataService {
 
   loading = false
   showErrorMessage = false
+  showSuccessMessage = false
 
   constructor(
     private http: HttpClient,
@@ -153,6 +154,8 @@ export class DataService {
   }
 
   async uploadData(selectedFile, selectedImport, selectedSource, year) {
+    this.showErrorMessage = false
+    this.showErrorMessage = false
     const fd = new FormData()
     fd.append(selectedImport, selectedFile, selectedFile.name)
 
@@ -161,6 +164,7 @@ export class DataService {
         res => {
           //this.getImportedYears()
           this.loading = false
+          this.showSuccessMessage = true
         },
         error => {
           console.log(error)

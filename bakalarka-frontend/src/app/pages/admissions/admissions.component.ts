@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/shared/data.service';
 import { AdmissionsFilterService } from './admissions-filter.service';
@@ -12,7 +12,12 @@ import { TocUtil } from 'src/app/plugins/utils/toc.utll';
   styleUrls: ['./admissions.component.scss']
 })
 export class AdmissionsComponent implements OnInit {
-  @ViewChild('paginator') paginator: MatPaginator
+  @ViewChild('paginator')
+  set setPaginator(paginator: MatPaginator) {
+    if(this.chosenSchool)
+      this.chosenSchool.admissions.paginator = paginator
+  }
+
   @ViewChild(MatSort) sort: MatSort
 
   subscription: Subscription
@@ -22,8 +27,11 @@ export class AdmissionsComponent implements OnInit {
   schools = []
   filteredSchools = []
 
+  filteredSchoolId
+
   // charts data
   admissionCounts = {}
+  chartsLoaded = false
 
   chosenSchool
   displayedAdmissionsColumns = ['id', 'Meno', 'Priezvisko', 'E_mail']
@@ -112,12 +120,30 @@ export class AdmissionsComponent implements OnInit {
     this.chosenSchool = null
   }
 
+  onFilterSchoolsBySchoolId() {
+    if(this.filteredSchoolId == "")
+      this.filteredSchools = this.schools
+    else
+      this.filteredSchools = this.admissionsFilterService.filterSchoolsBySchoolId(this.schools, this.filteredSchoolId)
+  }
+
   onSchoolChoose(event) {
     this.chosenSchool = {}
     this.chosenSchool = event
     this.chosenSchool.admissions = new MatTableDataSource<any[]>(event.admissions.data ? event.admissions.data : event.admissions)
-    this.chosenSchool.admissions.paginator = this.paginator
     this.chosenSchool.admissions.sort = this.sort
+  }
+
+  closeChosenSchoolWindow() {
+    this.chosenSchool = null
+  }
+
+  isAccepted(rozh) {
+    if(rozh == 10 || rozh == 11 || rozh == 13) {
+      return "Prijatý"
+    } else {
+      return "Neprijatý"
+    }
   }
 
   _getSchoolsAdmissions() {
@@ -137,7 +163,7 @@ export class AdmissionsComponent implements OnInit {
   }
 
   _displayedColumnsAndActions() {
-    return [...this.displayedAdmissionsColumns, 'Akcie']
+    return [...this.displayedAdmissionsColumns, 'Rozh', 'Akcie']
   }
 
   _calculateAdmissionsCounts() {
@@ -146,5 +172,9 @@ export class AdmissionsComponent implements OnInit {
       admission.Rozh != 45 ? acc.approved++ : acc.rejected++
       return acc
     }, {'bachelor': 0, 'master': 0, 'approved': 0, 'rejected': 0})
+
+    setTimeout(() => {
+      this.chartsLoaded = true
+    }, 1000)
   }
 }

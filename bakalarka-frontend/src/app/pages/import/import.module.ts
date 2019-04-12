@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ImportComponent } from './import.component';
-import { DataTablesComponent } from './data-tables/data-tables.component';
 
-import { 
-  MatInputModule, 
-  MatPaginatorModule, 
-  MatProgressSpinnerModule, 
-  MatSortModule, 
+import {
+  MatInputModule,
+  MatPaginatorModule,
+  MatProgressSpinnerModule,
+  MatSortModule,
   MatTableModule,
   MatButtonModule,
   MatRadioModule,
@@ -41,7 +40,6 @@ import { FormsModule } from '@angular/forms';
   ],
   declarations: [
     ImportComponent,
-    DataTablesComponent
   ]
 })
 export class ImportModule { }
