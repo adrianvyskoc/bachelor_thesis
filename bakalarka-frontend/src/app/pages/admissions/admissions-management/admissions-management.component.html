@@ -4,7 +4,7 @@
   <hr class="my-4">
 
   <div flex align-items-center>
-    <button class="btn btn-primary" (click)="deleteAllAdmissions()" [disabled]="!acceptDelete">Vymazať všetky údaje</button>
+    <button class="btn btn-danger" (click)="deleteAllAdmissions()" [disabled]="!acceptDelete">Vymazať všetky údaje</button>
     <div class="custom-control custom-checkbox" margin-left>
       <input [(ngModel)]="acceptDelete" type="checkbox" class="custom-control-input" id="acceptDelete">
       <label class="custom-control-label" for="acceptDelete">Súhlasím s vymazaním údajov o prijímacom konaní</label>
@@ -15,7 +15,7 @@
 
   <div flex>
     <button
-      class="btn btn-primary"
+      class="btn btn-danger"
       [disabled]="!year"
       (click)="deleteAdmissionsForGivenYear()"
     >
@@ -29,6 +29,34 @@
       style="width: 200px;"
     >
   </div>
+
+  <hr class="my-4">
+
+  <form class="year-change" flex align-items-center (ngSubmit)="changeSchoolYearForGivenYear(yearForm)" #yearForm="ngForm">
+    <div>Zmeniť školský rok pre prihlášky z</div>
+    <input
+      ngModel
+      class="form-control"
+      type="text"
+      name="fromYear"
+      placeholder="pôvodný školský rok"
+      margin-left
+      required
+      pattern="[1-9][0-9][0-9][0-9]-[1-9][0-9][0-9][0-9]"
+    >
+    <div margin-left>na</div>
+    <input
+      ngModel
+      class="form-control"
+      type="text"
+      name="toYear"
+      placeholder="cieľový školský rok"
+      margin-left
+      required
+      pattern="[1-9][0-9][0-9][0-9]-[1-9][0-9][0-9][0-9]"
+    >
+    <button [disabled]="!yearForm.valid" type="submit" class="btn btn-primary active" margin-left>Odoslať</button>
+  </form>
 </div>
 
 <div
@@ -91,7 +119,11 @@
   </tbody>
 </table>
 
-<div *ngIf="!admissions.length">
+<div
+  *ngIf="!admissions.length"
+  margin-top
+  text-center
+>
   Žiadne výsledky.
 </div>
 

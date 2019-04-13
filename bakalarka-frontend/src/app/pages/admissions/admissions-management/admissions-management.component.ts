@@ -126,4 +126,17 @@ export class AdmissionsManagementComponent implements OnInit {
         }, 5000)
       })
   }
+
+  changeSchoolYearForGivenYear(form: NgForm) {
+    this.AdmissionsManagementService.changeSchoolYearForGivenYear(form.value)
+      .subscribe((resp) => {
+        this.showNotification = true
+        this.success = resp['success']
+        this.message = resp['message']
+
+        setTimeout(() => {
+          this.showNotification = false
+        }, 5000)
+      })
+  }
 }

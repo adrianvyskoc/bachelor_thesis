@@ -161,6 +161,14 @@
       type="text"
       (ngModelChange)="onFilterSchoolsBySchoolId($event)"
     >
+    <input
+      [(ngModel)]="filteredSchoolStreet"
+      class="form-control"
+      placeholder="Ulica školy"
+      type="text"
+      margin-left
+      (ngModelChange)="onFilterSchoolsByStreet($event)"
+    >
   </div>
 
   <div *ngIf="chartsLoaded" flex>

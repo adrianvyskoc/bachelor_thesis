@@ -31,4 +31,8 @@ export class AdmissionsManagementService {
   deleteAdmissionsForGivenYear(year) {
     return this.http.delete(`${this.url}admissions/delete/${year}`)
   }
+
+  changeSchoolYearForGivenYear(years) {
+    return this.http.put(`${this.url}admissions/changeYear`, years)
+  }
 }

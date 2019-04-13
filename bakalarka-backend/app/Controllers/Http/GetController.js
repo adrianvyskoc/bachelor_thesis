@@ -323,7 +323,7 @@ class GetController {
       const schoolsAttrs = ['ineko_schools.typ_skoly', 'ineko_schools.sur_y', 'ineko_schools.sur_x', 'ineko_schools.kraj']
 
       const schools = await Database
-        .select(...schoolsAttrs, 'ineko_schools.nazov', 'ineko_schools.kod_kodsko', 'ineko_schools.email', 'ineko_total_ratings.celkove_hodnotenie')
+        .select(...schoolsAttrs, 'ineko_schools.ulica', 'ineko_schools.nazov', 'ineko_schools.kod_kodsko', 'ineko_schools.email', 'ineko_total_ratings.celkove_hodnotenie')
         .from('ineko_schools')
         .join('ineko_total_ratings', 'ineko_total_ratings.school_id', 'ineko_schools.kod_kodsko')
 

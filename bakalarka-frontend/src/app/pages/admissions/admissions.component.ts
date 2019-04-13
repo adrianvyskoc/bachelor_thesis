@@ -28,6 +28,7 @@ export class AdmissionsComponent implements OnInit {
   filteredSchools = []
 
   filteredSchoolId
+  filteredSchoolStreet
 
   // charts data
   admissionCounts = {}
@@ -127,7 +128,14 @@ export class AdmissionsComponent implements OnInit {
     if(this.filteredSchoolId == "")
       this.filteredSchools = this.schools
     else
-      this.filteredSchools = this.admissionsFilterService.filterSchoolsBySchoolId(this.schools, this.filteredSchoolId)
+      this.filteredSchools = this.admissionsFilterService.filterSchoolsBySchoolId(this.filteredSchools, this.filteredSchoolId)
+  }
+
+  onFilterSchoolsByStreet() {
+    if(this.filteredSchoolStreet == "")
+      this.filteredSchools = this.schools
+    else
+      this.filteredSchools = this.admissionsFilterService.filterSchoolsByStreet(this.filteredSchools, this.filteredSchoolStreet)
   }
 
   onSchoolChoose(event) {

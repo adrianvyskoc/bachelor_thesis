@@ -101,6 +101,39 @@ class AdmissionController {
       }
     }
   }
+
+  async changeYearForGivenYear({ request }) {
+    const years = await request.all()
+    let count = await Database
+      .from('ais_admissions')
+      .where('OBDOBIE', years.fromYear)
+      .count()
+    count = Number(count[0].count)
+
+    if(!count) {
+      return {
+        "success": false,
+        "message": `V systéme sa nenachádzajú žiadne prihlášky s školským rokom ${years.fromYear}.`
+      }
+    }
+
+    try {
+      await Database
+        .table('ais_admissions')
+        .where('OBDOBIE', years.fromYear)
+        .update('OBDOBIE', years.toYear)
+
+      return {
+        "success": true,
+        "message": `Prihláškam s školským rokom ${years.fromYear} bol úspešne zmenený školský rok na ${years.toYear}.`
+      }
+    } catch(err) {
+      return {
+        "success": false,
+        "message": `Vyskytla sa chyba pri upravovaní školského roku pre prihlášky s rokom ${years.fromYear}.`
+      }
+    }
+  }
 }
 
 module.exports = AdmissionController
