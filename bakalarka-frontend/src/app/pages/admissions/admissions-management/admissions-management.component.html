@@ -1,0 +1,89 @@
+<div class="jumbotron">
+  <h1 class="display-4">Prijímacie konanie</h1>
+  <p class="lead">Manažment údajov</p>
+  <hr class="my-4">
+</div>
+
+<div flex margin-bottom>
+  <input
+    [(ngModel)]="surname"
+    type="text"
+    class="form-control"
+    placeholder="Meno uchádzača"
+    style="width: 200px;"
+  >
+  <button class="btn btn-primary" margin-left (click)="onAdmissionSearch()">Vyhľadať</button>
+</div>
+
+<table *ngIf="admissions.length" class="table">
+  <thead>
+    <tr>
+      <th scope="col">AIS ID</th>
+      <th scope="col">Meno</th>
+      <th scope="col">Priezvisko</th>
+      <th scope="col">Školský rok</th>
+      <th scope="col">Rozhodnutie o prijatí</th>
+      <th scope="col">Akcie</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let admission of admissions">
+      <th scope="row">{{ admission['AIS_ID'] }}</th>
+      <td>{{ admission['Meno'] }}</td>
+      <td>{{ admission['Priezvisko'] }}</td>
+      <td>{{ admission['OBDOBIE'] }}</td>
+      <td>{{ admission['Rozh'] }}</td>
+      <td>
+        <button class="btn btn-primary" [routerLink]="['/admissions', 'bachelor', admission.id]">Detail</button>
+        <button class="btn btn-warning" (click)="onAdmissionUpdate(admission)">Upraviť</button>
+        <button class="btn btn-danger" (click)="onAdmissionDelete(admission.id)">Vymazať</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="!admissions.length">
+  Žiadne výsledky.
+</div>
+
+<div
+  *ngIf="showNotification && !success"
+  class="alert alert-danger mt-3"
+  role="alert"
+  flex align-items-center
+>
+  <div class="icon-wrapper danger" margin-right>
+    <i class="far fa-times-circle"></i>
+  </div>
+  {{ message }}
+</div>
+<div
+  *ngIf="showNotification && success"
+  class="alert alert-success mt-3" role="alert"
+  flex align-items-center
+>
+  <div class="icon-wrapper success" margin-right>
+    <i class="far fa-check-circle"></i>
+  </div>
+  {{ message }}
+</div>
+
+<form *ngIf="chosenAdmission" (ngSubmit)="onUpdate(f)" #f="ngForm">
+
+  <h2 padding>
+    Všetky atribúty
+    <button type="submit" class="btn btn-primary float-right">Upraviť prihlášku</button>
+  </h2>
+
+  <input placeholder="Zadajte názov atribútu" type="text" class="form-control">
+  <hr>
+
+  <div class="row">
+    <div *ngFor="let admission of chosenAdmission | keyvalue" class="col-lg-2">
+      <div class="form-group">
+        <label [for]="admission.key">{{ admission.key }}</label>
+        <input [ngModel]="admission.value" [name]="admission.key" [id]="admission.key" class="form-control" [value]="admission.value" type="text">
+      </div>
+    </div>
+  </div>
+</form>

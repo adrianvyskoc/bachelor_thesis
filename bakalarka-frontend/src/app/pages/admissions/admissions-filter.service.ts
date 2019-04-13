@@ -74,6 +74,12 @@ export class AdmissionsFilterService {
     })
   }
 
+  filterByName(admissions, value) {
+    return admissions.filter(admission => {
+      return (admission['Meno'] + " " + admission['Priezvisko']) == value
+    })
+  }
+
   /**
    * Filtrovanie podľa kódu školy - škola sa musí začínať na uvedenú postupnosť znakov
    * @param schools - všetky školy, ktoré ideme filtrovať

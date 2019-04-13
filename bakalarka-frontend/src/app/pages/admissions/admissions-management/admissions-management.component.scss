@@ -1,0 +1,23 @@
+h2 {
+  margin: 16px -16px;
+  background-color: #e9ecef;
+}
+
+.icon-wrapper {
+  font-size: 70px;
+
+  &.success {
+    color: green;
+  }
+
+  &.danger {
+    color: red;
+  }
+}
+
+label {
+  width: 100%;
+  line-height: 20px;
+  font-weight: bold;
+  word-break: break-word;
+}

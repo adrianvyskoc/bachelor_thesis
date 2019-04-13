@@ -11,9 +11,9 @@ import { ChartModule } from 'src/app/plugins/chart/chart.module';
 import { GeoChartModule } from 'src/app/plugins/geo-chart/geo-chart.module';
 import { MapModule } from 'src/app/plugins/map/map.module';
 import { AdmissionsComparisonComponent } from './admissions-comparison/admissions-comparison.component';
-import { AdmissionsYearBlockComponent } from './admissions-comparison/admissions-year-block/admissions-year-block.component';
 import { StatisticsTableComponent } from './admissions-bachelor/statistics-table/statistics-table.component';
 import { TimeChartModule } from 'src/app/plugins/time-chart/time-chart.module';
+import { AdmissionsManagementComponent } from './admissions-management/admissions-management.component';
 
 @NgModule({
   imports: [
@@ -40,7 +40,7 @@ import { TimeChartModule } from 'src/app/plugins/time-chart/time-chart.module';
     AdmissionsMasterComponent,
     AdmissionComponent,
     AdmissionsComparisonComponent,
-    AdmissionsYearBlockComponent,
+    AdmissionsManagementComponent,
     StatisticsTableComponent,
   ]
 })

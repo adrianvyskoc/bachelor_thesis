@@ -220,7 +220,7 @@ class GetController {
             'ais_state_exams_overviews.Stav as stav',
             'ais_state_exams_overviews.VŠP_štúdium as vspStudium',
             'ais_state_exams_overviews.VŠP_štud_bpo as vspStudBpo',
-            
+
             'ais_state_exams_scenarios.Vedúci as veduciHodnotenie',
             'ais_state_exams_scenarios.Oponent_1 as oponentHodnotenie',
             'ais_state_exams_scenarios.Výsledné_hodnotenie as vysledneHodnotenie',
@@ -243,7 +243,7 @@ class GetController {
           )
           .from('ais_state_exams_overviews')
           .leftJoin('ais_state_exams_scenarios', 'ais_state_exams_overviews.Záverečná_práca_názov', 'ais_state_exams_scenarios.Názov_projektu' )
-  
+
         return response
           .status(200)
           .send(data)
