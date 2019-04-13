@@ -5,7 +5,7 @@
   <button
     class="btn btn-primary"
     type="button"
-    [disabled]="!admissions.filteredData.length"
+    [disabled]="admissions && !admissions.filteredData.length"
     (click)="exportVisible()"
   >Exportovať viditeľné údaje</button>
 
@@ -18,7 +18,7 @@
   <button
     class="btn btn-primary"
     type="button"
-    [disabled]="!admissions.filteredData.length"
+    [disabled]="admissions && !admissions.filteredData.length"
     (click)="exportFiltered()"
   >Exportovať vyfiltrované údaje</button>
 </div>

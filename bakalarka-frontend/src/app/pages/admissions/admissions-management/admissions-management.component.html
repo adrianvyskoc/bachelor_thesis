@@ -2,6 +2,55 @@
   <h1 class="display-4">Prijímacie konanie</h1>
   <p class="lead">Manažment údajov</p>
   <hr class="my-4">
+
+  <div flex align-items-center>
+    <button class="btn btn-primary" (click)="deleteAllAdmissions()" [disabled]="!acceptDelete">Vymazať všetky údaje</button>
+    <div class="custom-control custom-checkbox" margin-left>
+      <input [(ngModel)]="acceptDelete" type="checkbox" class="custom-control-input" id="acceptDelete">
+      <label class="custom-control-label" for="acceptDelete">Súhlasím s vymazaním údajov o prijímacom konaní</label>
+    </div>
+  </div>
+
+  <hr class="my-4">
+
+  <div flex>
+    <button
+      class="btn btn-primary"
+      [disabled]="!year"
+      (click)="deleteAdmissionsForGivenYear()"
+    >
+      Vymazať údaje pre zvolený rok
+    </button>
+    <input
+      [(ngModel)]="year"
+      placeholder="Školský rok (yyyy-yyyy)"
+      type="text" class="form-control"
+      margin-left
+      style="width: 200px;"
+    >
+  </div>
+</div>
+
+<div
+  *ngIf="showNotification && !success"
+  class="alert alert-danger mt-3"
+  role="alert"
+  flex align-items-center
+>
+  <div class="icon-wrapper danger" margin-right>
+    <i class="far fa-times-circle"></i>
+  </div>
+  {{ message }}
+</div>
+<div
+  *ngIf="showNotification && success"
+  class="alert alert-success mt-3" role="alert"
+  flex align-items-center
+>
+  <div class="icon-wrapper success" margin-right>
+    <i class="far fa-check-circle"></i>
+  </div>
+  {{ message }}
 </div>
 
 <div flex margin-bottom>
@@ -46,43 +95,28 @@
   Žiadne výsledky.
 </div>
 
-<div
-  *ngIf="showNotification && !success"
-  class="alert alert-danger mt-3"
-  role="alert"
-  flex align-items-center
->
-  <div class="icon-wrapper danger" margin-right>
-    <i class="far fa-times-circle"></i>
-  </div>
-  {{ message }}
-</div>
-<div
-  *ngIf="showNotification && success"
-  class="alert alert-success mt-3" role="alert"
-  flex align-items-center
->
-  <div class="icon-wrapper success" margin-right>
-    <i class="far fa-check-circle"></i>
-  </div>
-  {{ message }}
-</div>
-
 <form *ngIf="chosenAdmission" (ngSubmit)="onUpdate(f)" #f="ngForm">
 
   <h2 padding>
     Všetky atribúty
-    <button type="submit" class="btn btn-primary float-right">Upraviť prihlášku</button>
+    <button type="submit" class="btn btn-primary active float-right">Upraviť prihlášku</button>
   </h2>
 
-  <input placeholder="Zadajte názov atribútu" type="text" class="form-control">
+  <input
+    [(ngModel)]="searchedAttrName"
+    [ngModelOptions]="{standalone: true}"
+    placeholder="Zadajte názov atribútu"
+    type="text"
+    class="form-control"
+    (ngModelChange)="onAttrSearch()"
+  >
   <hr>
 
   <div class="row">
-    <div *ngFor="let admission of chosenAdmission | keyvalue" class="col-lg-2">
+    <div *ngFor="let attr of allAttrs" [hidden]="filteredAttrs.indexOf(attr) == -1" class="col-lg-2">
       <div class="form-group">
-        <label [for]="admission.key">{{ admission.key }}</label>
-        <input [ngModel]="admission.value" [name]="admission.key" [id]="admission.key" class="form-control" [value]="admission.value" type="text">
+        <label [for]="attr">{{ attr }}</label>
+        <input [ngModel]="chosenAdmission[attr]" [name]="attr" [id]="attr" class="form-control" [value]="chosenAdmission[attr]" type="text">
       </div>
     </div>
   </div>

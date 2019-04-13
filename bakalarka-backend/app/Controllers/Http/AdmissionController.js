@@ -23,7 +23,6 @@ class AdmissionController {
       }
     }
 
-
     try {
       await Database
         .table('ais_admissions')
@@ -48,8 +47,6 @@ class AdmissionController {
       }
     }
 
-
-
     try {
       await admission.delete()
     } catch(err) { console.log(err) }
@@ -71,6 +68,39 @@ class AdmissionController {
     return { admissions }
   }
 
+  async deleteAllAdmissions() {
+    try {
+      await Database.truncate('ais_admissions')
+      return {
+        "success": true,
+        "message": "Všetky prihlášky boli úspešne zmazané."
+      }
+    } catch(err) {
+      return {
+        "success": false,
+        "message": "Nastala chyba pri odstraňovaní všetkých záznamov z prijímacieho konania."
+      }
+    }
+  }
+
+  async deleteAdmissionsForGivenYear({ params }) {
+    try {
+      await Database
+        .table('ais_admissions')
+        .where('OBDOBIE', params.year)
+        .delete()
+
+      return {
+        "success": true,
+        "message": `Prihlášky pre rok ${params.year} boli úspešne zmazané.`
+      }
+    } catch(err) {
+      return {
+        "success": false,
+        "message": `Vyskytla sa chyba pri zmazávaní prihlášok pre rok ${params.year}.`
+      }
+    }
+  }
 }
 
 module.exports = AdmissionController

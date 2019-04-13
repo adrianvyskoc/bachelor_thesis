@@ -23,4 +23,12 @@ export class AdmissionsManagementService {
   updateAdmission(admission) {
     return this.http.put(`${this.url}admissions/${admission.id}/update`, admission)
   }
+
+  deleteAllAdmissions() {
+    return this.http.delete(`${this.url}admissions/delete/all`)
+  }
+
+  deleteAdmissionsForGivenYear(year) {
+    return this.http.delete(`${this.url}admissions/delete/${year}`)
+  }
 }

@@ -38,6 +38,8 @@ export class AdmissionsComponent implements OnInit {
   schoolsToShow: string = 'all'
   schoolQuality: string = 'all'
 
+  loading: boolean = true
+
   // FILTER PROPERTIES
   filterForm: FormGroup
 
@@ -61,6 +63,7 @@ export class AdmissionsComponent implements OnInit {
     this.dataService.getAdmissionsOverviewUpdateListener()
       .subscribe(
         (data) => {
+          this.loading = false
           this.schools = data['schools']
           this.admissions = data['admissions']
           this.filteredAdmissions = data['admissions']
