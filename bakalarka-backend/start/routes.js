@@ -49,7 +49,8 @@ Route
         Route.post('administrators/removeUser', 'GetController.removeUser')
         // ---
         Route.get('statefinalexams', 'getController.getStateFinalExams')
-        // ---
+        // update SZS
+        Route.post('statefinalexams/update', 'getController.updateStateFinalExams')
 
         // imported years
         Route.get('importedYears', 'GetController.getImportedYears')

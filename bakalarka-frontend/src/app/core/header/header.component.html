@@ -28,20 +28,24 @@
             <a class="dropdown-item" routerLink="/admissions/master">Inžiniersky stupeň</a>
           </div>
         </li>
+
         <li class="nav-item" routerLinkActive="active">
           <a class="nav-link" routerLink="/statefinalexams">ŠZS</a>
         </li>
 
-        <!-- *ngIf="authService.loggedIn" -->
-        <li class="nav-item">
-          <a class="nav-link" (click)="logoutUser()">Odhlásenie</a>
-        </li>
         <li *ngIf="this.authService.isAdmin" class="nav-item">
           <a class="nav-link" routerLink="/accounts">
-            <i class="fas fa-unlock-alt"></i>
+            <!-- <i class="fas fa-unlock-alt"></i> -->
+            Správa účtov
           </a>
         </li>
+
+        <!-- *ngIf="authService.loggedIn" -->
+        <li class="nav-item logout">
+            <a class="nav-link" (click)="logoutUser()">Odhlásenie</a>
+          </li>
       </ul>
+
 
       <form class="form-inline my-2 my-lg-0">
         <select [(ngModel)]="selectedFaculty" class="custom-select mr-2" name="faculty" (change)="onFacultySelect()">

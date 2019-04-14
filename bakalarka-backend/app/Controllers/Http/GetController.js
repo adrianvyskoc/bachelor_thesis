@@ -201,52 +201,103 @@ class GetController {
           .send(e)
       }
     }
+
     // ---
 
     async getStateFinalExams ({ response }) {
       try {
-        const data = await Database
-          // .select('*', 'Celé_meno_s_titulmi as cmst')
-          .select(
-            'ais_state_exams_overviews.id as id',
-            // 'ais_state_exams_overviews.Celé_meno_s_titulmi as celeMenoSTitulmi',
-            'ais_state_exams_scenarios.Riešiteľ as riesitel',
-            'ais_state_exams_overviews.AIS_ID as aisId',
-            'ais_state_exams_overviews.Identifikácia_štúdia as identifikaciaStudia',
-            'ais_state_exams_overviews.Obhajoba as obhajoba',
-            'ais_state_exams_overviews.Záverečná_práca_názov as zaverecnaPracaNazov',
-            'ais_state_exams_overviews.Vedúci as veduci',
-            'ais_state_exams_overviews.Oponent as oponent',
-            'ais_state_exams_overviews.Stav as stav',
-            'ais_state_exams_overviews.VŠP_štúdium as vspStudium',
-            'ais_state_exams_overviews.VŠP_štud_bpo as vspStudBpo',
-            
-            'ais_state_exams_scenarios.Vedúci as veduciHodnotenie',
-            'ais_state_exams_scenarios.Oponent_1 as oponentHodnotenie',
-            'ais_state_exams_scenarios.Výsledné_hodnotenie as vysledneHodnotenie',
-            // 'ais_state_exams_overviews.test as test',
+        // const data = await Database
+        //   // .select('*', 'Celé_meno_s_titulmi as cmst')
+        //   .select(
+        //     'ais_state_exams_overviews.id as id',
+        //     // 'ais_state_exams_overviews.OBDOBIE as obdobie', //mozno zaznacit niekde na stranke pre orientaciu
+
+        //     // tabulka OVERVIEWS-----------------------------------
+        //     'ais_state_exams_overviews.Celé_meno_s_titulmi as celeMenoSTitulmi',
+        //     'ais_state_exams_overviews.AIS_ID as aisId',
+        //     'ais_state_exams_overviews.Identifikácia_štúdia as identifikaciaStudia',
+        //     'ais_state_exams_overviews.Obhajoba as obhajoba', // datum v tvare 19.06.2018
+        //     'ais_state_exams_overviews.Záverečná_práca_názov as zaverecnaPracaNazov',
+        //     'ais_state_exams_overviews.Vedúci as veduci',
+        //     'ais_state_exams_overviews.Oponent as oponent',
+        //     'ais_state_exams_overviews.Stav as stav',
+        //     'ais_state_exams_overviews.VŠP_štúdium as vspStudium',
+        //     'ais_state_exams_overviews.VŠP_štud_bpo as vspStudBpo',
+        //     // --- doplnene do overviews
+        //     // 'ais_state_exams_overviews.test as test',
 
 
-            // 'ais_state_exams_overviews.OBDOBIE as obdobie',
-            // 'Celé_meno_s_titulmi as celeMenoSTitulmi',
-            // 'Typ_proj as typProj',
-            // 'Štud_prog as studProg',
-            // 'Riešiteľ as riesitel',
-            // 'Názov_projektu as nazovProjektu',
-            // 'Vedúci_projektu as veduciProjektu',
-            // 'Oponent_1 as oponent1',
-            // 'Výsledné_hodnotenie as vysledneHodnotenie',
-            'ais_state_exams_scenarios.dňa as dna',
-            'ais_state_exams_scenarios.Komisia as komisia',
-            'ais_state_exams_scenarios.Predseda as predseda',
-            'ais_state_exams_scenarios.Tajomník as tajomnik'
-          )
-          .from('ais_state_exams_overviews')
-          .leftJoin('ais_state_exams_scenarios', 'ais_state_exams_overviews.Záverečná_práca_názov', 'ais_state_exams_scenarios.Názov_projektu' )
-  
+        //     // tabulka SCENARIO-------------------------------------
+        //     // 'OBDOBIE as obdobie' //nepotrebujem uz mam
+        //     // 'Typ_proj as typProj', //nepotrebujem
+        //     'ais_state_exams_scenarios.Štud_prog as studProg',
+        //     // 'ais_state_exams_scenarios.Riešiteľ as riesitel', // tu nie su vsetky mena
+        //     // 'Názov_projektu as nazovProjektu', //uz mam z overviews
+        //     // 'Vedúci_projektu as veduciProjektu', //uz mam z overviews
+        //     // 'Oponent as oponent' // uz mam z overviews
+        //     'ais_state_exams_scenarios.Vedúci as veduciHodnotenie', // znamka
+        //     'ais_state_exams_scenarios.Oponent_1 as oponentHodnotenie', // znamka
+        //     'ais_state_exams_scenarios.Výsledné_hodnotenie as vysledneHodnotenie', // znamka
+        //     'ais_state_exams_scenarios.dňa as dna', // datum v tvare 20. júna 2018
+        //     'ais_state_exams_scenarios.Komisia as komisia',
+        //     'ais_state_exams_scenarios.Predseda as predseda',
+        //     'ais_state_exams_scenarios.Tajomník as tajomnik',
+        //   )
+        //   .from('ais_state_exams_overviews')
+        //   .leftJoin('ais_state_exams_scenarios',
+        //     function () {
+        //       this
+        //       .on('trim(ais_state_exams_overviews.Záverečná_práca_názov)', 'trim(ais_state_exams_scenarios.Názov_projektu)')
+        //       // .andOn('ais_state_exams_overviews.Celé_meno_s_titulmi', 'ais_state_exams_scenarios.Riešiteľ')
+        //     }
+        //    )
+
+        const data = await Database.raw(`
+          select 
+            ais_state_exams_overviews.id as id,
+            ais_state_exams_overviews."Celé_meno_s_titulmi" as "celeMenoSTitulmi",
+            ais_state_exams_overviews."AIS_ID" as "aisId",
+            ais_state_exams_overviews."Identifikácia_štúdia" as "identifikaciaStudia",
+            ais_state_exams_overviews."Obhajoba" as "obhajoba", 
+            ais_state_exams_overviews."Záverečná_práca_názov" as "zaverecnaPracaNazov",
+            ais_state_exams_overviews."Vedúci" as "veduci",
+            ais_state_exams_overviews."Oponent" as "oponent",
+            ais_state_exams_overviews."Stav" as "stav",
+            ais_state_exams_overviews."VŠP_štúdium" as "vspStudium",
+            ais_state_exams_overviews."VŠP_štud_bpo" as "vspStudBpo",
+            ais_state_exams_scenarios."Štud_prog" as "studProg",
+            ais_state_exams_scenarios."Vedúci" as "veduciHodnotenie",
+            ais_state_exams_scenarios."Oponent_1" as "oponentHodnotenie", 
+            ais_state_exams_scenarios."Výsledné_hodnotenie" as "vysledneHodnotenie",
+            ais_state_exams_scenarios."dňa" as "dna", 
+            ais_state_exams_scenarios."Komisia" as "komisia",
+            ais_state_exams_scenarios."Predseda" as "predseda",
+            ais_state_exams_scenarios."Tajomník" as "tajomnik"
+          from 
+            ais_state_exams_overviews
+          left join ais_state_exams_scenarios on REGEXP_REPLACE(lower(ais_state_exams_overviews."Záverečná_práca_názov"), '[ \s]*', '', 'g') = REGEXP_REPLACE(lower(ais_state_exams_scenarios."Názov_projektu"), '[ \s]*', '', 'g')
+          and
+          ais_state_exams_overviews."Celé_meno_s_titulmi" like '%' || ais_state_exams_scenarios."Riešiteľ" || '%'
+        `)
+
+        // doplnit do selectu potom
+        // ais_state_exams_overviews."uzavreteStudium"
+        // ais_state_exams_overviews."bp2_v_aj"
+        // ais_state_exams_overviews."ssOpravnyTermin"
+        // ais_state_exams_overviews."navrhVKomisiiPoradie"
+        // ais_state_exams_overviews."skorTeoreticka"
+        // ais_state_exams_overviews."skorPrakticka"
+        // ais_state_exams_overviews."navrhDoRSP1"
+        // ais_state_exams_overviews."konecneRozhodnutie1"
+        // ais_state_exams_overviews."navrhDoRSP2"
+        // ais_state_exams_overviews."konecneRozhodnutie2"
+        // ais_state_exams_overviews."promocie"
+        // ais_state_exams_overviews."najhorsiaZnamka"
+
         return response
           .status(200)
-          .send(data)
+          // .send(data)
+          .send(data.rows)
 
       } catch(e) {
         console.log('error', e);
@@ -257,7 +308,47 @@ class GetController {
     }
 
     // ---
+    async updateStateFinalExams ({ response, request }) {
+      const data = request.body
+      try{
+        await Database
+          .table('ais_state_exams_overviews')
+          .where({id: data.id})
+          // nazovTabulky: data.nazovParametruCoPosielamzFE
+          .update({
+            test: data.test,
+            test2: data.test2,
+            bp2_v_aj: data.navrhVKomisiiPoradie,
 
+            // uzavreteStudium: data.uzavreteStudium,
+            // bp2_v_aj: data.bp2_v_aj,
+            // ssOpravnyTermin: data.ssOpravnyTermin,
+            // navrhVKomisiiPoradie: data.navrhVKomisiiPoradie,
+            // skorTeoreticka: data.skorTeoreticka,
+            // skorPrakticka: data.skorPrakticka,
+            // navrhDoRSP1: data.navrhDoRSP1,
+            // konecneRozhodnutie1: data.konecneRozhodnutie1,
+            // navrhDoRSP2: data.navrhDoRSP2,
+            // konecneRozhodnutie2: data.konecneRozhodnutie2,
+            // promocie: data.promocie,
+            // najhorsiaZnamka: data.najhorsiaZnamka,
+          })
+
+        console.log(request.body)
+        
+        return response
+          .status(200)
+          .send(true)
+
+      } catch(e) {
+        console.log(e)
+        return response
+          .status(500)
+          .send(e)
+      }
+    }
+
+    // ---
 
     async getGrades ({ response }) {
         const grades = await Grade.all()
