@@ -18,8 +18,6 @@ const Route = use('Route')
 
 Route
     .group(() => {
-        // test
-        Route.get('test', 'ImportAisController.read')
 
         // import ais
         Route.post('import/ais/:selectedImport/:year', 'ImportAisController.import')
@@ -33,13 +31,32 @@ Route
         // api endpoints
         Route.get('getStudents/:year', 'GetController.getStudents')
         Route.get('getAttendance/:year', 'GetController.getAttendance')
-        Route.get('getAdmissions/:year', 'GetController.getAdmissions')
         Route.get('getGrades/:year', 'GetController.getGrades')
         Route.get('getSchools', 'GetController.getSchools')
         Route.get('getSubjects/:year', 'GetController.getSubjects')
         Route.get('codebook/:type', 'GetController.getCodebook')
         Route.get('column-meaning/:type', 'GetController.getColumnMeaning')
+
+
+        /*
+          Admissions api endpoints start
+         */
+
         Route.get('getAdmission/:id', 'GetController.getAdmission')
+        Route.get('getAdmissions/:year', 'GetController.getAdmissions')
+        Route.post('admissions/new', 'AdmissionController.addAdmission')
+        Route.put('admissions/:id/update', 'AdmissionController.updateAdmission')
+        Route.delete('admissions/:id/delete', 'AdmissionController.deleteAdmission')
+        Route.delete('admissions/delete/all', 'AdmissionController.deleteAllAdmissions')
+        Route.delete('admissions/delete/:year', 'AdmissionController.deleteAdmissionsForGivenYear')
+        Route.put('admissions/changeYear', 'AdmissionController.changeYearForGivenYear')
+
+        Route.get('admissionsBySurname', 'AdmissionController.getAdmissionsBySurname')
+
+        /*
+          Admissions api endpoints end
+         */
+
         // ---
         // Route.get('administrators/getIfIsAdmin/:user', 'GetController.getIfIsAdmin')
         Route.get('administrators', 'GetController.getUsers')  // getAllAccounts
@@ -55,6 +72,14 @@ Route
         // imported years
         Route.get('importedYears', 'GetController.getImportedYears')
 
+        // login ldap
+        //Route.post('login', 'UserController.loginWithLDAP') //originalny LDAP funkcny
+        Route.post('login', 'UserController.verifyEmail') // už aj s overením prístupu
+
+        /*
+          Feature routes
+         */
+
         // Admissions overview
         Route.get('admissionsOverview', 'GetController.getAdmissionsOverview')
 
@@ -66,10 +91,5 @@ Route
 
         // Admissions master
         Route.get('admissionsMaster', 'GetController.getAdmissionsMaster')
-
-        // login ldap
-        //Route.post('login', 'UserController.loginWithLDAP') //originalny LDAP funkcny
-        Route.post('login', 'UserController.verifyEmail') // už aj s overením prístupu
-
     })
     .prefix('/api')

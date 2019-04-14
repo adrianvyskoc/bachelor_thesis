@@ -154,7 +154,7 @@ export class DataService {
   }
 
   async uploadData(selectedFile, selectedImport, selectedSource, year) {
-    this.showErrorMessage = false
+    this.showSuccessMessage = false
     this.showErrorMessage = false
     const fd = new FormData()
     fd.append(selectedImport, selectedFile, selectedFile.name)
@@ -165,11 +165,19 @@ export class DataService {
           //this.getImportedYears()
           this.loading = false
           this.showSuccessMessage = true
+
+          setTimeout(() => {
+            this.showSuccessMessage = false
+          }, 5000)
         },
         error => {
           console.log(error)
           this.loading = false
           this.showErrorMessage = true
+
+          setTimeout(() => {
+            this.showErrorMessage = false
+          }, 5000)
         }
       )
   }

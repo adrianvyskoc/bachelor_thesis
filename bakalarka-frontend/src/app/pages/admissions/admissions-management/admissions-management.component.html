@@ -1,0 +1,155 @@
+<div class="jumbotron">
+  <h1 class="display-4">Prijímacie konanie</h1>
+  <p class="lead">Manažment údajov</p>
+  <hr class="my-4">
+
+  <div flex align-items-center>
+    <button class="btn btn-danger" (click)="deleteAllAdmissions()" [disabled]="!acceptDelete">Vymazať všetky údaje</button>
+    <div class="custom-control custom-checkbox" margin-left>
+      <input [(ngModel)]="acceptDelete" type="checkbox" class="custom-control-input" id="acceptDelete">
+      <label class="custom-control-label" for="acceptDelete">Súhlasím s vymazaním údajov o prijímacom konaní</label>
+    </div>
+  </div>
+
+  <hr class="my-4">
+
+  <div flex>
+    <button
+      class="btn btn-danger"
+      [disabled]="!year"
+      (click)="deleteAdmissionsForGivenYear()"
+    >
+      Vymazať údaje pre zvolený rok
+    </button>
+    <input
+      [(ngModel)]="year"
+      placeholder="Školský rok (yyyy-yyyy)"
+      type="text" class="form-control"
+      margin-left
+      style="width: 200px;"
+    >
+  </div>
+
+  <hr class="my-4">
+
+  <form class="year-change" flex align-items-center (ngSubmit)="changeSchoolYearForGivenYear(yearForm)" #yearForm="ngForm">
+    <div>Zmeniť školský rok pre prihlášky z</div>
+    <input
+      ngModel
+      class="form-control"
+      type="text"
+      name="fromYear"
+      placeholder="pôvodný školský rok"
+      margin-left
+      required
+      pattern="[1-9][0-9][0-9][0-9]-[1-9][0-9][0-9][0-9]"
+    >
+    <div margin-left>na</div>
+    <input
+      ngModel
+      class="form-control"
+      type="text"
+      name="toYear"
+      placeholder="cieľový školský rok"
+      margin-left
+      required
+      pattern="[1-9][0-9][0-9][0-9]-[1-9][0-9][0-9][0-9]"
+    >
+    <button [disabled]="!yearForm.valid" type="submit" class="btn btn-primary active" margin-left>Odoslať</button>
+  </form>
+</div>
+
+<div
+  *ngIf="showNotification && !success"
+  class="alert alert-danger mt-3"
+  role="alert"
+  flex align-items-center
+>
+  <div class="icon-wrapper danger" margin-right>
+    <i class="far fa-times-circle"></i>
+  </div>
+  {{ message }}
+</div>
+<div
+  *ngIf="showNotification && success"
+  class="alert alert-success mt-3" role="alert"
+  flex align-items-center
+>
+  <div class="icon-wrapper success" margin-right>
+    <i class="far fa-check-circle"></i>
+  </div>
+  {{ message }}
+</div>
+
+<div flex margin-bottom>
+  <input
+    [(ngModel)]="surname"
+    type="text"
+    class="form-control"
+    placeholder="Meno uchádzača"
+    style="width: 200px;"
+  >
+  <button class="btn btn-primary" margin-left (click)="onAdmissionSearch()">Vyhľadať</button>
+</div>
+
+<table *ngIf="admissions.length" class="table">
+  <thead>
+    <tr>
+      <th scope="col">AIS ID</th>
+      <th scope="col">Meno</th>
+      <th scope="col">Priezvisko</th>
+      <th scope="col">Školský rok</th>
+      <th scope="col">Rozhodnutie o prijatí</th>
+      <th scope="col">Akcie</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let admission of admissions">
+      <th scope="row">{{ admission['AIS_ID'] }}</th>
+      <td>{{ admission['Meno'] }}</td>
+      <td>{{ admission['Priezvisko'] }}</td>
+      <td>{{ admission['OBDOBIE'] }}</td>
+      <td>{{ admission['Rozh'] }}</td>
+      <td>
+        <button class="btn btn-primary" [routerLink]="['/admissions', 'bachelor', admission.id]">Detail</button>
+        <button class="btn btn-warning" (click)="onAdmissionUpdate(admission)">Upraviť</button>
+        <button class="btn btn-danger" (click)="onAdmissionDelete(admission.id)">Vymazať</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div
+  *ngIf="!admissions.length"
+  margin-top
+  text-center
+>
+  Žiadne výsledky.
+</div>
+
+<form *ngIf="chosenAdmission" (ngSubmit)="onUpdate(f)" #f="ngForm">
+
+  <h2 padding>
+    Všetky atribúty
+    <button type="submit" class="btn btn-primary active float-right">Upraviť prihlášku</button>
+  </h2>
+
+  <input
+    [(ngModel)]="searchedAttrName"
+    [ngModelOptions]="{standalone: true}"
+    placeholder="Zadajte názov atribútu"
+    type="text"
+    class="form-control"
+    (ngModelChange)="onAttrSearch()"
+  >
+  <hr>
+
+  <div class="row">
+    <div *ngFor="let attr of allAttrs" [hidden]="filteredAttrs.indexOf(attr) == -1" class="col-lg-2">
+      <div class="form-group">
+        <label [for]="attr">{{ attr }}</label>
+        <input [ngModel]="chosenAdmission[attr]" [name]="attr" [id]="attr" class="form-control" [value]="chosenAdmission[attr]" type="text">
+      </div>
+    </div>
+  </div>
+</form>

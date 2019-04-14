@@ -1,4 +1,4 @@
-<div *ngIf="!admissions.length" class="spinner-wrapper" flex>
+<div *ngIf="loading" class="spinner-wrapper" flex>
     <mat-spinner></mat-spinner>
 </div>
 
@@ -160,6 +160,14 @@
       placeholder="Kód školy"
       type="text"
       (ngModelChange)="onFilterSchoolsBySchoolId($event)"
+    >
+    <input
+      [(ngModel)]="filteredSchoolStreet"
+      class="form-control"
+      placeholder="Ulica školy"
+      type="text"
+      margin-left
+      (ngModelChange)="onFilterSchoolsByStreet($event)"
     >
   </div>
 

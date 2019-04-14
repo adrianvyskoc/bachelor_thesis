@@ -82,4 +82,8 @@ export class AdmissionsFilterService {
   filterSchoolsBySchoolId(schools, value) {
     return schools.filter(school => String(school.kod_kodsko).startsWith(value))
   }
+
+  filterSchoolsByStreet(schools, value) {
+    return schools.filter(school => school.ulica.indexOf(value) > -1)
+  }
  }

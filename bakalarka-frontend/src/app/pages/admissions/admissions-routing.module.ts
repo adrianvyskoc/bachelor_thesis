@@ -5,6 +5,7 @@ import { AdmissionsBachelorComponent } from './admissions-bachelor/admissions-ba
 import { AdmissionsMasterComponent } from './admissions-master/admissions-master.component';
 import { AdmissionComponent } from './admission/admission.component';
 import { AdmissionsComparisonComponent } from './admissions-comparison/admissions-comparison.component';
+import { AdmissionsManagementComponent } from './admissions-management/admissions-management.component';
 
 const routes: Routes = [
   {
@@ -30,6 +31,10 @@ const routes: Routes = [
   {
     path: 'master/:id',
     component: AdmissionComponent
+  },
+  {
+    path: 'management',
+    component: AdmissionsManagementComponent
   }
 ];
 
