@@ -90,6 +90,14 @@
     style="width: 200px;"
   >
   <button class="btn btn-primary" margin-left (click)="onAdmissionSearch()">Vyhľadať</button>
+  <button
+    class="btn btn-secondary"
+    margin-left
+    [disabled]="!admissions.length"
+    (click)="onExportAdmissions()"
+  >
+    Exportovať
+  </button>
 </div>
 
 <table *ngIf="admissions.length" class="table">
