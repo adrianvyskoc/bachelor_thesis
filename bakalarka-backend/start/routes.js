@@ -44,7 +44,6 @@ Route
 
         Route.get('getAdmission/:id', 'GetController.getAdmission')
         Route.get('getAdmissions/:year', 'GetController.getAdmissions')
-        Route.post('admissions/new', 'AdmissionController.addAdmission')
         Route.put('admissions/:id/update', 'AdmissionController.updateAdmission')
         Route.delete('admissions/:id/delete', 'AdmissionController.deleteAdmission')
         Route.delete('admissions/delete/all', 'AdmissionController.deleteAllAdmissions')

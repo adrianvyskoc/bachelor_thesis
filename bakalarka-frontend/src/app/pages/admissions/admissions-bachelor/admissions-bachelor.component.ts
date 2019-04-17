@@ -114,6 +114,19 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
     this.displayedAdmissionsColumns = []
   }
 
+  exportAllTables() {
+    const tables = document.querySelectorAll("table:not([mat-table])")
+    this.exportService.exportMultipleTablesToExcel(tables, 'bachelor-overview', [
+      {
+        data: this.admissions.filteredData,
+        attrs: this.displayedAdmissionsColumns,
+      },
+      {
+        data: this.schools['data']
+      }
+    ])
+  }
+
   exportFiltered() {
     this.exportService.exportArrayOfObjectToExcel(this.admissions.filteredData, 'filtered_admissions', this.displayedAdmissionsColumns);
   }

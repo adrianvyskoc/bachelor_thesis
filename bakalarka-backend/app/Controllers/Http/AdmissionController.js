@@ -5,10 +5,6 @@ const Admission = use('App/Models/Admission')
 
 class AdmissionController {
 
-  async addAdmission({ request }) {
-    const data = await request.all()
-  }
-
   async updateAdmission({ request }) {
     const updatedAdmission = await request.all()
     const id = updatedAdmission.id

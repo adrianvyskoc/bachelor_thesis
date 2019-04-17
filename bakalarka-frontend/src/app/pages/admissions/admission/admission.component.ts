@@ -50,8 +50,10 @@ export class AdmissionComponent implements OnInit, OnDestroy {
   }
 
   exportAll() {
-    const tables = document.querySelectorAll('table')
-    this.exportService.exportMultipleTablesToExcel(tables, 'summary')
+    const tables = document.querySelectorAll('table:not([mat-table])')
+    this.exportService.exportMultipleTablesToExcel(tables, 'summary', [{
+      data: this.otherAdmissions.data
+    }])
   }
 
   isAccepted(rozh) {

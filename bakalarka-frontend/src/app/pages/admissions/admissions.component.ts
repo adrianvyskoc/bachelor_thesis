@@ -27,6 +27,8 @@ export class AdmissionsComponent implements OnInit {
   schools = []
   filteredSchools = []
 
+  regionMetrics = {}
+
   filteredSchoolId
   filteredSchoolStreet
 
@@ -65,6 +67,7 @@ export class AdmissionsComponent implements OnInit {
       .subscribe(
         (data) => {
           this.loading = false
+          this.regionMetrics = data['regionMetrics']
           this.schools = data['schools']
           this.admissions = data['admissions']
           this.filteredAdmissions = data['admissions']

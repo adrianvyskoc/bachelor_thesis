@@ -282,6 +282,23 @@
     <app-geo-chart *ngIf="filteredAdmissions.length" [data]="filteredAdmissions"></app-geo-chart>
   </div>
   <div class="col-lg-7">
-
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Kraj</th>
+          <th scope="col">Medián</th>
+          <th scope="col">Priemer bodov</th>
+          <th scope="col">Počet študentov</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let region of regionMetrics | keyvalue">
+          <th scope="row">{{ region.value.kraj }}</th>
+          <td>{{ region.value.median }}</td>
+          <td>{{ region.value.mean | number:'2.2-2' }}</td>
+          <td>{{ region.value.count }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

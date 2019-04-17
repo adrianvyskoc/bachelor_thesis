@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AdmissionsManagementService } from './admissions-management.service';
 import { NgForm } from '@angular/forms';
+import { ExportService } from 'src/app/plugins/utils/export.service';
 
 @Component({
   selector: 'app-admissions-management',
@@ -36,7 +37,8 @@ export class AdmissionsManagementComponent implements OnInit {
 
 
   constructor(
-    private AdmissionsManagementService: AdmissionsManagementService
+    private AdmissionsManagementService: AdmissionsManagementService,
+    private exportService: ExportService
   ) { }
 
   ngOnInit() {
@@ -59,6 +61,10 @@ export class AdmissionsManagementComponent implements OnInit {
 
   onAdmissionUpdate(admission) {
     this.chosenAdmission = admission
+  }
+
+  onExportAdmissions() {
+    this.exportService.exportArrayOfObjectToExcel(this.admissions, `admissions${this.surname ? '-' + this.surname : ''}`)
   }
 
   onAdmissionDelete(id) {
