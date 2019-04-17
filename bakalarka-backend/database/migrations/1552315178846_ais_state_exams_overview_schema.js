@@ -18,7 +18,29 @@ class StateExamsOverviewSchema extends Schema {
       table.string("Stav")
       table.decimal("VŠP_štúdium")
       table.decimal("VŠP_štud_bpo")
-      table.decimal("test")
+      
+      // ----------- doplnene stlpce ------------
+      table.string("uzavreteStudium")
+      // hlavička: Ďalšie informácie 
+      table.string("bp2_v_aj")
+      table.string("ssOpravnyTermin")
+      // Návrh - cena akákoľvek (vyhodnotí sa samé)
+      // hlavička: Návrh na ocenenie z komisie za prácu
+      table.string("navrhVKomisiiPoradie")
+      table.string("skorTeoreticka")
+      table.string("skorPrakticka")
+      // Automaticky navrh (vyhodnoti sa same)
+      table.string("navrhDoRSP1")
+      table.string("konecneRozhodnutie1")
+      // hlavička: Ocenenie za prospech
+      // Automaticky navrh (vyhodnoti sa same)
+      table.string("navrhDoRSP2")
+      table.string("konecneRozhodnutie2")
+      table.string("promocie")
+      table.string("najhorsiaZnamka")
+
+      table.string("test")
+      table.string("test2")
     })
   }
 

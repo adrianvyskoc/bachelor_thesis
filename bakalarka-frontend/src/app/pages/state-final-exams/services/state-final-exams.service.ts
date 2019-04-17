@@ -17,4 +17,7 @@ export class StateFinalExamsService {
     return this.http.get<Array<Exam>>(`${environment.apiUrl}/api/statefinalexams`)
   } 
 
+  updateStateFinalExams(exam: Exam): Observable<Array<Exam>> {
+    return this.http.post<any>(`${environment.apiUrl}/api/statefinalexams/update`, exam)
+  }
 }
