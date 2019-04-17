@@ -255,6 +255,7 @@ class GetController {
         const data = await Database.raw(`
           select 
             ais_state_exams_overviews.id as id,
+            ais_state_exams_overviews."OBDOBIE" as "obdobie",
             ais_state_exams_overviews."Celé_meno_s_titulmi" as "celeMenoSTitulmi",
             ais_state_exams_overviews."AIS_ID" as "aisId",
             ais_state_exams_overviews."Identifikácia_štúdia" as "identifikaciaStudia",
@@ -272,27 +273,28 @@ class GetController {
             ais_state_exams_scenarios."dňa" as "dna", 
             ais_state_exams_scenarios."Komisia" as "komisia",
             ais_state_exams_scenarios."Predseda" as "predseda",
-            ais_state_exams_scenarios."Tajomník" as "tajomnik"
+            ais_state_exams_scenarios."Tajomník" as "tajomnik",
+            ais_state_exams_overviews."uzavreteStudium",
+            ais_state_exams_overviews."bp2_v_aj",
+            ais_state_exams_overviews."ssOpravnyTermin",
+            ais_state_exams_overviews."navrhVKomisiiPoradie",
+            ais_state_exams_overviews."skorTeoreticka",
+            ais_state_exams_overviews."skorPrakticka",
+            ais_state_exams_overviews."navrhDoRSP1",
+            ais_state_exams_overviews."konecneRozhodnutie1",
+            ais_state_exams_overviews."navrhDoRSP2",
+            ais_state_exams_overviews."konecneRozhodnutie2",
+            ais_state_exams_overviews."promocie",
+            ais_state_exams_overviews."najhorsiaZnamka"
           from 
             ais_state_exams_overviews
-          left join ais_state_exams_scenarios on REGEXP_REPLACE(lower(ais_state_exams_overviews."Záverečná_práca_názov"), '[ \s]*', '', 'g') = REGEXP_REPLACE(lower(ais_state_exams_scenarios."Názov_projektu"), '[ \s]*', '', 'g')
+          left join 
+            ais_state_exams_scenarios on REGEXP_REPLACE(lower(ais_state_exams_overviews."Záverečná_práca_názov"), '[ \s]*', '', 'g') = REGEXP_REPLACE(lower(ais_state_exams_scenarios."Názov_projektu"), '[ \s]*', '', 'g')
           and
-          ais_state_exams_overviews."Celé_meno_s_titulmi" like '%' || ais_state_exams_scenarios."Riešiteľ" || '%'
+            ais_state_exams_overviews."Celé_meno_s_titulmi" like '%' || ais_state_exams_scenarios."Riešiteľ" || '%'
+          order by id ASC
         `)
 
-        // doplnit do selectu potom
-        // ais_state_exams_overviews."uzavreteStudium"
-        // ais_state_exams_overviews."bp2_v_aj"
-        // ais_state_exams_overviews."ssOpravnyTermin"
-        // ais_state_exams_overviews."navrhVKomisiiPoradie"
-        // ais_state_exams_overviews."skorTeoreticka"
-        // ais_state_exams_overviews."skorPrakticka"
-        // ais_state_exams_overviews."navrhDoRSP1"
-        // ais_state_exams_overviews."konecneRozhodnutie1"
-        // ais_state_exams_overviews."navrhDoRSP2"
-        // ais_state_exams_overviews."konecneRozhodnutie2"
-        // ais_state_exams_overviews."promocie"
-        // ais_state_exams_overviews."najhorsiaZnamka"
 
         return response
           .status(200)
@@ -316,22 +318,18 @@ class GetController {
           .where({id: data.id})
           // nazovTabulky: data.nazovParametruCoPosielamzFE
           .update({
-            test: data.test,
-            test2: data.test2,
-            bp2_v_aj: data.navrhVKomisiiPoradie,
-
-            // uzavreteStudium: data.uzavreteStudium,
-            // bp2_v_aj: data.bp2_v_aj,
-            // ssOpravnyTermin: data.ssOpravnyTermin,
-            // navrhVKomisiiPoradie: data.navrhVKomisiiPoradie,
-            // skorTeoreticka: data.skorTeoreticka,
-            // skorPrakticka: data.skorPrakticka,
-            // navrhDoRSP1: data.navrhDoRSP1,
-            // konecneRozhodnutie1: data.konecneRozhodnutie1,
-            // navrhDoRSP2: data.navrhDoRSP2,
-            // konecneRozhodnutie2: data.konecneRozhodnutie2,
-            // promocie: data.promocie,
-            // najhorsiaZnamka: data.najhorsiaZnamka,
+            uzavreteStudium: data.uzavreteStudium,
+            bp2_v_aj: data.bp2_v_aj,
+            ssOpravnyTermin: data.ssOpravnyTermin,
+            navrhVKomisiiPoradie: data.navrhVKomisiiPoradie,
+            skorTeoreticka: data.skorTeoreticka,
+            skorPrakticka: data.skorPrakticka,
+            navrhDoRSP1: data.navrhDoRSP1,
+            konecneRozhodnutie1: data.konecneRozhodnutie1,
+            navrhDoRSP2: data.navrhDoRSP2,
+            konecneRozhodnutie2: data.konecneRozhodnutie2,
+            promocie: data.promocie,
+            najhorsiaZnamka: data.najhorsiaZnamka,
           })
 
         console.log(request.body)
@@ -350,6 +348,7 @@ class GetController {
 
     // ---
 
+    
     async getGrades ({ response }) {
         const grades = await Grade.all()
 

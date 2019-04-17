@@ -57,28 +57,44 @@ Route
           Admissions api endpoints end
          */
 
-        // ---
-        // Route.get('administrators/getIfIsAdmin/:user', 'GetController.getIfIsAdmin')
+
+        /*
+          Administrators api endpoints start
+        */
         Route.get('administrators', 'GetController.getUsers')  // getAllAccounts
         Route.post('administrators/addUser', 'GetController.addUser')
         Route.post('administrators/addAdmin', 'GetController.addAdmin')
         Route.post('administrators/removeAdmin', 'GetController.removeAdmin')
         Route.post('administrators/removeUser', 'GetController.removeUser')
-        // ---
+        // Route.get('administrators/getIfIsAdmin/:user', 'GetController.getIfIsAdmin')
+        /*
+          Administrators api endpoints end
+        */
+
+
+        /*
+          State Final Exams api endpoints start
+        */
         Route.get('statefinalexams', 'getController.getStateFinalExams')
-        // update SZS
         Route.post('statefinalexams/update', 'getController.updateStateFinalExams')
+        /*
+          State Final Exams api endpoints end
+        */
 
-        // imported years
-        Route.get('importedYears', 'GetController.getImportedYears')
 
-        // login ldap
+        /*
+          Login LDAP
+        */
         //Route.post('login', 'UserController.loginWithLDAP') //originalny LDAP funkcny
         Route.post('login', 'UserController.verifyEmail') // už aj s overením prístupu
 
+
+        // imported years
+        Route.get('importedYears', 'GetController.getImportedYears')
+            
         /*
           Feature routes
-         */
+        */
 
         // Admissions overview
         Route.get('admissionsOverview', 'GetController.getAdmissionsOverview')

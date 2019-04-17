@@ -8,8 +8,7 @@
     <!-- uzavrte studium -->
     <ng-container matColumnDef="uzavreteStudium">
       <th mat-header-cell *matHeaderCellDef>Uzavrete studium</th>
-      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup" ></td>
-      <!-- <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup" [(ngModel)]="row.uzavreteStudium" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td> -->
+      <td mat-cell *matCellDef="let row" class="type--input">{{ row.uzavreteStudium }}<input type="text" value="row.uzavreteStudium" [(ngModel)]="row.uzavreteStudium" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
     </ng-container>
 
     <!-- meno -->
@@ -102,13 +101,13 @@
      <!-- DI-BP2vAJ -->
      <ng-container matColumnDef="DI-BP2vAJ">
       <th mat-header-cell *matHeaderCellDef>BP2 v AJ</th>
-      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup" [(ngModel)]="row.test" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
+      <td mat-cell *matCellDef="let row" class="type--input">{{ row.bp2_v_aj }}<input type="text" placeholder="vstup" [(ngModel)]="row.bp2_v_aj" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
     </ng-container>
 
     <!-- DI-SSOpravnyTermin -->
     <ng-container matColumnDef="DI-SSOpravnyTermin">
       <th mat-header-cell *matHeaderCellDef>ŠS  opravný termín</th>
-      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+      <td mat-cell *matCellDef="let row" class="type--input">{{ row.ssOpravnyTermin }}<input type="text" placeholder="vstup" [(ngModel)]="row.ssOpravnyTermin" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
     </ng-container>
 
     <!-- NCA-navrhVKomisii -->
@@ -117,70 +116,70 @@
       <td mat-cell *matCellDef="let row"> {{ navrhVKomisii(row) }}</td>
     </ng-container>
 
-    <!-- NOKP-navrhVKomisii -->
-    <ng-container matColumnDef="NOKP-navrhVKomisii">
+    <!-- NOKP-navrhVKomisiiPoradie -->
+    <ng-container matColumnDef="NOKP-navrhVKomisiiPoradie">
       <th mat-header-cell *matHeaderCellDef>návrh v komisii - poradie</th>
-      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"  [(ngModel)]="row.navrhVKomisiiPoradie" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
+      <td mat-cell *matCellDef="let row" class="type--input">{{ row.navrhVKomisiiPoradie }}<input type="text" placeholder="vstup" [(ngModel)]="row.navrhVKomisiiPoradie" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
     </ng-container>
 
     <!-- NOKP-skorTeoreticka -->
     <ng-container matColumnDef="NOKP-skorTeoreticka">
       <th mat-header-cell *matHeaderCellDef>skôr teoretická</th>
-      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+      <td mat-cell *matCellDef="let row" class="type--input">{{ row.skorTeoreticka }}<input type="text" placeholder="vstup" [(ngModel)]="row.skorTeoreticka" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
     </ng-container>
 
     <!-- NOKP-skorPrakticka -->
     <ng-container matColumnDef="NOKP-skorPrakticka">
       <th mat-header-cell *matHeaderCellDef>skôr praktická</th>
-      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+      <td mat-cell *matCellDef="let row" class="type--input">{{ row.skorPrakticka }}<input type="text" placeholder="vstup" [(ngModel)]="row.skorPrakticka" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
     </ng-container>
 
     <!-- NOKP-autoNavrh -->
     <ng-container matColumnDef="NOKP-autoNavrh">
       <th mat-header-cell *matHeaderCellDef>Automatický návrh</th>
-      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vzorec"></td>
+      <td mat-cell *matCellDef="let row"></td>
     </ng-container>
 
     <!-- NOKP-navrhDoRSP -->
     <ng-container matColumnDef="NOKP-navrhDoRSP">
       <th mat-header-cell *matHeaderCellDef>Návrh do RŠP</th>
-      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+      <td mat-cell *matCellDef="let row" class="type--input">{{ row.navrhDoRSP1 }}<input type="text" placeholder="vstup" [(ngModel)]="row.navrhDoRSP1" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
     </ng-container>
 
     <!-- NOKP-konecneRozhodnutie -->
     <ng-container matColumnDef="NOKP-konecneRozhodnutie">
       <th mat-header-cell *matHeaderCellDef>Konečné rozhodnutie (RŠP)</th>
-      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+      <td mat-cell *matCellDef="let row" class="type--input">{{ row.konecneRozhodnutie1 }}<input type="text" placeholder="vstup" [(ngModel)]="row.konecneRozhodnutie1" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
     </ng-container>
 
     <!-- OP-autoNavrh -->
     <ng-container matColumnDef="OP-autoNavrh">
       <th mat-header-cell *matHeaderCellDef>Automatický návrh</th>
-      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vzorec"></td>
+      <td mat-cell *matCellDef="let row"></td>
     </ng-container>
 
     <!-- OP-navrhDoRSP -->
     <ng-container matColumnDef="OP-navrhDoRSP">
       <th mat-header-cell *matHeaderCellDef>Návrh do RŠP</th>
-      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+      <td mat-cell *matCellDef="let row" class="type--input">{{ row.navrhDoRSP2 }}<input type="text" placeholder="vstup" [(ngModel)]="row.navrhDoRSP2" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
     </ng-container>
 
     <!-- OP-konecneRozhodnutie -->
     <ng-container matColumnDef="OP-konecneRozhodnutie">
       <th mat-header-cell *matHeaderCellDef>Konečné rozhodnutie (RŠP)</th>
-      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+      <td mat-cell *matCellDef="let row" class="type--input">{{ row.konecneRozhodnutie2 }}<input type="text" placeholder="vstup" [(ngModel)]="row.konecneRozhodnutie2" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
     </ng-container>
 
     <!-- promocie -->
     <ng-container matColumnDef="promocie">
       <th mat-header-cell *matHeaderCellDef>Promócie</th>
-      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+      <td mat-cell *matCellDef="let row" class="type--input">{{ row.promocie }}<input type="text" placeholder="vstup" [(ngModel)]="row.promocie" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
     </ng-container>
 
     <!-- najhorsiaZnamkaPriCR -->
     <ng-container matColumnDef="najhorsiaZnamkaPriCR">
       <th mat-header-cell *matHeaderCellDef>Najhorsia znamka pri CR</th>
-      <td mat-cell *matCellDef="let row"><input type="text" placeholder="vstup"></td>
+      <td mat-cell *matCellDef="let row" class="type--input">{{ row.najhorsiaZnamka }}<input type="text" placeholder="vstup" [(ngModel)]="row.najhorsiaZnamka" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
     </ng-container>
     
 
@@ -188,5 +187,13 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+
+  <hr>
+  <button
+    class="btn btn-raised btn-primary"
+    matTooltip="Exportuje sa celkové vyhodnotenie ŠZS."
+    (click)="export()">
+      Exportovať vyhodnotenie ŠZS
+  </button>
   <hr>
   
