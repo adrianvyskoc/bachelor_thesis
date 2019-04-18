@@ -10,6 +10,8 @@ import { Exam } from 'src/app/model';
 export class StateFinalExamsComponent implements OnInit {
 
   data: Array<Exam>;
+  // komisiaUpravena: string;
+  // studijnyProgramUpraveny: string;
 
   constructor(
     private stateFinalExamsService: StateFinalExamsService,
@@ -17,6 +19,12 @@ export class StateFinalExamsComponent implements OnInit {
 
   ngOnInit() {
     this.stateFinalExamsService.getAllStateFinalExams().subscribe( data => this.data = data )
+    this.stateFinalExamsService.getAllStateFinalExams().subscribe( data => console.log(data) )
+   
   }
+
+  // komisiaStlpec(komisiaUpravena, studijnyProgramUpraveny) {
+  //   komisiaUpravena = this.data.
+  // }
 
 }

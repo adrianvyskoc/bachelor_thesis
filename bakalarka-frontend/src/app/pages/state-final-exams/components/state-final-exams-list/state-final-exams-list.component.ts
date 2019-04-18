@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges, Inject } from '@ang
 import { MatTableDataSource } from '@angular/material';
 import { Exam } from 'src/app/model';
 import { StateFinalExamsService } from '../../services/state-final-exams.service';
+import { ExportService } from 'src/app/plugins/utils/export.service';
 
 @Component({
   selector: 'app-state-final-exams-list',
@@ -17,7 +18,7 @@ export class StateFinalExamsListComponent implements OnInit, OnChanges {
   displayedColumns: string[] = [
     'id', 'uzavreteStudium', 'meno', 'studProgram', 'datumSS', 'komisia', 'predsenaKomisie', 
     'tajomnik', 'nazovBP', 'veduci', 'oponent', 'OH-veduci', 'OH-oponent', 'OH-komisia', 'P-vspBez', 
-    'P-vspCele', 'DI-BP2vAJ', 'DI-SSOpravnyTermin', 'NCA-navrhVKomisii', 'NOKP-navrhVKomisii', 
+    'P-vspCele', 'DI-BP2vAJ', 'DI-SSOpravnyTermin', 'NCA-navrhVKomisii', 'NOKP-navrhVKomisiiPoradie', 
     'NOKP-skorTeoreticka', 'NOKP-skorPrakticka', 'NOKP-autoNavrh', 'NOKP-navrhDoRSP', 'NOKP-konecneRozhodnutie',
     'OP-autoNavrh', 'OP-navrhDoRSP', 'OP-konecneRozhodnutie', 'promocie', 'najhorsiaZnamkaPriCR']
 
@@ -25,6 +26,7 @@ export class StateFinalExamsListComponent implements OnInit, OnChanges {
 
   constructor(
     private stateFinalExamsService: StateFinalExamsService,
+    private exportService: ExportService,
   ) { }
 
   ngOnInit() {
@@ -42,6 +44,11 @@ export class StateFinalExamsListComponent implements OnInit, OnChanges {
 
     this.stateFinalExamsService.updateStateFinalExams(val).subscribe(data => console.log(data));
     // alert(val);
+  }
+
+  export() {
+    const tables = document.querySelector('table')
+    this.exportService.exportTableToExcel(tables, 'VyhodnotenieSZS')
   }
 
   // prvy vzorec

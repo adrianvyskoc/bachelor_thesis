@@ -4,5 +4,34 @@ th.mat-header-cell {
 }
 
 input {
-  max-width: 60px;
+  width: 65px;
+}
+
+td.mat-cell {
+  white-space: nowrap;
+  padding-right: 10px;
+}
+
+.type--input {
+  position: relative;
+  width: 70px;
+  max-width: 70px;
+  // overflow-x: hidden;
+  color: white;
+  font-size: 0px;
+
+  input {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    visibility: visible;
+    transform: translateY(-50%);
+    transition: all 0.1s linear;
+    font-size: 13px;
+  }
+
+  input:focus {
+    width: 150px;
+    z-index: 10;
+  }
 }
