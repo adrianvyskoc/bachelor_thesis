@@ -2,21 +2,60 @@
   <h1 class="display-4">Prijímacie konanie</h1>
   <p class="lead">Porovnanie školských rokov</p>
   <hr class="my-4">
+
+  <button
+    class="btn btn-primary"
+    type="button"
+    (click)="exportAllTables()"
+  >Exportovať tabuľky</button>
 </div>
 
 <app-chart
   [title]="'Počet prijatých/neprijatých uchádzačov za školské roky'"
-  [data]="admCountsPerYearArr"
+  [data]="adm.admCountsPerYearArr"
   [labels]="schoolYears"
   [groupLabels]="['Prijatý', 'Nastúpený']"
   [type]="'bar'"
   [legend]="true"
   [group]="true"
   [secondYAxis]="true"
-  [secondYAxisData]="admRatiosPerYearArr"
+  [secondYAxisData]="adm.admRatiosPerYearArr"
   [secondYAxisType]="'line'"
   [secondYAxisDataLabel]="'Pomery'"
 ></app-chart>
+
+<div class="row">
+  <div class="col-lg-6">
+    <app-chart
+      [title]="'Počet prijatých/neprijatých uchádzačov za školské roky - bakalársky stupeň'"
+      [data]="admBachelor.admCountsPerYearArr"
+      [labels]="schoolYears"
+      [groupLabels]="['Prijatý', 'Nastúpený']"
+      [type]="'bar'"
+      [legend]="true"
+      [group]="true"
+      [secondYAxis]="true"
+      [secondYAxisData]="admBachelor.admRatiosPerYearArr"
+      [secondYAxisType]="'line'"
+      [secondYAxisDataLabel]="'Pomery'"
+    ></app-chart>
+  </div>
+  <div class="col-lg-6">
+    <app-chart
+      [title]="'Počet prijatých/neprijatých uchádzačov za školské roky - inžiniersky stupeň'"
+      [data]="admMaster.admCountsPerYearArr"
+      [labels]="schoolYears"
+      [groupLabels]="['Prijatý', 'Nastúpený']"
+      [type]="'bar'"
+      [legend]="true"
+      [group]="true"
+      [secondYAxis]="true"
+      [secondYAxisData]="admMaster.admRatiosPerYearArr"
+      [secondYAxisType]="'line'"
+      [secondYAxisDataLabel]="'Pomery'"
+    ></app-chart>
+  </div>
+</div>
 
 <h2 id="ratios" padding>Pomery nastúpených a prijatých študentov</h2>
 
@@ -30,14 +69,61 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let ratio of admRatiosPerYear | keyvalue">
+    <tr *ngFor="let ratio of adm.admRatiosPerYear | keyvalue">
       <th scope="row">{{ ratio.key }}</th>
-      <td>{{ admCountsPerYear[ratio.key].approved }}</td>
-      <td>{{ admCountsPerYear[ratio.key].beganStudy }}</td>
+      <td>{{ adm.admCountsPerYear[ratio.key].approved }}</td>
+      <td>{{ adm.admCountsPerYear[ratio.key].beganStudy }}</td>
       <td>{{ ratio.value }}</td>
     </tr>
   </tbody>
 </table>
+
+<div class="row">
+  <div class="col-lg-6">
+    <h6>Bakalársky stupeň</h6>
+    <hr>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Školský rok</th>
+          <th scope="col">Prijatý</th>
+          <th scope="col">Nastúpený</th>
+          <th scope="col">Pomer nastúpený/prijatý (%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ratio of admBachelor.admRatiosPerYear | keyvalue">
+          <th scope="row">{{ ratio.key }}</th>
+          <td>{{ adm.admCountsPerYear[ratio.key].approved }}</td>
+          <td>{{ adm.admCountsPerYear[ratio.key].beganStudy }}</td>
+          <td>{{ ratio.value }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-lg-6">
+    <h6>Inžiniersky stupeň</h6>
+    <hr>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Školský rok</th>
+          <th scope="col">Prijatý</th>
+          <th scope="col">Nastúpený</th>
+          <th scope="col">Pomer nastúpený/prijatý (%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ratio of admMaster.admRatiosPerYear | keyvalue">
+          <th scope="row">{{ ratio.key }}</th>
+          <td>{{ adm.admCountsPerYear[ratio.key].approved }}</td>
+          <td>{{ adm.admCountsPerYear[ratio.key].beganStudy }}</td>
+          <td>{{ ratio.value }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
 <h2 id="counts-per-year" padding>Počty prihlášok na jednotlivé študijné programy za jednotlivé roky (Bakalársky stupeň)</h2>
 

@@ -5,6 +5,7 @@ import { AdmissionsFilterService } from './admissions-filter.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
 import { TocUtil } from 'src/app/plugins/utils/toc.utll';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-admissions',
@@ -49,10 +50,12 @@ export class AdmissionsComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private admissionsFilterService: AdmissionsFilterService,
-    private tocUtil: TocUtil
+    private tocUtil: TocUtil,
+    private titleService: Title
   ) { }
 
   ngOnInit() {
+    this.titleService.setTitle("Prijímacie konanie - Všeobecné")
     this.tocUtil.createToc()
     this.filterForm = new FormGroup({
       'studyType': new FormControl('all'),

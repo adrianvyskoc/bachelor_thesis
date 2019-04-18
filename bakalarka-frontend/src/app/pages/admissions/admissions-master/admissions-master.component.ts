@@ -3,6 +3,7 @@ import { ExportService } from 'src/app/plugins/utils/export.service';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { DataService } from 'src/app/shared/data.service';
 import { AdmissionsUtil } from '../admissions.util';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-admissions-master',
@@ -36,10 +37,12 @@ export class AdmissionsMasterComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private exportService: ExportService,
-    private admissionsUtil: AdmissionsUtil
+    private admissionsUtil: AdmissionsUtil,
+    private titleService: Title
   ) { }
 
   ngOnInit() {
+    this.titleService.setTitle("Prijímacie konanie - Inžiniersky stupeň")
     this.dataService.getAdmissionsMaster()
     this.dataService.getAdmissionsMasterUpdateListener()
       .subscribe(data => {

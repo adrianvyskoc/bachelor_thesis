@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { DataService } from 'src/app/shared/data.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-import',
@@ -22,10 +23,12 @@ export class ImportComponent implements OnInit {
   disableImport: boolean = true
 
   constructor(
-    private dataService: DataService
+    private dataService: DataService,
+    private titleService: Title
   ) {}
 
   ngOnInit() {
+    this.titleService.setTitle("Importovanie dát")
     this.dataService.getImportedYears()
     this.dataService.getImportedYearsUpdateListener()
       .subscribe(years => this.importedYears = years)

@@ -75,7 +75,8 @@ class GetController {
         const admission = await Admission.find(params.id)
         const school = await School.find(admission.school_id)
         const pointers = await Database.table('ineko_individual_pointer_values').where('school_id', admission.school_id)
-        const otherAdmissions = await Database.table('ais_admissions').where('AIS_ID', admission.AIS_ID)
+        const otherAdmissions = await Database.table('ais_admissions')
+          .where('Rodné_číslo', admission.Rodné_číslo)
 
         return response.send({
             admission,
@@ -253,12 +254,12 @@ class GetController {
         //    )
 
         const data = await Database.raw(`
-          select 
+          select
             ais_state_exams_overviews.id as id,
             ais_state_exams_overviews."Celé_meno_s_titulmi" as "celeMenoSTitulmi",
             ais_state_exams_overviews."AIS_ID" as "aisId",
             ais_state_exams_overviews."Identifikácia_štúdia" as "identifikaciaStudia",
-            ais_state_exams_overviews."Obhajoba" as "obhajoba", 
+            ais_state_exams_overviews."Obhajoba" as "obhajoba",
             ais_state_exams_overviews."Záverečná_práca_názov" as "zaverecnaPracaNazov",
             ais_state_exams_overviews."Vedúci" as "veduci",
             ais_state_exams_overviews."Oponent" as "oponent",
@@ -267,13 +268,13 @@ class GetController {
             ais_state_exams_overviews."VŠP_štud_bpo" as "vspStudBpo",
             ais_state_exams_scenarios."Štud_prog" as "studProg",
             ais_state_exams_scenarios."Vedúci" as "veduciHodnotenie",
-            ais_state_exams_scenarios."Oponent_1" as "oponentHodnotenie", 
+            ais_state_exams_scenarios."Oponent_1" as "oponentHodnotenie",
             ais_state_exams_scenarios."Výsledné_hodnotenie" as "vysledneHodnotenie",
-            ais_state_exams_scenarios."dňa" as "dna", 
+            ais_state_exams_scenarios."dňa" as "dna",
             ais_state_exams_scenarios."Komisia" as "komisia",
             ais_state_exams_scenarios."Predseda" as "predseda",
             ais_state_exams_scenarios."Tajomník" as "tajomnik"
-          from 
+          from
             ais_state_exams_overviews
           left join ais_state_exams_scenarios on REGEXP_REPLACE(lower(ais_state_exams_overviews."Záverečná_práca_názov"), '[ \s]*', '', 'g') = REGEXP_REPLACE(lower(ais_state_exams_scenarios."Názov_projektu"), '[ \s]*', '', 'g')
           and
@@ -335,7 +336,7 @@ class GetController {
           })
 
         console.log(request.body)
-        
+
         return response
           .status(200)
           .send(true)
@@ -494,8 +495,46 @@ class GetController {
         GROUP BY "OBDOBIE"
       `, ['áno'])
 
+      let bachelorRatios = {}
+      bachelorRatios.approved = await Database.raw(`
+        SELECT "OBDOBIE", COUNT("Rodné_číslo") AS apr FROM (
+          SELECT DISTINCT "OBDOBIE", "Rodné_číslo" FROM ais_admissions
+          WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND stupen_studia = ?
+        ) AS x
+        GROUP BY "OBDOBIE"
+      `, ['Bakalársky'])
+      bachelorRatios.began_study = await Database.raw(`
+        SELECT "OBDOBIE", COUNT("Rodné_číslo") AS bs FROM (
+          SELECT DISTINCT "OBDOBIE", "Rodné_číslo" FROM ais_admissions
+          WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND "Štúdium" = ? AND stupen_studia = ?
+        ) AS x
+        GROUP BY "OBDOBIE"
+      `, ['áno', 'Bakalársky'])
+
+      let masterRatios = {}
+      masterRatios.approved = await Database.raw(`
+        SELECT "OBDOBIE", COUNT("Rodné_číslo") AS apr FROM (
+          SELECT DISTINCT "OBDOBIE", "Rodné_číslo" FROM ais_admissions
+          WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND stupen_studia = ?
+        ) AS x
+        GROUP BY "OBDOBIE"
+      `, ['Inžiniersky'])
+      masterRatios.began_study = await Database.raw(`
+        SELECT "OBDOBIE", COUNT("Rodné_číslo") AS bs FROM (
+          SELECT DISTINCT "OBDOBIE", "Rodné_číslo" FROM ais_admissions
+          WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND "Štúdium" = ? AND stupen_studia = ?
+        ) AS x
+        GROUP BY "OBDOBIE"
+      `, ['áno', 'Inžiniersky'])
+
       ratios.approved = ratios.approved.rows
       ratios.began_study = ratios.began_study.rows
+
+      bachelorRatios.approved = bachelorRatios.approved.rows
+      bachelorRatios.began_study = bachelorRatios.began_study.rows
+
+      masterRatios.approved = masterRatios.approved.rows
+      masterRatios.began_study = masterRatios.began_study.rows
 
       studyProgrammes = studyProgrammes.rows.map(programme => programme.Program_1)
       years = years.rows.map(year => year.OBDOBIE)
@@ -505,7 +544,7 @@ class GetController {
         return item1.localeCompare(item2);
       })
 
-      return response.send({ admissions, years, studyProgrammes, ratios })
+      return response.send({ admissions, years, studyProgrammes, ratios, masterRatios, bachelorRatios })
     }
 
     async getAdmissionsBachelor ({ request, response }) {

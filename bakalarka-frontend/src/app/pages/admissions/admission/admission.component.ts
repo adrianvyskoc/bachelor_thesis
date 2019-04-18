@@ -5,6 +5,7 @@ import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
 import { DataService } from 'src/app/shared/data.service';
 import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 import { Subscription } from 'rxjs';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-admission',
@@ -29,7 +30,8 @@ export class AdmissionComponent implements OnInit, OnDestroy {
     private dataService: DataService,
     private exportService: ExportService,
     private tocUtil: TocUtil,
-    private router: Router
+    private router: Router,
+    private titleService: Title
   ) {
     this.navigationSubscription = router.events.subscribe(
       (e: any) => {
@@ -75,6 +77,8 @@ export class AdmissionComponent implements OnInit, OnDestroy {
 
         this.otherAdmissions.paginator = this.paginator
         this.otherAdmissions.sort = this.sort
+
+        this.titleService.setTitle(`Prijímacie konanie - ${this.admission['Meno']} ${this.admission['Priezvisko']}`)
       })
   }
 }

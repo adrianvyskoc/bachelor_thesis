@@ -52,6 +52,9 @@ class ImportAisController {
         const sheet_name_list = workbook.SheetNames
         const rows = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
 
+        // delete uploaded xlsx file
+        deleteFile(Helpers.tmpPath('uploads'), params.selectedImport);
+
 /*
  *  import rows start ------------------------------------------------------------------------------------------
  */
@@ -286,12 +289,95 @@ class ImportAisController {
           }
         }
 
+        // -------------------------------------------------------------------
+        // Students data part 1
+        // -------------------------------------------------------------------
+
+        if(params.selectedImport == 'StudentsDataPt1') {
+          for(let row of rows) {
+            for (const prop of Object.keys(row)) {
+              if(prop.indexOf('__EMPTY') > -1) delete row[prop];
+            }
+
+            Object.keys(row).forEach((key) => {
+              if(row[key] == " ")
+                row[key] = null
+            })
+
+            row = adjustKeys(row)
+
+            row['OBDOBIE'] = params.year
+
+            delete row['Por']
+
+            let toNumberAttrs = [
+              "Priemer", "Priemer_4", "Priem_2_obd_4", "Priem_ar_4", "Priem_štúdium", "Priem_štúd_bez_posl_o",
+              "Priem_št_4_bez_posl_o", "Priem_štúdium_4", "Priemer_štip_ZF", "Bod_priemer", "Body_PS", "Extrabody_PZ",
+              "IpŠp", "IpŠp_min_ar"
+            ]
+
+            try {
+              toNumberAttrs.forEach((attr) => {
+                row[attr] = toNumber(row[attr])
+              })
+            } catch(err) {
+              //console.log(err)
+            }
+
+            try {
+              await Database.table('ais_students_data_pt_1').insert(row)
+            } catch(err) { console.log(err) }
+          }
+        }
+
+        // -------------------------------------------------------------------
+        // Students data part 2
+        // -------------------------------------------------------------------
+
+        if(params.selectedImport == 'StudentsDataPt2') {
+          for(let row of rows) {
+            for (const prop of Object.keys(row)) {
+              if(prop.indexOf('__EMPTY') > -1) delete row[prop];
+            }
+
+            Object.keys(row).forEach((key) => {
+              if(row[key] == " ")
+                row[key] = null
+            })
+
+            row = adjustKeys(row)
+
+            row['OBDOBIE'] = params.year
+
+            delete row['Por']
+
+            let toNumberAttrs = [
+              "Percentil_ob_+_roč", "Percentil_prog_+_roč", "Priemer", "Priemer_SŠ", "VŠP", "VŠP_4", "VŠP_2_obd",
+              "VŠP_2_obd_4", "VŠP_ar", "VŠP_ar_4", "VŠP_štúdium", "VŠP_štud_bpo", "VŠP_štúdium_4", "VSP_štud_4_bpo", "VŠP_min_ar_4",
+              "VŠP_min_ar", "VŠP_min_ar_4_1", "VŠP_posl_obd", "VŠP_posl_obd_4", "VŠP_posl_obd_4_1", "Architektúra_počítačov",
+              "Databázové_systémy", "Externá_maturita_z_cudzieho_jazyka_ECJ", "Externá_maturita_z_matematiky_EM",
+              "Externá_maturita_z_cudzieho_jazyka", "Externá_maturita_z_matematiky", "Písomný_test_z_matematiky_SCIO_PTM",
+              "Princípy_softvérového_inžinierstva", "Programovanie_a_počítačové_systémy", "Test_z_matematiky_SCIO_PTM",
+              "Test_z_matematiky_SCIO", "Všeobecné_študijné_predpoklady_SCIO", "Všeobecné_študijné_predpoklady_SCIO_VŠP", "Perc_zhody"
+            ]
+
+            try {
+              toNumberAttrs.forEach((attr) => {
+                row[attr] = toNumber(row[attr])
+              })
+            } catch(err) {
+              //console.log(err)
+            }
+
+            try {
+              await Database.table('ais_students_data_pt_2').insert(row)
+            } catch(err) { console.log(err) }
+          }
+        }
+
 /*
  *  import rows end ------------------------------------------------------------------------------------------
  */
-
-        // delete uploaded xlsx file
-        deleteFile(Helpers.tmpPath('uploads'), params.selectedImport);
     }
 }
 

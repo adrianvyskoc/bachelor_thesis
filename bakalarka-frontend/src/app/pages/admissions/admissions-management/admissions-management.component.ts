@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AdmissionsManagementService } from './admissions-management.service';
 import { NgForm } from '@angular/forms';
 import { ExportService } from 'src/app/plugins/utils/export.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-admissions-management',
@@ -38,10 +39,12 @@ export class AdmissionsManagementComponent implements OnInit {
 
   constructor(
     private AdmissionsManagementService: AdmissionsManagementService,
-    private exportService: ExportService
+    private exportService: ExportService,
+    private titleService: Title
   ) { }
 
   ngOnInit() {
+    this.titleService.setTitle("Prijímacie konanie - Manažment")
     this.filteredAttrs = this.allAttrs
   }
 

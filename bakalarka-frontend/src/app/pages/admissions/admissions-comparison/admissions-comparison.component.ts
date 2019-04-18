@@ -1,6 +1,8 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { DataService } from 'src/app/shared/data.service';
 import { TocUtil } from 'src/app/plugins/utils/toc.utll';
+import { ExportService } from 'src/app/plugins/utils/export.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-admissions-comparison',
@@ -14,19 +16,35 @@ export class AdmissionsComparisonComponent implements OnInit {
   schoolYears = []
   studyProgrammesMap = {}
 
-
   admCountsPerYear = {}
   admCountsPerYearArr = []
-
   admRatiosPerYear = {}
   admRatiosPerYearArr = []
 
+  admBachelorCountsPerYear = {}
+  admBachelorCountsPerYearArr = []
+  admBachelorRatiosPerYear = {}
+  admBachelorRatiosPerYearArr = []
+
+  admMasterCountsPerYear = {}
+  admMasterCountsPerYearArr = []
+  admMasterRatiosPerYear = {}
+  admMasterRatiosPerYearArr = []
+
+  adm = {}
+  admBachelor = {}
+  admMaster = {}
+
   constructor(
     private dataService: DataService,
-    private tocUtil: TocUtil
+    private tocUtil: TocUtil,
+    private exportService: ExportService,
+    private titleService: Title
   ) { }
 
   ngOnInit() {
+    this.titleService.setTitle("Prijímacie konanie - Porovnanie")
+
     this.tocUtil.createToc()
     this.dataService.getAdmissionsYearComparison()
     this.dataService.getAdmissionsYearComparisonUpdateListener()
@@ -35,30 +53,20 @@ export class AdmissionsComparisonComponent implements OnInit {
         this.schoolYears = data['years']
         this.studyProgrammes = data['studyProgrammes']
         this.studyProgrammesMap = this._calculateCountsPerProgrammeForEachYear()
-        this._adjustRatioCountsObject(data['ratios'])
+        debugger;
+        this.adm = this._adjustRatioCountsObject(data['ratios'])
+        this.admBachelor = this._adjustRatioCountsObject(data['bachelorRatios'])
+        this.admMaster = this._adjustRatioCountsObject(data['masterRatios'])
+
+        console.log(this.adm, this.admBachelor, this.admMaster)
       })
   }
 
-  /*_calculateCountsForEachYear() {
-    let admCountsPerYear = this.admissions.reduce((acc, admission) => {
-      if(!acc[admission.OBDOBIE])
-        acc[admission.OBDOBIE] = {}
+  exportAllTables() {
+    const tables = document.querySelectorAll("table:not([mat-table])")
 
-      if(admission.Rozh != 45) {
-        if(admission.Štúdium == 'áno')
-          acc[admission.OBDOBIE].beganStudy = ++acc[admission.OBDOBIE].beganStudy || 1
-        acc[admission.OBDOBIE].approved = ++acc[admission.OBDOBIE].approved || 1
-      }
-      else
-        acc[admission.OBDOBIE].rejected = ++acc[admission.OBDOBIE].rejected || 1
-
-      return acc
-    }, {})
-
-    this.admCountsPerYear = Object.keys(admCountsPerYear).reduce((acc, nextVal) => {
-      return [ [...acc[0], admCountsPerYear[nextVal].rejected], [...acc[1], admCountsPerYear[nextVal].approved], [...acc[2], admCountsPerYear[nextVal].beganStudy]]
-    }, [[], [], []])
-  }*/
+    this.exportService.exportMultipleTablesToExcel(tables, 'admissions-comparison')
+  }
 
   _calculateCountsPerProgrammeForEachYear() {
     let programmesMap = this.studyProgrammes.reduce((acc, programme) => {
@@ -84,18 +92,21 @@ export class AdmissionsComparisonComponent implements OnInit {
       return acc
     }, {})
 
-    this.admCountsPerYear = this.schoolYears.reduce((acc, year) => {
+    let admCountsPerYear = this.schoolYears.reduce((acc, year) => {
       acc[year] = {}
       acc[year].approved = approvedMap[year]
       acc[year].beganStudy = beganStudyMap[year]
       return acc
     }, {})
 
-    this.admCountsPerYearArr = Object.keys(this.admCountsPerYear).reduce((acc, year) => {
-      this.admRatiosPerYear[year] = ((this.admCountsPerYear[year].beganStudy / this.admCountsPerYear[year].approved) * 100).toFixed(2)
-      return [ [...acc[0], this.admCountsPerYear[year].approved], [...acc[1], this.admCountsPerYear[year].beganStudy]]
+    let admRatiosPerYear = {}, admRatiosPerYearArr = []
+    let admCountsPerYearArr = Object.keys(admCountsPerYear).reduce((acc, year) => {
+      admRatiosPerYear[year] = ((admCountsPerYear[year].beganStudy / admCountsPerYear[year].approved) * 100).toFixed(2)
+      return [ [...acc[0], admCountsPerYear[year].approved], [...acc[1], admCountsPerYear[year].beganStudy]]
     }, [[], []])
 
-    this.admRatiosPerYearArr = Object.values(this.admRatiosPerYear)
+    admRatiosPerYearArr = Object.values(admRatiosPerYear)
+
+    return { admRatiosPerYear, admRatiosPerYearArr, admCountsPerYear, admCountsPerYearArr }
   }
 }
