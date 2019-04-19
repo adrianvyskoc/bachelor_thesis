@@ -7,7 +7,7 @@ const fs = use('fs')
 // const Redis = use('Redis')
 
 // Models
-const School         = use('App/Models/School')
+const School = use('App/Models/School')
 
 class ImportInekoController {
 
@@ -35,6 +35,28 @@ class ImportInekoController {
         const workbook = xlsx.readFile(`tmp/uploads/${params.selectedImport}.xlsx`, config)
         const sheet_name_list = workbook.SheetNames
         const rows = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
+
+        // delete uploaded xlsx file
+        deleteFile(Helpers.tmpPath('uploads'), params.selectedImport);
+
+        // mapovanie atribútov, ak nejaké existuje
+        const data = await request.all()
+        const mapping = JSON.parse(data.mapping)
+
+        if(mapping && mapping.length) {
+          mapping.reduce((acc, item) => {
+            acc[item.from] = item.to
+            return acc
+          }, {})
+
+          rows.forEach((row, idx) => {
+            rows[idx] = adjustKeys(rows[idx])
+            for(let mp of mapping) {
+              rows[idx][mp.to] = rows[idx][mp.from]
+              delete rows[idx][mp.from]
+            }
+          })
+        }
 
 /*
  *  import rows start ------------------------------------------------------------------------------------------
@@ -96,7 +118,7 @@ class ImportInekoController {
                     emptySchoolFK.push(row.nazov)
                 }
 
-                row.OBDOBIE = params.year
+                row.OBDOBIE = data.year
                 row.typ = "KONCOROCNE"
 
                 for(const prop of toDeleteAttrs) {
@@ -135,16 +157,13 @@ class ImportInekoController {
 
             // if(!importedYears) importedYears = []
 
-            // if(importedYears.indexOf(params.year) == -1)
-            //   await Redis.set(params.selectedImport, JSON.stringify([...importedYears, params.year]))
+            // if(importedYears.indexOf(data.year) == -1)
+            //   await Redis.set(params.selectedImport, JSON.stringify([...importedYears, data.year]))
         }
 
 /*
  *  import rows end ------------------------------------------------------------------------------------------
  */
-
-        // delete uploaded xlsx file
-        deleteFile(Helpers.tmpPath('uploads'), params.selectedImport);
 
         return response.send(emptySchoolFK);
     }

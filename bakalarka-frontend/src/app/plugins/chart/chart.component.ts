@@ -29,7 +29,7 @@ export class ChartComponent implements OnInit, OnChanges {
       ticks: {
         beginAtZero: true,
       },
-      id: 'A'
+      id: 'first'
     }
   ]
 
@@ -55,12 +55,15 @@ export class ChartComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     if(this.secondYAxis)
-      this.yAxes.push({ ticks: { beginAtZero: true }, position: 'right', id: 'B' })
+      this.yAxes.push({ ticks: { beginAtZero: true }, position: 'right', id: 'second' })
   }
 
   ngOnChanges(changes: SimpleChanges) {
     const data: SimpleChange = changes.data
     this.data = data.currentValue
+
+    if(!this.data)
+      return
 
     if(this.chart)
       this.chart.destroy()
@@ -115,7 +118,7 @@ export class ChartComponent implements OnInit, OnChanges {
           backgroundColor: this.backgroundColors[idx],
           borderColor: this.borderColors[idx],
           borderWidth: 1,
-          yAxisID: 'A'
+          yAxisID: 'first'
         })
         return acc
       }, [])
@@ -125,7 +128,7 @@ export class ChartComponent implements OnInit, OnChanges {
         backgroundColor: this.backgroundColors.slice(0, this.data.length),
         borderColor: this.borderColors.slice(0, this.data.length),
         borderWidth: 1,
-        yAxisID: 'A'
+        yAxisID: 'first'
       }]
     }
 
@@ -136,7 +139,7 @@ export class ChartComponent implements OnInit, OnChanges {
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
         borderColor: 'rgba(255,99,132,1)',
         borderWidth: 1,
-        yAxisID: 'B',
+        yAxisID: 'second',
         type: this.secondYAxisType,
         fill: false
       })

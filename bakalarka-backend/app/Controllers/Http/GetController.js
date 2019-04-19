@@ -607,6 +607,22 @@ class GetController {
 
       return response.send({ admissions })
     }
+
+    async getAttrNames({ request, response }) {
+      let queryParams = await request.all()
+      let attrs = await Database.raw(`
+        SELECT column_name
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_NAME = ?
+      `, [queryParams.tableName])
+
+      attrs = attrs.rows.reduce((acc, attr) => {
+        acc.push(attr.column_name)
+        return acc
+      }, [])
+
+      return response.send(attrs)
+    }
 }
 
 module.exports = GetController

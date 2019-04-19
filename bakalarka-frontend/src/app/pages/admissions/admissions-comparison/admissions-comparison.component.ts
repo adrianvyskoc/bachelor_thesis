@@ -53,12 +53,9 @@ export class AdmissionsComparisonComponent implements OnInit {
         this.schoolYears = data['years']
         this.studyProgrammes = data['studyProgrammes']
         this.studyProgrammesMap = this._calculateCountsPerProgrammeForEachYear()
-        debugger;
         this.adm = this._adjustRatioCountsObject(data['ratios'])
         this.admBachelor = this._adjustRatioCountsObject(data['bachelorRatios'])
         this.admMaster = this._adjustRatioCountsObject(data['masterRatios'])
-
-        console.log(this.adm, this.admBachelor, this.admMaster)
       })
   }
 

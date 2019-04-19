@@ -94,8 +94,8 @@
       <tbody>
         <tr *ngFor="let ratio of admBachelor.admRatiosPerYear | keyvalue">
           <th scope="row">{{ ratio.key }}</th>
-          <td>{{ adm.admCountsPerYear[ratio.key].approved }}</td>
-          <td>{{ adm.admCountsPerYear[ratio.key].beganStudy }}</td>
+          <td>{{ admBachelor.admCountsPerYear[ratio.key].approved }}</td>
+          <td>{{ admBachelor.admCountsPerYear[ratio.key].beganStudy }}</td>
           <td>{{ ratio.value }}</td>
         </tr>
       </tbody>
@@ -116,8 +116,8 @@
       <tbody>
         <tr *ngFor="let ratio of admMaster.admRatiosPerYear | keyvalue">
           <th scope="row">{{ ratio.key }}</th>
-          <td>{{ adm.admCountsPerYear[ratio.key].approved }}</td>
-          <td>{{ adm.admCountsPerYear[ratio.key].beganStudy }}</td>
+          <td>{{ admMaster.admCountsPerYear[ratio.key].approved }}</td>
+          <td>{{ admMaster.admCountsPerYear[ratio.key].beganStudy }}</td>
           <td>{{ ratio.value }}</td>
         </tr>
       </tbody>

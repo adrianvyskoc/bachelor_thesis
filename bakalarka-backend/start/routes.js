@@ -20,10 +20,10 @@ Route
     .group(() => {
 
         // import ais
-        Route.post('import/ais/:selectedImport/:year', 'ImportAisController.import')
+        Route.post('import/ais/:selectedImport', 'ImportAisController.import')
 
         // import ineko
-        Route.post('import/ineko/:selectedImport/:year', 'ImportInekoController.import')
+        Route.post('import/ineko/:selectedImport', 'ImportInekoController.import')
 
         // import codebooks
         Route.post('codebook/:type', 'SettingController.createCodebookRecord')
@@ -90,7 +90,7 @@ Route
 
         // imported years
         Route.get('importedYears', 'GetController.getImportedYears')
-            
+
         /*
           Feature routes
         */
@@ -106,5 +106,8 @@ Route
 
         // Admissions master
         Route.get('admissionsMaster', 'GetController.getAdmissionsMaster')
+
+        // Get attributes for table
+        Route.get('tableColumns', 'GetController.getAttrNames')
     })
     .prefix('/api')

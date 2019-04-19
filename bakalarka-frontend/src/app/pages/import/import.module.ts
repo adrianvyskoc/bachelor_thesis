@@ -15,9 +15,12 @@ import {
   MatSidenavModule,
   MatDividerModule,
   MatCheckboxModule,
+  MatDialogModule,
+  MatSelectModule,
 } from "@angular/material";
 import { ImportRoutingModule } from './import-routing.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MappingDialogComponent } from './mapping-dialog/mapping-dialog.component';
 
 @NgModule({
   imports: [
@@ -33,13 +36,20 @@ import { FormsModule } from '@angular/forms';
     MatDividerModule,
     MatCheckboxModule,
     MatProgressSpinnerModule,
+    MatDialogModule,
+    MatSelectModule,
 
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     ImportRoutingModule
   ],
   declarations: [
     ImportComponent,
+    MappingDialogComponent,
+  ],
+  entryComponents: [
+    MappingDialogComponent
   ]
 })
 export class ImportModule { }

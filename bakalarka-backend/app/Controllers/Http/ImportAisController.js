@@ -12,22 +12,6 @@ const Admission = use('App/Models/Admission')
 
 class ImportAisController {
 
-    async read ({ request, response }) {
-        const config = {
-            sheetRows: 11,
-            type: "string",
-            cellFormula: false,		// formula format
-            cellHTML: false,		// html format
-            cellText: false			// formatted text format
-        }
-
-        const workbook = xlsx.readFile(`tmp/uploads/scenar_komisii.xlsx`, config)
-        const sheet_name_list = workbook.SheetNames
-        const rows = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
-
-        return response.send(rows)
-    }
-
     async import ({ request, params }) {
 
         const config = {
@@ -53,7 +37,26 @@ class ImportAisController {
         const rows = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
 
         // delete uploaded xlsx file
-        deleteFile(Helpers.tmpPath('uploads'), params.selectedImport);
+        deleteFile(Helpers.tmpPath('uploads'), params.selectedImport)
+
+        // mapovanie atribútov, ak nejaké existuje
+        const data = await request.all()
+        const mapping = JSON.parse(data.mapping)
+
+        if(mapping && mapping.length) {
+          mapping.reduce((acc, item) => {
+            acc[item.from] = item.to
+            return acc
+          }, {})
+
+          rows.forEach((row, idx) => {
+            rows[idx] = adjustKeys(rows[idx])
+            for(let mp of mapping) {
+              rows[idx][mp.to] = rows[idx][mp.from]
+              delete rows[idx][mp.from]
+            }
+          })
+        }
 
 /*
  *  import rows start ------------------------------------------------------------------------------------------
@@ -68,7 +71,7 @@ class ImportAisController {
                 const { STUDENT, STUDIUM, ...attendanceRow } = row
                 const [ PRIEZVISKO, MENO ] = STUDENT.split(" ");
 
-                attendanceRow.OBDOBIE = params.year
+                attendanceRow.OBDOBIE = data.year
 
                 const studentData = {
                     AIS_ID: attendanceRow.AIS_ID,
@@ -106,7 +109,7 @@ class ImportAisController {
             for (let row of rows) {
                 const { PRIEZVISKO, MENO, STUDIUM, ROCNIK, ...gradeRow } = row
 
-                gradeRow.OBDOBIE = params.year
+                gradeRow.OBDOBIE = data.year
 
                 for(const prop of attrsToDeleteGrades) {
                     delete gradeRow[prop]
@@ -173,7 +176,7 @@ class ImportAisController {
                 row.č_d = String(row.č_d)
                 row.č_d_1 = String(row.č_d_1)
                 row.Odbor_SŠ = String(row.Odbor_SŠ)
-                row.OBDOBIE = params.year
+                row.OBDOBIE = data.year
                 row.stupen_studia = row.Program_1[0] == 'B' ? 'Bakalársky' : 'Inžiniersky'
 
                 delete row['Druh_SŠ']
@@ -194,8 +197,8 @@ class ImportAisController {
 
         //     if(!importedYears) importedYears = []
 
-        //     if(importedYears.indexOf(params.year) == -1)
-        //       await Redis.set(params.selectedImport, JSON.stringify([...importedYears, params.year]))
+        //     if(importedYears.indexOf(data.year) == -1)
+        //       await Redis.set(params.selectedImport, JSON.stringify([...importedYears, data.year]))
         }
 
         // -------------------------------------------------------------------
@@ -239,7 +242,7 @@ class ImportAisController {
             try {
               await Database
               .table('ais_admissions')
-              .where({ 'Reg_č': row['Reg_č'], OBDOBIE: params.year })
+              .where({ 'Reg_č': row['Reg_č'], OBDOBIE: data.year })
               .update(obj)
             } catch (err) { console.log(err) }
 
@@ -255,7 +258,7 @@ class ImportAisController {
             row = adjustKeys(row)
 
             row['AIS_ID'] = row['ID']
-            row['OBDOBIE'] = params.year
+            row['OBDOBIE'] = data.year
 
             delete row['ID']
             delete row['Por']
@@ -281,7 +284,7 @@ class ImportAisController {
 
             row = adjustKeys(row)
 
-            row['OBDOBIE'] = params.year
+            row['OBDOBIE'] = data.year
 
             try {
               await Database.table('ais_state_exams_scenarios').insert(row)
@@ -306,7 +309,7 @@ class ImportAisController {
 
             row = adjustKeys(row)
 
-            row['OBDOBIE'] = params.year
+            row['OBDOBIE'] = data.year
 
             delete row['Por']
 
@@ -347,7 +350,7 @@ class ImportAisController {
 
             row = adjustKeys(row)
 
-            row['OBDOBIE'] = params.year
+            row['OBDOBIE'] = data.year
 
             delete row['Por']
 

@@ -153,13 +153,15 @@ export class DataService {
     return this.importedYearsChanged.asObservable()
   }
 
-  async uploadData(selectedFile, selectedImport, selectedSource, year) {
+  async uploadData(selectedFile, selectedImport, selectedSource, year, mapping) {
     this.showSuccessMessage = false
     this.showErrorMessage = false
     const fd = new FormData()
     fd.append(selectedImport, selectedFile, selectedFile.name)
+    fd.append('mapping', JSON.stringify(mapping))
+    fd.append('year', year)
 
-    await this.http.post('http://localhost:3333/api/import/' + selectedSource + '/' + selectedImport + '/' + year, fd)
+    await this.http.post('http://localhost:3333/api/import/' + selectedSource + '/' + selectedImport, fd)
       .subscribe(
         res => {
           //this.getImportedYears()
@@ -182,7 +184,7 @@ export class DataService {
       )
   }
 
-  loadColumnMeaning(type) {
-    return this.http.get(`http://localhost:3333/api/column-meaning/${type}`)
+  getAttrNames(tableName: string) {
+    return this.http.get(`http://localhost:3333/api/tableColumns?tableName=${tableName}`)
   }
 }

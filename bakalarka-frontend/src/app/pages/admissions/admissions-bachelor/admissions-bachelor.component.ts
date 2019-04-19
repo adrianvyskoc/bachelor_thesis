@@ -46,7 +46,8 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
     "Rozh", "Stredná_škola", "Stredná_škola_adresa", "Stredná_škola_1", "Stredná_škola_cudzinci", "Súčasné_štúdium", "Súhlas_ZS",
     "Študijný_odbor", "Termín", "Čas", "Dátum", "Miestnosť", "Titul", "Titul_za", "Adresa_trvalého_pobytu", "č_d_1", "Trvalý_pobyt_obec",
     "Trv_pobyt_obec", "Trv_pobyt_okres", "Trv_pobyt_pozn", "PSČ_1", "Trv_pobyt_štát", "Trv_pobyt_ulica", "Trv_pobyt_ulica_1", "Predmety",
-    "Zameranie", "Zapl", "Zvol_predmet", "Zvol_predmet_1", 'stupen_studia'
+    "Zameranie", "Zapl", "Zvol_predmet", "Zvol_predmet_1", 'stupen_studia',
+    "Externá_maturita_z_cudzieho_jazyka_ECJ", "Externá_maturita_z_matematiky_EM", "Písomný_test_z_matematiky_SCIO_PTM", "Všeobecné_študijné_predpoklady_SCIO_VŠP"
   ]
   filteredColumns = this.allColumns
 
