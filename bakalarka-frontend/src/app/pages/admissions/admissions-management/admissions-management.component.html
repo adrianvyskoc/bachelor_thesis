@@ -32,7 +32,12 @@
 
   <hr class="my-4">
 
-  <form class="year-change" flex align-items-center (ngSubmit)="changeSchoolYearForGivenYear(yearForm)" #yearForm="ngForm">
+  <form
+    #yearForm="ngForm"
+    class="year-change"
+    flex align-items-center
+    (ngSubmit)="changeSchoolYearForGivenYear(yearForm)"
+  >
     <div>Zmeniť školský rok pre prihlášky z</div>
     <input
       ngModel
@@ -51,11 +56,94 @@
       type="text"
       name="toYear"
       placeholder="cieľový školský rok"
-      margin-left
       required
       pattern="[1-9][0-9][0-9][0-9]-[1-9][0-9][0-9][0-9]"
+      margin-left
     >
     <button [disabled]="!yearForm.valid" type="submit" class="btn btn-primary active" margin-left>Odoslať</button>
+  </form>
+
+  <hr>
+
+  <form
+    #inekoYearForm="ngForm"
+    class="year-change"
+    flex align-items-center
+    (ngSubmit)="changeSchoolYearForInekoDataForGivenYear(inekoYearForm)"
+  >
+    <div>Zmeniť školský rok pre dáta</div>
+    <mat-select ngModel name="inekoData" required margin-left>
+      <mat-option value="ineko_percentils">Percentily</mat-option>
+      <mat-option value="ineko_individual_pointer_values">Ukazatele</mat-option>
+      <mat-option value="ineko_total_ratings">Celkové hodnotenie</mat-option>
+      <mat-option value="ineko_additional_data">Doplnkové informácie</mat-option>
+    </mat-select>
+    <div margin-left>z</div>
+    <input
+      ngModel
+      class="form-control"
+      name="fromYear"
+      placeholder="pôvodný školský rok"
+      type="text"
+      required
+      pattern="[1-9][0-9][0-9][0-9]-[1-9][0-9][0-9][0-9]"
+      margin-left
+    >
+    <div margin-left>na</div>
+    <input
+      ngModel
+      class="form-control"
+      name="toYear"
+      placeholder="cieľový školský rok"
+      type="text"
+      required
+      pattern="[1-9][0-9][0-9][0-9]-[1-9][0-9][0-9][0-9]"
+      margin-left
+    >
+    <button
+      [disabled]="!inekoYearForm.valid"
+      class="btn btn-primary active"
+      type="submit"
+      margin-left
+    >
+      Odoslať
+    </button>
+  </form>
+
+  <hr>
+
+  <form
+    #inekoDeleteForm="ngForm"
+    class="year-change"
+    flex align-items-center
+    (ngSubmit)="deleteInekoDataForGivenYear(inekoDeleteForm)"
+  >
+    <div>Zmazať dáta</div>
+    <mat-select ngModel name="inekoData" required margin-left>
+      <mat-option value="ineko_percentils">Percentily</mat-option>
+      <mat-option value="ineko_individual_pointer_values">Ukazatele</mat-option>
+      <mat-option value="ineko_total_ratings">Celkové hodnotenie</mat-option>
+      <mat-option value="ineko_additional_data">Doplnkové informácie</mat-option>
+    </mat-select>
+    <div margin-left>z roku</div>
+    <input
+      ngModel
+      class="form-control"
+      name="year"
+      placeholder="školský rok"
+      type="text"
+      required
+      pattern="[1-9][0-9][0-9][0-9]-[1-9][0-9][0-9][0-9]"
+      margin-left
+    >
+    <button
+      [disabled]="!inekoDeleteForm.valid"
+      class="btn btn-primary active"
+      type="submit"
+      margin-left
+    >
+      Odoslať
+    </button>
   </form>
 </div>
 

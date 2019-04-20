@@ -34,6 +34,13 @@
           <th scope="row">Prijatie na program</th>
           <td>{{ admission['Prijatie_na_program'] }}</td>
         </tr>
+        <tr
+          [ngClass]="{ 'table-success': admission['Štúdium'] == 'áno', 'table-danger': admission['Štúdium'] == 'nie' }"
+          class="table-success"
+        >
+          <th scope="row">Nastúpil uchádzač na fakultu?</th>
+          <td>{{ admission['Štúdium'] }}</td>
+        </tr>
       </tbody>
     </table>
 

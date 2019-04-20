@@ -48,7 +48,9 @@ Route
         Route.delete('admissions/:id/delete', 'AdmissionController.deleteAdmission')
         Route.delete('admissions/delete/all', 'AdmissionController.deleteAllAdmissions')
         Route.delete('admissions/delete/:year', 'AdmissionController.deleteAdmissionsForGivenYear')
+        Route.delete('admissions/delete/:year/:inekoData', 'AdmissionController.deleteInekoDataForGivenYear')
         Route.put('admissions/changeYear', 'AdmissionController.changeYearForGivenYear')
+        Route.put('admissions/changeYearForInekoData', 'AdmissionController.changeYearForInekoData')
 
         Route.get('admissionsBySurname', 'AdmissionController.getAdmissionsBySurname')
 
