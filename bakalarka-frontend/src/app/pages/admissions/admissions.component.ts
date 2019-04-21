@@ -77,8 +77,6 @@ export class AdmissionsComponent implements OnInit {
           this._getSchoolsAdmissions()
           this._calculateAdmissionsCounts()
           this.filterSchools()
-
-          console.log(data)
         }
       )
   }
