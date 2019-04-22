@@ -22,6 +22,7 @@ export interface Exam {
   veduciHodnotenie: string;
   oponentHodnotenie: string;
   vysledneHodnotenie: string;
+  studProg: string;
   dna: string;
   komisia: string;
   predseda: string;

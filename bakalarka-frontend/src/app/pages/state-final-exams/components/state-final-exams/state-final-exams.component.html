@@ -2,6 +2,12 @@
   <h2>Vyhodnotenie štátnych záverečných skúšok</h2>
   <p>Tabuľka obsahuje údaje z roku:  {{ data ? data[0].obdobie : 'Dáta nie sú importované' }} </p>
 
+  <!-- spravit slovnik skratiek -->
+  <h4>Zoznam skratiek</h4>
+  <p>OH - Obhajoba hodnotenie</p>
+  <p>...</p>
+
+
   {{ data ? data[0].AIS_ID : '' }}
   
   <app-state-final-exams-list [data]="data"></app-state-final-exams-list>

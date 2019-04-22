@@ -4,6 +4,9 @@ import { StateFinalExamsComponent } from './components/state-final-exams/state-f
 import { StateFinalExamsListComponent } from './components/state-final-exams-list/state-final-exams-list.component';
 import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/modules/shared.module';
+import { FormatNameTitlePipe } from 'src/app/pipes/format-name-title.pipe';
+import { FormatLastnamePipe } from 'src/app/pipes/format-lastname.pipe';
+import { FormatStudyProgrammePipe } from 'src/app/pipes/format-study-programme.pipe';
 
 const routes: Routes = [
   {
@@ -21,6 +24,9 @@ const routes: Routes = [
   declarations: [
     StateFinalExamsComponent, 
     StateFinalExamsListComponent,
+    FormatNameTitlePipe,
+    FormatLastnamePipe,
+    FormatStudyProgrammePipe
   ],
   bootstrap: [
     StateFinalExamsComponent,

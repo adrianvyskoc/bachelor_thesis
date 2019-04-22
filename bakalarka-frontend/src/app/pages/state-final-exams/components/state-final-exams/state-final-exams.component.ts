@@ -10,21 +10,39 @@ import { Exam } from 'src/app/model';
 export class StateFinalExamsComponent implements OnInit {
 
   data: Array<Exam>;
-  // komisiaUpravena: string;
-  // studijnyProgramUpraveny: string;
 
   constructor(
     private stateFinalExamsService: StateFinalExamsService,
   ) { }
 
   ngOnInit() {
-    this.stateFinalExamsService.getAllStateFinalExams().subscribe( data => this.data = data )
-    this.stateFinalExamsService.getAllStateFinalExams().subscribe( data => console.log(data) )
-   
-  }
+    // this.stateFinalExamsService.getAllStateFinalExams().subscribe( data => this.data = data )
+    
+    // získanie všetkých údajov na Vyhodnotenie ŠZS BC a upravenie dát pre komisiu (z komisie vybrate čísla a spojenie so štud. prog.)
+    this.stateFinalExamsService.getAllStateFinalExams()
+      .subscribe(
+        data => {
+          console.log(data)
+          data.map(e => {
+            let comission = ''
+            if (e.komisia) {
+              let tmp = e.komisia.trim().split('.')
+              comission = tmp.pop()
+            } else {
+               if(!e.studProg) {
+                 e.studProg = '-'
+               }
+            }
 
-  // komisiaStlpec(komisiaUpravena, studijnyProgramUpraveny) {
-  //   komisiaUpravena = this.data.
-  // }
+            e.komisia = `${comission} ${e.studProg}`
+          })
+
+          this.data = data
+        },
+        error => {
+          console.log(error)
+        })
+
+  }
 
 }
