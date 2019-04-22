@@ -20,6 +20,8 @@
           <mat-radio-button value="AdmissionsPoints">Prijímačky - body</mat-radio-button>
           <mat-radio-button value="StateExamsOverviews">Štátnice - prehľad</mat-radio-button>
           <mat-radio-button value="StateExamsScenarios">Štátnice - scenáre</mat-radio-button>
+          <mat-radio-button value="StudentsDataPt1">Dáta o študentoch - časť 1</mat-radio-button>
+          <mat-radio-button value="StudentsDataPt2">Dáta o študentoch - časť 2</mat-radio-button>
         </mat-radio-group>
       </div>
 
@@ -78,6 +80,15 @@
   </section>
 
   <button
+    mat-raised-button
+    color="primary"
+    [disabled]="!selectedImportAttrs.length || !selectedFileAttrs.length"
+    (click)="openAttrMapping()"
+  >
+    Mapovanie atribútov
+  </button>
+
+  <button
     class="btn-lg float-right"
     mat-raised-button
     color="primary"
@@ -97,7 +108,7 @@
     <div class="icon-wrapper danger" margin-right>
       <i class="far fa-times-circle"></i>
     </div>
-    Pri importovaní dát nastala chyba. Problémom môže byť nesprávna štruktúra zvoleného xlsx súboru.
+    Pri importovaní dát nastala chyba. Problémom môže byť nesprávna štruktúra zvoleného xlsx súboru. Problémom môže byť aj chybné mapovanie atribútov.
   </div>
 
   <div

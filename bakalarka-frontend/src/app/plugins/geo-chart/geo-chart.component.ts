@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core'
+import { Component, Input, OnChanges } from '@angular/core'
 
 // how to get region codes
 // https://sk.wikipedia.org/wiki/ISO_3166-2:SK
@@ -8,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core'
   templateUrl: './geo-chart.component.html',
   styleUrls: ['./geo-chart.component.scss']
 })
-export class GeoChartComponent implements OnInit {
+export class GeoChartComponent implements OnChanges {
   @Input() data = []
 
   regionAdmissionCounts = {}
@@ -17,7 +17,11 @@ export class GeoChartComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnChanges() {
+    this._initChart()
+  }
+
+  _initChart() {
     this._calculateRegionAdmissionCounts()
 
     google['charts'].load('current', {

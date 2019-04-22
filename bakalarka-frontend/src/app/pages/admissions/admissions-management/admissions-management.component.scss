@@ -23,7 +23,11 @@ label {
 }
 
 .year-change {
-  input {
+  input, mat-select {
     width: 200px;
+  }
+
+  mat-select {
+    background-image: linear-gradient(0deg,rgba(0,0,0,.26) 2px,rgba(213,0,0,0) 0),linear-gradient(0deg,rgba(0,0,0,.26) 1px,transparent 0);
   }
 }

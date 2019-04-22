@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AdmissionsManagementService } from './admissions-management.service';
 import { NgForm } from '@angular/forms';
 import { ExportService } from 'src/app/plugins/utils/export.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-admissions-management',
@@ -38,10 +39,12 @@ export class AdmissionsManagementComponent implements OnInit {
 
   constructor(
     private AdmissionsManagementService: AdmissionsManagementService,
-    private exportService: ExportService
+    private exportService: ExportService,
+    private titleService: Title
   ) { }
 
   ngOnInit() {
+    this.titleService.setTitle("Prijímacie konanie - Manažment")
     this.filteredAttrs = this.allAttrs
   }
 
@@ -117,6 +120,22 @@ export class AdmissionsManagementComponent implements OnInit {
       })
   }
 
+  deleteInekoDataForGivenYear(form: NgForm) {
+    this.AdmissionsManagementService.deleteInekoDataForGivenYear(form.value)
+      .subscribe((resp) => {
+        this.showNotification = true
+        this.success = resp['success']
+        this.message = resp['message']
+
+        if(this.success)
+          this.chosenAdmission = null
+
+        setTimeout(() => {
+          this.showNotification = false
+        }, 5000)
+      })
+  }
+
   deleteAllAdmissions() {
     this.AdmissionsManagementService.deleteAllAdmissions()
       .subscribe((resp) => {
@@ -135,6 +154,19 @@ export class AdmissionsManagementComponent implements OnInit {
 
   changeSchoolYearForGivenYear(form: NgForm) {
     this.AdmissionsManagementService.changeSchoolYearForGivenYear(form.value)
+      .subscribe((resp) => {
+        this.showNotification = true
+        this.success = resp['success']
+        this.message = resp['message']
+
+        setTimeout(() => {
+          this.showNotification = false
+        }, 5000)
+      })
+  }
+
+  changeSchoolYearForInekoDataForGivenYear(form: NgForm) {
+    this.AdmissionsManagementService.changeSchoolYearForInekoDataForGivenYear(form.value)
       .subscribe((resp) => {
         this.showNotification = true
         this.success = resp['success']

@@ -32,7 +32,15 @@ export class AdmissionsManagementService {
     return this.http.delete(`${this.url}admissions/delete/${year}`)
   }
 
+  deleteInekoDataForGivenYear(data) {
+    return this.http.delete(`${this.url}admissions/delete/${data.year}/${data.inekoData}`)
+  }
+
   changeSchoolYearForGivenYear(years) {
     return this.http.put(`${this.url}admissions/changeYear`, years)
+  }
+
+  changeSchoolYearForInekoDataForGivenYear(data) {
+    return this.http.put(`${this.url}admissions/changeYearForInekoData`, data)
   }
 }

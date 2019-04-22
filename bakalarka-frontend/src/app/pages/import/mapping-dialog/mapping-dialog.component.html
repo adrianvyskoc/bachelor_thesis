@@ -1,0 +1,36 @@
+<h3>
+  Mapovanie atribútov
+  <button class="btn btn-primary float-right" (click)="onAddMapping()">Pridať mapovanie</button>
+</h3>
+<hr>
+
+<form (ngSubmit)="onMappingCreate()" [formGroup]="mappingForm">
+
+    <div formArrayName="mappings" margin-bottom>
+      <div *ngFor="let mapping of mappingForm.get('mappings').controls; let i = index" [formGroupName]="i" flex align-items-center margin-bottom>
+        <mat-select fromControlName="from" (selectionChange)="onFromAttrChange($event, i)">
+          <mat-option *ngFor="let attr of data.selectedFileAttrs" [value]="attr">
+            {{attr}}
+          </mat-option>
+        </mat-select>
+        <span margin-left margin-right><i class="fas fa-arrow-right"></i></span>
+        <mat-select fromControlName="to" (selectionChange)="onToAttrChange($event, i)">
+          <mat-option *ngFor="let attr of data.selectedImportAttrs" [value]="attr">
+            {{attr}}
+          </mat-option>
+        </mat-select>
+      </div>
+    </div>
+
+    <div class="text-muted text-center" *ngIf="!mappingForm.get('mappings').controls.length">
+      Nie sú pridané žiadne mapovania.
+    </div>
+
+    <hr>
+    <button
+      class="btn btn-primary"
+      type="submit"
+    >
+    Vytvoriť mapovanie
+  </button>
+</form>
