@@ -1,0 +1,18 @@
+<div>
+  <h2>Vyhodnotenie štátnych záverečných skúšok - Bakalársky ročník</h2>
+  
+  <h5>Slovník skratiek pred názvom stĺpcov</h5>
+  <ul>
+    <li>OH - Obhajoba hodnotenie</li>
+    <li>DI - Ďalšie informácie</li>
+    <li>NCA - Návrh - cena akákoľvek</li>
+    <li>NOPK - Návrh na ocenenie z komisie za prácu (CR, CD, PLD)</li>
+    <li>OP - Ocenenie  za prospech</li>
+  </ul>
+
+  <p>Tabuľka obsahuje údaje z roku:  {{ data ? data[0].obdobie : 'Dáta nie sú importované' }} </p>
+
+  {{ data ? data[0].AIS_ID : '' }}
+  
+  <app-state-final-exams-list-bc [data]="data"></app-state-final-exams-list-bc>
+</div>

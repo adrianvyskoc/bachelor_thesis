@@ -3,11 +3,11 @@ import { StateFinalExamsService } from '../../services/state-final-exams.service
 import { Exam } from 'src/app/model';
 
 @Component({
-  selector: 'app-state-final-exams',
-  templateUrl: './state-final-exams.component.html',
-  styleUrls: ['./state-final-exams.component.scss']
+  selector: 'app-state-final-exams-bc',
+  templateUrl: './state-final-exams-bc.component.html',
+  styleUrls: ['./state-final-exams-bc.component.scss']
 })
-export class StateFinalExamsComponent implements OnInit {
+export class StateFinalExamsBcComponent implements OnInit {
 
   data: Array<Exam>;
 

@@ -76,8 +76,11 @@ Route
         /*
           State Final Exams api endpoints start
         */
-        Route.get('statefinalexams', 'getController.getStateFinalExams')
-        Route.post('statefinalexams/update', 'getController.updateStateFinalExams')
+        Route.get('statefinalexamsbc', 'getController.getStateFinalExamsBc')
+        Route.post('statefinalexamsbc/update', 'getController.updateStateFinalExamsBc')
+        
+        Route.get('statefinalexamsing', 'getController.getStateFinalExamsIng')
+        Route.post('statefinalexamsing/update', 'getController.updateStateFinalExamsIng')
         /*
           State Final Exams api endpoints end
         */

@@ -205,7 +205,7 @@ class GetController {
 
     // ---
 
-    async getStateFinalExams ({ response }) {
+    async getStateFinalExamsBc ({ response }) {
       try {
         // const data = await Database
         //   // .select('*', 'Celé_meno_s_titulmi as cmst')
@@ -296,7 +296,6 @@ class GetController {
           order by id ASC
         `)
 
-
         return response
           .status(200)
           // .send(data)
@@ -311,7 +310,7 @@ class GetController {
     }
 
     // ---
-    async updateStateFinalExams ({ response, request }) {
+    async updateStateFinalExamsBc ({ response, request }) {
       const data = request.body
       try{
         await Database
@@ -347,6 +346,45 @@ class GetController {
       }
     }
 
+    async getStateFinalExamsIng ({ response }) {
+      try {
+        // dorobit select podla dat
+        const data = await Database.raw(``)
+        
+        return response
+          .status(200)
+          .send(data.rows)
+      } catch(e) {
+        console.log('error', e)
+        return response
+          .status(500)
+          .send(e)
+      }
+    }
+
+
+    async updateStateFinalExamsIng ({ response, request }) {
+      const data = request.body
+      try {
+        await Database
+          .table('ais_state_exams_overviews_ing')
+          .where({ id:data.id })
+          .update({
+          // nazovTabulky: data.nazovParametruCoPosielamzFE
+          // spisat si stlpce ktore sa budu doplnat
+          })
+
+        return response
+          .status(200)
+          .send(true)
+      } catch(e) {
+        console.log('error', e)
+        return response
+          .status(500)
+          .send(e)
+      }
+
+    }
     // ---
 
 

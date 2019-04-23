@@ -23,6 +23,7 @@ class UserController {
     user[0].access ? auth.access = true : null
     if (user !== undefined && auth.access) {
       if (await this.loginWithLDAP({ request, response })) {
+      // if (true) {
         user[0].admin ? auth.admin = true : null
       }
     } else {

@@ -31,21 +31,26 @@
           </div>
         </li>
 
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="/statefinalexams">ŠZS</a>
+
+        <li class="nav-item dropdown" routerLinkActive="active">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            ŠZS
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" routerLink="/statefinalexamsbc">Vyhodnotenie ŠZS BC</a>
+            <a class="dropdown-item" routerLink="/statefinalexamsing">Vyhodnotenie ŠZS ING</a>
+          </div>
         </li>
 
-        <li *ngIf="this.authService.isAdmin" class="nav-item">
+        <li *ngIf="this.authService.isAdmin" class="nav-item" routerLinkActive="active">
           <a class="nav-link" routerLink="/accounts">
-            <!-- <i class="fas fa-unlock-alt"></i> -->
             Správa účtov
           </a>
         </li>
 
-        <!-- *ngIf="authService.loggedIn" -->
         <li class="nav-item logout">
             <a class="nav-link" (click)="logoutUser()">Odhlásenie</a>
-          </li>
+        </li>
       </ul>
 
 

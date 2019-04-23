@@ -5,11 +5,11 @@ import { StateFinalExamsService } from '../../services/state-final-exams.service
 import { ExportService } from 'src/app/plugins/utils/export.service';
 
 @Component({
-  selector: 'app-state-final-exams-list',
-  templateUrl: './state-final-exams-list.component.html',
-  styleUrls: ['./state-final-exams-list.component.scss']
+  selector: 'app-state-final-exams-list-bc',
+  templateUrl: './state-final-exams-list-bc.component.html',
+  styleUrls: ['./state-final-exams-list-bc.component.scss']
 })
-export class StateFinalExamsListComponent implements OnInit, OnChanges {
+export class StateFinalExamsListBcComponent implements OnInit, OnChanges {
  
   // hodnota z excelu vyhodnotenie v druhom harku
   paramsPldNavrhKomisie = 2;
