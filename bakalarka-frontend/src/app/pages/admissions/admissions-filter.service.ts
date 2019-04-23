@@ -74,6 +74,10 @@ export class AdmissionsFilterService {
     })
   }
 
+  filterByDegree(admissions, value) {
+    return admissions.filter(admission => admission.stupen_studia == value)
+  }
+
   /**
    * Filtrovanie podľa kódu školy - škola sa musí začínať na uvedenú postupnosť znakov
    * @param schools - všetky školy, ktoré ideme filtrovať

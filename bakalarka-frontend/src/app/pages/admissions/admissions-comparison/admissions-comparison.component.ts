@@ -80,19 +80,25 @@ export class AdmissionsComparisonComponent implements OnInit {
 
   _adjustRatioCountsObject(ratioCounts) {
     let approvedMap = ratioCounts['approved'].reduce((acc, nextVal) => {
-      acc[nextVal.OBDOBIE] = nextVal.apr
+      acc[nextVal.OBDOBIE] = {}
+      acc[nextVal.OBDOBIE].apr = nextVal.apr
+      acc[nextVal.OBDOBIE].mean = Number(nextVal.mean).toFixed(2)
+      acc[nextVal.OBDOBIE].median = nextVal.median
       return acc
     }, {})
 
     let beganStudyMap = ratioCounts['began_study'].reduce((acc, nextVal) => {
-      acc[nextVal.OBDOBIE] = nextVal.bs
+      acc[nextVal.OBDOBIE] = {}
+      acc[nextVal.OBDOBIE].bs = nextVal.bs
+      acc[nextVal.OBDOBIE].mean = Number(nextVal.mean).toFixed(2)
+      acc[nextVal.OBDOBIE].median = nextVal.median
       return acc
     }, {})
 
     let admCountsPerYear = this.schoolYears.reduce((acc, year) => {
       acc[year] = {}
-      acc[year].approved = approvedMap[year]
-      acc[year].beganStudy = beganStudyMap[year]
+      acc[year].approved = approvedMap[year].apr
+      acc[year].beganStudy = beganStudyMap[year].bs
       return acc
     }, {})
 
@@ -104,6 +110,6 @@ export class AdmissionsComparisonComponent implements OnInit {
 
     admRatiosPerYearArr = Object.values(admRatiosPerYear)
 
-    return { admRatiosPerYear, admRatiosPerYearArr, admCountsPerYear, admCountsPerYearArr }
+    return { admRatiosPerYear, admRatiosPerYearArr, admCountsPerYear, admCountsPerYearArr, beganStudyMap, approvedMap }
   }
 }

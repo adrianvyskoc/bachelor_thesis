@@ -12,6 +12,15 @@
       <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
         <select
           class="custom-select"
+          formControlName="degree"
+          margin-bottom
+        >
+          <option value="all">Všetky stupne štúdia</option>
+          <option value="Bakalársky">Bakalársky stupeň</option>
+          <option value="Inžiniersky">Inžiniersky stupeň</option>
+        </select>
+        <select
+          class="custom-select"
           formControlName="studyType"
           margin-bottom
         >
@@ -221,8 +230,8 @@
         *ngIf="chosenSchool.admissions.data.length"
         [legend]="false"
         [type]="'bar'"
-        [data]="[chosenSchool.approved, chosenSchool.rejected]"
-        [labels]="['Prijatý', 'Neprijatý']"
+        [data]="[chosenSchool.beganStudy, chosenSchool.approved, chosenSchool.rejected]"
+        [labels]="['Nastúpený', 'Prijatý', 'Neprijatý']"
       ></app-chart>
     </div>
   </div>

@@ -38,7 +38,7 @@ export class AdmissionsComponent implements OnInit {
   chartsLoaded = false
 
   chosenSchool
-  displayedAdmissionsColumns = ['id', 'Meno', 'Priezvisko', 'E_mail']
+  displayedAdmissionsColumns = ['id', 'Meno', 'Priezvisko', 'E_mail', 'Program_1']
   schoolsToShow: string = 'all'
   schoolQuality: string = 'all'
 
@@ -58,6 +58,7 @@ export class AdmissionsComponent implements OnInit {
     this.titleService.setTitle("Prijímacie konanie - Všeobecné")
     this.tocUtil.createToc()
     this.filterForm = new FormGroup({
+      'degree': new FormControl('all'),
       'studyType': new FormControl('all'),
       'schoolType': new FormControl('all'),
       'gender': new FormControl('all'),
@@ -85,6 +86,9 @@ export class AdmissionsComponent implements OnInit {
 
   onFilter() {
     this.filteredAdmissions = this.admissions
+
+    if(this.filterForm.value.degree !== 'all')
+      this.filteredAdmissions = this.admissionsFilterService.filterByDegree(this.filteredAdmissions, this.filterForm.value.degree)
 
     if(this.filterForm.value.studyType !== 'all')
       this.filteredAdmissions = this.admissionsFilterService.filterByStudyType(this.filteredAdmissions, this.filterForm.value.studyType)
@@ -167,10 +171,13 @@ export class AdmissionsComponent implements OnInit {
     this.schools = this.schools.map((school) => {
       school.approved = 0
       school.rejected = 0
+      school.beganStudy = 0
       school.admissions = this.filteredAdmissions.reduce((acc, nextVal) => {
         if(nextVal.school_id == school.kod_kodsko) {
           acc.push(nextVal)
-          nextVal.Rozh != 45 ? school.approved++ : school.rejected++
+          nextVal.Rozh == 10 || nextVal.Rozh == 11 || nextVal.Rozh == 13 ? school.approved++ : school.rejected++
+          if((nextVal.Rozh == 10 || nextVal.Rozh == 11 || nextVal.Rozh == 13) && nextVal['Štúdium'] == 'áno')
+            school.beganStudy++
         }
         return acc
       }, [])
@@ -186,7 +193,7 @@ export class AdmissionsComponent implements OnInit {
   _calculateAdmissionsCounts() {
     this.admissionCounts = this.filteredAdmissions.reduce((acc, admission) => {
       admission.stupen_studia == "Bakalársky" ? acc.bachelor++ : acc.master++
-      admission.Rozh != 45 ? acc.approved++ : acc.rejected++
+      admission.Rozh == 10 || admission.Rozh == 11 || admission.Rozh == 13 ? acc.approved++ : acc.rejected++
       return acc
     }, {'bachelor': 0, 'master': 0, 'approved': 0, 'rejected': 0})
 
