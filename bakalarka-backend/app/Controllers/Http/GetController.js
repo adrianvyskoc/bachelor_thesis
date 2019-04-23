@@ -409,14 +409,15 @@ class GetController {
         'ais_admissions.school_id',
         'ais_admissions.stupen_studia',
         'ais_admissions.Body_celkom',
-        'ais_admissions.Rozh'
+        'ais_admissions.Rozh',
+        'ais_admissions.Štúdium'
       ]
       const schoolsAttrs = ['ineko_schools.typ_skoly', 'ineko_schools.sur_y', 'ineko_schools.sur_x', 'ineko_schools.kraj']
 
       const schools = await Database
         .select(...schoolsAttrs, 'ineko_schools.ulica', 'ineko_schools.nazov', 'ineko_schools.kod_kodsko', 'ineko_schools.email', 'ineko_total_ratings.celkove_hodnotenie')
         .from('ineko_schools')
-        .join('ineko_total_ratings', 'ineko_total_ratings.school_id', 'ineko_schools.kod_kodsko')
+        .leftJoin('ineko_total_ratings', 'ineko_total_ratings.school_id', 'ineko_schools.kod_kodsko')
 
       let admissions
       let regionMetrics
@@ -480,15 +481,15 @@ class GetController {
 
       let ratios = {}
       ratios.approved = await Database.raw(`
-        SELECT "OBDOBIE", COUNT("Rodné_číslo") AS apr FROM (
-          SELECT DISTINCT "OBDOBIE", "Rodné_číslo" FROM ais_admissions
+        SELECT "OBDOBIE", COUNT("Rodné_číslo") AS apr, AVG("Body_celkom") as mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM (
+          SELECT DISTINCT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
           WHERE "Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13
         ) AS x
         GROUP BY "OBDOBIE"
       `)
       ratios.began_study = await Database.raw(`
-        SELECT "OBDOBIE", COUNT("Rodné_číslo") AS bs FROM (
-          SELECT DISTINCT "OBDOBIE", "Rodné_číslo" FROM ais_admissions
+        SELECT "OBDOBIE", COUNT("Rodné_číslo") AS bs, AVG("Body_celkom") as mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM (
+          SELECT DISTINCT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
           WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND "Štúdium" = ?
         ) AS x
         GROUP BY "OBDOBIE"
@@ -496,15 +497,15 @@ class GetController {
 
       let bachelorRatios = {}
       bachelorRatios.approved = await Database.raw(`
-        SELECT "OBDOBIE", COUNT("Rodné_číslo") AS apr FROM (
-          SELECT DISTINCT "OBDOBIE", "Rodné_číslo" FROM ais_admissions
+        SELECT "OBDOBIE", COUNT("Rodné_číslo") AS apr, AVG("Body_celkom") as mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM (
+          SELECT DISTINCT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
           WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND stupen_studia = ?
         ) AS x
         GROUP BY "OBDOBIE"
       `, ['Bakalársky'])
       bachelorRatios.began_study = await Database.raw(`
-        SELECT "OBDOBIE", COUNT("Rodné_číslo") AS bs FROM (
-          SELECT DISTINCT "OBDOBIE", "Rodné_číslo" FROM ais_admissions
+        SELECT "OBDOBIE", COUNT("Rodné_číslo") AS bs, AVG("Body_celkom") as mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM (
+          SELECT DISTINCT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
           WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND "Štúdium" = ? AND stupen_studia = ?
         ) AS x
         GROUP BY "OBDOBIE"
@@ -512,15 +513,15 @@ class GetController {
 
       let masterRatios = {}
       masterRatios.approved = await Database.raw(`
-        SELECT "OBDOBIE", COUNT("Rodné_číslo") AS apr FROM (
-          SELECT DISTINCT "OBDOBIE", "Rodné_číslo" FROM ais_admissions
+        SELECT "OBDOBIE", COUNT("Rodné_číslo") AS apr, AVG("Body_celkom") as mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM (
+          SELECT DISTINCT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
           WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND stupen_studia = ?
         ) AS x
         GROUP BY "OBDOBIE"
       `, ['Inžiniersky'])
       masterRatios.began_study = await Database.raw(`
-        SELECT "OBDOBIE", COUNT("Rodné_číslo") AS bs FROM (
-          SELECT DISTINCT "OBDOBIE", "Rodné_číslo" FROM ais_admissions
+        SELECT "OBDOBIE", COUNT("Rodné_číslo") AS bs, AVG("Body_celkom") AS mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM (
+          SELECT DISTINCT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
           WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND "Štúdium" = ? AND stupen_studia = ?
         ) AS x
         GROUP BY "OBDOBIE"
@@ -554,8 +555,8 @@ class GetController {
         schools = await Database.raw(
             `
               SELECT sch.nazov, sch.druh_skoly, sch.kod_kodsko, tr.celkove_hodnotenie FROM ineko_schools AS sch
-              JOIN ais_admissions AS adm ON adm.school_id = sch.kod_kodsko
-              JOIN ineko_total_ratings AS tr ON tr.school_id = sch.kod_kodsko AND tr."OBDOBIE" = ?
+              LEFT JOIN ais_admissions AS adm ON adm.school_id = sch.kod_kodsko
+              LEFT JOIN ineko_total_ratings AS tr ON tr.school_id = sch.kod_kodsko AND tr."OBDOBIE" = ?
               WHERE adm."OBDOBIE" = ?
             `, [queryParams.year, queryParams.year]
         )
@@ -563,7 +564,7 @@ class GetController {
         schools = await Database.raw(
             `
               SELECT sch.nazov, sch.druh_skoly, sch.kod_kodsko, tr.celkove_hodnotenie FROM ineko_schools AS sch
-              JOIN ineko_total_ratings AS tr ON tr.school_id = sch.kod_kodsko
+              LEFT JOIN ineko_total_ratings AS tr ON tr.school_id = sch.kod_kodsko
             `
         )
       }

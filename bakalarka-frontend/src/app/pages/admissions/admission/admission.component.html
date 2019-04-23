@@ -26,6 +26,11 @@
           <th scope="row">Študijný program</th>
           <td>{{ admission['Program_2'] }}</td>
         </tr>
+        <tr>
+          <th scope="row">Predošlá vysoká škola</th>
+          <td *ngIf="admission['Absolvovaná_VŠ']">{{ admission['Absolvovaná_VŠ'] }} ({{ admission['Abs_VŠ'] }})</td>
+          <td *ngIf="!admission['Absolvovaná_VŠ']">Žiadna</td>
+        </tr>
         <tr [ngClass]="{ 'table-success': admission.Rozh != 45, 'table-danger': admission.Rozh == 45 }">
           <th scope="row">Rozhodnutie o prijatí</th>
           <td>{{ admission['Rozhodnutie_o_prijatí'] }}</td>

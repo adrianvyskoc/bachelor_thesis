@@ -59,6 +59,8 @@
 
 <h2 id="ratios" padding>Pomery nastúpených a prijatých študentov</h2>
 
+<h3 id="bachelor&master">Bakalárske + inžinierske štúdium</h3>
+<hr>
 <table class="table">
   <thead>
     <tr>
@@ -66,6 +68,8 @@
       <th scope="col">Prijatý</th>
       <th scope="col">Nastúpený</th>
       <th scope="col">Pomer nastúpený/prijatý (%)</th>
+      <th scope="col">Bodový priemer (prijatý/nastúpený)</th>
+      <th scope="col">Medián bodov (prijatý/nastúpený)</th>
     </tr>
   </thead>
   <tbody>
@@ -74,56 +78,61 @@
       <td>{{ adm.admCountsPerYear[ratio.key].approved }}</td>
       <td>{{ adm.admCountsPerYear[ratio.key].beganStudy }}</td>
       <td>{{ ratio.value }}</td>
+      <td>{{ adm.approvedMap[ratio.key].mean + " / " + adm.beganStudyMap[ratio.key].mean }}</td>
+      <td>{{ adm.approvedMap[ratio.key].median + " / " + adm.beganStudyMap[ratio.key].median }}</td>
     </tr>
   </tbody>
 </table>
 
-<div class="row">
-  <div class="col-lg-6">
-    <h6>Bakalársky stupeň</h6>
-    <hr>
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">Školský rok</th>
-          <th scope="col">Prijatý</th>
-          <th scope="col">Nastúpený</th>
-          <th scope="col">Pomer nastúpený/prijatý (%)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let ratio of admBachelor.admRatiosPerYear | keyvalue">
-          <th scope="row">{{ ratio.key }}</th>
-          <td>{{ admBachelor.admCountsPerYear[ratio.key].approved }}</td>
-          <td>{{ admBachelor.admCountsPerYear[ratio.key].beganStudy }}</td>
-          <td>{{ ratio.value }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="col-lg-6">
-    <h6>Inžiniersky stupeň</h6>
-    <hr>
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">Školský rok</th>
-          <th scope="col">Prijatý</th>
-          <th scope="col">Nastúpený</th>
-          <th scope="col">Pomer nastúpený/prijatý (%)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let ratio of admMaster.admRatiosPerYear | keyvalue">
-          <th scope="row">{{ ratio.key }}</th>
-          <td>{{ admMaster.admCountsPerYear[ratio.key].approved }}</td>
-          <td>{{ admMaster.admCountsPerYear[ratio.key].beganStudy }}</td>
-          <td>{{ ratio.value }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+<h3 id="bachelor">Bakalársky stupeň</h3>
+<hr>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Školský rok</th>
+      <th scope="col">Prijatý</th>
+      <th scope="col">Nastúpený</th>
+      <th scope="col">Pomer nastúpený/prijatý (%)</th>
+      <th scope="col">Bodový priemer (prijatý/nastúpený)</th>
+      <th scope="col">Medián bodov (prijatý/nastúpený)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let ratio of admBachelor.admRatiosPerYear | keyvalue">
+      <th scope="row">{{ ratio.key }}</th>
+      <td>{{ admBachelor.admCountsPerYear[ratio.key].approved }}</td>
+      <td>{{ admBachelor.admCountsPerYear[ratio.key].beganStudy }}</td>
+      <td>{{ ratio.value }}</td>
+      <td>{{ admBachelor.approvedMap[ratio.key].mean + " / " + admBachelor.beganStudyMap[ratio.key].mean }}</td>
+      <td>{{ admBachelor.approvedMap[ratio.key].median + " / " + admBachelor.beganStudyMap[ratio.key].median }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="master">Inžiniersky stupeň</h3>
+<hr>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Školský rok</th>
+      <th scope="col">Prijatý</th>
+      <th scope="col">Nastúpený</th>
+      <th scope="col">Pomer nastúpený/prijatý (%)</th>
+      <th scope="col">Bodový priemer (prijatý/nastúpený)</th>
+      <th scope="col">Medián bodov (prijatý/nastúpený)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let ratio of admMaster.admRatiosPerYear | keyvalue">
+      <th scope="row">{{ ratio.key }}</th>
+      <td>{{ admMaster.admCountsPerYear[ratio.key].approved }}</td>
+      <td>{{ admMaster.admCountsPerYear[ratio.key].beganStudy }}</td>
+      <td>{{ ratio.value }}</td>
+      <td>{{ admMaster.approvedMap[ratio.key].mean + " / " + admMaster.beganStudyMap[ratio.key].mean }}</td>
+      <td>{{ admMaster.approvedMap[ratio.key].median + " / " + admMaster.beganStudyMap[ratio.key].median }}</td>
+    </tr>
+  </tbody>
+</table>
 
 <h2 id="counts-per-year" padding>Počty prihlášok na jednotlivé študijné programy za jednotlivé roky (Bakalársky stupeň)</h2>
 
