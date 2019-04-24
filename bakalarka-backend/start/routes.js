@@ -72,6 +72,8 @@ Route
           Administrators api endpoints end
         */
 
+        Route.get('finalexamconfig/get', 'GetController.getFinalExamConfiguration')
+        Route.post('finalexamconfig/update', 'GetController.updateFinalExamConfiguration')
 
         /*
           State Final Exams api endpoints start

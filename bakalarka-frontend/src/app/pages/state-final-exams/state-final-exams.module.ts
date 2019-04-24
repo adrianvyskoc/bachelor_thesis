@@ -9,6 +9,7 @@ import { FormatLastnamePipe } from 'src/app/pipes/format-lastname.pipe';
 import { FormatStudyProgrammePipe } from 'src/app/pipes/format-study-programme.pipe';
 import { StateFinalExamsIngComponent } from './components/state-final-exams-ing/state-final-exams-ing.component';
 import { StateFinalExamsListIngComponent } from './components/state-final-exams-list-ing/state-final-exams-list-ing.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -21,6 +22,8 @@ const routes: Routes = [
   imports: [
     CommonModule,
     SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
     RouterModule.forChild(routes),
   ],
   declarations: [

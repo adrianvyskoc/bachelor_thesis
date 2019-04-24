@@ -36,3 +36,11 @@ td.mat-cell {
     z-index: 10;
   }
 }
+
+form {
+  label {
+    min-width: 200px;
+    margin: 5px;
+    font-size: 11px;
+  }
+}

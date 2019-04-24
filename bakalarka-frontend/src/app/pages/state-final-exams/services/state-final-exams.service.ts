@@ -28,4 +28,12 @@ export class StateFinalExamsService {
   updateStateFinalExamsIng(exam: Exam): Observable<Array<Exam>> {
     return this.http.post<any>(`${environment.apiUrl}/api/statefinalexamsing/update`, exam)
   }
+
+  getFinalExamConfiguration(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/api/finalexamconfig/get`)
+  }
+
+  updateFinalExamConfiguration(val: any): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/api/finalexamconfig/update`, val )
+  } 
 }

@@ -387,6 +387,43 @@ class GetController {
     }
     // ---
 
+    async getFinalExamConfiguration ({ response, request }) {
+      const finalExamConfig = {
+        pldVeduci: 'B',
+        pldOponent: 'B',
+        pldCelkovo: 'B',
+        mclVsp: 1.19,
+        mclVeduci: 'A',
+        mclOponent:'D',
+        mclCelkovo: 'A',
+        clVsp: 1.6,
+        clVeduci: 'C',
+        clOponent:'D',
+        clCelkovo: 'B'
+      };
+      return response.send(finalExamConfig);
+    }
+
+    // TODO
+    async updateFinalExamConfiguration ({ response, request }) {
+      const data = request.body;
+      console.log(data);
+      const finalExamConfig = {
+        pldVeduci: data.pldVeduci,
+        pldOponent: data.pldOponent,
+        pldCelkovo: data.pldCelkovo,
+        mclVsp: data.mclVsp,
+        mclVeduci: data.mclVeduci,
+        mclOponent: data.mclOponent,
+        mclCelkovo: data.mclCelkovo,
+        clVsp: data.clVsp,
+        clVeduci: data.clVeduci,
+        clOponent: data.clOponent,
+        clCelkovo: data.clCelkovo
+      };
+      return response.send(finalExamConfig);
+    }
+
 
     async getGrades ({ response }) {
         const grades = await Grade.all()
