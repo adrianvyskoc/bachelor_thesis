@@ -9,7 +9,7 @@ class StateExamsOverviewSchema extends Schema {
 
       table.string("OBDOBIE")
       table.string("Celé_meno_s_titulmi")
-      table.integer("AIS_ID")
+      table.integer("AIS_ID").references("AIS_ID").inTable("ais_students")
       table.string("Identifikácia_štúdia")
       table.string("Obhajoba")
       table.string("Záverečná_práca_názov")
@@ -18,10 +18,10 @@ class StateExamsOverviewSchema extends Schema {
       table.string("Stav")
       table.decimal("VŠP_štúdium")
       table.decimal("VŠP_štud_bpo")
-      
+
       // ----------- doplnene stlpce ------------
       table.string("uzavreteStudium")
-      // hlavička: Ďalšie informácie 
+      // hlavička: Ďalšie informácie
       table.string("bp2_v_aj")
       table.string("ssOpravnyTermin")
       // Návrh - cena akákoľvek (vyhodnotí sa samé)
