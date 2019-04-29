@@ -60,6 +60,7 @@ export class ImportComponent implements OnInit {
     const dialogRef = this.dialog.open(MappingDialogComponent, {
       width: '700px',
       data: {
+        attrMapping: this.attrMapping,
         selectedFileAttrs: this.selectedFileAttrs,
         selectedImportAttrs: this.selectedImportAttrs
       }

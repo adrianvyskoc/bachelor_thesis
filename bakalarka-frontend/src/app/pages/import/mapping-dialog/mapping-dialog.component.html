@@ -7,18 +7,31 @@
 <form (ngSubmit)="onMappingCreate()" [formGroup]="mappingForm">
 
     <div formArrayName="mappings" margin-bottom>
+      <div class="text-muted" flex align-items-center justify-content-evenly>
+        Atribúty z vstupného súboru
+        <span></span>
+        Atribúty z databázy
+      </div>
+      <hr>
       <div *ngFor="let mapping of mappingForm.get('mappings').controls; let i = index" [formGroupName]="i" flex align-items-center margin-bottom>
-        <mat-select fromControlName="from" (selectionChange)="onFromAttrChange($event, i)">
+        <mat-select [(value)]="mappingForm.get('mappings').controls[i].value.from" fromControlName="from" (selectionChange)="onFromAttrChange($event, i)">
           <mat-option *ngFor="let attr of data.selectedFileAttrs" [value]="attr">
             {{attr}}
           </mat-option>
         </mat-select>
         <span margin-left margin-right><i class="fas fa-arrow-right"></i></span>
-        <mat-select fromControlName="to" (selectionChange)="onToAttrChange($event, i)">
+        <mat-select [(value)]="mappingForm.get('mappings').controls[i].value.to" fromControlName="to" (selectionChange)="onToAttrChange($event, i)">
           <mat-option *ngFor="let attr of data.selectedImportAttrs" [value]="attr">
             {{attr}}
           </mat-option>
         </mat-select>
+        <span
+          margin-left
+          margin-right
+          (click)="onRemoveMapping(i)"
+        >
+          <i class="fas fa-times text-danger"></i>
+        </span>
       </div>
     </div>
 

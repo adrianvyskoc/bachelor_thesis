@@ -1,3 +1,9 @@
 mat-select {
   border-bottom: 1px solid lightgray;
 }
+
+.fa-times.text-danger:hover {
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.3s ease-in-out;
+}

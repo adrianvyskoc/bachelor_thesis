@@ -21,8 +21,16 @@ export class MappingDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log(this.data.attrMapping)
+    const mapping = this.data.attrMapping.reduce((acc, item) => {
+      acc.push(new FormGroup({
+        'from': new FormControl(item.from, Validators.required),
+        'to': new FormControl(item.to, Validators.required)
+      }))
+      return acc
+    }, [])
     this.mappingForm = new FormGroup({
-      'mappings': new FormArray([])
+      'mappings': new FormArray(mapping)
     })
   }
 
@@ -48,5 +56,9 @@ export class MappingDialogComponent implements OnInit {
 
   onToAttrChange(event, index) {
     this.mappingForm.get('mappings')['controls'][index].get('to').setValue(event.value)
+  }
+
+  onRemoveMapping(index) {
+    (<FormArray>this.mappingForm.get('mappings')).removeAt(index);
   }
 }
