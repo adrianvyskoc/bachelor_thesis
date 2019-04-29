@@ -1,7 +1,6 @@
 'use strict'
 
 const Database = use('Database')
-//const Redis = use('Redis')
 
 const Student = use('App/Models/Student')
 const Attendance = use('App/Models/Attendance')
@@ -16,31 +15,6 @@ const Pointer = use('App/Models/Pointer')
 const Admin = use('App/Models/Admin')
 
 class GetController {
-    async getImportedYears ({ response }) {
-        // INEKO
-        // const AdditionalData = JSON.parse(await Redis.get('AdditionalData'))
-        // const TotalRating = JSON.parse(await Redis.get('TotalRating'))
-        // const Percentils = JSON.parse(await Redis.get('Percentils'))
-        // const Pointers = JSON.parse(await Redis.get('Pointers'))
-
-        // AIS
-        // const Admissions = await Redis.get('Admissions')
-
-        // return response.send({
-        //   'ineko': {
-        //     TotalRating,
-        //     Percentils,
-        //     Pointers,
-        //     AdditionalData
-        //   },
-        //   'ais': {
-        //     Admissions
-        //   }
-        // })
-        return response.send({
-
-        })
-    }
 
     async getStudents ({ response }) {
         const students = await Student.all()
@@ -350,7 +324,7 @@ class GetController {
       try {
         // dorobit select podla dat
         const data = await Database.raw(``)
-        
+
         return response
           .status(200)
           .send(data.rows)
@@ -686,18 +660,27 @@ class GetController {
 
     async getAttrNames({ request, response }) {
       let queryParams = await request.all()
+
       let attrs = await Database.raw(`
         SELECT column_name
         FROM INFORMATION_SCHEMA.COLUMNS
         WHERE TABLE_NAME = ?
       `, [queryParams.tableName])
-
       attrs = attrs.rows.reduce((acc, attr) => {
         acc.push(attr.column_name)
         return acc
       }, [])
 
-      return response.send(attrs)
+      if(queryParams.tableName == 'ineko_schools') {
+        return response.send({attrs, years: []})
+      }
+
+      let years = await Database.raw(`
+        SELECT DISTINCT "OBDOBIE" FROM ${queryParams.tableName}
+      `)
+      years = years.rows.map(year => year.OBDOBIE)
+
+      return response.send({ attrs, years })
     }
 }
 

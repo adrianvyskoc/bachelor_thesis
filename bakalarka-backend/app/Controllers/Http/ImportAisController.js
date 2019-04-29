@@ -4,7 +4,6 @@ const xlsx = use('xlsx')
 const Helpers = use('Helpers')
 const Database = use('Database')
 const fs = use('fs')
-//const Redis = use('Redis')
 
 // Models
 const Student = use('App/Models/Student')
@@ -15,7 +14,6 @@ class ImportAisController {
     async import ({ request, params }) {
 
         const config = {
-            //sheetRows: 11,
             type: "string",
             cellFormula: false,		// formula format
             cellHTML: false,		// html formats

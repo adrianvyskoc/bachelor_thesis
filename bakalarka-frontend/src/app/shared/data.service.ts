@@ -44,11 +44,6 @@ export class DataService {
     return this.year
   }
 
-  getImportedYears() {
-    return this.http.get(`http://localhost:3333/api/importedYears`)
-      .subscribe(years => this.importedYearsChanged.next(years))
-  }
-
   getData(selectedImport) {
     const url = selectedImport ==
       'Schools' ?
@@ -147,10 +142,6 @@ export class DataService {
 
   getGradesUpdateListener() {
     return this.gradesChanged.asObservable()
-  }
-
-  getImportedYearsUpdateListener() {
-    return this.importedYearsChanged.asObservable()
   }
 
   async uploadData(selectedFile, selectedImport, selectedSource, year, mapping) {

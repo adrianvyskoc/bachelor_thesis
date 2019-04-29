@@ -80,7 +80,7 @@ Route
         */
         Route.get('statefinalexamsbc', 'getController.getStateFinalExamsBc')
         Route.post('statefinalexamsbc/update', 'getController.updateStateFinalExamsBc')
-        
+
         Route.get('statefinalexamsing', 'getController.getStateFinalExamsIng')
         Route.post('statefinalexamsing/update', 'getController.updateStateFinalExamsIng')
         /*
@@ -93,10 +93,6 @@ Route
         */
         //Route.post('login', 'UserController.loginWithLDAP') //originalny LDAP funkcny
         Route.post('login', 'UserController.verifyEmail') // už aj s overením prístupu
-
-
-        // imported years
-        Route.get('importedYears', 'GetController.getImportedYears')
 
         /*
           Feature routes
