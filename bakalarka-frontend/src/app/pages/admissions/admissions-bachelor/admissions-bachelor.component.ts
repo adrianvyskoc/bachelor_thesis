@@ -131,21 +131,26 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
     ])
   }
 
+  /**
+   * Funkcia ktorá exportuje do xslx súboru vyfiltrované dáta z tabuľky (len zvolené stĺpce a riadky)
+   */
   exportFiltered() {
     this.exportService.exportArrayOfObjectToExcel(this.admissions.filteredData, 'filtered_admissions', this.displayedAdmissionsColumns);
   }
 
+  /**
+   * Funkcia, ktorá exportuje do xlsx súboru dáta, ktoré momentálne vidíme v tabuľke (zobrazenú stranu a zvolené stĺpce)
+   */
   exportVisible() {
     const tables = document.querySelector('table')
     this.exportService.exportTableToExcel(tables, 'admissions')
   }
 
+  /**
+   * Funkcia, ktorá exportuje do xlsx súboru všetky údaje z tabuľky bez ohľadu na filtrovanie
+   */
   exportAll() {
     this.exportService.exportArrayOfObjectToExcel(this.admissions.data, 'all_admissions');
-  }
-
-  _displayedColumnsAndActions() {
-    return [...this.displayedAdmissionsColumns, 'Akcie']
   }
 
   /**
@@ -202,5 +207,12 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
     this.schools = new MatTableDataSource<any[]>(Object.values(schoolMap))
     this.schools.paginator = this.schoolsPaginator
     this.schools.sort = this.schoolsSort
+  }
+
+  /**
+   * Funkcia ktorá vráti všetky stĺpce, ktoré chceme zobraziť v tabuľke a pridá stĺpec akcie
+   */
+  _displayedColumnsAndActions() {
+    return [...this.displayedAdmissionsColumns, 'Akcie']
   }
 }

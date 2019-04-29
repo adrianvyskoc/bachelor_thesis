@@ -284,6 +284,44 @@
   [showMarkers]="false"
 ></app-map>
 
+<h3 id="abroad-students" margin-top>Zahraniční študenti</h3>
+<hr>
+
+<div class="row">
+  <div class="col-lg-6">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th scope="col">Program</th>
+          <th scope="col">Všetci</th>
+          <th scope="col">Prijatý</th>
+          <th scope="col">Neprijatý</th>
+          <th scope="col">Nastúpený</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let programme of abroadAdmissions.programmes | keyvalue">
+          <th scope="row">{{ programme.key }}</th>
+          <td>{{ programme.value.count }}</td>
+          <td>{{ programme.value.approved }}</td>
+          <td>{{ programme.value.rejected }}</td>
+          <td>{{ programme.value.beganStudy }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-lg-6">
+    <app-chart
+      *ngIf="abroadAdmissions.admissions"
+      [title]="'Počet prihlásených, prijatých, neprijatých a nastúpených študentov zo zahraničia'"
+      [data]="[abroadAdmissions.admissions.length, abroadAdmissions.approved, abroadAdmissions.rejected, abroadAdmissions.beganStudy]"
+      [labels]="['Prihlásený', 'Prijatý', 'Neprijatý', 'Nastúpený']"
+      [type]="'bar'"
+      [legend]="false"
+    ></app-chart>
+  </div>
+</div>
+
 <h2 id="regions" class="display-4" padding>Regióny</h2>
 
 <div class="row">

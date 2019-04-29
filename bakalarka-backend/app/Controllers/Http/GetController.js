@@ -417,28 +417,6 @@ class GetController {
         return response.send(schools)
     }
 
-    async getCodebook ({ response, params }) {
-        var codebook
-        switch (params.type) {
-            case 'attendanceTypes':
-                codebook = await AttendanceType.all()
-                break
-
-            case 'studyForms':
-                codebook = await StudyForm.all()
-                break
-
-            case 'highSchoolTypes':
-                codebook = await HighSchoolType.all()
-                break
-
-            default:
-                break
-        }
-
-        return response.send(codebook)
-    }
-
     // API endpoints for usecases
     async getAdmissionsOverview ({ request, response }) {
       const queryParams = await request.all()
@@ -459,7 +437,8 @@ class GetController {
         'ais_admissions.stupen_studia',
         'ais_admissions.Body_celkom',
         'ais_admissions.Rozh',
-        'ais_admissions.Štúdium'
+        'ais_admissions.Štúdium',
+        'ais_admissions.Občianstvo'
       ]
       const schoolsAttrs = ['ineko_schools.typ_skoly', 'ineko_schools.sur_y', 'ineko_schools.sur_x', 'ineko_schools.kraj']
 

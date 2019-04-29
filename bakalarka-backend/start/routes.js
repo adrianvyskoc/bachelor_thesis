@@ -34,9 +34,7 @@ Route
         Route.get('getGrades/:year', 'GetController.getGrades')
         Route.get('getSchools', 'GetController.getSchools')
         Route.get('getSubjects/:year', 'GetController.getSubjects')
-        Route.get('codebook/:type', 'GetController.getCodebook')
         Route.get('column-meaning/:type', 'GetController.getColumnMeaning')
-
 
         /*
           Admissions api endpoints start
