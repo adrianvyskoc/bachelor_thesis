@@ -10,7 +10,6 @@ import { AuthService } from 'src/app/login/services/auth.service';
 })
 export class HeaderComponent implements OnInit {
   selectedYear: string = 'all'
-  selectedFaculty: string = 'all'
 
   constructor(
     private dataService: DataService,

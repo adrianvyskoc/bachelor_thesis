@@ -37,6 +37,7 @@ export class DataService {
   setYear(year) {
     this.year.next(year)
     this.getAdmissionsBachelor()
+    this.getAdmissionsMaster()
     this.loadAdmissionsOverview()
   }
 

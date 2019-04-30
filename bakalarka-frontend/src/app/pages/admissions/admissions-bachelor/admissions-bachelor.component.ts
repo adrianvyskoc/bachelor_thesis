@@ -22,6 +22,7 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   showFilter = true
   showLabels = false
   subscription: Subscription
+
   admissions
   schools
   filteredAdmissions = []
@@ -118,6 +119,9 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
     this.displayedAdmissionsColumns = []
   }
 
+  /**
+   * Funkcia zodpovedná za exportovanie všetkých tabuliek do xlsx súboru. Každá tabuľka bude na osobitnom hárku.
+   */
   exportAllTables() {
     const tables = document.querySelectorAll("table:not([mat-table])")
     this.exportService.exportMultipleTablesToExcel(tables, 'bachelor-overview', [

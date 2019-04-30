@@ -491,7 +491,6 @@ class GetController {
     }
 
     async getAdmissionsYearComparison ({ response }) {
-      //const years = await Redis.get('Admissions')
       const admissions = await Database
         .select('*')
         .from('ais_admissions')
@@ -510,14 +509,15 @@ class GetController {
       let ratios = {}
       ratios.approved = await Database.raw(`
         SELECT "OBDOBIE", COUNT("Rodné_číslo") AS apr, AVG("Body_celkom") as mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM (
-          SELECT DISTINCT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
+          SELECT "Rodné_číslo", "OBDOBIE", max("Body_celkom") AS "Body_celkom" FROM ais_admissions
           WHERE "Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13
+          GROUP BY "Rodné_číslo", "OBDOBIE"
         ) AS x
         GROUP BY "OBDOBIE"
       `)
       ratios.began_study = await Database.raw(`
         SELECT "OBDOBIE", COUNT("Rodné_číslo") AS bs, AVG("Body_celkom") as mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM (
-          SELECT DISTINCT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
+          SELECT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
           WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND "Štúdium" = ?
         ) AS x
         GROUP BY "OBDOBIE"
@@ -526,14 +526,15 @@ class GetController {
       let bachelorRatios = {}
       bachelorRatios.approved = await Database.raw(`
         SELECT "OBDOBIE", COUNT("Rodné_číslo") AS apr, AVG("Body_celkom") as mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM (
-          SELECT DISTINCT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
+          SELECT "Rodné_číslo", "OBDOBIE", max("Body_celkom") AS "Body_celkom" FROM ais_admissions
           WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND stupen_studia = ?
+          GROUP BY "Rodné_číslo", "OBDOBIE"
         ) AS x
         GROUP BY "OBDOBIE"
       `, ['Bakalársky'])
       bachelorRatios.began_study = await Database.raw(`
         SELECT "OBDOBIE", COUNT("Rodné_číslo") AS bs, AVG("Body_celkom") as mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM (
-          SELECT DISTINCT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
+          SELECT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
           WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND "Štúdium" = ? AND stupen_studia = ?
         ) AS x
         GROUP BY "OBDOBIE"
@@ -542,14 +543,15 @@ class GetController {
       let masterRatios = {}
       masterRatios.approved = await Database.raw(`
         SELECT "OBDOBIE", COUNT("Rodné_číslo") AS apr, AVG("Body_celkom") as mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM (
-          SELECT DISTINCT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
+          SELECT "Rodné_číslo", "OBDOBIE", max("Body_celkom") AS "Body_celkom" FROM ais_admissions
           WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND stupen_studia = ?
+          GROUP BY "Rodné_číslo", "OBDOBIE"
         ) AS x
         GROUP BY "OBDOBIE"
       `, ['Inžiniersky'])
       masterRatios.began_study = await Database.raw(`
         SELECT "OBDOBIE", COUNT("Rodné_číslo") AS bs, AVG("Body_celkom") AS mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM (
-          SELECT DISTINCT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
+          SELECT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
           WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND "Štúdium" = ? AND stupen_studia = ?
         ) AS x
         GROUP BY "OBDOBIE"
@@ -620,21 +622,33 @@ class GetController {
     async getAdmissionsMaster({ request, response }) {
       const queryParams = await request.all()
 
-      let admissions
+      let admissions, universities
       if(queryParams.year == 'all') {
         admissions = await Database
           .select('*')
           .from('ais_admissions')
           .where('stupen_studia', 'Inžiniersky')
+
+        universities = await Database.raw(`
+          SELECT "Absolvovaná_VŠ", COUNT("Rodné_číslo") AS count, AVG("Body_celkom") AS mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM ais_admissions
+          WHERE "stupen_studia" = ?
+          GROUP BY "Absolvovaná_VŠ"
+        `, ['Inžiniersky'])
       } else {
         admissions = await Database
           .select('*')
           .from('ais_admissions')
           .where('OBDOBIE', queryParams.year)
           .where('stupen_studia', 'Inžiniersky')
+
+        universities = await Database.raw(`
+          SELECT "Absolvovaná_VŠ", COUNT("Rodné_číslo") AS count, AVG("Body_celkom") AS mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM ais_admissions
+          WHERE "OBDOBIE" = ? AND "stupen_studia" = ?
+          GROUP BY "Absolvovaná_VŠ"
+        `, [queryParams.year, 'Inžiniersky'])
       }
 
-      return response.send({ admissions })
+      return response.send({ admissions, universities: universities.rows })
     }
 
     async getAttrNames({ request, response }) {
