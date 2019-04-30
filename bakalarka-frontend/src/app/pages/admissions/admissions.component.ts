@@ -83,6 +83,7 @@ export class AdmissionsComponent implements OnInit {
           this.regionMetrics = data['regionMetrics']
           this.schools = data['schools']
           this.admissions = data['admissions']
+          console.log(this.admissions)
           this.filteredAdmissions = data['admissions']
           this._getSchoolsAdmissions()
           this._calculateAdmissionsCounts()

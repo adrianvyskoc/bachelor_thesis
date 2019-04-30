@@ -56,7 +56,6 @@ export class AdmissionsMasterComponent implements OnInit, OnDestroy {
     this.dataService.getAdmissionsMaster()
     this.subscription = this.dataService.getAdmissionsMasterUpdateListener()
       .subscribe(data => {
-        console.log(data)
         this.admissions = new MatTableDataSource<any[]>(data['admissions'])
         this.universities = data['universities']
         this.admissions.paginator = this.paginator

@@ -27,6 +27,9 @@ export class AdmissionsFilterService {
    * @param value - hodnota, podľa ktorej ideme filtrovať
    */
   filterByStudyType(admissions, value) {
+    if(value !== 3 || value !== 4)
+      return []
+
     if(value == 4)
       return admissions.filter(admission => admission.Program_1[admission.Program_1.length - 1] == "4")
     else
@@ -84,7 +87,7 @@ export class AdmissionsFilterService {
   }
 
   /**
-   * Filtrovanie podľa kódu školy - škola sa musí začínať na uvedenú postupnosť znakov
+   * Filtrovanie škôl podľa kódu školy - škola sa musí začínať na uvedenú postupnosť znakov
    * @param schools - všetky školy, ktoré ideme filtrovať
    * @param value - kód školy, respektíve postupnosť znakov
    */
@@ -92,6 +95,11 @@ export class AdmissionsFilterService {
     return schools.filter(school => String(school.kod_kodsko).startsWith(value))
   }
 
+  /**
+   * Filtrovanie podľa názvu ulice
+   * @param schools  - všetky školy, ktoré ideme filtrovať
+   * @param value  - ulica, respektíve podreťazec ulice
+   */
   filterSchoolsByStreet(schools, value) {
     return schools.filter(school => school.ulica.indexOf(value) > -1)
   }

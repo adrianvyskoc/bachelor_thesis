@@ -156,7 +156,6 @@ export class DataService {
     await this.http.post('http://localhost:3333/api/import/' + selectedSource + '/' + selectedImport, fd)
       .subscribe(
         res => {
-          //this.getImportedYears()
           this.loading = false
           this.showSuccessMessage = true
 
