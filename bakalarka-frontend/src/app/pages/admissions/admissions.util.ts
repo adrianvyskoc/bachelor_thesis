@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SortingUtil } from 'src/app/shared/Utils/sorting.util';
+import { SortingUtil } from 'src/app/plugins/utils/sorting.util';
 import { AdmissionsFilterService } from './admissions-filter.service';
 
 @Injectable({

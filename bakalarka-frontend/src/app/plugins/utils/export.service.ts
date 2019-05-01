@@ -63,7 +63,6 @@ export class ExportService {
       }, '')
 
       workbook = XLSX.read('<table>' + toExport + '</table>', {type:'string'})
-
     }
 
     XLSX.writeFile(workbook, `${filename}.xlsx`)
