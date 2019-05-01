@@ -91,9 +91,7 @@ export class ChartComponent implements OnInit, OnChanges {
           }
         },
         animation: {
-          onComplete: () => {
-            this.download.nativeElement.href = this.chart.toBase64Image();
-          }
+          onComplete: this.downloadChart.bind(this)
         },
         scales: {
           yAxes: this.yAxes,
@@ -105,6 +103,10 @@ export class ChartComponent implements OnInit, OnChanges {
         }
       }
     })
+  }
+
+  downloadChart() {
+    this.download.nativeElement.href = this.chart.toBase64Image();
   }
 
   _createDatasets() {

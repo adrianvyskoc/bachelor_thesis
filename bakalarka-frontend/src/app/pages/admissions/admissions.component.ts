@@ -6,6 +6,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
 import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 import { Title } from '@angular/platform-browser';
+import { AdmissionsUtil } from './admissions.util';
 
 @Component({
   selector: 'app-admissions',
@@ -27,6 +28,13 @@ export class AdmissionsComponent implements OnInit {
   filteredAdmissions = []
   schools = []
   filteredSchools = []
+
+  // zahraničné prihlášky a ich počty
+  abroadAdmissions = {}
+
+    // data pre graf
+    abroadAdmissionsLabels = []
+    abroadAdmissionsChartDatasets = []
 
   regionMetrics = {}
 
@@ -51,7 +59,8 @@ export class AdmissionsComponent implements OnInit {
     private dataService: DataService,
     private admissionsFilterService: AdmissionsFilterService,
     private tocUtil: TocUtil,
-    private titleService: Title
+    private titleService: Title,
+    private admissionsUtil: AdmissionsUtil
   ) { }
 
   ngOnInit() {
@@ -77,6 +86,7 @@ export class AdmissionsComponent implements OnInit {
           this.filteredAdmissions = data['admissions']
           this._getSchoolsAdmissions()
           this._calculateAdmissionsCounts()
+          this.abroadAdmissions = this.admissionsUtil._calculateAbroadStudents(this.filteredAdmissions)
           this.filterSchools()
         }
       )
@@ -103,6 +113,7 @@ export class AdmissionsComponent implements OnInit {
       this.filteredAdmissions = this.admissionsFilterService.filterByPoints(this.filteredAdmissions, this.filterForm.value.pointsValue, this.filterForm.value.pointsType)
 
 
+    this.abroadAdmissions = this.admissionsUtil._calculateAbroadStudents(this.filteredAdmissions)
     this._getSchoolsAdmissions()
     this._calculateAdmissionsCounts()
     this.filterSchools()

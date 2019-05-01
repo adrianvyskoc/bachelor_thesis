@@ -5,6 +5,7 @@ import { Title } from '@angular/platform-browser';
 import * as XLSX from 'xlsx';
 import { MatDialog } from '@angular/material';
 import { MappingDialogComponent } from './mapping-dialog/mapping-dialog.component';
+import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 
 @Component({
   selector: 'app-import',
@@ -14,12 +15,12 @@ import { MappingDialogComponent } from './mapping-dialog/mapping-dialog.componen
 export class ImportComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
 
-  importedYears
 
   selectedFile: File = null
   selectedFileAttrs = []
 
   selectedImportAttrs = []
+  selectedImportYears = []
 
   selectedSource: string = ""
   selectedImport: string = ""
@@ -31,14 +32,22 @@ export class ImportComponent implements OnInit {
   attrMapping = []
 
   tablesMap = {
+    // AIS
     Attendance: 'ais_attendances',
     Grades: 'ais_grades',
     Admissions: 'ais_admissions',
     AdmissionsPoints: 'ais_admissions',
     StateExamsOverviews: 'ais_state_exams_overviews',
     StateExamsScenarios: 'ais_state_exams_scenarios',
-    StudentsDataPt1: 'ais_students_data_pt1',
-    StudentsDataPt2: 'ais_students_data_pt2',
+    StudentsDataPt1: 'ais_students_data_pt_1',
+    StudentsDataPt2: 'ais_students_data_pt_2',
+
+    // INEKO
+    Schools: 'ineko_schools',
+    Percentils: 'ineko_percentils',
+    TotalRating: 'ineko_total_ratings',
+    Pointers: 'ineko_individual_pointer_values',
+    AdditionalData: 'ineko_additional_data'
   }
 
   disableImport: boolean = true
@@ -46,20 +55,20 @@ export class ImportComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private titleService: Title,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private tocUtil: TocUtil
   ) {}
 
   ngOnInit() {
+    this.tocUtil.noToc()
     this.titleService.setTitle("Importovanie dát")
-    this.dataService.getImportedYears()
-    this.dataService.getImportedYearsUpdateListener()
-      .subscribe(years => this.importedYears = years)
   }
 
   openAttrMapping() {
     const dialogRef = this.dialog.open(MappingDialogComponent, {
       width: '700px',
       data: {
+        attrMapping: this.attrMapping,
         selectedFileAttrs: this.selectedFileAttrs,
         selectedImportAttrs: this.selectedImportAttrs
       }
@@ -81,11 +90,6 @@ export class ImportComponent implements OnInit {
   }
 
   onFileSelected(event) {
-    this.dataService.getAttrNames(this.tablesMap[this.selectedImport])
-      .subscribe((attrs: any) => {
-        this.selectedImportAttrs = attrs
-      })
-
     this.selectedFile = <File>event.target.files[0]
     this.fileName = event.target.files[0] ? event.target.files[0].name : ""
 
@@ -117,7 +121,15 @@ export class ImportComponent implements OnInit {
     this.schoolYear = ""
   }
 
-  onFormChange() {
+  onFormChange(callAttrsAndYears = false) {
+    if(callAttrsAndYears) {
+      this.dataService.getAttrNames(this.tablesMap[this.selectedImport])
+        .subscribe((attrsAndYears: any) => {
+          this.selectedImportAttrs = attrsAndYears.attrs
+          this.selectedImportYears = attrsAndYears.years
+        })
+    }
+
     if(this.selectedSource == 'ais') {
       if(this.selectedImport == 'Attendance' || this.selectedImport == 'Grades')
         this.disableImport = (!this.semester || !this.schoolYear)

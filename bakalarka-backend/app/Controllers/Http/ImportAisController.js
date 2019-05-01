@@ -4,7 +4,6 @@ const xlsx = use('xlsx')
 const Helpers = use('Helpers')
 const Database = use('Database')
 const fs = use('fs')
-//const Redis = use('Redis')
 
 // Models
 const Student = use('App/Models/Student')
@@ -15,7 +14,6 @@ class ImportAisController {
     async import ({ request, params }) {
 
         const config = {
-            //sheetRows: 11,
             type: "string",
             cellFormula: false,		// formula format
             cellHTML: false,		// html formats
@@ -147,31 +145,41 @@ class ImportAisController {
             for (let row of rows) {
                 row = adjustKeys(row)
 
-                /*if(row['Rozh'] == 11 || row['Rozh'] == 10 || row['Rozh'] == 13) {
-                  let student = new Student()
-
-                  student.fill({
-                    AIS_ID: row['Používateľ_podľa_RČ'].split(" ")[0],
-                    SCHOOL_ID: row['SŠ_kód'],
-                    MENO: row['Meno'],
-                    PRIEZVISKO: row['Priezvisko'],
-                    STUDIUM: row['Prijatie_na_program']
-                  })
-
-                  try {
-                    await student.save()
-                  } catch (err) { console.log(err) }
-                }*/
-
+                let schools
                 if(row.SŠ_kód) {
-                  const schools = await Database.table('ineko_schools').where('kod_kodsko', row.SŠ_kód).count()
+                  schools = await Database.table('ineko_schools').where('kod_kodsko', row.SŠ_kód).count()
                   row.school_id = schools[0].count != '0' ? row.SŠ_kód : null
                 }
 
-                let admission = new Admission()
+                if((row['Rozh'] == 11 || row['Rozh'] == 10 || row['Rozh'] == 13) && row['Používateľ_podľa_RČ'] && row['Štúdium'] == 'áno') {
+                  let student = new Student()
 
-                if(row['Používateľ_podľa_RČ'])
-                  row.AIS_ID = Number(row['Používateľ_podľa_RČ'].split(" ")[0])
+                  try {
+                    const studentData = {
+                      AIS_ID: row['Používateľ_podľa_RČ'].split(" ")[0],
+                      SCHOOL_ID: row.SŠ_kód && schools[0].count != '0' ? row.SŠ_kód : null,
+                      MENO: row['Meno'],
+                      PRIEZVISKO: row['Priezvisko'],
+                      STUDIUM: row['Prijatie_na_program']
+                    }
+
+                    student.fill(studentData)
+
+                    let students = await Database.table('ais_students').where('AIS_ID', studentData.AIS_ID).count()
+
+                    if(students[0].count == '0')
+                      await student.save()
+                    else {
+                      await Database
+                        .table('ais_students')
+                        .where({ 'AIS_ID': studentData.AIS_ID })
+                        .update(studentData)
+                    }
+                    row.AIS_ID = Number(row['Používateľ_podľa_RČ'].split(" ")[0])
+                  } catch (err) { console.log(err) }
+                }
+
+                let admission = new Admission()
 
                 row.č_d = String(row.č_d)
                 row.č_d_1 = String(row.č_d_1)
@@ -180,7 +188,7 @@ class ImportAisController {
                 row.stupen_studia = row.Program_1[0] == 'B' ? 'Bakalársky' : 'Inžiniersky'
 
                 delete row['Druh_SŠ']
-                delete row['Používateľ_podľa_RČ'] // z tohto ziskat ais ID
+                delete row['Používateľ_podľa_RČ']
                 delete row['SŠ_kód']
 
                 admission.fill(row)
@@ -189,16 +197,6 @@ class ImportAisController {
                   await admission.save()
                 } catch (err) { console.log(err) }
             }
-
-
-
-        //     let importedYears = await Redis.get(params.selectedImport)
-        //     importedYears = JSON.parse(importedYears)
-
-        //     if(!importedYears) importedYears = []
-
-        //     if(importedYears.indexOf(data.year) == -1)
-        //       await Redis.set(params.selectedImport, JSON.stringify([...importedYears, data.year]))
         }
 
         // -------------------------------------------------------------------
@@ -260,6 +258,30 @@ class ImportAisController {
             row['AIS_ID'] = row['ID']
             row['OBDOBIE'] = data.year
 
+            if(row['ID']) {
+              let students = await Database.table('ais_students').where('AIS_ID', row['ID']).count()
+
+              let studentData = {
+                AIS_ID: row['ID'],
+                PRIEZVISKO: row.Celé_meno_s_titulmi.split(",")[0].split(" ")[0],
+                MENO: row.Celé_meno_s_titulmi.split(",")[0].split(" ")[1]
+              }
+
+              try {
+                if(students[0].count == '0') {
+                  let student = new Student()
+                  student.fill(studentData)
+                  await student.save()
+                }
+                else {
+                  await Database
+                    .table('ais_students')
+                    .where({ 'AIS_ID': studentData.AIS_ID })
+                    .update(studentData)
+                }
+              } catch(err) {console.log(err)}
+            }
+
             delete row['ID']
             delete row['Por']
 
@@ -309,6 +331,30 @@ class ImportAisController {
 
             row = adjustKeys(row)
 
+            if(row['ID']) {
+              let students = await Database.table('ais_students').where('AIS_ID', row['ID']).count()
+
+              let studentData = {
+                AIS_ID: row['ID'],
+                PRIEZVISKO: row.Celé_meno_s_titulmi.split(",")[0].split(" ")[0],
+                MENO: row.Celé_meno_s_titulmi.split(",")[0].split(" ")[1]
+              }
+
+              try {
+                if(students[0].count == '0') {
+                  let student = new Student()
+                  student.fill(studentData)
+                  await student.save()
+                }
+                else {
+                  await Database
+                    .table('ais_students')
+                    .where({ 'AIS_ID': studentData.AIS_ID })
+                    .update(studentData)
+                }
+              } catch(err) {console.log(err)}
+            }
+
             row['OBDOBIE'] = data.year
 
             delete row['Por']
@@ -350,18 +396,42 @@ class ImportAisController {
 
             row = adjustKeys(row)
 
+            if(row['ID']) {
+              let students = await Database.table('ais_students').where('AIS_ID', row['ID']).count()
+
+              let studentData = {
+                AIS_ID: row['ID'],
+                PRIEZVISKO: row.Celé_meno_s_titulmi.split(",")[0].split(" ")[0],
+                MENO: row.Celé_meno_s_titulmi.split(",")[0].split(" ")[1]
+              }
+
+              try {
+                if(students[0].count == '0') {
+                  let student = new Student()
+                  student.fill(studentData)
+                  await student.save()
+                }
+                else {
+                  await Database
+                    .table('ais_students')
+                    .where({ 'AIS_ID': studentData.AIS_ID })
+                    .update(studentData)
+                }
+              } catch(err) {console.log(err)}
+            }
+
             row['OBDOBIE'] = data.year
 
             delete row['Por']
 
             let toNumberAttrs = [
-              "Percentil_ob_+_roč", "Percentil_prog_+_roč", "Priemer", "Priemer_SŠ", "VŠP", "VŠP_4", "VŠP_2_obd",
+              "Percentil_ob_+_roč", "Perc_zhody", "Percentil_prog_+_roč", "Priemer", "Priemer_SŠ", "VŠP", "VŠP_4", "VŠP_2_obd",
               "VŠP_2_obd_4", "VŠP_ar", "VŠP_ar_4", "VŠP_štúdium", "VŠP_štud_bpo", "VŠP_štúdium_4", "VSP_štud_4_bpo", "VŠP_min_ar_4",
               "VŠP_min_ar", "VŠP_min_ar_4_1", "VŠP_posl_obd", "VŠP_posl_obd_4", "VŠP_posl_obd_4_1", "Architektúra_počítačov",
               "Databázové_systémy", "Externá_maturita_z_cudzieho_jazyka_ECJ", "Externá_maturita_z_matematiky_EM",
               "Externá_maturita_z_cudzieho_jazyka", "Externá_maturita_z_matematiky", "Písomný_test_z_matematiky_SCIO_PTM",
               "Princípy_softvérového_inžinierstva", "Programovanie_a_počítačové_systémy", "Test_z_matematiky_SCIO_PTM",
-              "Test_z_matematiky_SCIO", "Všeobecné_študijné_predpoklady_SCIO", "Všeobecné_študijné_predpoklady_SCIO_VŠP", "Perc_zhody"
+              "Test_z_matematiky_SCIO", "Všeobecné_študijné_predpoklady_SCIO", "Všeobecné_študijné_predpoklady_SCIO_VŠP"
             ]
 
             try {

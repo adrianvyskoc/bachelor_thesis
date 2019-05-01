@@ -8,6 +8,7 @@ class AisStudentsDataPt1Schema extends Schema {
       table.increments()
       table.timestamps()
 
+      table.integer("ID").references("AIS_ID").inTable("ais_students")
       table.string("OBDOBIE")
       table.string("Celé_meno_s_titulmi")
       table.integer("Rok_abs_VŠ")
@@ -82,7 +83,6 @@ class AisStudentsDataPt1Schema extends Schema {
       table.string("Forwardy")
       table.string("Identifikácia_štúdia")
       table.string("Identifikácia_štúdia_1")
-      table.integer("ID")
       table.integer("ID_štud")
       table.decimal("IpŠp")
       table.decimal("IpŠp_min_ar")

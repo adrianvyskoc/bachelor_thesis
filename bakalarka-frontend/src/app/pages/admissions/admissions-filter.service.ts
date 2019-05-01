@@ -27,6 +27,9 @@ export class AdmissionsFilterService {
    * @param value - hodnota, podľa ktorej ideme filtrovať
    */
   filterByStudyType(admissions, value) {
+    if(value !== 3 || value !== 4)
+      return []
+
     if(value == 4)
       return admissions.filter(admission => admission.Program_1[admission.Program_1.length - 1] == "4")
     else
@@ -74,12 +77,17 @@ export class AdmissionsFilterService {
     })
   }
 
+  /**
+   * Filtrovanie podľa stupňa štúdia, na ktoré sa uchádzač uchádzal
+   * @param admissions - všetky prihlášky, ktoré ideme filtrovať
+   * @param value - hodnota, podľa ktorej ideme filtrovať (stupeň stúdia Bakalársky/Inžiniersky)
+   */
   filterByDegree(admissions, value) {
     return admissions.filter(admission => admission.stupen_studia == value)
   }
 
   /**
-   * Filtrovanie podľa kódu školy - škola sa musí začínať na uvedenú postupnosť znakov
+   * Filtrovanie škôl podľa kódu školy - škola sa musí začínať na uvedenú postupnosť znakov
    * @param schools - všetky školy, ktoré ideme filtrovať
    * @param value - kód školy, respektíve postupnosť znakov
    */
@@ -87,7 +95,20 @@ export class AdmissionsFilterService {
     return schools.filter(school => String(school.kod_kodsko).startsWith(value))
   }
 
+  /**
+   * Filtrovanie podľa názvu ulice
+   * @param schools  - všetky školy, ktoré ideme filtrovať
+   * @param value  - ulica, respektíve podreťazec ulice
+   */
   filterSchoolsByStreet(schools, value) {
     return schools.filter(school => school.ulica.indexOf(value) > -1)
+  }
+
+  /**
+   * Funkcia, ktorá vyfiltruje len zahraničných študentov, t.j. takých, čo nemajú slovenské občianstvo.
+   * @param admissions  - všetky prihlášky, ktoré ideme filtrovať
+   */
+  filterAbroadStudents(admissions) {
+    return admissions.filter(admission => admission['Občianstvo'] !== 'Slovenská republika')
   }
  }

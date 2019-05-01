@@ -16,11 +16,6 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'settings',
-    loadChildren: './pages/settings/settings.module#SettingsModule',
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'admissions',
     loadChildren: './pages/admissions/admissions.module#AdmissionsModule',
     canActivate: [AuthGuard],

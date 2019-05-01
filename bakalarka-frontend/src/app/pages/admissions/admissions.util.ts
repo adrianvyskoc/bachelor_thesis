@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { SortingUtil } from 'src/app/shared/Utils/sorting.util';
+import { SortingUtil } from 'src/app/plugins/utils/sorting.util';
+import { AdmissionsFilterService } from './admissions-filter.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,8 @@ import { SortingUtil } from 'src/app/shared/Utils/sorting.util';
 export class AdmissionsUtil {
 
   constructor(
-    private SortingUtil: SortingUtil
+    private SortingUtil: SortingUtil,
+    private AdmissionsFilterService: AdmissionsFilterService
   ) {}
 
   _calculateIntervals(data, intervalsUpperLimits) {
@@ -49,25 +51,35 @@ export class AdmissionsUtil {
     return intervals
   }
 
+  /**
+   * Funkcia na vypočítanie metrík pre skupiny rozdelené podľa bodov.
+   * @param data - dáta, z ktorých tvoríme skupiny
+   * @param numberOfGroups - požadovaný počet skupín
+   */
   _calculateGroups(data, numberOfGroups) {
     let groups = []
     let inOneGroup = Math.floor(data.length / numberOfGroups)
     let group = { mean: 0, arr: [], adm: [], beganStudy: 0 }
 
+    // dáta musíme zoradiť podľa bodov od najmenšieho aby sme vytvorili skupiny rovnakej veľkosti rovnomerného rozloženia bodov
     data.sort(function(a, b) {
       return Number(a.Body_celkom) - Number(b.Body_celkom);
     })
 
+    // preiterovanie dát
     data.forEach((admission, index) => {
       let points = Number(admission.Body_celkom)
 
+      // spočítavanie bodov (neskôr sa body vydelia počtom aby sme dostali mean)
       group.mean += points
       group.arr = this.SortingUtil._insertionSort([points, ...group.arr])
       group.adm.push(admission)
 
+      // ak je študent prijatý a naozaj začal študovať
       if((admission.Rozh == 10 || admission.Rozh == 11 || admission.Rozh == 13) && admission.Štúdium == "áno")
         group.beganStudy++
 
+      // ak sme na konci dát ale v poslednej skupine nie je dostatok ludí, musíme rozdeliť  túto skupinu do všetkých skupín
       if(index == data.length - 1 && group.arr.length < inOneGroup) {
         const lastGroupIndex = groups.length - 1
 
@@ -89,6 +101,10 @@ export class AdmissionsUtil {
     return groups
   }
 
+  /**
+   * Funkcia, pomocou ktorej vypočítame zhrnutie (hodnoty pre všetky skupiny dokopy) zo skupín vypočítaných funkciou _calculateGroups
+   * @param groups - skupiny, pre ktoré počítame zhrnutie
+   */
   _calculateSummary(groups) {
     let summary = { beganStudy: 0, arr: [], mean: 0 , median: null}
 
@@ -190,5 +206,40 @@ export class AdmissionsUtil {
 
       return dateA.getTime() > dateB.getTime() ? 1 : -1
     }
+  }
+
+  /**
+   * Funkcia, ktorá spočíta základné hodnoty pre zahraničných študentov.
+   * @param admissions
+   */
+  _calculateAbroadStudents(admissions) {
+    let programmes = {}
+    const abroadAdmissions = this.AdmissionsFilterService.filterAbroadStudents(admissions)
+
+    abroadAdmissions.forEach(admission => {
+      if(!programmes[admission['Program_1']]) {
+        programmes[admission['Program_1']] = {count: 0, beganStudy: 0, rejected: 0, approved: 0}
+      }
+
+      programmes[admission['Program_1']].count++
+
+      // ak bol uchádzač prijatý
+      if(admission.Rozh == 10 || admission.Rozh == 11 || admission.Rozh == 13) {
+        if(admission.Štúdium == "áno")
+          programmes[admission['Program_1']].beganStudy++
+        programmes[admission['Program_1']].approved++
+      } else {
+        programmes[admission['Program_1']].rejected++
+      }
+    })
+
+    let counts = { approved: 0, rejected: 0, beganStudy: 0 }
+    Object.keys(programmes).forEach(key => {
+      counts.approved += programmes[key].approved
+      counts.rejected += programmes[key].rejected
+      counts.beganStudy += programmes[key].beganStudy
+    })
+
+    return { programmes, ...counts, admissions: abroadAdmissions }
   }
 }

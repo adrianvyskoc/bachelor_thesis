@@ -37,8 +37,11 @@
   >Exportovať vyfiltrované údaje</button>
 </div>
 
-<div>
+<!--
+  TABS CONTROL (TABLE CONTROL) START
+-->
 
+<div class="tabs-wrapper">
   <button
     [ngClass]="{ 'active': showFilter }"
     class="tabs-control__button"
@@ -90,8 +93,11 @@
       >
     </mat-form-field>
   </div>
-
 </div>
+
+<!--
+  TABS CONTROL (TABLE CONTROL) END
+-->
 
 <table mat-table #admSort="matSort" matSort [dataSource]="admissions" full-width>
   <ng-container [matColumnDef]="column" *ngFor="let column of displayedAdmissionsColumns">

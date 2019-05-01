@@ -10,7 +10,6 @@ import { AuthService } from 'src/app/login/services/auth.service';
 })
 export class HeaderComponent implements OnInit {
   selectedYear: string = 'all'
-  selectedFaculty: string = 'all'
 
   constructor(
     private dataService: DataService,
@@ -34,5 +33,9 @@ export class HeaderComponent implements OnInit {
   logoutUser() {
     this.authService.logoutUser()
     this.router.navigate(['login'])
+  }
+
+  generateYears() {
+
   }
 }

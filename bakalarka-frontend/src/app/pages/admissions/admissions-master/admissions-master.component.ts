@@ -1,20 +1,27 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ExportService } from 'src/app/plugins/utils/export.service';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { DataService } from 'src/app/shared/data.service';
 import { AdmissionsUtil } from '../admissions.util';
 import { Title } from '@angular/platform-browser';
+import { Subscription } from 'rxjs';
+import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 
 @Component({
   selector: 'app-admissions-master',
   templateUrl: './admissions-master.component.html',
   styleUrls: ['./admissions-master.component.scss']
 })
-export class AdmissionsMasterComponent implements OnInit {
+export class AdmissionsMasterComponent implements OnInit, OnDestroy {
   @ViewChild('paginator') paginator: MatPaginator
   @ViewChild(MatSort) sort: MatSort
 
+  showFilter = true
+  showLabels = false
+  subscription: Subscription
+
   admissions
+  universities = []
 
   admissionsTimes = []
   admissionsPerDay = []
@@ -33,20 +40,24 @@ export class AdmissionsMasterComponent implements OnInit {
     "Trv_pobyt_obec", "Trv_pobyt_okres", "Trv_pobyt_pozn", "PSČ_1", "Trv_pobyt_štát", "Trv_pobyt_ulica", "Trv_pobyt_ulica_1", "Predmety",
     "Zameranie", "Zapl", "Zvol_predmet", "Zvol_predmet_1", 'stupen_studia'
   ]
+  filteredColumns = this.allColumns
 
   constructor(
     private dataService: DataService,
     private exportService: ExportService,
     private admissionsUtil: AdmissionsUtil,
-    private titleService: Title
+    private titleService: Title,
+    private tocUtil: TocUtil
   ) { }
 
   ngOnInit() {
     this.titleService.setTitle("Prijímacie konanie - Inžiniersky stupeň")
+    this.tocUtil.createToc()
     this.dataService.getAdmissionsMaster()
-    this.dataService.getAdmissionsMasterUpdateListener()
+    this.subscription = this.dataService.getAdmissionsMasterUpdateListener()
       .subscribe(data => {
         this.admissions = new MatTableDataSource<any[]>(data['admissions'])
+        this.universities = data['universities']
         this.admissions.paginator = this.paginator
         this.admissions.sort = this.sort
         this.admissionsTimes = this.admissionsUtil._getAdmissionsDates(this.admissions.data)
@@ -54,9 +65,74 @@ export class AdmissionsMasterComponent implements OnInit {
       })
   }
 
-  exportAll() {
+  ngOnDestroy() {
+    this.subscription.unsubscribe()
+  }
+
+  applyFilter(value: string) {
+    this.admissions.filter = value.trim().toLowerCase();
+  }
+
+  filterLabels(value: string) {
+    this.filteredColumns = this.allColumns.filter(col => col.indexOf(value) > -1)
+  }
+
+  toggleColumn(column) {
+    const index = this.displayedAdmissionsColumns.indexOf(column)
+    if(index > -1) {
+      this.displayedAdmissionsColumns.splice(index, 1)
+    } else {
+      this.displayedAdmissionsColumns.push(column)
+    }
+  }
+
+  switchTabs() {
+    this.showFilter = !this.showFilter;
+    this.showLabels = !this.showLabels;
+  }
+
+  selectAll() {
+    this.displayedAdmissionsColumns = this.allColumns.slice()
+    this.filteredColumns = this.allColumns.slice()
+  }
+
+  deselectAll() {
+    this.displayedAdmissionsColumns = []
+  }
+
+  /**
+   * Funkcia zodpovedná za exportovanie všetkých tabuliek do xlsx súboru. Každá tabuľka bude na osobitnom hárku.
+   */
+   exportAllTables() {
+    const tables = document.querySelectorAll("table:not([mat-table])")
+    this.exportService.exportMultipleTablesToExcel(tables, 'bachelor-overview', [
+      {
+        data: this.admissions.filteredData,
+        attrs: this.displayedAdmissionsColumns,
+      }
+    ])
+  }
+
+  /**
+   * Funkcia ktorá exportuje do xslx súboru vyfiltrované dáta z tabuľky (len zvolené stĺpce a riadky)
+   */
+  exportFiltered() {
+    this.exportService.exportArrayOfObjectToExcel(this.admissions.filteredData, 'filtered_admissions', this.displayedAdmissionsColumns);
+  }
+
+  /**
+   * Funkcia, ktorá exportuje do xlsx súboru dáta, ktoré momentálne vidíme v tabuľke (zobrazenú stranu a zvolené stĺpce)
+   */
+  exportVisible() {
     const tables = document.querySelector('table')
     this.exportService.exportTableToExcel(tables, 'admissions')
+  }
+
+  /**
+   * Funkcia, ktorá exportuje do xlsx súboru všetky údaje z tabuľky bez ohľadu na filtrovanie
+   */
+  exportAll() {
+    this.exportService.exportArrayOfObjectToExcel(this.admissions.data, 'all_admissions');
   }
 
   _displayedColumnsAndActions() {

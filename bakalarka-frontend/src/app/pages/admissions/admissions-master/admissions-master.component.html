@@ -2,12 +2,101 @@
   <h1 class="display-4">Prijímacie konanie</h1>
   <p class="lead">Inžiniersky stupeň</p>
   <hr class="my-4">
+  <h6>Export všetkých tabuliek</h6>
+
+  <button
+    class="btn btn-primary"
+    type="button"
+    [disabled]="admissions && !admissions.filteredData.length"
+    (click)="exportAllTables()"
+  >Exportovať všetky tabuľky</button>
+
+  <hr class="my-4">
+
+  <h6>Export prihlášok</h6>
+
+  <button
+    class="btn btn-primary"
+    type="button"
+    [disabled]="admissions && !admissions.filteredData.length"
+    (click)="exportVisible()"
+  >Exportovať viditeľné údaje</button>
+
   <button
     class="btn btn-primary"
     type="button"
     (click)="exportAll()"
-  >Exportovať údaje</button>
+  >Exportovať všetky údaje</button>
+
+  <button
+    class="btn btn-primary"
+    type="button"
+    [disabled]="admissions && !admissions.filteredData.length"
+    (click)="exportFiltered()"
+  >Exportovať vyfiltrované údaje</button>
 </div>
+
+<!--
+  TABS CONTROL (TABLE CONTROL) START
+-->
+
+<div class="tabs-wrapper">
+  <button
+    [ngClass]="{ 'active': showFilter }"
+    class="tabs-control__button"
+    (click)="switchTabs()"
+  >
+    Filter
+  </button>
+  <button
+    [ngClass]="{ 'active': showLabels }"
+    class="tabs-control__button"
+    (click)="switchTabs()"
+  >
+    Upravovať stĺpce
+  </button>
+
+  <div *ngIf="showLabels" class="tab">
+    <button class="btn btn-raised btn-primary" margin-right (click)="selectAll()">Označiť všetky</button>
+    <button class="btn btn-raised btn-primary" (click)="deselectAll()">Odznačiť všetky</button>
+    <hr>
+
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        placeholder="Vyhľadávanie v stĺpcoch"
+        (input)="filterLabels($event.target.value)"
+      >
+    </mat-form-field>
+
+    <div flex flex-wrap>
+      <div
+        *ngFor="let col of filteredColumns"
+        [ngClass]="{ active: displayedAdmissionsColumns.indexOf(col) > -1 }"
+        class="label"
+        (click)="toggleColumn(col)"
+      >
+        {{ col }}
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="showFilter" class="tab">
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        placeholder="Vyhľadávanie"
+        (input)="applyFilter($event.target.value)"
+      >
+    </mat-form-field>
+  </div>
+</div>
+
+<!--
+  TABS CONTROL (TABLE CONTROL) END
+-->
 
 <table mat-table matSort [dataSource]="admissions" full-width>
   <ng-container [matColumnDef]="column" *ngFor="let column of displayedAdmissionsColumns">
@@ -25,7 +114,11 @@
 </table>
 <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons #paginator></mat-paginator>
 
-<h2 padding>Štatistiky</h2>
+<!--
+  ŠTATISTIKY
+-->
+
+<h2 id="statistics" padding>Štatistiky</h2>
 
 <div class="row">
   <div class="col-lg-6 col-sm-6">
@@ -47,3 +140,28 @@
     ></app-time-chart>
   </div>
 </div>
+
+<!--
+  OSTATNĚ VYSOKĚ ŠKOLY
+-->
+
+<h2 id="statistics" padding>Ostatné vysoké školy</h2>
+
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">Fakulta</th>
+      <th scope="col">Počet prihlášok</th>
+      <th scope="col">Priemerný počet bodov</th>
+      <th scope="col">Medián bodov</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let uni of universities">
+      <th scope="row">{{ uni['Absolvovaná_VŠ'] ? uni['Absolvovaná_VŠ'] : 'Nešpecifikované' }}</th>
+      <td>{{ uni.count }}</td>
+      <td>{{ uni.mean | number : '1.2-2' }}</td>
+      <td>@{{ uni.median }}</td>
+    </tr>
+  </tbody>
+</table>

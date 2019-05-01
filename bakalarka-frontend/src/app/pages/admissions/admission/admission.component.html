@@ -52,6 +52,32 @@
     <table #table2 class="table table-borderless table-sm">
       <thead>
         <tr>
+          <th colspan="2" scope="col">Osobné informácie</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Rodné číslo</th>
+          <td>{{ admission['Rodné_číslo'] }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Občianstvo</th>
+          <td>{{ admission['Občianstvo'] }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Maturoval v roku</th>
+          <td>{{ admission['Maturita_1'] }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Dátum a miesto narodenia</th>
+          <td>{{ admission.Narodenie }} ({{ admission.Miesto_narodenia }})</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table #table2 class="table table-borderless table-sm">
+      <thead>
+        <tr>
           <th colspan="2" scope="col">Kontaktné informácie</th>
         </tr>
       </thead>

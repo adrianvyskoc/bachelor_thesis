@@ -1,7 +1,6 @@
 'use strict'
 
 const Database = use('Database')
-//const Redis = use('Redis')
 
 const Student = use('App/Models/Student')
 const Attendance = use('App/Models/Attendance')
@@ -16,31 +15,6 @@ const Pointer = use('App/Models/Pointer')
 const Admin = use('App/Models/Admin')
 
 class GetController {
-    async getImportedYears ({ response }) {
-        // INEKO
-        // const AdditionalData = JSON.parse(await Redis.get('AdditionalData'))
-        // const TotalRating = JSON.parse(await Redis.get('TotalRating'))
-        // const Percentils = JSON.parse(await Redis.get('Percentils'))
-        // const Pointers = JSON.parse(await Redis.get('Pointers'))
-
-        // AIS
-        // const Admissions = await Redis.get('Admissions')
-
-        // return response.send({
-        //   'ineko': {
-        //     TotalRating,
-        //     Percentils,
-        //     Pointers,
-        //     AdditionalData
-        //   },
-        //   'ais': {
-        //     Admissions
-        //   }
-        // })
-        return response.send({
-
-        })
-    }
 
     async getStudents ({ response }) {
         const students = await Student.all()
@@ -338,7 +312,7 @@ class GetController {
       try {
         // dorobit select podla dat
         const data = await Database.raw(``)
-        
+
         return response
           .status(200)
           .send(data.rows)
@@ -478,28 +452,6 @@ class GetController {
         return response.send(schools)
     }
 
-    async getCodebook ({ response, params }) {
-        var codebook
-        switch (params.type) {
-            case 'attendanceTypes':
-                codebook = await AttendanceType.all()
-                break
-
-            case 'studyForms':
-                codebook = await StudyForm.all()
-                break
-
-            case 'highSchoolTypes':
-                codebook = await HighSchoolType.all()
-                break
-
-            default:
-                break
-        }
-
-        return response.send(codebook)
-    }
-
     // API endpoints for usecases
     async getAdmissionsOverview ({ request, response }) {
       const queryParams = await request.all()
@@ -520,7 +472,8 @@ class GetController {
         'ais_admissions.stupen_studia',
         'ais_admissions.Body_celkom',
         'ais_admissions.Rozh',
-        'ais_admissions.Štúdium'
+        'ais_admissions.Štúdium',
+        'ais_admissions.Občianstvo'
       ]
       const schoolsAttrs = ['ineko_schools.typ_skoly', 'ineko_schools.sur_y', 'ineko_schools.sur_x', 'ineko_schools.kraj']
 
@@ -573,7 +526,6 @@ class GetController {
     }
 
     async getAdmissionsYearComparison ({ response }) {
-      //const years = await Redis.get('Admissions')
       const admissions = await Database
         .select('*')
         .from('ais_admissions')
@@ -592,14 +544,15 @@ class GetController {
       let ratios = {}
       ratios.approved = await Database.raw(`
         SELECT "OBDOBIE", COUNT("Rodné_číslo") AS apr, AVG("Body_celkom") as mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM (
-          SELECT DISTINCT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
+          SELECT "Rodné_číslo", "OBDOBIE", max("Body_celkom") AS "Body_celkom" FROM ais_admissions
           WHERE "Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13
+          GROUP BY "Rodné_číslo", "OBDOBIE"
         ) AS x
         GROUP BY "OBDOBIE"
       `)
       ratios.began_study = await Database.raw(`
         SELECT "OBDOBIE", COUNT("Rodné_číslo") AS bs, AVG("Body_celkom") as mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM (
-          SELECT DISTINCT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
+          SELECT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
           WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND "Štúdium" = ?
         ) AS x
         GROUP BY "OBDOBIE"
@@ -608,14 +561,15 @@ class GetController {
       let bachelorRatios = {}
       bachelorRatios.approved = await Database.raw(`
         SELECT "OBDOBIE", COUNT("Rodné_číslo") AS apr, AVG("Body_celkom") as mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM (
-          SELECT DISTINCT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
+          SELECT "Rodné_číslo", "OBDOBIE", max("Body_celkom") AS "Body_celkom" FROM ais_admissions
           WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND stupen_studia = ?
+          GROUP BY "Rodné_číslo", "OBDOBIE"
         ) AS x
         GROUP BY "OBDOBIE"
       `, ['Bakalársky'])
       bachelorRatios.began_study = await Database.raw(`
         SELECT "OBDOBIE", COUNT("Rodné_číslo") AS bs, AVG("Body_celkom") as mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM (
-          SELECT DISTINCT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
+          SELECT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
           WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND "Štúdium" = ? AND stupen_studia = ?
         ) AS x
         GROUP BY "OBDOBIE"
@@ -624,14 +578,15 @@ class GetController {
       let masterRatios = {}
       masterRatios.approved = await Database.raw(`
         SELECT "OBDOBIE", COUNT("Rodné_číslo") AS apr, AVG("Body_celkom") as mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM (
-          SELECT DISTINCT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
+          SELECT "Rodné_číslo", "OBDOBIE", max("Body_celkom") AS "Body_celkom" FROM ais_admissions
           WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND stupen_studia = ?
+          GROUP BY "Rodné_číslo", "OBDOBIE"
         ) AS x
         GROUP BY "OBDOBIE"
       `, ['Inžiniersky'])
       masterRatios.began_study = await Database.raw(`
         SELECT "OBDOBIE", COUNT("Rodné_číslo") AS bs, AVG("Body_celkom") AS mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM (
-          SELECT DISTINCT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
+          SELECT "OBDOBIE", "Rodné_číslo", "Body_celkom" FROM ais_admissions
           WHERE ("Rozh" = 10 OR "Rozh" = 11 OR "Rozh" = 13) AND "Štúdium" = ? AND stupen_studia = ?
         ) AS x
         GROUP BY "OBDOBIE"
@@ -702,37 +657,58 @@ class GetController {
     async getAdmissionsMaster({ request, response }) {
       const queryParams = await request.all()
 
-      let admissions
+      let admissions, universities
       if(queryParams.year == 'all') {
         admissions = await Database
           .select('*')
           .from('ais_admissions')
           .where('stupen_studia', 'Inžiniersky')
+
+        universities = await Database.raw(`
+          SELECT "Absolvovaná_VŠ", COUNT("Rodné_číslo") AS count, AVG("Body_celkom") AS mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM ais_admissions
+          WHERE "stupen_studia" = ?
+          GROUP BY "Absolvovaná_VŠ"
+        `, ['Inžiniersky'])
       } else {
         admissions = await Database
           .select('*')
           .from('ais_admissions')
           .where('OBDOBIE', queryParams.year)
           .where('stupen_studia', 'Inžiniersky')
+
+        universities = await Database.raw(`
+          SELECT "Absolvovaná_VŠ", COUNT("Rodné_číslo") AS count, AVG("Body_celkom") AS mean, percentile_disc(0.5) WITHIN GROUP (ORDER BY "Body_celkom") AS median FROM ais_admissions
+          WHERE "OBDOBIE" = ? AND "stupen_studia" = ?
+          GROUP BY "Absolvovaná_VŠ"
+        `, [queryParams.year, 'Inžiniersky'])
       }
 
-      return response.send({ admissions })
+      return response.send({ admissions, universities: universities.rows })
     }
 
     async getAttrNames({ request, response }) {
       let queryParams = await request.all()
+
       let attrs = await Database.raw(`
         SELECT column_name
         FROM INFORMATION_SCHEMA.COLUMNS
         WHERE TABLE_NAME = ?
       `, [queryParams.tableName])
-
       attrs = attrs.rows.reduce((acc, attr) => {
         acc.push(attr.column_name)
         return acc
       }, [])
 
-      return response.send(attrs)
+      if(queryParams.tableName == 'ineko_schools') {
+        return response.send({attrs, years: []})
+      }
+
+      let years = await Database.raw(`
+        SELECT DISTINCT "OBDOBIE" FROM ${queryParams.tableName}
+      `)
+      years = years.rows.map(year => year.OBDOBIE)
+
+      return response.send({ attrs, years })
     }
 }
 

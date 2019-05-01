@@ -1,15 +1,18 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { DataService } from 'src/app/shared/data.service';
 import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 import { ExportService } from 'src/app/plugins/utils/export.service';
 import { Title } from '@angular/platform-browser';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admissions-comparison',
   templateUrl: './admissions-comparison.component.html',
   styleUrls: ['./admissions-comparison.component.scss']
 })
-export class AdmissionsComparisonComponent implements OnInit {
+export class AdmissionsComparisonComponent implements OnInit, OnDestroy {
+
+  subscription: Subscription
 
   admissions
   studyProgrammes = []
@@ -47,7 +50,7 @@ export class AdmissionsComparisonComponent implements OnInit {
 
     this.tocUtil.createToc()
     this.dataService.getAdmissionsYearComparison()
-    this.dataService.getAdmissionsYearComparisonUpdateListener()
+    this.subscription =  this.dataService.getAdmissionsYearComparisonUpdateListener()
       .subscribe(data => {
         this.admissions = data['admissions']
         this.schoolYears = data['years']
@@ -57,6 +60,10 @@ export class AdmissionsComparisonComponent implements OnInit {
         this.admBachelor = this._adjustRatioCountsObject(data['bachelorRatios'])
         this.admMaster = this._adjustRatioCountsObject(data['masterRatios'])
       })
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe()
   }
 
   exportAllTables() {

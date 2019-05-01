@@ -3,7 +3,7 @@
   <p class="lead">Údaje označené symbolom <strong>*</strong> sú povinné.</p>
   <mat-divider></mat-divider>
 
-  <mat-radio-group [(ngModel)]="selectedSource" class="mt-4" (ngModelChange)="onFormChange()">
+  <mat-radio-group [(ngModel)]="selectedSource" class="source mt-4" (ngModelChange)="onFormChange()">
     <mat-radio-button value="ais" (click)="resetForm()">AIS</mat-radio-button>
     <mat-radio-button value="ineko" (click)="resetForm()">INEKO</mat-radio-button>
   </mat-radio-group>
@@ -13,7 +13,7 @@
   <ng-template [ngIf]="selectedSource">
 
       <div *ngIf="selectedSource == 'ais'">
-        <mat-radio-group [(ngModel)]="selectedImport" class="mt-4" (ngModelChange)="onFormChange()">
+        <mat-radio-group [(ngModel)]="selectedImport" class="mt-4" (ngModelChange)="onFormChange(true)">
           <mat-radio-button value="Attendance">Dochádzka</mat-radio-button>
           <mat-radio-button value="Grades">Študijné výsledky</mat-radio-button>
           <mat-radio-button value="Admissions">Prijímačky</mat-radio-button>
@@ -26,7 +26,7 @@
       </div>
 
       <div *ngIf="selectedSource == 'ineko'">
-        <mat-radio-group [(ngModel)]="selectedImport" class="mt-4" (ngModelChange)="onFormChange()">
+        <mat-radio-group [(ngModel)]="selectedImport" class="mt-4" (ngModelChange)="onFormChange(true)">
           <mat-radio-button value="Schools">Školy</mat-radio-button>
           <mat-radio-button value="Percentils">Percentily</mat-radio-button>
           <mat-radio-button value="TotalRating">Celkové hodnotenie</mat-radio-button>
@@ -51,18 +51,18 @@
       <input matInput placeholder="Školský rok" [(ngModel)]="schoolYear" (ngModelChange)="onFormChange()">
     </mat-form-field>
 
-    <!-- <div
-      *ngIf="importedYears[selectedSource][selectedImport] && importedYears[selectedSource][selectedImport].length"
+    <div
+      *ngIf="selectedImportYears.length"
       class="alert alert-warning"
       role="alert"
     >
       <p font-weight-bold>Pre nasledujúce roky bol daný import už vykonaný:</p>
       <ul>
-        <li *ngFor="let year of importedYears[selectedSource][selectedImport]">{{ year }}</li>
+        <li *ngFor="let year of selectedImportYears">{{ year }}</li>
       </ul>
       <hr>
       <p class="mb-0">Opätovným importovaním s daným obdobím vzniká riziko, že si prepíšete existujúce dáta.</p>
-    </div> -->
+    </div>
     <mat-divider></mat-divider>
   </ng-template>
 
@@ -87,6 +87,11 @@
   >
     Mapovanie atribútov
   </button>
+
+  <span *ngIf="attrMapping.length" class="text-success" margin-left>
+    <i class="fas fa-check"></i>
+    Mapovanie atribútov bolo pridané.
+  </span>
 
   <button
     class="btn-lg float-right"

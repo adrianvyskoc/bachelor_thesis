@@ -8,9 +8,9 @@ class AisStudentsDataPt2Schema extends Schema {
       table.increments()
       table.timestamps()
 
+      table.integer("ID").references("AIS_ID").inTable("ais_students")
       table.string("OBDOBIE")
       table.string("Celé_meno_s_titulmi")
-      table.string("ID")
       table.string("Pohlavie")
       table.string("Poplatky_poznámka")
       table.string("Zapl_rozpočítané")
