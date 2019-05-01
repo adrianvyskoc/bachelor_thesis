@@ -1,63 +1,87 @@
+<h5>Parametre pre vyhodnotenie ocenení</h5>
+<span>*pre nebratie do úvahy parameter hodnotenie, zadajte hodnotu "FX"</span><br>
+<span>*pre nebratie do úvahy parameter vážený študijný priemer, zadajte hodnotu "5"</span>
+<hr>
+
+<div class="params">
+  <form [formGroup]="configForm" (ngSubmit)="onConfigFormSubmit()">
+    <div class="row">
+      <label>
+        MCL Vedúci
+        <input type="text" formControlName="mclVeduci">
+      </label>
+      <label>
+        MCL Oponent
+        <input type="text" formControlName="mclOponent">
+      </label>
+      <label>
+        MCL Celkovo
+        <input type="text" formControlName="mclCelkovo">
+      </label>
+      <label>
+        MCL VŠP
+        <input type="text" formControlName="mclVsp">
+      </label>
+    </div>
+    <div class="row">
+      <label>
+        CL Vedúci
+        <input type="text" formControlName="clVeduci">
+      </label>
+      <label>
+        CL Oponent
+        <input type="text" formControlName="clOponent">
+      </label>
+      <label>
+        CL Celkovo
+        <input type="text" formControlName="clCelkovo">
+      </label>
+      <label>
+        CL VŠP
+        <input type="text" formControlName="clVsp">
+      </label>
+    </div>
+    <div class="row">
+      <label>
+        PLD Vedúci
+        <input type="text" formControlName="pldVeduci">
+      </label>
+      <label>
+        PLD Oponent
+        <input type="text" formControlName="pldOponent">
+      </label>
+      <label>
+        PLD Celkovo
+        <input type="text" formControlName="pldCelkovo">
+      </label>
+      <label>
+        PLD Návrh
+        <input type="text" formControlName="pldNavrh">
+        <span>(1: len prvé návrhy; 2: všetky návrhy)</span>
+      </label>
+    </div>
+    <div class="row">
+      <label>
+        CR Celkovo
+        <input type="text" formControlName="crCelkovo">
+      </label>
+      <label>
+        CR VŠP
+        <input type="text" formControlName="crVsp">
+      </label>
+    </div>
+    <button class="btn btn-raised btn-primary" [disabled]="!configForm.valid" type="submit">Uložiť zmeny</button>
+  </form>
+</div>
+
 <hr>
 <button class="btn btn-raised btn-primary" matTooltip="Exportuje sa celkové vyhodnotenie ŠZS." (click)="export()">
   Exportovať vyhodnotenie ŠZS
 </button>
+<div class="warning">
+  <p class="warning">Skontrolujte posledný stĺpec s možnými chybami v dátach!</p>
+</div>
 <hr>
-
-<!-- [(ngModel)]="mclVeduci" (ngModelChange)="changeConfig(mclVeduci)" [ngModelOptions]="{updateOn: 'blur'}" -->
-<form [formGroup]="configForm" (ngSubmit)="onConfigFormSubmit()">
-  <div class="row">
-    <label>
-      MCL Vedúci
-      <input type="text" formControlName="mclVeduci" [(ngModel)]="mclVeduci">
-    </label>
-    <label>
-      MCL Oponent
-      <input type="text" formControlName="mclOponent" [(ngModel)]="mclOponent">
-    </label>
-    <label>
-      MCL Celkovo
-      <input type="text" formControlName="mclCelkovo" [(ngModel)]="mclCelkovo">
-    </label>
-    <label>
-      MCL VŠP
-      <input type="text" formControlName="mclVsp" [(ngModel)]="mclVsp">
-    </label>
-  </div>
-  <div class="row">
-    <label>
-      CL Vedúci
-      <input type="text" formControlName="clVeduci" [(ngModel)]="clVeduci">
-    </label>
-    <label>
-      CL Oponent
-      <input type="text" formControlName="clOponent" [(ngModel)]="clOponent">
-    </label>
-    <label>
-      CL Celkovo
-      <input type="text" formControlName="clCelkovo" [(ngModel)]="clCelkovo">
-    </label>
-    <label>
-      CL VŠP
-      <input type="text" formControlName="clVsp" [(ngModel)]="clVsp">
-    </label>
-  </div>
-  <div class="row">
-    <label>
-      PLD Vedúci
-      <input type="text" formControlName="pldVeduci" [(ngModel)]="pldVeduci">
-    </label>
-    <label>
-      PLD Oponent
-      <input type="text" formControlName="pldOponent" [(ngModel)]="pldOponent">
-    </label>
-    <label>
-      PLD Celkovo
-      <input type="text" formControlName="pldCelkovo" [(ngModel)]="pldCelkovo">
-    </label>
-  </div>
-  <button type="submit">Uložiť zmeny</button>
-</form>
 
 <table mat-table [dataSource]="dataSource">
   <!-- id -->
@@ -74,7 +98,7 @@
         [ngModelOptions]="{updateOn: 'blur'}"></td>
   </ng-container>
 
-  <!-- meno -->
+  <!-- meno [ngClass] -->
   <ng-container matColumnDef="meno">
     <th mat-header-cell *matHeaderCellDef>Meno</th>
     <td mat-cell *matCellDef="let row">{{ row.celeMenoSTitulmi }}</td>
@@ -121,7 +145,10 @@
   <!-- veduci -->
   <ng-container matColumnDef="veduci">
     <th mat-header-cell *matHeaderCellDef>Vedúci</th>
-    <td mat-cell *matCellDef="let row">{{ row.veduci | formatNameTitle }}</td>
+    <td mat-cell *matCellDef="let row">
+      <ng-container *ngIf="row.veduciY">{{ row.veduciY }}</ng-container>
+      <ng-container *ngIf="!row.veduciY">{{ row.veduci | formatNameTitle }}</ng-container>
+    </td>
   </ng-container>
 
   <!-- oponent -->
@@ -163,7 +190,7 @@
   <!-- DI-BP2vAJ -->
   <ng-container matColumnDef="DI-BP2vAJ">
     <th mat-header-cell *matHeaderCellDef>(DI) BP2 v AJ</th>
-    <td mat-cell *matCellDef="let row" class="type--input">{{ row.bp2_v_aj }}<input type="text" placeholder="vstup"
+    <td mat-cell *matCellDef="let row" class="type--input">{{ row.bp2_v_aj }}<input type="text"
         [(ngModel)]="row.bp2_v_aj" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
   </ng-container>
 
@@ -171,8 +198,7 @@
   <ng-container matColumnDef="DI-SSOpravnyTermin">
     <th mat-header-cell *matHeaderCellDef>(DI) ŠS opravný termín</th>
     <td mat-cell *matCellDef="let row" class="type--input">{{ row.ssOpravnyTermin }}<input type="text"
-        placeholder="vstup" [(ngModel)]="row.ssOpravnyTermin" (ngModelChange)="change(row)"
-        [ngModelOptions]="{updateOn: 'blur'}"></td>
+        [(ngModel)]="row.ssOpravnyTermin" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
   </ng-container>
 
   <!-- NCA-navrhVKomisii VZOREC-->
@@ -185,22 +211,20 @@
   <ng-container matColumnDef="NOKP-navrhVKomisiiPoradie">
     <th mat-header-cell *matHeaderCellDef>(NOKP) Návrh v komisii - poradie</th>
     <td mat-cell *matCellDef="let row" class="type--input">{{ row.navrhVKomisiiPoradie }}<input type="text"
-        placeholder="vstup" [(ngModel)]="row.navrhVKomisiiPoradie" (ngModelChange)="change(row)"
-        [ngModelOptions]="{updateOn: 'blur'}"></td>
+        [(ngModel)]="row.navrhVKomisiiPoradie" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
   </ng-container>
 
   <!-- NOKP-skorTeoreticka -->
   <ng-container matColumnDef="NOKP-skorTeoreticka">
     <th mat-header-cell *matHeaderCellDef>(NOKP) Skôr teoretická</th>
     <td mat-cell *matCellDef="let row" class="type--input">{{ row.skorTeoreticka }}<input type="text"
-        placeholder="vstup" [(ngModel)]="row.skorTeoreticka" (ngModelChange)="change(row)"
-        [ngModelOptions]="{updateOn: 'blur'}"></td>
+        [(ngModel)]="row.skorTeoreticka" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
   </ng-container>
 
   <!-- NOKP-skorPrakticka -->
   <ng-container matColumnDef="NOKP-skorPrakticka">
     <th mat-header-cell *matHeaderCellDef>(NOKP) Skôr praktická</th>
-    <td mat-cell *matCellDef="let row" class="type--input">{{ row.skorPrakticka }}<input type="text" placeholder="vstup"
+    <td mat-cell *matCellDef="let row" class="type--input">{{ row.skorPrakticka }}<input type="text"
         [(ngModel)]="row.skorPrakticka" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
   </ng-container>
 
@@ -213,7 +237,7 @@
   <!-- NOKP-navrhDoRSP -->
   <ng-container matColumnDef="NOKP-navrhDoRSP">
     <th mat-header-cell *matHeaderCellDef>(NOKP) Návrh do RŠP</th>
-    <td mat-cell *matCellDef="let row" class="type--input">{{ row.navrhDoRSP1 }}<input type="text" placeholder="vstup"
+    <td mat-cell *matCellDef="let row" class="type--input">{{ row.navrhDoRSP1 }}<input type="text"
         [(ngModel)]="row.navrhDoRSP1" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
   </ng-container>
 
@@ -221,8 +245,7 @@
   <ng-container matColumnDef="NOKP-konecneRozhodnutie">
     <th mat-header-cell *matHeaderCellDef>(NOKP) Konečné rozhodnutie (RŠP)</th>
     <td mat-cell *matCellDef="let row" class="type--input">{{ row.konecneRozhodnutie1 }}<input type="text"
-        placeholder="vstup" [(ngModel)]="row.konecneRozhodnutie1" (ngModelChange)="change(row)"
-        [ngModelOptions]="{updateOn: 'blur'}"></td>
+        [(ngModel)]="row.konecneRozhodnutie1" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
   </ng-container>
 
   <!-- OP-autoNavrh VZOREC-->
@@ -234,7 +257,7 @@
   <!-- OP-navrhDoRSP -->
   <ng-container matColumnDef="OP-navrhDoRSP">
     <th mat-header-cell *matHeaderCellDef>(OP) Návrh do RŠP</th>
-    <td mat-cell *matCellDef="let row" class="type--input">{{ row.navrhDoRSP2 }}<input type="text" placeholder="vstup"
+    <td mat-cell *matCellDef="let row" class="type--input">{{ row.navrhDoRSP2 }}<input type="text"
         [(ngModel)]="row.navrhDoRSP2" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
   </ng-container>
 
@@ -242,14 +265,13 @@
   <ng-container matColumnDef="OP-konecneRozhodnutie">
     <th mat-header-cell *matHeaderCellDef>(OP) Konečné rozhodnutie (RŠP)</th>
     <td mat-cell *matCellDef="let row" class="type--input">{{ row.konecneRozhodnutie2 }}<input type="text"
-        placeholder="vstup" [(ngModel)]="row.konecneRozhodnutie2" (ngModelChange)="change(row)"
-        [ngModelOptions]="{updateOn: 'blur'}"></td>
+        [(ngModel)]="row.konecneRozhodnutie2" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
   </ng-container>
 
   <!-- promocie -->
   <ng-container matColumnDef="promocie">
     <th mat-header-cell *matHeaderCellDef>Promócie</th>
-    <td mat-cell *matCellDef="let row" class="type--input">{{ row.promocie }}<input type="text" placeholder="vstup"
+    <td mat-cell *matCellDef="let row" class="type--input">{{ row.promocie }}<input type="text"
         [(ngModel)]="row.promocie" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
   </ng-container>
 
@@ -257,10 +279,21 @@
   <ng-container matColumnDef="najhorsiaZnamkaPriCR">
     <th mat-header-cell *matHeaderCellDef>Najhoršia známka pri CR</th>
     <td mat-cell *matCellDef="let row" class="type--input">{{ row.najhorsiaZnamka }}<input type="text"
-        placeholder="vstup" [(ngModel)]="row.najhorsiaZnamka" (ngModelChange)="change(row)"
-        [ngModelOptions]="{updateOn: 'blur'}"></td>
+        [(ngModel)]="row.najhorsiaZnamka" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
   </ng-container>
 
+  <!-- poznámky -->
+  <ng-container matColumnDef="poznamky">
+    <th mat-header-cell *matHeaderCellDef>Poznámky</th>
+    <td mat-cell *matCellDef="let row" class="type--input">{{ row.poznamky }}<input type="text"
+        [(ngModel)]="row.poznamky" (ngModelChange)="change(row)" [ngModelOptions]="{updateOn: 'blur'}"></td>
+  </ng-container>
+  
+  <!-- podozrenie -->
+  <ng-container matColumnDef="podozrenie">
+    <th mat-header-cell *matHeaderCellDef>Možná chyba v dátach</th>
+    <td mat-cell *matCellDef="let row">{{ row.podozrenie }}</td>
+  </ng-container>
 
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -271,4 +304,3 @@
 <button class="btn btn-raised btn-primary" matTooltip="Exportuje sa celkové vyhodnotenie ŠZS." (click)="export()">
   Exportovať vyhodnotenie ŠZS
 </button>
-<hr>

@@ -20,25 +20,50 @@ class UserController {
       })
 
     console.log(user)
-    user[0].access ? auth.access = true : null
-    if (user !== undefined && auth.access) {
-      if (await this.loginWithLDAP({ request, response })) {
-      // if (true) {
-        user[0].admin ? auth.admin = true : null
-      }
+    if(user == undefined || user.length === 0) {
+      return response.send({
+        type: 'error',
+        message: 'Použivateľ v systéme neexistuje'
+      });
     } else {
-      console.log('pouzivatel nie je v databaze')
+      user[0].access ? auth.access = true : null
+      if (auth.access) {
+        if (await this.loginWithLDAP({ request, response })) {
+          user[0].admin ? auth.admin = true : null
+          // if (auth.admin) {
+            return response.send({
+              type: 'success',
+              message: 'Prihlásenie úspešné',
+              auth: auth
+            });
+          // } else {
+          //   return response.send({
+          //     type: 'error',
+          //     message: 'Nie ste pripojeny na univerzitnu siet',
+          //     auth: auth
+          //   });
+          // }
+        } else {
+          return response.send({
+            type: 'error',
+            message: 'Nesprávne meno alebo heslo',
+            auth: auth
+          });
+        }
+      } else {
+        return response.send({
+          type: 'error',
+          message: 'Používateľ nemá oprávnenie na prístup',
+          auth: auth
+        });
+      }
     }
-    return response.send(auth)
   }
 
   async loginWithLDAP({ request, response }) {
     return new Promise((resolve, reject) => {
       let data = request.all()
-      let loggedIn = false
-      // console.log(`pouzivatel: ${data.email} sa skusil prihlasit s ${data.password}`)
 
-      // ************************************ start JavaScript LDAP
       if (data.email && data.password) {
         const client = ldap.createClient({
           url: 'ldaps://ldap.stuba.sk'
@@ -53,15 +78,12 @@ class UserController {
           err ? resolve(false) : resolve(true)
         })
       } else {
-        console.log("Musis zadat meno a heslo $ node ldap_validator meno heslo");
+        resolve(false)
       }
     })
     .then((res) => {
       return res
-      // console.log(res)
-      // return response.status(200).send(res)
     })
-    // ************************************
   }
 }
 

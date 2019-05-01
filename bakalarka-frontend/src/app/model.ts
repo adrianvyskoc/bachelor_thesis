@@ -9,12 +9,15 @@ export interface User {
 
 export interface Exam {
   id: number;
+  obdobie: string;
+  celeMenoSTitulmi: string;
   riesitel: string;
   aisId: string;
   identifikaciaStudia: string; 
   obhajoba: string;
   zaverecnaPracaNazov: string;
   veduci: string;
+  veduciY: string;
   oponent: string;
   stav: string;
   vspStudium: string | number;
@@ -27,4 +30,22 @@ export interface Exam {
   komisia: string;
   predseda: string;
   tajomnik: string;
+  podozrenie?: string;
+}
+
+export interface Param {
+  crVsp: number;
+  crCelkovo: string
+  pldVeduci: string;
+  pldOponent: string;
+  pldCelkovo: string;
+  pldNavrh: number;
+  mclVsp: number;
+  mclVeduci: string;
+  mclOponent: string;
+  mclCelkovo: string;
+  clVsp: number;
+  clVeduci: string;
+  clOponent: string;
+  clCelkovo: string;
 }

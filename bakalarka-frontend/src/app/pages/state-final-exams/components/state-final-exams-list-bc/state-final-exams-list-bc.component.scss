@@ -29,6 +29,8 @@ td.mat-cell {
     transform: translateY(-50%);
     transition: all 0.1s linear;
     font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
   }
 
   input:focus {
@@ -37,10 +39,32 @@ td.mat-cell {
   }
 }
 
-form {
-  label {
-    min-width: 200px;
+.params {
+  margin-left: 15px;
+
+  form {
+    label {
+      min-width: 200px;
     margin: 5px;
     font-size: 11px;
   }
+  input {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  button {
+    margin-top: 15px;
+    margin-left: -15px;
+  }
+}
+}
+
+span {
+  font-size: 12px;
+  padding-left: 10px;
+}
+
+.warning {
+  color: red;
+  font-size: 11px;
 }

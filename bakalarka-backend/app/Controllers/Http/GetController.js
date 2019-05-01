@@ -87,7 +87,7 @@ class GetController {
     }
 
     // ---
-    // vrati userov ktori maju pristup do appky
+    // vrati userov ktori maju pristup do aplikácie
     async getUsers({ response }) {
       try {
         const data = await Database
@@ -205,54 +205,30 @@ class GetController {
 
     // ---
 
-    async getStateFinalExamsBc ({ response }) {
+    async getDateYears({request, response}) {
+      let rawData = [];
+      const data = await Database.raw(`
+        select distinct 
+          ais_state_exams_scenarios."OBDOBIE" 
+        from 
+          ais_state_exams_scenarios
+        order by 
+          ais_state_exams_scenarios."OBDOBIE" ASC
+      `);
+
+      // odstranenie nezelaneho tvaru ziskanych dat
+      data.rows.map(e => {
+        rawData.push(e['OBDOBIE']);
+      })
+
+      return response
+        .status(200)
+        .send(rawData)
+    }
+
+    async getStateFinalExamsBc ({ request, response }) {
+      const datum = request.body.year;
       try {
-        // const data = await Database
-        //   // .select('*', 'Celé_meno_s_titulmi as cmst')
-        //   .select(
-        //     'ais_state_exams_overviews.id as id',
-        //     // 'ais_state_exams_overviews.OBDOBIE as obdobie', //mozno zaznacit niekde na stranke pre orientaciu
-
-        //     // tabulka OVERVIEWS-----------------------------------
-        //     'ais_state_exams_overviews.Celé_meno_s_titulmi as celeMenoSTitulmi',
-        //     'ais_state_exams_overviews.AIS_ID as aisId',
-        //     'ais_state_exams_overviews.Identifikácia_štúdia as identifikaciaStudia',
-        //     'ais_state_exams_overviews.Obhajoba as obhajoba', // datum v tvare 19.06.2018
-        //     'ais_state_exams_overviews.Záverečná_práca_názov as zaverecnaPracaNazov',
-        //     'ais_state_exams_overviews.Vedúci as veduci',
-        //     'ais_state_exams_overviews.Oponent as oponent',
-        //     'ais_state_exams_overviews.Stav as stav',
-        //     'ais_state_exams_overviews.VŠP_štúdium as vspStudium',
-        //     'ais_state_exams_overviews.VŠP_štud_bpo as vspStudBpo',
-        //     // --- doplnene do overviews
-        //     // 'ais_state_exams_overviews.test as test',
-
-
-        //     // tabulka SCENARIO-------------------------------------
-        //     // 'OBDOBIE as obdobie' //nepotrebujem uz mam
-        //     // 'Typ_proj as typProj', //nepotrebujem
-        //     'ais_state_exams_scenarios.Štud_prog as studProg',
-        //     // 'ais_state_exams_scenarios.Riešiteľ as riesitel', // tu nie su vsetky mena
-        //     // 'Názov_projektu as nazovProjektu', //uz mam z overviews
-        //     // 'Vedúci_projektu as veduciProjektu', //uz mam z overviews
-        //     // 'Oponent as oponent' // uz mam z overviews
-        //     'ais_state_exams_scenarios.Vedúci as veduciHodnotenie', // znamka
-        //     'ais_state_exams_scenarios.Oponent_1 as oponentHodnotenie', // znamka
-        //     'ais_state_exams_scenarios.Výsledné_hodnotenie as vysledneHodnotenie', // znamka
-        //     'ais_state_exams_scenarios.dňa as dna', // datum v tvare 20. júna 2018
-        //     'ais_state_exams_scenarios.Komisia as komisia',
-        //     'ais_state_exams_scenarios.Predseda as predseda',
-        //     'ais_state_exams_scenarios.Tajomník as tajomnik',
-        //   )
-        //   .from('ais_state_exams_overviews')
-        //   .leftJoin('ais_state_exams_scenarios',
-        //     function () {
-        //       this
-        //       .on('trim(ais_state_exams_overviews.Záverečná_práca_názov)', 'trim(ais_state_exams_scenarios.Názov_projektu)')
-        //       // .andOn('ais_state_exams_overviews.Celé_meno_s_titulmi', 'ais_state_exams_scenarios.Riešiteľ')
-        //     }
-        //    )
-
         const data = await Database.raw(`
           select
             ais_state_exams_overviews.id as id,
@@ -268,6 +244,8 @@ class GetController {
             ais_state_exams_overviews."VŠP_štúdium" as "vspStudium",
             ais_state_exams_overviews."VŠP_štud_bpo" as "vspStudBpo",
             ais_state_exams_scenarios."Štud_prog" as "studProg",
+            ais_state_exams_scenarios."Riešiteľ" as "riesitel",
+            ais_state_exams_scenarios."Vedúci_projektu" as "veduciY",
             ais_state_exams_scenarios."Vedúci" as "veduciHodnotenie",
             ais_state_exams_scenarios."Oponent_1" as "oponentHodnotenie",
             ais_state_exams_scenarios."Výsledné_hodnotenie" as "vysledneHodnotenie",
@@ -286,19 +264,27 @@ class GetController {
             ais_state_exams_overviews."navrhDoRSP2",
             ais_state_exams_overviews."konecneRozhodnutie2",
             ais_state_exams_overviews."promocie",
-            ais_state_exams_overviews."najhorsiaZnamka"
+            ais_state_exams_overviews."najhorsiaZnamka",
+            ais_state_exams_overviews."poznamky"
           from
             ais_state_exams_overviews
-          left join
-            ais_state_exams_scenarios on REGEXP_REPLACE(lower(ais_state_exams_overviews."Záverečná_práca_názov"), '[ \s]*', '', 'g') = REGEXP_REPLACE(lower(ais_state_exams_scenarios."Názov_projektu"), '[ \s]*', '', 'g')
+          full outer join
+            ais_state_exams_scenarios 
+          on 
+            REGEXP_REPLACE(lower(ais_state_exams_overviews."Záverečná_práca_názov"), '[ \\s]*', '', 'g') = REGEXP_REPLACE(lower(ais_state_exams_scenarios."Názov_projektu"), '[ \\s]*', '', 'g')
           and
             ais_state_exams_overviews."Celé_meno_s_titulmi" like '%' || ais_state_exams_scenarios."Riešiteľ" || '%'
+          and
+            ais_state_exams_overviews."OBDOBIE" like ais_state_exams_scenarios."OBDOBIE"
+          where
+            ais_state_exams_overviews."OBDOBIE" = '${datum}'
           order by id ASC
-        `)
+        `);
+
+        console.log('dlzka dat', data.rows.length);
 
         return response
           .status(200)
-          // .send(data)
           .send(data.rows)
 
       } catch(e) {
@@ -330,6 +316,7 @@ class GetController {
             konecneRozhodnutie2: data.konecneRozhodnutie2,
             promocie: data.promocie,
             najhorsiaZnamka: data.najhorsiaZnamka,
+            poznamky: data.poznamky,
           })
 
         console.log(request.body)
@@ -346,6 +333,7 @@ class GetController {
       }
     }
 
+    // Todo
     async getStateFinalExamsIng ({ response }) {
       try {
         // dorobit select podla dat
@@ -362,7 +350,7 @@ class GetController {
       }
     }
 
-
+    // Todo
     async updateStateFinalExamsIng ({ response, request }) {
       const data = request.body
       try {
@@ -387,43 +375,90 @@ class GetController {
     }
     // ---
 
-    async getFinalExamConfiguration ({ response, request }) {
-      const finalExamConfig = {
-        pldVeduci: 'B',
-        pldOponent: 'B',
-        pldCelkovo: 'B',
-        mclVsp: 1.19,
-        mclVeduci: 'A',
-        mclOponent:'D',
-        mclCelkovo: 'A',
-        clVsp: 1.6,
-        clVeduci: 'C',
-        clOponent:'D',
-        clCelkovo: 'B'
-      };
-      return response.send(finalExamConfig);
+    async getFinalExamConfiguration ({ response }) {
+      const data = await Database
+        .table('state_exams_params')
+
+        if (data[0] == undefined) {
+          console.log('tralaalal som tu' + data[0])
+
+          await Database.raw(`
+            ALTER SEQUENCE 
+              state_exams_params_id_seq 
+            RESTART WITH 1
+          `)
+
+          await Database
+            .table('state_exams_params')
+            .insert([{
+              crVsp: 1.2,
+              crCelkovo: 'A',
+              pldVeduci: 'B',
+              pldOponent: 'B',
+              pldCelkovo: 'B',
+              pldNavrh: 1,
+              mclVsp: 1.19,
+              mclVeduci: 'A',
+              mclOponent: 'D',
+              mclCelkovo: 'A',
+              clVsp: 1.6,
+              clVeduci: 'C',
+              clOponent: 'D',
+              clCelkovo: 'B'
+            }])
+          
+          const dataNew = await Database
+            .table('state_exams_params')
+
+          return response
+            .status(200)
+            .send(dataNew[0]);
+        }
+
+      return response
+        .status(200)
+        .send(data[0]);
     }
 
-    // TODO
     async updateFinalExamConfiguration ({ response, request }) {
       const data = request.body;
+      console.log('dataaaa')
       console.log(data);
-      const finalExamConfig = {
-        pldVeduci: data.pldVeduci,
-        pldOponent: data.pldOponent,
-        pldCelkovo: data.pldCelkovo,
-        mclVsp: data.mclVsp,
-        mclVeduci: data.mclVeduci,
-        mclOponent: data.mclOponent,
-        mclCelkovo: data.mclCelkovo,
-        clVsp: data.clVsp,
-        clVeduci: data.clVeduci,
-        clOponent: data.clOponent,
-        clCelkovo: data.clCelkovo
-      };
-      return response.send(finalExamConfig);
+      try {
+        await Database
+          .table('state_exams_params')
+          .where({ id: data.id })
+          .update({
+            crVsp: data.crVsp,
+            crCelkovo: data.crCelkovo,
+            pldVeduci: data.pldVeduci,
+            pldOponent: data.pldOponent,
+            pldCelkovo: data.pldCelkovo,
+            pldNavrh: data.pldNavrh,
+            mclVsp: data.mclVsp,
+            mclVeduci: data.mclVeduci,
+            mclOponent: data.mclOponent,
+            mclCelkovo: data.mclCelkovo,
+            clVsp: data.clVsp,
+            clVeduci: data.clVeduci,
+            clOponent: data.clOponent,
+            clCelkovo: data.clCelkovo
+          })
+        
+        return response
+          .status(200)
+          .send(true);
+
+      } catch(e) {
+        console.log(e)
+
+        return response
+          .status(500)
+          .send(e)
+      }
     }
 
+    // ---
 
     async getGrades ({ response }) {
         const grades = await Grade.all()

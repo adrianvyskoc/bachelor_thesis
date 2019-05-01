@@ -72,14 +72,15 @@ Route
           Administrators api endpoints end
         */
 
+       
+       /*
+       State Final Exams api endpoints start
+       */
+        Route.post('statefinalexamsbc', 'getController.getStateFinalExamsBc')
+        Route.post('statefinalexamsbc/update', 'getController.updateStateFinalExamsBc')
+        Route.get('statefinalexamsbc/year', 'getController.getDateYears')
         Route.get('finalexamconfig/get', 'GetController.getFinalExamConfiguration')
         Route.post('finalexamconfig/update', 'GetController.updateFinalExamConfiguration')
-
-        /*
-          State Final Exams api endpoints start
-        */
-        Route.get('statefinalexamsbc', 'getController.getStateFinalExamsBc')
-        Route.post('statefinalexamsbc/update', 'getController.updateStateFinalExamsBc')
         
         Route.get('statefinalexamsing', 'getController.getStateFinalExamsIng')
         Route.post('statefinalexamsing/update', 'getController.updateStateFinalExamsIng')
@@ -87,6 +88,7 @@ Route
           State Final Exams api endpoints end
         */
 
+       
 
         /*
           Login LDAP

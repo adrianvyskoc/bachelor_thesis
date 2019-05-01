@@ -38,6 +38,7 @@ class StateExamsOverviewSchema extends Schema {
       table.string("konecneRozhodnutie2")
       table.string("promocie")
       table.string("najhorsiaZnamka")
+      table.string("poznamky")
     })
   }
 

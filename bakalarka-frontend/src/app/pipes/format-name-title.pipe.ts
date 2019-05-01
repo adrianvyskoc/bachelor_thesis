@@ -4,11 +4,13 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'formatNameTitle'
 })
 export class FormatNameTitlePipe implements PipeTransform {
-  /*
-    Pipe-a na upravenie celého mena s titulmi a zobrazenie vo formáte: Priezvisko Meno, Akademické tituly
-    Je dôležité držať tituly v správnom poradí, aby aj transformované dáta boli správne. 
-    Tituly, ktoré sa tu nenachádzajú, nebudú zobrazené po transformácii.
-  */
+  /**
+   * Dátovod na upravenie celého mena s titulmi a zobrazenie vo formáte: Priezvisko Meno, Akademické tituly
+   * Je dôležité držať tituly v správnom poradí, aby transformované dáta boli správne.
+   * Tituly, ktoré sa tu nenachádzajú, nebudú zobrazené po transformácii.
+   * @param value - meno a priezvisko s titulmi
+   * @param args 
+   */
   transform(value: any, args?: any): any {
     const titles = ['doc.', 'RNDr.', 'Mgr.', 'prof.', 'Dr.', 'Ing.', 'Bc.', 'PhD.', 'CSc.']
     // const titles = ['prof.', 'doc.', 'RNDr.', 'PhDr.', 'Mgr.', 'Dr.', 'Ing.', 'Bc.', 'PhD.', 'CSc.', 'DrSc.'] mozno spravnejsie poradie

@@ -16,7 +16,7 @@ export class AccountsFormComponent implements OnInit {
   ngOnInit() {}
 
   submitForm() {
-    this.accountsService.addAccount(this.username).subscribe(
+    this.accountsService.addAccount(this.username.toLocaleLowerCase()).subscribe(
       () => {
         this.accountsService.loadAllAccounts();
         this.username = null;
