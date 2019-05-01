@@ -5,6 +5,7 @@ import { Title } from '@angular/platform-browser';
 import * as XLSX from 'xlsx';
 import { MatDialog } from '@angular/material';
 import { MappingDialogComponent } from './mapping-dialog/mapping-dialog.component';
+import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 
 @Component({
   selector: 'app-import',
@@ -54,10 +55,12 @@ export class ImportComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private titleService: Title,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private tocUtil: TocUtil
   ) {}
 
   ngOnInit() {
+    this.tocUtil.noToc()
     this.titleService.setTitle("Importovanie dát")
   }
 

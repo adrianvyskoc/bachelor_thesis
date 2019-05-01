@@ -23,6 +23,10 @@ export class TocUtil {
     this.tocChanged.next(toc)
   }
 
+  noToc() {
+    this.tocChanged.next([])
+  }
+
   getTocUpdateListener() {
     return this.tocChanged.asObservable()
   }
