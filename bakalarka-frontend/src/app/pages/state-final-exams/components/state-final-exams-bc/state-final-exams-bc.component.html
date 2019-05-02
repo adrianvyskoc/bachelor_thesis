@@ -7,12 +7,22 @@
     <li>DI - Ďalšie informácie</li>
     <li>NCA - Návrh - cena akákoľvek</li>
     <li>NOPK - Návrh na ocenenie z komisie za prácu (CR, CD, PLD)</li>
-    <li>OP - Ocenenie  za prospech</li>
+    <li>OP - Ocenenie za prospech</li>
   </ul>
-
-  <p>Tabuľka obsahuje údaje z roku:  {{ data ? data[0].obdobie : 'Dáta nie sú importované' }} </p>
+  <hr>
+  <p>Tabuľka obsahuje údaje z roku: {{ data ? data[0].obdobie : 'Dáta nie sú importované' }}</p>
+  <form class="col-sm-2" [formGroup]="filterForm" (ngSubmit)="onFilterFormSubmit()">
+    <label>
+      Zmeniť rok
+      <select class="custom-select" name="year" formControlName="yearOption">
+        <option [value]="year" *ngFor="let year of yearOptions">{{ year }}</option>
+      </select>
+    </label>
+    <button class="btn btn-raised btn-primary" type="submit">Uložiť zmeny</button>
+  </form>
+  <hr>
 
   {{ data ? data[0].AIS_ID : '' }}
-  
+
   <app-state-final-exams-list-bc [data]="data" [examConfig]="examConfig"></app-state-final-exams-list-bc>
 </div>

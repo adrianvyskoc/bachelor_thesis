@@ -10,6 +10,7 @@ import { AccountsService } from '../pages/accounts/services/accounts.service';
 export class LoginComponent implements OnInit {
   _email: string = ""
   _password: string = ""
+  authResult: any  
 
   constructor(
     private authService: AuthService,
@@ -20,8 +21,19 @@ export class LoginComponent implements OnInit {
   }
 
   submitForm() {
-    this.authService.loginUser(this._email, this._password)
-    // this.accountService.isAdmin(this._email).subscribe(user => console.log('from backend', user[0].admin) )
+    this.authService.authUser(this._email, this._password)
+      .subscribe(
+        data => {
+          this.authResult = data;
+          // console.log(this.authResult);
+          if(this.authResult.type === 'success') {
+            this.authService.loginUser(this.authResult.auth, this._email);
+          }
+        },
+        error => {
+          console.log(error);
+        }
+      )
   }
 
   get email() {

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,6 @@ export class AuthService {
     private http: HttpClient,
     private router: Router
   ) {
-    // const user: any = JSON.parse(localStorage.getItem('user'))
     const user: any = JSON.parse(sessionStorage.getItem('user'))
     this.loggedIn = false
     this.isAdmin = false
@@ -26,7 +26,16 @@ export class AuthService {
     }
   }
 
-  loginUser(email: string, password: string) {
+  authUser(email: string, password: string): Observable<any> {
+    let requestData = {
+      email: email,
+      password: password
+    }
+
+    return this.http.post(`http://localhost:3333/api/login`, requestData);
+  }
+
+  loginUser(auth: any, email: string) {
     let user = {
       email: email,
       isAdmin: false,
@@ -34,39 +43,22 @@ export class AuthService {
       date: new Date()
     }
 
-    let requestData = {
-      email: email,
-      password: password
+    if(auth.access) {
+      if(auth.admin) {
+        this.isAdmin = true
+        user.isAdmin = true
+      }
+      this.loggedIn = true
+      user.hasAccess = true
+      sessionStorage.setItem('user', JSON.stringify(user))
+      this.router.navigate(['dashboard'])
     }
-
-    this.http.post(`http://localhost:3333/api/login`, requestData)
-      .subscribe(
-        response => {
-          let res: any = response
-          console.log(res)
-          if(res.access) {
-            if(res.admin) {
-              this.isAdmin = true
-              user.isAdmin = true
-            }
-            this.loggedIn = true
-            user.hasAccess = true
-            // localStorage.setItem('user', JSON.stringify(user))
-            sessionStorage.setItem('user', JSON.stringify(user))
-            this.router.navigate(['dashboard'])
-          }
-          else {
-            this.loggedIn = false
-          }
-        },
-        err => {
-          console.log(err)
-        }
-      )
+    else {
+      this.loggedIn = false
+    }
   }
 
   logoutUser() {
-    // localStorage.removeItem('user')
     sessionStorage.removeItem('user')
     this.loggedIn = false;
     this.isAdmin = false;
