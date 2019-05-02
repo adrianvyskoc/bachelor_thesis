@@ -252,7 +252,6 @@ class ImportAisController {
         // -------------------------------------------------------------------
 
         if(params.selectedImport == 'StateExamsOverviews') {
-          try {
           for(let row of rows) {
             row = adjustKeys(row)
 
@@ -293,10 +292,7 @@ class ImportAisController {
               await Database.table('ais_state_exams_overviews').insert(row)
             } catch(err) { console.log(err) }
           }
-          let lol = await Database.table("ais_state_exams_overviews").select("*")
-        } catch(err) {console.log(err)}
         }
-
 
         // -------------------------------------------------------------------
         // StateExamsScenarios

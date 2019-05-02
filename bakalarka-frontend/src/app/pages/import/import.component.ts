@@ -75,7 +75,7 @@ export class ImportComponent implements OnInit {
     })
 
     dialogRef.afterClosed().subscribe(attrMapping => {
-      this.attrMapping = attrMapping
+      this.attrMapping = attrMapping ? attrMapping : []
     });
   }
 
@@ -119,6 +119,7 @@ export class ImportComponent implements OnInit {
     this.selectedImport = ""
     this.semester = ""
     this.schoolYear = ""
+    this.fileInput.nativeElement.value = "" // premazanie súborov v input[file] elemente
   }
 
   onFormChange(callAttrsAndYears = false) {
