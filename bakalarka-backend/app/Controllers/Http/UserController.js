@@ -49,7 +49,8 @@ class UserController {
           process.exit();
         })
 
-        client.bind(`uid=${data.email}, ou=People, DC=stuba, DC=sk`, `${data.password}`, function (err) {
+        client.bind(`uid=${data.email}, ou=People, DC=stuba, DC=sk`, `${data.password}`, function (err, lol) {
+          console.log(lol)
           err ? resolve(false) : resolve(true)
         })
       } else {

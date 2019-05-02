@@ -43,6 +43,7 @@ export class AuthService {
       .subscribe(
         response => {
           let res: any = response
+          console.log(res)
           if(res.access) {
             if(res.admin) {
               this.isAdmin = true
