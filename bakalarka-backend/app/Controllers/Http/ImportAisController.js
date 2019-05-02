@@ -184,6 +184,8 @@ class ImportAisController {
                 row.č_d = String(row.č_d)
                 row.č_d_1 = String(row.č_d_1)
                 row.Odbor_SŠ = String(row.Odbor_SŠ)
+                row.Body = toNumber(row.Body)
+                row.Body_celkom = toNumber(row.Body_celkom)
                 row.OBDOBIE = data.year
                 row.stupen_studia = row.Program_1[0] == 'B' ? 'Bakalársky' : 'Inžiniersky'
 
@@ -484,6 +486,9 @@ function adjustKeys(obj) {
 function toNumber(num) {
   if(!num)
     return null
+
+  if(typeof num == "number")
+    return num
 
   return Number(num.trim().replace(",", "."))
 }
