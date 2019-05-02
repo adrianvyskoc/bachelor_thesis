@@ -82,7 +82,7 @@
   <button
     mat-raised-button
     color="primary"
-    [disabled]="!selectedImportAttrs.length || !selectedFileAttrs.length"
+    [disabled]="!selectedImportAttrs.length && !selectedFileAttrs.length"
     (click)="openAttrMapping()"
   >
     Mapovanie atribútov

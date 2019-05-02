@@ -27,10 +27,7 @@ export class AdmissionsFilterService {
    * @param value - hodnota, podľa ktorej ideme filtrovať
    */
   filterByStudyType(admissions, value) {
-    if(value !== 3 || value !== 4)
-      return []
-
-    if(value == 4)
+    if(value == "4")
       return admissions.filter(admission => admission.Program_1[admission.Program_1.length - 1] == "4")
     else
       return admissions.filter(admission => admission.Program_1[admission.Program_1.length - 1] !== "4")
