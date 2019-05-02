@@ -22,15 +22,17 @@ export class AdmissionsFilterService {
   }
 
   /**
-   * Filtrovanie podľa typu štúdia (4 ročný, 3 ročný)
+   * Filtrovanie podľa typu štúdia (4 ročný, 3 ročný, 2 ročný)
    * @param admissions - všetky prihlášky, ktoré ideme filtrovať
    * @param value - hodnota, podľa ktorej ideme filtrovať
    */
   filterByStudyType(admissions, value) {
     if(value == "4")
       return admissions.filter(admission => admission.Program_1[admission.Program_1.length - 1] == "4")
+    else if(value == "2")
+      return admissions.filter(admission => admission.Program_1[admission.Program_1.length - 1] == "2")
     else
-      return admissions.filter(admission => admission.Program_1[admission.Program_1.length - 1] !== "4")
+      return admissions.filter(admission => admission.Program_1[admission.Program_1.length - 1] != "2" && admission.Program_1[admission.Program_1.length - 1] != "4")
   }
 
   /**

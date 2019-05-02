@@ -75,7 +75,7 @@
       </tbody>
     </table>
 
-    <table #table2 class="table table-borderless table-sm">
+    <table class="table table-borderless table-sm">
       <thead>
         <tr>
           <th colspan="2" scope="col">Kontaktné informácie</th>
@@ -96,7 +96,7 @@
         </tr>
         <tr>
           <th scope="row">Mesto</th>
-          <td>{{ admission.Kont_adresa_obec }}</td>
+          <td>{{ admission.Kont_adresa_obec }} ({{ admission['PSČ'] }})</td>
         </tr>
       </tbody>
     </table>
@@ -104,10 +104,19 @@
   </div>
   <div class="col-lg-6">
     <app-chart
-      [title]="'Body v prijímacom konaní'"
-      [data]="[admission.Body,admission.Body_celkom - admission.Body, admission.Body_celkom]"
-      [labels]="['Body zo strednej školy', 'Doplňkové body',  'Celkové body']"
+      *ngIf="admission['Externá_maturita_z_cudzieho_jazyka_ECJ'] || admission['Externá_maturita_z_matematiky_EM'] || admission['Písomný_test_z_matematiky_SCIO_PTM'] || admission['Všeobecné_študijné_predpoklady_SCIO_VŠP'] || admission['Body_celkom']"
+      [title]="'Body v prijímacom konaní podľa typu testu, ktorý uchádzač absolvoval'"
+      [data]="[admission['Externá_maturita_z_cudzieho_jazyka_ECJ'], admission['Externá_maturita_z_matematiky_EM'], admission['Písomný_test_z_matematiky_SCIO_PTM'], admission['Všeobecné_študijné_predpoklady_SCIO_VŠP'], admission['Body_celkom']]"
+      [labels]="['Ext. maturita z CJ', 'Ext. mat. z matematiky',  'SCIO z matematiky', 'SCIO VŠP', 'Celkové body']"
       [type]="'bar'"
+      [legend]="false"
+    ></app-chart>
+    <app-chart
+      *ngIf="admission.Body_celkom || admission.Body"
+      [title]="'Body v prijímacom konaní'"
+      [data]="[admission.Body, (admission.Body_celkom - admission.Body) | number:'2.2-2']"
+      [labels]="['Body zo strednej školy', 'Doplňkové body']"
+      [type]="'pie'"
       [legend]="false"
     ></app-chart>
   </div>
@@ -126,7 +135,7 @@
       <tbody>
         <tr>
           <th scope="row">Kód školy</th>
-          <td>{{ school.kod_kodsko }}</td>
+          <td>{{ school ? school.kod_kodsko : 'Neuvedené' }}</td>
         </tr>
         <tr>
           <th scope="row">Názov</th>
@@ -157,10 +166,11 @@
       </tbody>
     </table>
 
-    <app-map [markers]="[school]" [height]="400" [showSettingsButton]="false"></app-map>
+    <app-map *ngIf="school" [markers]="[school]" [height]="400" [showSettingsButton]="false"></app-map>
   </div>
   <div class="col-lg-6">
     <app-chart
+      *ngIf="school"
       [title]="'Hodnoty za jednotlivé ukazovatele školy'"
       [data]="[pointers.Mat_SJ, pointers.Mat_M, pointers.Mat_AJB1, pointers.Mat_AJB2]"
       [labels]="['Slovenský jazyk', 'Matematika', 'Anglický jazyk B1', 'Anglický jazyk B2']"

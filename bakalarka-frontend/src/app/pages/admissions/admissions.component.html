@@ -19,16 +19,18 @@
           <option value="Bakalársky">Bakalársky stupeň</option>
           <option value="Inžiniersky">Inžiniersky stupeň</option>
         </select>
+        <select
+          *ngIf="filterForm.controls.degree.value !== 'all'"
+          class="custom-select"
+          formControlName="studyType"
+          margin-bottom
+        >
+          <option value="all">Všetky typy štúdia</option>
+          <option *ngIf="filterForm.controls.degree.value == 'Inžiniersky'" value="2">Dvojročné štúdium</option>
+          <option value="3">Trojročné štúdium</option>
+          <option *ngIf="filterForm.controls.degree.value == 'Bakalársky'" value="4">Štvorročné štúdium</option>
+        </select>
         <div [hidden]="filterForm.controls.degree.value !== 'Bakalársky'">
-          <select
-            class="custom-select"
-            formControlName="studyType"
-            margin-bottom
-          >
-            <option value="all">Všetky typy štúdia</option>
-            <option value="3">Trojročné štúdium</option>
-            <option value="4">Štvorročné štúdium</option>
-          </select>
           <select
             class="custom-select"
             formControlName="schoolType"
