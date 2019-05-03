@@ -39,6 +39,8 @@ export class ImportComponent implements OnInit {
     AdmissionsPoints: 'ais_admissions',
     StateExamsOverviews: 'ais_state_exams_overviews',
     StateExamsScenarios: 'ais_state_exams_scenarios',
+    StateExamsOverviewsIng: 'ais_state_exams_overview_ings',
+    StateExamsScenariosIng: 'ais_state_exams_scenario_ings',
     StudentsDataPt1: 'ais_students_data_pt_1',
     StudentsDataPt2: 'ais_students_data_pt_2',
 
