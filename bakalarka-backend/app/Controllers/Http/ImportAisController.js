@@ -295,6 +295,59 @@ class ImportAisController {
             } catch(err) { console.log(err) }
           }
         }
+        
+        // -------------------------------------------------------------------
+        // StateExamsOverviewsIng
+        // -------------------------------------------------------------------
+        
+        if(params.selectedImport == 'StateExamsOverviewsIng') {
+          for(let row of rows) {
+            console.log(row)
+            for (const prop of Object.keys(row)) {
+              if(prop.indexOf('__EMPTY') > -1) delete row[prop];
+            }
+
+            row = adjustKeys(row)
+
+            row['AIS_ID'] = row['ID']
+            row['OBDOBIE'] = data.year
+
+            if(row['ID']) {
+              let students = await Database.table('ais_students').where('AIS_ID', row['ID']).count()
+
+              let studentData = {
+                AIS_ID: row['ID'],
+                PRIEZVISKO: row.Celé_meno_s_titulmi.split(",")[0].split(" ")[0],
+                MENO: row.Celé_meno_s_titulmi.split(",")[0].split(" ")[1]
+              }
+
+              try {
+                if(students[0].count == '0') {
+                  let student = new Student()
+                  student.fill(studentData)
+                  await student.save()
+                }
+                else {
+                  await Database
+                    .table('ais_students')
+                    .where({ 'AIS_ID': studentData.AIS_ID })
+                    .update(studentData)
+                }
+              } catch(err) {console.log(err)}
+            }
+
+            delete row['ID']
+            // delete row['Por']
+
+            row['VŠP_štúdium'] = toNumber(row['VŠP_štúdium'])
+            row['VŠP_štud_bpo'] = toNumber(row['VŠP_štud_bpo'])
+
+            try {
+              await Database.table('ais_state_exams_overview_ings').insert(row)
+
+            } catch(err) { console.log(err) }
+          }
+        }
 
         // -------------------------------------------------------------------
         // StateExamsScenarios
@@ -315,6 +368,29 @@ class ImportAisController {
             } catch(err) { console.log(err) }
           }
         }
+
+        // -------------------------------------------------------------------
+        // StateExamsScenariosIng
+        // -------------------------------------------------------------------
+
+        if(params.selectedImport == 'StateExamsScenariosIng') {
+          for(let row of rows) {
+            // console.log(row)
+
+            for (const prop of Object.keys(row)) {
+              if(prop.indexOf('__EMPTY') > -1) delete row[prop];
+            }
+
+            row = adjustKeys(row)
+
+            row['OBDOBIE'] = data.year
+
+            try {
+              await Database.table('ais_state_exams_scenario_ings').insert(row)
+            } catch(err) { console.log(err) }
+          }
+        }
+
 
         // -------------------------------------------------------------------
         // Students data part 1
