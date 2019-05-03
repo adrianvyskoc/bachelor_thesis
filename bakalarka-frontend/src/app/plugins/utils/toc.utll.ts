@@ -9,7 +9,7 @@ export class TocUtil {
   private tocChanged = new Subject()
 
   createToc() {
-    let headings = document.querySelectorAll('main *:nth-child(2) h2[id], h3[id], h4[id], h5[id]')
+    let headings = document.querySelectorAll('main *:nth-child(2) h2[id], main *:nth-child(2) h3[id], main *:nth-child(2) h4[id], main *:nth-child(2) h5[id]')
 
     const path = window.location.pathname
     const toc = Array.from(headings).map(heading => {

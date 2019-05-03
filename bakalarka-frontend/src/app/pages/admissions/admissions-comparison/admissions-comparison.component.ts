@@ -14,9 +14,12 @@ export class AdmissionsComparisonComponent implements OnInit, OnDestroy {
 
   subscription: Subscription
 
+  lastNYears: number
+
   admissions
   studyProgrammes = []
   schoolYears = []
+  schoolYearsFiltered = []
   studyProgrammesMap = {}
 
   admCountsPerYear = {}
@@ -38,6 +41,10 @@ export class AdmissionsComparisonComponent implements OnInit, OnDestroy {
   admBachelor = {}
   admMaster = {}
 
+  admFiltered = {}
+  admBachelorFiltered = {}
+  admMasterFiltered = {}
+
   constructor(
     private dataService: DataService,
     private tocUtil: TocUtil,
@@ -47,23 +54,30 @@ export class AdmissionsComparisonComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.titleService.setTitle("Prijímacie konanie - Porovnanie")
-
     this.tocUtil.createToc()
     this.dataService.getAdmissionsYearComparison()
     this.subscription =  this.dataService.getAdmissionsYearComparisonUpdateListener()
       .subscribe(data => {
         this.admissions = data['admissions']
         this.schoolYears = data['years']
+        this.schoolYearsFiltered = data['years']
         this.studyProgrammes = data['studyProgrammes']
         this.studyProgrammesMap = this._calculateCountsPerProgrammeForEachYear()
-        this.adm = this._adjustRatioCountsObject(data['ratios'])
-        this.admBachelor = this._adjustRatioCountsObject(data['bachelorRatios'])
-        this.admMaster = this._adjustRatioCountsObject(data['masterRatios'])
+        this.adm = data['ratios']
+        this.admBachelor = data['bachelorRatios']
+        this.admMaster = data['masterRatios']
+        this.loadYearsData()
       })
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe()
+  }
+
+  loadYearsData() {
+    this.admFiltered = this._adjustRatioCountsObject(this.adm)
+    this.admBachelorFiltered = this._adjustRatioCountsObject(this.admBachelor)
+    this.admMasterFiltered = this._adjustRatioCountsObject(this.admMaster)
   }
 
   exportAllTables() {
@@ -86,6 +100,17 @@ export class AdmissionsComparisonComponent implements OnInit, OnDestroy {
   }
 
   _adjustRatioCountsObject(ratioCounts) {
+
+    // vyfiltrovat len roky za počet zvolených rokov, ak nejaký počet je zadaný
+    if(this.lastNYears) {
+      ratioCounts = {
+        approved: ratioCounts['approved'].slice(ratioCounts['approved'].length - this.lastNYears),
+        began_study: ratioCounts['began_study'].slice(ratioCounts['began_study'].length- this.lastNYears)
+      }
+      this.schoolYearsFiltered = this.schoolYears.slice(this.schoolYears.length - this.lastNYears)
+    } else
+      this.schoolYearsFiltered = this.schoolYears
+
     let approvedMap = ratioCounts['approved'].reduce((acc, nextVal) => {
       acc[nextVal.OBDOBIE] = {}
       acc[nextVal.OBDOBIE].apr = nextVal.apr
@@ -102,7 +127,7 @@ export class AdmissionsComparisonComponent implements OnInit, OnDestroy {
       return acc
     }, {})
 
-    let admCountsPerYear = this.schoolYears.reduce((acc, year) => {
+    let admCountsPerYear = this.schoolYearsFiltered.reduce((acc, year) => {
       acc[year] = {}
       acc[year].approved = approvedMap[year].apr
       acc[year].beganStudy = beganStudyMap[year].bs

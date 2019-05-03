@@ -60,7 +60,7 @@ class ImportInekoController {
  *  import rows start ------------------------------------------------------------------------------------------
  */
 
-        // pole názvov atribútov, ktoré môžeme vymazať vo všetkých tabuĽkách okrem zoznamu škôl
+        // pole názvov atribútov, ktoré môžeme vymazať vo všetkých tabuľkách okrem zoznamu škôl
         const toDeleteAttrs = [ 'ID', 'kraj', 'okres', 'zriadovatel', 'druh_skoly', 'jazyk', 'typ_skoly', 'nazov', 'ulica', 'obec', 'PSC' ]
 
         // errory, ktoré vrátime frontendu

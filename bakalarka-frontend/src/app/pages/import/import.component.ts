@@ -84,6 +84,7 @@ export class ImportComponent implements OnInit {
   }
 
   onUpload() {
+    this.disableImport = true
     this.dataService.uploadData(this.selectedFile, this.selectedImport, this.selectedSource, this.schoolYear, this.attrMapping)
     this.dataService.loading = true
     this.resetForm()

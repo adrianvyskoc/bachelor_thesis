@@ -33,7 +33,7 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   graduationYear: number
   numberOfGroups: number = 10
 
-  displayedSchoolsColumns = ['kod_kodsko', 'nazov', 'pocet_prihlasok', 'pocet_nastupenych', 'pocet_prijatych', 'prijaty/prihlasky', 'nastupeny/prihlasky', 'nastupeny/prijaty']
+  displayedSchoolsColumns = ['kod_kodsko', 'nazov', 'pocet_prihlasok', 'pocet_prijatych', 'pocet_nastupenych', 'prijaty/prihlasky', 'nastupeny/prihlasky', 'nastupeny/prijaty']
 
   displayedAdmissionsColumns = ['id', 'Meno', 'Priezvisko', 'E_mail', 'Rozhodnutie_o_prijatí']
   allColumns = [
@@ -75,6 +75,7 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
           this.admissions.sort = this.admSort
           this.admissionsTimes = this.admissionsUtil._getAdmissionsDates(this.admissions.data)
           this.admissionsPerDay = this.admissionsUtil._getAdmissionsPerDay(this.admissions.data)
+
           this._getSchoolsData()
         }
       )

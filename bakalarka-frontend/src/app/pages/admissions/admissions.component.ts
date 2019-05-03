@@ -108,12 +108,12 @@ export class AdmissionsComponent implements OnInit {
       if(this.filterForm.value.schoolType !== 'all')
         this.filteredAdmissions = this.admissionsFilterService.filterBySchoolType(this.filteredAdmissions, this.filterForm.value.schoolType)
 
-      if(this.filterForm.value.gender !== 'all')
-        this.filteredAdmissions = this.admissionsFilterService.filterByGender(this.filteredAdmissions, this.filterForm.value.gender)
-
       if(this.filterForm.value.pointsType !== 'all')
         this.filteredAdmissions = this.admissionsFilterService.filterByPoints(this.filteredAdmissions, this.filterForm.value.pointsValue, this.filterForm.value.pointsType)
     }
+
+    if(this.filterForm.value.gender !== 'all')
+      this.filteredAdmissions = this.admissionsFilterService.filterByGender(this.filteredAdmissions, this.filterForm.value.gender)
 
     this.abroadAdmissions = this.admissionsUtil._calculateAbroadStudents(this.filteredAdmissions)
     this._getSchoolsAdmissions()
