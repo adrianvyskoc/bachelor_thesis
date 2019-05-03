@@ -21,7 +21,6 @@ export class MappingDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.data.attrMapping)
     const mapping = this.data.attrMapping.reduce((acc, item) => {
       acc.push(new FormGroup({
         'from': new FormControl(item.from, Validators.required),

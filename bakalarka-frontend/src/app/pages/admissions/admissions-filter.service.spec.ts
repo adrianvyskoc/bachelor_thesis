@@ -14,7 +14,7 @@ const SCHOOL_TYPE_MOCKS = [{ typ_skoly: 'Športové gymnázium' }, { typ_skoly: 
 const GRADUATION_QUERY = 2018
 const GRADUATION_MOCKS = [{ Maturita_1: 2018 }, { Maturita_1: 2010 }, { Maturita_1: 2017 }, { Maturita_1: 2017 }, { Maturita_1: 2011 }, { Maturita_1: 2011 }, { Maturita_1: 2016 }, { Maturita_1: 2017 }, { Maturita_1: 2018 }]
 
-const STUDY_TYPE_QUERY = 4
+let STUDY_TYPE_QUERY = "4"
 const STUDY_TYPE_MOCKS = [{ Program_1: 'study-3' }, { Program_1: 'study-4' }, { Program_1: 'study-3' }, { Program_1: 'study-4' }, { Program_1: 'study-3' }, { Program_1: 'study-4' }, { Program_1: 'study-3' }, { Program_1: 'study-3' }]
 
 const DEGREE_QUERY = 'Bakalársky'
@@ -79,7 +79,12 @@ describe('AdmissionsFilterService', () => {
     expect(filtered).toBeDefined()
     expect(filtered).toBeTruthy()
 
-    filtered.every(item => expect(item.Program_1[item.Program_1.length - 1]).toEqual(String(STUDY_TYPE_QUERY)))
+    if(STUDY_TYPE_QUERY == "4")
+      return filtered.filter(admission => expect(admission.Program_1[admission.Program_1.length - 1]).toEqual(STUDY_TYPE_QUERY))
+    else if(STUDY_TYPE_QUERY == "2")
+      return filtered.filter(admission => expect(admission.Program_1[admission.Program_1.length - 1]).toEqual(STUDY_TYPE_QUERY))
+    else
+      return filtered.filter(admission => expect(admission.Program_1[admission.Program_1.length - 1] != "2" && admission.Program_1[admission.Program_1.length - 1] != "4").toBeTruthy())
   })
 
   it('filter by degree returns correct values', () => {

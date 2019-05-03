@@ -92,26 +92,28 @@ export class AdmissionsComponent implements OnInit {
       )
   }
 
-  // GENERAL FILTERING
-
+  /**
+   * Funkcia, ktorá aplikuje filtrovanie na prihlášky podľa zvolených kritérií
+   */
   onFilter() {
     this.filteredAdmissions = this.admissions
 
     if(this.filterForm.value.degree !== 'all')
       this.filteredAdmissions = this.admissionsFilterService.filterByDegree(this.filteredAdmissions, this.filterForm.value.degree)
 
-    if(this.filterForm.value.studyType !== 'all')
+    if(this.filterForm.value.studyType !== 'all' && this.filterForm.value.degree !== 'all')
       this.filteredAdmissions = this.admissionsFilterService.filterByStudyType(this.filteredAdmissions, this.filterForm.value.studyType)
 
-    if(this.filterForm.value.schoolType !== 'all')
-      this.filteredAdmissions = this.admissionsFilterService.filterBySchoolType(this.filteredAdmissions, this.filterForm.value.schoolType)
+    if(this.filterForm.value.degree == 'Bakalársky') {
+      if(this.filterForm.value.schoolType !== 'all')
+        this.filteredAdmissions = this.admissionsFilterService.filterBySchoolType(this.filteredAdmissions, this.filterForm.value.schoolType)
 
-    if(this.filterForm.value.gender !== 'all')
-      this.filteredAdmissions = this.admissionsFilterService.filterByGender(this.filteredAdmissions, this.filterForm.value.gender)
+      if(this.filterForm.value.gender !== 'all')
+        this.filteredAdmissions = this.admissionsFilterService.filterByGender(this.filteredAdmissions, this.filterForm.value.gender)
 
-    if(this.filterForm.value.pointsType !== 'all')
-      this.filteredAdmissions = this.admissionsFilterService.filterByPoints(this.filteredAdmissions, this.filterForm.value.pointsValue, this.filterForm.value.pointsType)
-
+      if(this.filterForm.value.pointsType !== 'all')
+        this.filteredAdmissions = this.admissionsFilterService.filterByPoints(this.filteredAdmissions, this.filterForm.value.pointsValue, this.filterForm.value.pointsType)
+    }
 
     this.abroadAdmissions = this.admissionsUtil._calculateAbroadStudents(this.filteredAdmissions)
     this._getSchoolsAdmissions()
@@ -119,8 +121,9 @@ export class AdmissionsComponent implements OnInit {
     this.filterSchools()
   }
 
-  // SCHOOL MAP FILTERING
-
+  /**
+   * Funkcia, ktorá aplikuje filtrovanie na školy podľa zvolených kritérií
+   */
   filterSchools() {
     if (this.schoolsToShow == 'all') {
       this.filteredSchools = this.schools
