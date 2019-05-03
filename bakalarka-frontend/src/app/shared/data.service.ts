@@ -166,13 +166,16 @@ export class DataService {
    * @param year - zvolený školský rok, pre ktorý robíme import
    * @param mapping - mapovanie atribútov objekt obsahujúci key/value dvojice key - atribút zo vstupného súboru, value - atribút z DB
    */
-  async uploadData(selectedFile, selectedImport, selectedSource, year, mapping) {
+  async uploadData(selectedFile, selectedImport, selectedSource, year, mapping, semester) {
     this.showSuccessMessage = false
     this.showErrorMessage = false
     const fd = new FormData()
     fd.append(selectedImport, selectedFile, selectedFile.name)
     fd.append('mapping', JSON.stringify(mapping))
     fd.append('year', year)
+
+    if(semester)
+      fd.append('semester', semester)
 
     await this.http.post('http://localhost:3333/api/import/' + selectedSource + '/' + selectedImport, fd)
       .subscribe(

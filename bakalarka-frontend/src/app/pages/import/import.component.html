@@ -42,7 +42,7 @@
     <mat-divider></mat-divider>
   </ng-template>
 
-  <ng-template [ngIf]="selectedImport && selectedSource == 'ais' && (selectedImport == 'Attendance' || selectedImport == 'Grades')">
+  <ng-template [ngIf]="selectedImport && selectedSource == 'ais' && (selectedImport == 'Attendance' || selectedImport == 'Grades' || selectedImport == 'StudentsDataPt1' || selectedImport == 'StudentsDataPt2')">
     <mat-radio-group [(ngModel)]="semester" class="mt-4" (ngModelChange)="onFormChange()">
       <mat-radio-button value="winter">Zimný semester</mat-radio-button>
       <mat-radio-button value="summer">Letný semester</mat-radio-button>
