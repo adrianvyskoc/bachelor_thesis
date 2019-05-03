@@ -1,6 +1,25 @@
 <div class="jumbotron">
   <h1 class="display-4">Prijímacie konanie</h1>
   <p class="lead">Porovnanie školských rokov</p>
+
+  <hr class="my-4">
+
+  <div class="lastNYears" flex align-items-center>
+    <span>Zobraziť údaje z posledných </span>
+
+    <input
+      [(ngModel)]="lastNYears"
+      class="form-control lastNYears__input"
+      type="number"
+      min="1"
+      [max]="schoolYears.length"
+      margin-left margin-right
+      (ngModelChange)="loadYearsData()"
+    >
+
+    <span>importovaných rokov.</span>
+  </div>
+
   <hr class="my-4">
 
   <button
@@ -12,14 +31,14 @@
 
 <app-chart
   [title]="'Počet prijatých/neprijatých uchádzačov za školské roky'"
-  [data]="adm.admCountsPerYearArr"
-  [labels]="schoolYears"
+  [data]="admFiltered.admCountsPerYearArr"
+  [labels]="schoolYearsFiltered"
   [groupLabels]="['Prijatý', 'Nastúpený']"
   [type]="'bar'"
   [legend]="true"
   [group]="true"
   [secondYAxis]="true"
-  [secondYAxisData]="adm.admRatiosPerYearArr"
+  [secondYAxisData]="admFiltered.admRatiosPerYearArr"
   [secondYAxisType]="'line'"
   [secondYAxisDataLabel]="'Pomery'"
 ></app-chart>
@@ -28,14 +47,14 @@
   <div class="col-lg-6">
     <app-chart
       [title]="'Počet prijatých/neprijatých uchádzačov za školské roky - bakalársky stupeň'"
-      [data]="admBachelor.admCountsPerYearArr"
-      [labels]="schoolYears"
+      [data]="admBachelorFiltered.admCountsPerYearArr"
+      [labels]="schoolYearsFiltered"
       [groupLabels]="['Prijatý', 'Nastúpený']"
       [type]="'bar'"
       [legend]="true"
       [group]="true"
       [secondYAxis]="true"
-      [secondYAxisData]="admBachelor.admRatiosPerYearArr"
+      [secondYAxisData]="admBachelorFiltered.admRatiosPerYearArr"
       [secondYAxisType]="'line'"
       [secondYAxisDataLabel]="'Pomery'"
     ></app-chart>
@@ -43,14 +62,14 @@
   <div class="col-lg-6">
     <app-chart
       [title]="'Počet prijatých/neprijatých uchádzačov za školské roky - inžiniersky stupeň'"
-      [data]="admMaster.admCountsPerYearArr"
-      [labels]="schoolYears"
+      [data]="admMasterFiltered.admCountsPerYearArr"
+      [labels]="schoolYearsFiltered"
       [groupLabels]="['Prijatý', 'Nastúpený']"
       [type]="'bar'"
       [legend]="true"
       [group]="true"
       [secondYAxis]="true"
-      [secondYAxisData]="admMaster.admRatiosPerYearArr"
+      [secondYAxisData]="admMasterFiltered.admRatiosPerYearArr"
       [secondYAxisType]="'line'"
       [secondYAxisDataLabel]="'Pomery'"
     ></app-chart>
@@ -73,13 +92,13 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let ratio of adm.admRatiosPerYear | keyvalue">
+    <tr *ngFor="let ratio of admFiltered.admRatiosPerYear | keyvalue">
       <th scope="row">{{ ratio.key }}</th>
-      <td>{{ adm.admCountsPerYear[ratio.key].approved }}</td>
-      <td>{{ adm.admCountsPerYear[ratio.key].beganStudy }}</td>
+      <td>{{ admFiltered.admCountsPerYear[ratio.key].approved }}</td>
+      <td>{{ admFiltered.admCountsPerYear[ratio.key].beganStudy }}</td>
       <td>{{ ratio.value }}</td>
-      <td>{{ adm.approvedMap[ratio.key].mean + " / " + adm.beganStudyMap[ratio.key].mean }}</td>
-      <td>{{ adm.approvedMap[ratio.key].median + " / " + adm.beganStudyMap[ratio.key].median }}</td>
+      <td>{{ admFiltered.approvedMap[ratio.key].mean + " / " + admFiltered.beganStudyMap[ratio.key].mean }}</td>
+      <td>{{ admFiltered.approvedMap[ratio.key].median + " / " + admFiltered.beganStudyMap[ratio.key].median }}</td>
     </tr>
   </tbody>
 </table>
@@ -98,13 +117,13 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let ratio of admBachelor.admRatiosPerYear | keyvalue">
+    <tr *ngFor="let ratio of admBachelorFiltered.admRatiosPerYear | keyvalue">
       <th scope="row">{{ ratio.key }}</th>
-      <td>{{ admBachelor.admCountsPerYear[ratio.key].approved }}</td>
-      <td>{{ admBachelor.admCountsPerYear[ratio.key].beganStudy }}</td>
+      <td>{{ admBachelorFiltered.admCountsPerYear[ratio.key].approved }}</td>
+      <td>{{ admBachelorFiltered.admCountsPerYear[ratio.key].beganStudy }}</td>
       <td>{{ ratio.value }}</td>
-      <td>{{ admBachelor.approvedMap[ratio.key].mean + " / " + admBachelor.beganStudyMap[ratio.key].mean }}</td>
-      <td>{{ admBachelor.approvedMap[ratio.key].median + " / " + admBachelor.beganStudyMap[ratio.key].median }}</td>
+      <td>{{ admBachelorFiltered.approvedMap[ratio.key].mean + " / " + admBachelorFiltered.beganStudyMap[ratio.key].mean }}</td>
+      <td>{{ admBachelorFiltered.approvedMap[ratio.key].median + " / " + admBachelorFiltered.beganStudyMap[ratio.key].median }}</td>
     </tr>
   </tbody>
 </table>
@@ -123,13 +142,13 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let ratio of admMaster.admRatiosPerYear | keyvalue">
+    <tr *ngFor="let ratio of admMasterFiltered.admRatiosPerYear | keyvalue">
       <th scope="row">{{ ratio.key }}</th>
-      <td>{{ admMaster.admCountsPerYear[ratio.key].approved }}</td>
-      <td>{{ admMaster.admCountsPerYear[ratio.key].beganStudy }}</td>
+      <td>{{ admMasterFiltered.admCountsPerYear[ratio.key].approved }}</td>
+      <td>{{ admMasterFiltered.admCountsPerYear[ratio.key].beganStudy }}</td>
       <td>{{ ratio.value }}</td>
-      <td>{{ admMaster.approvedMap[ratio.key].mean + " / " + admMaster.beganStudyMap[ratio.key].mean }}</td>
-      <td>{{ admMaster.approvedMap[ratio.key].median + " / " + admMaster.beganStudyMap[ratio.key].median }}</td>
+      <td>{{ admMasterFiltered.approvedMap[ratio.key].mean + " / " + admMasterFiltered.beganStudyMap[ratio.key].mean }}</td>
+      <td>{{ admMasterFiltered.approvedMap[ratio.key].median + " / " + admMasterFiltered.beganStudyMap[ratio.key].median }}</td>
     </tr>
   </tbody>
 </table>
@@ -140,13 +159,13 @@
   <thead>
     <tr>
       <th scope="col">Študijný program</th>
-      <th *ngFor="let year of schoolYears" scope="col">{{ year }}</th>
+      <th *ngFor="let year of schoolYearsFiltered" scope="col">{{ year }}</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let programme of studyProgrammesMap | keyvalue">
       <th scope="row">{{ programme.key }}</th>
-      <td *ngFor="let year of schoolYears">
+      <td *ngFor="let year of schoolYearsFiltered">
         {{ programme.value[year] ? programme.value[year] : "-" }}
       </td>
     </tr>

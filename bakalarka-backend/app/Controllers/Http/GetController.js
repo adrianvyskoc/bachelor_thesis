@@ -5,9 +5,6 @@ const Database = use('Database')
 const Student = use('App/Models/Student')
 const Attendance = use('App/Models/Attendance')
 const Admission = use('App/Models/Admission')
-const AttendanceType = use('App/Models/AttendanceType')
-const StudyForm = use('App/Models/StudyForm')
-const HighSchoolType = use('App/Models/HighSchoolType')
 const Grade = use('App/Models/Grade')
 const Subject = use('App/Models/Subject')
 const School = use('App/Models/School')
@@ -183,11 +180,11 @@ class GetController {
     async getDateYears({request, response}) {
       let rawData = [];
       const data = await Database.raw(`
-        select distinct 
-          ais_state_exams_scenarios."OBDOBIE" 
-        from 
+        select distinct
+          ais_state_exams_scenarios."OBDOBIE"
+        from
           ais_state_exams_scenarios
-        order by 
+        order by
           ais_state_exams_scenarios."OBDOBIE" ASC
       `);
 
@@ -265,8 +262,8 @@ class GetController {
           from
             ais_state_exams_overviews
           full outer join
-            ais_state_exams_scenarios 
-          on 
+            ais_state_exams_scenarios
+          on
             REGEXP_REPLACE(lower(ais_state_exams_overviews."Záverečná_práca_názov"), '[ \\s]*', '', 'g') = REGEXP_REPLACE(lower(ais_state_exams_scenarios."Názov_projektu"), '[ \\s]*', '', 'g')
           and
             ais_state_exams_overviews."Celé_meno_s_titulmi" like '%' || ais_state_exams_scenarios."Riešiteľ" || '%'
@@ -407,8 +404,8 @@ class GetController {
           console.log('tralaalal som tu' + data[0])
 
           await Database.raw(`
-            ALTER SEQUENCE 
-              state_exams_params_id_seq 
+            ALTER SEQUENCE
+              state_exams_params_id_seq
             RESTART WITH 1
           `)
 
@@ -430,7 +427,7 @@ class GetController {
               clOponent: 'D',
               clCelkovo: 'B'
             }])
-          
+
           const dataNew = await Database
             .table('state_exams_params')
 
@@ -468,7 +465,7 @@ class GetController {
             clOponent: data.clOponent,
             clCelkovo: data.clCelkovo
           })
-        
+
         return response
           .status(200)
           .send(true);

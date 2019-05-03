@@ -11,6 +11,8 @@ import { AuthService } from 'src/app/login/services/auth.service';
 export class HeaderComponent implements OnInit {
   selectedYear: string = 'all'
 
+  yearsSelection = []
+
   constructor(
     private dataService: DataService,
     private authService: AuthService,
@@ -18,6 +20,7 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.generateYears()
     this.dataService.getYear()
       .subscribe(year => this.selectedYear = year)
   }
@@ -36,6 +39,9 @@ export class HeaderComponent implements OnInit {
   }
 
   generateYears() {
-
+    const currentYear = new Date().getFullYear()
+    for(let i = 2000; i < currentYear + 1; i++) {
+      this.yearsSelection.push(`${i}-${i+1}`)
+    }
   }
 }

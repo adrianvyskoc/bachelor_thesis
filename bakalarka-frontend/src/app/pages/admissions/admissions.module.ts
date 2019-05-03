@@ -42,7 +42,7 @@ import { AdmissionsManagementComponent } from './admissions-management/admission
     AdmissionComponent,
     AdmissionsComparisonComponent,
     AdmissionsManagementComponent,
-    StatisticsTableComponent,
+    StatisticsTableComponent
   ]
 })
 export class AdmissionsModule { }

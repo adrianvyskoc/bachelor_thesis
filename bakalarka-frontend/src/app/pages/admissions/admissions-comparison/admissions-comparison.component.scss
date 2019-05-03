@@ -2,3 +2,9 @@ h2 {
   margin: 16px -16px;
   background-color: #e9ecef;
 }
+
+.lastNYears {
+  &__input {
+    width: 50px;
+  }
+}

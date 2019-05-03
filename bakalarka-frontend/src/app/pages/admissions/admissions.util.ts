@@ -175,7 +175,7 @@ export class AdmissionsUtil {
    */
   _getAdmissionsPerDay(admissions) {
     let admissionsPerDayObj = admissions.reduce((acc, admission) => {
-      acc[admission['Prevedené']] = ++acc[admission['Prevedené']] || 0
+      acc[admission['Prevedené']] = ++acc[admission['Prevedené']] || 1
       return acc
     }, {})
 

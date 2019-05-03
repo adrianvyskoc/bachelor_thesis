@@ -161,7 +161,7 @@
       <th scope="row">{{ uni['Absolvovaná_VŠ'] ? uni['Absolvovaná_VŠ'] : 'Nešpecifikované' }}</th>
       <td>{{ uni.count }}</td>
       <td>{{ uni.mean | number : '1.2-2' }}</td>
-      <td>@{{ uni.median }}</td>
+      <td>{{ uni.median }}</td>
     </tr>
   </tbody>
 </table>
