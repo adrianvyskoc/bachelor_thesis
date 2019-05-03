@@ -6,8 +6,21 @@
   type="number"
   name="numberOfGroups"
   min="0"
-  (change)="filterByGraduationYear()"
+  (change)="onFilter()"
 >
+
+<label for="graduationYear" margin-top>Dĺžka štúdia</label>
+<select
+  id="graduationYear"
+  [(ngModel)]="studyLength"
+  class="custom-select"
+  margin-bottom
+  (change)="onFilter()"
+>
+  <option value="all">Všetko</option>
+  <option value="3">Trojročné štúdium</option>
+  <option value="4">Štvorročné štúdium</option>
+</select>
 
 <table *ngIf="filtered.length else noData" class="table">
   <thead>

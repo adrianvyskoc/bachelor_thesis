@@ -100,7 +100,6 @@ export class AdmissionsComparisonComponent implements OnInit, OnDestroy {
   }
 
   _adjustRatioCountsObject(ratioCounts) {
-
     // vyfiltrovat len roky za počet zvolených rokov, ak nejaký počet je zadaný
     if(this.lastNYears) {
       ratioCounts = {
