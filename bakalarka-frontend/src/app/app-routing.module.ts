@@ -31,16 +31,16 @@ const routes: Routes = [
     canActivate: [AdminGuard]
   },
   {
-    path: 'statefinalexamsbc',
+    path: 'statefinalexams',
     loadChildren: './pages/state-final-exams/state-final-exams.module#StateFinalExamsModule',
     canActivate: [AuthGuard]
   },
-  {
-    // ????
-    path: 'statefinalexamsing',
-    loadChildren: './pages/state-final-exams/state-final-exams.module#StateFinalExamsModule',
-    canActivate: [AuthGuard]
-  },
+  // {
+    // todo
+  //   path: 'statistics',
+  //   loadChildren: './pages/state-final-exams/state-final-exams.module#StateFinalExamsModule',
+  //   canActivate: [AuthGuard]
+  // },
   {
     path: '**',
     loadChildren: './pages/dashboard/dashboard.module#DashboardModule',

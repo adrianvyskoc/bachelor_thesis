@@ -37,9 +37,16 @@
             ŠZS
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" routerLink="/statefinalexamsbc">Vyhodnotenie ŠZS BC</a>
-            <a class="dropdown-item" routerLink="/statefinalexamsing">Vyhodnotenie ŠZS ING</a>
+            <a class="dropdown-item" routerLink="/statefinalexams/bc">Vyhodnotenie ŠZS BC</a>
+            <a class="dropdown-item" routerLink="/statefinalexams/ing">Vyhodnotenie ŠZS ING</a>
           </div>
+        </li>
+
+        <!-- dorobit -->
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" routerLink="/statistics">
+            Štatistiky
+          </a>
         </li>
 
         <li *ngIf="this.authService.isAdmin" class="nav-item" routerLinkActive="active">
