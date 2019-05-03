@@ -76,6 +76,7 @@ Route
        */
         Route.post('statefinalexamsbc', 'getController.getStateFinalExamsBc')
         Route.post('statefinalexamsbc/update', 'getController.updateStateFinalExamsBc')
+        Route.post('statefinalexamsbc/delete', 'getController.deleteStateFinalExamsBc')
         Route.get('statefinalexamsbc/year', 'getController.getDateYears')
         Route.get('finalexamconfig/get', 'GetController.getFinalExamConfiguration')
         Route.post('finalexamconfig/update', 'GetController.updateFinalExamConfiguration')

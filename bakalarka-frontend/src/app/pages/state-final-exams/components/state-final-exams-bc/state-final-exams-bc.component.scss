@@ -9,12 +9,22 @@ ul {
     font-size: 12px;
   }
 }
+
 form {
   padding-left: 10px;
+
   .custom-select {
     margin: 10px 0 15px;
-  } 
+  }
+
   button {
     margin-left: -10px;
+  }
+}
+
+p {
+  &.warning {
+    color: red;
+    font-size: 11px;
   }
 }

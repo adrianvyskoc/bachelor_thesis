@@ -26,3 +26,17 @@
 
   <app-state-final-exams-list-bc [data]="data" [examConfig]="examConfig"></app-state-final-exams-list-bc>
 </div>
+
+<hr>
+<h5>Vymazanie údajov pre konkrétny rok</h5>
+<p class="warning">Upozornenie: Touto akciou sa vymažú všetky dáta daného roku pre vyhodnotenie ŠZS a bude potrebné ich opäť importovať.<br> Je vhodné tak urobiť, ak ste upravili zdrojové dáta a potrebujete pracovať s aktuálnymi údajmi.</p> 
+<form class="col-sm-2" [formGroup]="filterForm" (ngSubmit)="onFilterFormDelete()">
+  <label>
+      Vybrať rok
+      <select class="custom-select" name="year" formControlName="yearOption">
+        <option [value]="year" *ngFor="let year of yearOptions">{{ year }}</option>
+      </select>
+    </label>
+    <button class="btn btn-raised btn-primary" type="submit">Vymazať všetky importy  daného roku</button>
+    <p class="warning">*je potrebné znovu načítanie stránky</p> 
+  </form>

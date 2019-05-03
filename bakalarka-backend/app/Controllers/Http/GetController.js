@@ -176,6 +176,7 @@ class GetController {
 
     // ---
 
+    // data z druhej tabuky mi to vrati len ked v prvej už nic nie je 
     async getDateYears({request, response}) {
       let rawData = [];
       const data = await Database.raw(`
@@ -191,6 +192,27 @@ class GetController {
       data.rows.map(e => {
         rawData.push(e['OBDOBIE']);
       })
+
+      if (rawData.length == 0) {
+      let rawData2 = [];
+        const data2 = await Database.raw(`
+          select distinct 
+            ais_state_exams_overviews."OBDOBIE" 
+          from 
+            ais_state_exams_overviews
+          order by 
+            ais_state_exams_overviews."OBDOBIE" ASC
+        `);
+
+        // odstranenie nezelaneho tvaru ziskanych dat
+        data2.rows.map(e => {
+          rawData2.push(e['OBDOBIE']);
+        })
+        
+        return response
+          .status(200)
+          .send(rawData2)
+      }
 
       return response
         .status(200)
@@ -298,6 +320,34 @@ class GetController {
 
       } catch(e) {
         console.log(e)
+        return response
+          .status(500)
+          .send(e)
+      }
+    }
+
+    async deleteStateFinalExamsBc ({ request, response }) {
+      const datum = request.body.year;
+
+      try{
+        await Database
+        .query()
+        .table('ais_state_exams_overviews')
+        .where('OBDOBIE', datum)
+        .delete()
+
+        await Database
+        .query()
+        .table('ais_state_exams_scenarios')
+        .where('OBDOBIE', datum)
+        .delete()
+
+        return response
+          .status(200)
+          .send(true)
+
+      } catch(e) {
+        console.log('error', e);
         return response
           .status(500)
           .send(e)

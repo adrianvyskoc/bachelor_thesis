@@ -23,6 +23,14 @@ export class StateFinalExamsService {
     return this.http.post<any>(`${environment.apiUrl}/api/statefinalexamsbc/update`, exam)
   }
 
+  deleteStateFinalExams(year: string): Observable<Array<Exam>> {
+    const reqData = {
+      year: year
+    };
+    return this.http.post<any>(`${environment.apiUrl}/api/statefinalexamsbc/delete`, reqData)
+  }
+
+
   getYearDates(): Observable<Array<string>> {
     return this.http.get<Array<string>>(`${environment.apiUrl}/api/statefinalexamsbc/year`)
   }

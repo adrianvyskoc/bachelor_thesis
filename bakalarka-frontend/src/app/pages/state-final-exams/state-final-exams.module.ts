@@ -13,8 +13,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'bc',
     component: StateFinalExamsBcComponent
+  },
+  {
+    path: 'ing',
+    component: StateFinalExamsIngComponent
   }
 ]
 

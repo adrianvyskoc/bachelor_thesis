@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StateFinalExamsService } from '../../services/state-final-exams.service';
 import { Exam, Param } from 'src/app/model';
 import { FormGroup, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-state-final-exams-bc',
@@ -18,6 +19,7 @@ export class StateFinalExamsBcComponent implements OnInit {
 
   constructor(
     private stateFinalExamsService: StateFinalExamsService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -82,6 +84,19 @@ export class StateFinalExamsBcComponent implements OnInit {
       this.filterForm.get('yearOption').value
     );
   }
+
+  onFilterFormDelete(): void {
+    this.deleteStateFinalExams(
+      this.filterForm.get('yearOption').value
+    );
+  }
+
+  deleteStateFinalExams(selectedYear: string): void{
+    this.stateFinalExamsService.deleteStateFinalExams(selectedYear)
+      .subscribe(data => console.log(data))
+      // this.router.navigate(['import'])
+  }
+
 
   /**
    * Získanie všetkých údajov na Vyhodnotenie ŠZS BC a upravenie dát pre komisiu (z komisie vybrate čísla a spojenie so štud. prog.)
