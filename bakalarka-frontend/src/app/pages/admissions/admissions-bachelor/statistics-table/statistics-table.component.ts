@@ -22,6 +22,7 @@ export class StatisticsTableComponent implements OnChanges {
   filtered = []
 
   graduationYear: number
+  studyLength
 
   // table header
   header = []
@@ -36,8 +37,13 @@ export class StatisticsTableComponent implements OnChanges {
     this._calculateData()
   }
 
-  filterByGraduationYear() {
-    this.filtered = this.admissionsFilterService.filterByGraduationYear(this.data, this.graduationYear)
+  onFilter() {
+    this.filtered = this.data
+
+    if(this.graduationYear)
+      this.filtered = this.admissionsFilterService.filterByGraduationYear(this.filtered, this.graduationYear)
+    if(this.studyLength !== 'all')
+      this.filtered = this.admissionsFilterService.filterByStudyType(this.filtered, this.studyLength)
     this._calculateData()
   }
 
