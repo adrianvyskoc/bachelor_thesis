@@ -72,7 +72,7 @@ Route
 
        
        /*
-       State Final Exams api endpoints start
+          State Final Exams BC and ING api endpoints start
        */
         Route.post('statefinalexamsbc', 'getController.getStateFinalExamsBc')
         Route.post('statefinalexamsbc/update', 'getController.updateStateFinalExamsBc')
@@ -81,10 +81,14 @@ Route
         Route.get('finalexamconfig/get', 'GetController.getFinalExamConfiguration')
         Route.post('finalexamconfig/update', 'GetController.updateFinalExamConfiguration')
         
-        Route.get('statefinalexamsing', 'getController.getStateFinalExamsIng')
+        Route.post('statefinalexamsing', 'getController.getStateFinalExamsIng')
         Route.post('statefinalexamsing/update', 'getController.updateStateFinalExamsIng')
+        Route.post('statefinalexamsing/delete', 'getController.deleteStateFinalExamsIng')
+        Route.get('statefinalexamsing/year', 'getController.getDateYearsIng')
+        Route.get('finalexamconfiging/get', 'GetController.getFinalExamConfigurationIng')
+        Route.post('finalexamconfiging/update', 'GetController.updateFinalExamConfigurationIng')
         /*
-          State Final Exams api endpoints end
+          api endpoints end
         */
 
        

@@ -12,6 +12,10 @@ export class StateFinalExamsService {
     private http: HttpClient,
   ) { }
 
+  /** -----------------------------------------------------------------------
+   * State Final Exams BC
+   * ------------------------------------------------------------------------*/
+
   getAllStateFinalExams(year: string): Observable<Array<Exam>> {
     const reqData = {
       year: year
@@ -43,14 +47,39 @@ export class StateFinalExamsService {
     return this.http.post<any>(`${environment.apiUrl}/api/finalexamconfig/update`, configObj)
   }
 
-  /**
-   * ING
-   */
-  getAllStateFinalExamsIng(): Observable<Array<Exam>> {
-    return this.http.get<Array<Exam>>(`${environment.apiUrl}/api/statefinalexamsing`)
+  
+  /** -----------------------------------------------------------------------
+   * State Final Exams ING
+   * ------------------------------------------------------------------------*/
+  getAllStateFinalExamsIng(year: string): Observable<Array<Exam>> {
+    const reqData = {
+      year: year
+    };
+    return this.http.post<Array<Exam>>(`${environment.apiUrl}/api/statefinalexamsing`, reqData)
   }
-
+  
   updateStateFinalExamsIng(exam: Exam): Observable<Array<Exam>> {
     return this.http.post<any>(`${environment.apiUrl}/api/statefinalexamsing/update`, exam)
   }
+
+  deleteStateFinalExamsIng(year: string): Observable<Array<Exam>> {
+    const reqData = {
+      year: year
+    };
+    return this.http.post<any>(`${environment.apiUrl}/api/statefinalexamsing/delete`, reqData)
+  }
+
+
+  getYearDatesIng(): Observable<Array<string>> {
+    return this.http.get<Array<string>>(`${environment.apiUrl}/api/statefinalexamsing/year`)
+  }
+
+  getFinalExamConfigurationIng(): Observable<Param> {
+    return this.http.get<any>(`${environment.apiUrl}/api/finalexamconfiging/get`)
+  }
+  
+  updateFinalExamConfigurationIng(configObj: Param): Observable<Param> {
+    return this.http.post<any>(`${environment.apiUrl}/api/finalexamconfiging/update`, configObj)
+  }
+
 }
