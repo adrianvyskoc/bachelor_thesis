@@ -106,7 +106,7 @@ class AisStudentsDataPt2Schema extends Schema {
       table.string("Program_3")
       table.string("Výmenný_program")
       table.string("Zameranie")
-      table.string("Zaradenie_1")
+      table.string("Zaradenie")
       table.string("Študentské_domovy")
       table.string("Potvrdenie_odovzdania_ZP")
       table.string("Vloženie_ZP")
