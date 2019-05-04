@@ -25,16 +25,12 @@ Route
         // import ineko
         Route.post('import/ineko/:selectedImport', 'ImportInekoController.import')
 
-        // import codebooks
-        Route.post('codebook/:type', 'SettingController.createCodebookRecord')
-
         // api endpoints
         Route.get('getStudents/:year', 'GetController.getStudents')
         Route.get('getAttendance/:year', 'GetController.getAttendance')
         Route.get('getGrades/:year', 'GetController.getGrades')
         Route.get('getSchools', 'GetController.getSchools')
         Route.get('getSubjects/:year', 'GetController.getSubjects')
-        Route.get('column-meaning/:type', 'GetController.getColumnMeaning')
 
         /*
           Admissions api endpoints start
@@ -49,13 +45,11 @@ Route
         Route.delete('admissions/delete/:year/:inekoData', 'AdmissionController.deleteInekoDataForGivenYear')
         Route.put('admissions/changeYear', 'AdmissionController.changeYearForGivenYear')
         Route.put('admissions/changeYearForInekoData', 'AdmissionController.changeYearForInekoData')
-
         Route.get('admissionsBySurname', 'AdmissionController.getAdmissionsBySurname')
 
         /*
           Admissions api endpoints end
          */
-
 
         /*
           Administrators api endpoints start
@@ -70,7 +64,7 @@ Route
           Administrators api endpoints end
         */
 
-       
+
        /*
        State Final Exams api endpoints start
        */
@@ -80,14 +74,14 @@ Route
         Route.get('statefinalexamsbc/year', 'getController.getDateYears')
         Route.get('finalexamconfig/get', 'GetController.getFinalExamConfiguration')
         Route.post('finalexamconfig/update', 'GetController.updateFinalExamConfiguration')
-        
+
         Route.get('statefinalexamsing', 'getController.getStateFinalExamsIng')
         Route.post('statefinalexamsing/update', 'getController.updateStateFinalExamsIng')
         /*
           State Final Exams api endpoints end
         */
 
-       
+
 
         /*
           Login LDAP

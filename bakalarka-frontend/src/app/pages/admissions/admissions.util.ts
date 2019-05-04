@@ -140,33 +140,22 @@ export class AdmissionsUtil {
   _getAdmissionsDates(admissions) {
     let admissionsTimes = admissions.reduce((acc, admission) => {
       if(admission['Prevedené']) {
-        acc.push(admission['Prevedené'].split(".").join("/"))
+        let date = admission['Prevedené'].split('.').reverse().join('/')
+
+        acc.push(date)
       }
       return acc
     }, [])
 
-    admissionsTimes.sort(sortByDate);​
+    // dátum prihlášky musí byť v tvare YYYY/MM/DD, aby bol správne zosortovaný
+    admissionsTimes.sort();​
 
     admissionsTimes = admissionsTimes.reduce((acc, admission, idx) => {
-      acc.push({x: admission, y: idx})
+      acc.push({x: admission.split('/').reverse().join('/'), y: idx})
       return acc
     }, [])
 
     return admissionsTimes
-
-    function sortByDate(a, b) {
-      let [add, amm, ayyyy] = a.split("/")
-      let [bdd, bmm, byyyy] = b.split("/")
-
-      var dateA = new Date()
-      var dateB = new Date()
-
-      dateA.setFullYear(ayyyy); dateB.setFullYear(byyyy)
-      dateA.setMonth(amm); dateB.setMonth(bmm)
-      dateA.setDate(add); dateB.setDate(bdd)
-
-      return dateA.getTime() > dateB.getTime() ? 1 : -1
-    }
   }
 
   /**
@@ -189,22 +178,16 @@ export class AdmissionsUtil {
       })
     }
 
+    // dátum prihlášky musí byť v tvare YYYY/MM/DD, aby bol správne zosortovaný
     admissionsPerDay.sort(sortByDateByKey)
 
     return admissionsPerDay;​
 
     function sortByDateByKey(a, b) {
-      let [add, amm, ayyyy] = a.x.split("/")
-      let [bdd, bmm, byyyy] = b.x.split("/")
+      let dateA = a.x.split("/").reverse().join("/")
+      let dateB = b.x.split("/").reverse().join("/")
 
-      var dateA = new Date()
-      var dateB = new Date()
-
-      dateA.setFullYear(ayyyy); dateB.setFullYear(byyyy)
-      dateA.setMonth(amm); dateB.setMonth(bmm)
-      dateA.setDate(add); dateB.setDate(bdd)
-
-      return dateA.getTime() > dateB.getTime() ? 1 : -1
+      return dateA > dateB ? 1 : -1
     }
   }
 

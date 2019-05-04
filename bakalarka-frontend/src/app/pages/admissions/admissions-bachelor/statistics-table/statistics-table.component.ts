@@ -22,7 +22,7 @@ export class StatisticsTableComponent implements OnChanges {
   filtered = []
 
   graduationYear: number
-  studyLength
+  studyLength = 'all'
 
   // table header
   header = []
