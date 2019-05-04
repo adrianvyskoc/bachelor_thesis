@@ -176,7 +176,7 @@ export class StateFinalExamsListBcComponent implements OnInit, OnChanges {
 
   export() {
     const tables = document.querySelector('table')
-    this.exportService.exportTableToExcel(tables, 'VyhodnotenieSZS')
+    this.exportService.exportTableToExcel(tables, 'VyhodnotenieSZS-BC')
   }
 
   /*
@@ -273,7 +273,6 @@ export class StateFinalExamsListBcComponent implements OnInit, OnChanges {
             break
           }
         }
-
         return result
       }
       return null
@@ -300,10 +299,8 @@ export class StateFinalExamsListBcComponent implements OnInit, OnChanges {
       }
       return null
     }
-
     return null
   }
-
 
   /**
    * Porovnanie, či hodnotenie spadá do limitu zadefinovaného parametrom na ocenenie

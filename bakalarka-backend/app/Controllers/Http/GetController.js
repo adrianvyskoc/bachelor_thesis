@@ -184,38 +184,17 @@ class GetController {
       let rawData = [];
       const data = await Database.raw(`
         select distinct
-          ais_state_exams_scenarios."OBDOBIE"
+          ais_state_exams_overviews."OBDOBIE"
         from
-          ais_state_exams_scenarios
+          ais_state_exams_overviews
         order by
-          ais_state_exams_scenarios."OBDOBIE" ASC
+          ais_state_exams_overviews."OBDOBIE" ASC
       `);
 
       // odstranenie nezelaneho tvaru ziskanych dat
       data.rows.map(e => {
         rawData.push(e['OBDOBIE']);
       })
-
-      if (rawData.length == 0) {
-      let rawData2 = [];
-        const data2 = await Database.raw(`
-          select distinct 
-            ais_state_exams_overviews."OBDOBIE" 
-          from 
-            ais_state_exams_overviews
-          order by 
-            ais_state_exams_overviews."OBDOBIE" ASC
-        `);
-
-        // odstranenie nezelaneho tvaru ziskanych dat
-        data2.rows.map(e => {
-          rawData2.push(e['OBDOBIE']);
-        })
-        
-        return response
-          .status(200)
-          .send(rawData2)
-      }
 
       return response
         .status(200)
@@ -449,17 +428,16 @@ class GetController {
      * ------------------------------------------------------------------------
      */
 
-
     // data z druhej tabuky mi to vrati len ked v prvej už nic nie je 
     async getDateYearsIng({request, response}) {
       let rawData = [];
       const data = await Database.raw(`
         select distinct
-          ais_state_exams_scenario_ings."OBDOBIE"
+          ais_state_exams_overview_ings."OBDOBIE"
         from
-          ais_state_exams_scenario_ings
+          ais_state_exams_overview_ings
         order by
-          ais_state_exams_scenario_ings."OBDOBIE" ASC
+          ais_state_exams_overview_ings."OBDOBIE" ASC
       `);
 
       // odstranenie nezelaneho tvaru ziskanych dat
@@ -467,32 +445,82 @@ class GetController {
         rawData.push(e['OBDOBIE']);
       })
 
-      if (rawData.length == 0) {
-      let rawData2 = [];
-        const data2 = await Database.raw(`
-          select distinct 
-            ais_state_exams_overview_ings."OBDOBIE" 
-          from 
-            ais_state_exams_overview_ings
-          order by 
-            ais_state_exams_overview_ings."OBDOBIE" ASC
-        `);
-
-        // odstranenie nezelaneho tvaru ziskanych dat
-        data2.rows.map(e => {
-          rawData2.push(e['OBDOBIE']);
-        })
-        
-        return response
-          .status(200)
-          .send(rawData2)
-      }
-
       return response
         .status(200)
         .send(rawData)
     }
 
+    // testovacie
+    async getState ({ request, response }) {
+      try {
+        const data = await Database.raw(`
+          select
+            ais_state_exams_overview_ings.id as id,
+            ais_state_exams_overview_ings."OBDOBIE" as "obdobie",
+            ais_state_exams_overview_ings."Celé_meno_s_titulmi" as "celeMenoSTitulmi",
+            ais_state_exams_overview_ings."AIS_ID" as "aisId",
+            ais_state_exams_overview_ings."Identifikácia_štúdia" as "identifikaciaStudia",
+            ais_state_exams_overview_ings."Obhajoba" as "obhajoba",
+            ais_state_exams_overview_ings."Záverečná_práca_názov" as "zaverecnaPracaNazov",
+            ais_state_exams_overview_ings."Vedúci" as "veduci",
+            ais_state_exams_overview_ings."Oponent" as "oponent",
+            ais_state_exams_overview_ings."Stav" as "stav",
+            ais_state_exams_overview_ings."VŠP_štúdium" as "vspStudium",
+            ais_state_exams_overview_ings."VŠP_štud_bpo" as "vspStudBpo",
+
+            ais_state_exams_scenario_ings."študent" as "student",
+            ais_state_exams_scenario_ings."názov_diplomovej_práce" as "nazovDiplomPrace",
+            ais_state_exams_scenario_ings."vedúci" as "veduciY",
+            ais_state_exams_scenario_ings."oponent" as "oponentY",
+            ais_state_exams_scenario_ings."študijný_program" as "studProg",
+            ais_state_exams_scenario_ings."Komisia" as "komisia",
+            ais_state_exams_scenario_ings."datum_šs" as "datum",
+            ais_state_exams_scenario_ings."Predseda" as "predseda",
+            ais_state_exams_scenario_ings."tajomník" as "tajomnik",
+
+            ais_state_exams_overview_ings."uzavreteStudium",
+            ais_state_exams_overview_ings."oponentHodnotenie",
+            ais_state_exams_overview_ings."vysledneHodnotenie",
+            ais_state_exams_overview_ings."hlasi_sa_na_phd",
+            ais_state_exams_overview_ings."dp3_v_aj",
+            ais_state_exams_overview_ings."ssOpravnyTermin",
+            ais_state_exams_overview_ings."navrhPoradie",
+            ais_state_exams_overview_ings."clanokIny",
+            ais_state_exams_overview_ings."clanokIITSRC",
+            ais_state_exams_overview_ings."navrhDoRSP1",
+            ais_state_exams_overview_ings."konecneRozhodnutie1",
+            ais_state_exams_overview_ings."navrhDoRSP2",
+            ais_state_exams_overview_ings."konecneRozhodnutie2",
+            ais_state_exams_overview_ings."konecneRozhodnutie3",
+            ais_state_exams_overview_ings."potvrdenieIET",
+            ais_state_exams_overview_ings."poznamky"
+          from
+            ais_state_exams_overview_ings
+          full outer join
+            ais_state_exams_scenario_ings
+          on
+            REGEXP_REPLACE(lower(ais_state_exams_overview_ings."Záverečná_práca_názov"), '[ \\s]*', '', 'g') = REGEXP_REPLACE(lower(ais_state_exams_scenario_ings."názov_diplomovej_práce"), '[ \\s]*', '', 'g')
+          and
+            ais_state_exams_overview_ings."Celé_meno_s_titulmi" like '%' || ais_state_exams_scenario_ings."študent" || '%'
+          and
+            ais_state_exams_overview_ings."OBDOBIE" like ais_state_exams_scenario_ings."OBDOBIE"
+          order by id ASC
+        `);
+
+        console.log('dlzka dat', data.rows.length);
+
+        return response
+          .status(200)
+          .send(data.rows)
+
+      } catch(e) {
+        console.log('error', e);
+        return response
+          .status(500)
+          .send(e)
+      }
+    }
+    // testovacie 
 
     async getStateFinalExamsIng ({ request, response }) {
       const datum = request.body.year;
@@ -514,8 +542,8 @@ class GetController {
 
             ais_state_exams_scenario_ings."študent" as "student",
             ais_state_exams_scenario_ings."názov_diplomovej_práce" as "nazovDiplomPrace",
-            ais_state_exams_scenario_ings."vedúci" as "veduci",
-            ais_state_exams_scenario_ings."oponent" as "oponent",
+            ais_state_exams_scenario_ings."vedúci" as "veduciY",
+            ais_state_exams_scenario_ings."oponent" as "oponentY",
             ais_state_exams_scenario_ings."študijný_program" as "studProg",
             ais_state_exams_scenario_ings."Komisia" as "komisia",
             ais_state_exams_scenario_ings."datum_šs" as "datum",

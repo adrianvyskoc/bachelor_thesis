@@ -81,6 +81,7 @@ Route
         Route.get('finalexamconfig/get', 'GetController.getFinalExamConfiguration')
         Route.post('finalexamconfig/update', 'GetController.updateFinalExamConfiguration')
         
+        Route.get('statefinalexamsing', 'getController.getState')
         Route.post('statefinalexamsing', 'getController.getStateFinalExamsIng')
         Route.post('statefinalexamsing/update', 'getController.updateStateFinalExamsIng')
         Route.post('statefinalexamsing/delete', 'getController.deleteStateFinalExamsIng')

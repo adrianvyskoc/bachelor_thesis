@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Exam, Param } from 'src/app/model';
+import { Exam, ExamIng, Param } from 'src/app/model';
 
 @Injectable({
   providedIn: 'root'
@@ -51,18 +51,18 @@ export class StateFinalExamsService {
   /** -----------------------------------------------------------------------
    * State Final Exams ING
    * ------------------------------------------------------------------------*/
-  getAllStateFinalExamsIng(year: string): Observable<Array<Exam>> {
+  getAllStateFinalExamsIng(year: string): Observable<Array<ExamIng>> {
     const reqData = {
       year: year
     };
-    return this.http.post<Array<Exam>>(`${environment.apiUrl}/api/statefinalexamsing`, reqData)
+    return this.http.post<Array<ExamIng>>(`${environment.apiUrl}/api/statefinalexamsing`, reqData)
   }
   
-  updateStateFinalExamsIng(exam: Exam): Observable<Array<Exam>> {
+  updateStateFinalExamsIng(exam: ExamIng): Observable<Array<ExamIng>> {
     return this.http.post<any>(`${environment.apiUrl}/api/statefinalexamsing/update`, exam)
   }
 
-  deleteStateFinalExamsIng(year: string): Observable<Array<Exam>> {
+  deleteStateFinalExamsIng(year: string): Observable<Array<ExamIng>> {
     const reqData = {
       year: year
     };
