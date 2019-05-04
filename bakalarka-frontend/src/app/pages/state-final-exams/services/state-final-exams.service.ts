@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Exam, Param } from 'src/app/model';
+import { Exam, ExamIng, Param } from 'src/app/model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +11,10 @@ export class StateFinalExamsService {
   constructor(
     private http: HttpClient,
   ) { }
+
+  /** -----------------------------------------------------------------------
+   * State Final Exams BC
+   * ------------------------------------------------------------------------*/
 
   getAllStateFinalExams(year: string): Observable<Array<Exam>> {
     const reqData = {
@@ -43,14 +47,39 @@ export class StateFinalExamsService {
     return this.http.post<any>(`${environment.apiUrl}/api/finalexamconfig/update`, configObj)
   }
 
-  /**
-   * ING
-   */
-  getAllStateFinalExamsIng(): Observable<Array<Exam>> {
-    return this.http.get<Array<Exam>>(`${environment.apiUrl}/api/statefinalexamsing`)
+  
+  /** -----------------------------------------------------------------------
+   * State Final Exams ING
+   * ------------------------------------------------------------------------*/
+  getAllStateFinalExamsIng(year: string): Observable<Array<ExamIng>> {
+    const reqData = {
+      year: year
+    };
+    return this.http.post<Array<ExamIng>>(`${environment.apiUrl}/api/statefinalexamsing`, reqData)
   }
-
-  updateStateFinalExamsIng(exam: Exam): Observable<Array<Exam>> {
+  
+  updateStateFinalExamsIng(exam: ExamIng): Observable<Array<ExamIng>> {
     return this.http.post<any>(`${environment.apiUrl}/api/statefinalexamsing/update`, exam)
   }
+
+  deleteStateFinalExamsIng(year: string): Observable<Array<ExamIng>> {
+    const reqData = {
+      year: year
+    };
+    return this.http.post<any>(`${environment.apiUrl}/api/statefinalexamsing/delete`, reqData)
+  }
+
+
+  getYearDatesIng(): Observable<Array<string>> {
+    return this.http.get<Array<string>>(`${environment.apiUrl}/api/statefinalexamsing/year`)
+  }
+
+  getFinalExamConfigurationIng(): Observable<Param> {
+    return this.http.get<any>(`${environment.apiUrl}/api/finalexamconfiging/get`)
+  }
+  
+  updateFinalExamConfigurationIng(configObj: Param): Observable<Param> {
+    return this.http.post<any>(`${environment.apiUrl}/api/finalexamconfiging/update`, configObj)
+  }
+
 }

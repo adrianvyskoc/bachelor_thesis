@@ -31,11 +31,14 @@ export class StateFinalExamsBcComponent implements OnInit {
    * Kontrolovanie, či sa v hodnotení nenachádza preklep
    * @param valuation - hodnotenie na kontrolu
    */
-  faultInValuation(valuation): string {
+  faultInValuation(valuation: string): string {
     const grades = ['A', 'B', 'C', 'D', 'E', 'FX']
-    let allRight: string = 'Preklep v hodnotení';
+    let allRight: string = 'Preklep v hodnotení záverečnej práce';
 
-    if (valuation) {
+    if (valuation === null || valuation === 'undefined') {
+      allRight = 'Chýba hodnotenie';
+    }
+    else if (valuation && valuation != null) {
       grades.forEach(g => {
         if (valuation == g) {
           allRight = '';
@@ -43,6 +46,7 @@ export class StateFinalExamsBcComponent implements OnInit {
       })
       return allRight
     }
+    return allRight
   }
 
   getFinalStateConfig(): void {
@@ -117,19 +121,27 @@ export class StateFinalExamsBcComponent implements OnInit {
             }
 
             e.komisia = `${comission} ${e.studProg}`
-            e.podozrenie = null
+            e.podozrenie = '';
+
             /**
              * Detekcia chýb
              */
-            e.podozrenie = this.faultInValuation(e.veduciHodnotenie)
-            e.podozrenie = this.faultInValuation(e.oponentHodnotenie)
-            e.podozrenie = this.faultInValuation(e.vysledneHodnotenie)
+
+            if (this.faultInValuation(e.veduciHodnotenie) != '') {
+              e.podozrenie += (this.faultInValuation(e.veduciHodnotenie) + ' od vedúceho. ')
+            }
+            if (this.faultInValuation(e.oponentHodnotenie) != '') {
+              e.podozrenie += (this.faultInValuation(e.oponentHodnotenie) + ' od oponenta. ')
+            }
+            if (this.faultInValuation(e.vysledneHodnotenie) != '') {
+              e.podozrenie += (this.faultInValuation(e.vysledneHodnotenie) + ' od komisie. ')
+            }
 
             if (e.celeMenoSTitulmi && !e.vysledneHodnotenie && e.celeMenoSTitulmi !== null) {
-              e.podozrenie = e.celeMenoSTitulmi + ': Neštátnicoval/a tento rok (možný tiež preklep v mene/práci)'
+              e.podozrenie += e.celeMenoSTitulmi + ': Neštátnicoval/a tento rok (možný tiež preklep v mene/práci) '
             }
             if (!e.celeMenoSTitulmi && e.riesitel !== null) {
-              e.podozrenie = 'Študent ' + e.riesitel + ' sa nenachádza v súbore z AIS-u. '
+              e.podozrenie += 'Študent ' + e.riesitel + ' sa nenachádza v súbore z AIS-u. '
             }
             /**
              * Pokial by sa poznámka 2x nachádzala inde ako v dátach podľa kt. spájame, dalo by sa to využiť

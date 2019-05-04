@@ -1,6 +1,6 @@
 <div>
   <h2>Vyhodnotenie štátnych záverečných skúšok - Bakalársky ročník</h2>
-  
+
   <h5>Slovník skratiek pred názvom stĺpcov</h5>
   <ul>
     <li>OH - Obhajoba hodnotenie</li>
@@ -29,14 +29,16 @@
 
 <hr>
 <h5>Vymazanie údajov pre konkrétny rok</h5>
-<p class="warning">Upozornenie: Touto akciou sa vymažú všetky dáta daného roku pre vyhodnotenie ŠZS a bude potrebné ich opäť importovať.<br> Je vhodné tak urobiť, ak ste upravili zdrojové dáta a potrebujete pracovať s aktuálnymi údajmi.</p> 
+<p class="warning">Upozornenie: Touto akciou sa vymažú všetky dáta daného roku pre vyhodnotenie ŠZS a bude potrebné ich
+  <br>opäť importovať. Je vhodné tak urobiť, ak ste upravili zdrojové dáta a potrebujete pracovať s aktuálnymi údajmi.
+</p>
 <form class="col-sm-2" [formGroup]="filterForm" (ngSubmit)="onFilterFormDelete()">
   <label>
-      Vybrať rok
-      <select class="custom-select" name="year" formControlName="yearOption">
-        <option [value]="year" *ngFor="let year of yearOptions">{{ year }}</option>
-      </select>
-    </label>
-    <button class="btn btn-raised btn-primary" type="submit">Vymazať všetky importy daného roku</button>
-    <p class="warning">*je potrebné znovu načítanie stránky</p> 
-  </form>
+    Vybrať rok
+    <select class="custom-select" name="year" formControlName="yearOption">
+      <option [value]="year" *ngFor="let year of yearOptions">{{ year }}</option>
+    </select>
+  </label>
+  <button class="btn btn-raised btn-primary" type="submit">Vymazať všetky importy daného roku</button>
+  <p class="warning">*je potrebné znovu načítanie stránky</p>
+</form>

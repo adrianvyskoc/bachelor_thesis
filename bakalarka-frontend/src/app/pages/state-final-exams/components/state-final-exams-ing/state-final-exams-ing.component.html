@@ -1,29 +1,46 @@
 <div>
-    <h2>Vyhodnotenie štátnych záverečných skúšok - Inžiniersky ročník</h2>
-    
-    <h5>Slovník skratiek pred názvom stĺpcov</h5>
-    <ul>
-      <!-- overiť  -->
-      <li>OH - Obhajoba hodnotenie</li>
-      <li>DI - Ďalšie informácie</li>
-      <li>NCA - Návrh - cena akákoľvek</li>
-      <li>NOPK - Návrh na ocenenie z komisie za prácu (CR, CD, PLD)</li>
-      <li>OP - Ocenenie za prospech</li>
-    </ul>
-    <hr>
-    <p>Tabuľka obsahuje údaje z roku: {{ data ? data[0].obdobie : 'Dáta nie sú importované' }}</p>
-    <form class="col-sm-2" [formGroup]="filterForm" (ngSubmit)="onFilterFormSubmit()">
-      <label>
-        Zmeniť rok
-        <select class="custom-select" name="year" formControlName="yearOption">
-          <option [value]="year" *ngFor="let year of yearOptions">{{ year }}</option>
-        </select>
-      </label>
-      <button class="btn btn-raised btn-primary" type="submit">Uložiť zmeny</button>
-    </form>
-    <hr>
-  
-    {{ data ? data[0].AIS_ID : '' }}
-  
-    <!-- <app-state-final-exams-list-ing [data]="data" [examConfig]="examConfig"></app-state-final-exams-list-ing> -->
-  </div>
+  <h2>Vyhodnotenie štátnych záverečných skúšok - Inžiniersky ročník</h2>
+
+  <h5>Slovník skratiek pred názvom stĺpcov</h5>
+  <ul>
+    <li>OH - Obhajoba hodnotenie</li>
+    <li>P - Prospech</li>
+    <li>DI - Ďalšie informácie</li>
+    <li>NCA - Návrh - cena akákoľvek</li>
+    <li>NOPK - Návrh na ocenenie z komisie za prácu (CR, CD, UI SAV, IET, PLD)</li>
+    <li>OP - Ocenenie za prospech (MCL, CL)</li>
+    <li>S - Súťaže (IT SPY, ING CENA)</li>
+  </ul>
+  <hr>
+  <p>Tabuľka obsahuje údaje z roku: {{ dataIng ? dataIng[0].obdobie : 'Dáta nie sú importované' }}</p>
+  <form class="col-sm-2" [formGroup]="filterForm" (ngSubmit)="onFilterFormSubmitIng()">
+    <label>
+      Zmeniť rok
+      <select class="custom-select" name="year" formControlName="yearOption">
+        <option [value]="year" *ngFor="let year of yearOptions">{{ year }}</option>
+      </select>
+    </label>
+    <button class="btn btn-raised btn-primary" type="submit">Uložiť zmeny</button>
+  </form>
+  <hr>
+
+  {{ dataIng ? dataIng[0].AIS_ID : '' }}
+
+  <app-state-final-exams-list-ing [dataIng]="dataIng" [examConfigIng]="examConfigIng"></app-state-final-exams-list-ing>
+</div>
+
+<hr>
+<h5>Vymazanie údajov pre konkrétny rok</h5>
+<p class="warning">Upozornenie: Touto akciou sa vymažú všetky dáta daného roku pre vyhodnotenie ŠZS a bude potrebné ich
+    <br>opäť importovať. Je vhodné tak urobiť, ak ste upravili zdrojové dáta a potrebujete pracovať s aktuálnymi údajmi.
+</p>
+<form class="col-sm-2" [formGroup]="filterForm" (ngSubmit)="onFilterFormDeleteIng()">
+  <label>
+    Vybrať rok
+    <select class="custom-select" name="year" formControlName="yearOption">
+      <option [value]="year" *ngFor="let year of yearOptions">{{ year }}</option>
+    </select>
+  </label>
+  <button class="btn btn-raised btn-primary" type="submit">Vymazať všetky importy daného roku</button>
+  <p class="warning">*je potrebné znovu načítanie stránky</p>
+</form>
