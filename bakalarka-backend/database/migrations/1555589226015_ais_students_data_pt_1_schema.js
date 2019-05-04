@@ -10,6 +10,7 @@ class AisStudentsDataPt1Schema extends Schema {
 
       table.integer("ID").references("AIS_ID").inTable("ais_students")
       table.string("OBDOBIE")
+      table.string("SEMESTER")
       table.string("Celé_meno_s_titulmi")
       table.integer("Rok_abs_VŠ")
       table.string("Adresa")
