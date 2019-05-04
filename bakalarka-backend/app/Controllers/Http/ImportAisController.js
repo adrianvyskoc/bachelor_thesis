@@ -434,6 +434,7 @@ class ImportAisController {
             }
 
             row['OBDOBIE'] = data.year
+            row['SEMESTER'] = data.semester
 
             delete row['Por']
 
@@ -499,6 +500,7 @@ class ImportAisController {
             }
 
             row['OBDOBIE'] = data.year
+            row['SEMESTER'] = data.semester
 
             delete row['Por']
 
