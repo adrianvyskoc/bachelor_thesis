@@ -35,12 +35,11 @@ const routes: Routes = [
     loadChildren: './pages/state-final-exams/state-final-exams.module#StateFinalExamsModule',
     canActivate: [AuthGuard]
   },
-  // {
-    // todo
-  //   path: 'statistics',
-  //   loadChildren: './pages/state-final-exams/state-final-exams.module#StateFinalExamsModule',
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'statistics',
+    loadChildren: './pages/statistics/statistics.module#StatisticsModule',
+    canActivate: [AuthGuard]
+  },
   {
     path: '**',
     loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
