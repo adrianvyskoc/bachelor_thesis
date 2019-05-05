@@ -109,12 +109,13 @@ export class AdmissionsUtil {
     let summary = { beganStudy: 0, arr: [], mean: 0 , median: null}
 
     groups.map((group) => {
-      // calculate summary numbers
       summary.mean += group.mean
       summary.beganStudy += group.beganStudy
       summary.arr = this.SortingUtil._mergeSort([...summary.arr, ...group.arr])
 
+      // výpočet priemeru - celkový počet bodov získaný študentmi vydelený počtom študentov
       group.mean /= group.arr.length
+      // výpočet mediánu
       group.median =
         group.arr.length / 2 !== 0 ?
         group.arr[Math.floor(group.arr.length / 2)] :
@@ -122,7 +123,7 @@ export class AdmissionsUtil {
       return group
     })
 
-    // calculate mean and median for summary
+    // výpočet mediánu a priemeru bodov
     summary.mean /= summary.arr.length
       summary.median =
         summary.arr.length / 2 !== 0 ?
