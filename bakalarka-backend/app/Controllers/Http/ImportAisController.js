@@ -9,6 +9,9 @@ const fs = use('fs')
 const Student = use('App/Models/Student')
 const Admission = use('App/Models/Admission')
 
+/**
+ * Controller, ktorý obsahuje endpoint, ktorý slúži na importovanie dát so zdrojom AIS
+ */
 class ImportAisController {
 
     async import ({ request, params }) {
@@ -295,11 +298,11 @@ class ImportAisController {
             } catch(err) { console.log(err) }
           }
         }
-        
+
         // -------------------------------------------------------------------
         // StateExamsOverviewsIng
         // -------------------------------------------------------------------
-        
+
         if(params.selectedImport == 'StateExamsOverviewsIng') {
           for(let row of rows) {
             console.log(row)

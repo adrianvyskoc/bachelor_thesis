@@ -8,6 +8,9 @@ const fs = use('fs')
 // Models
 const School = use('App/Models/School')
 
+/**
+ * Controller, ktorý obsahuje endpoint, ktorý slúži na importovanie dát so zdrojom INEKO
+ */
 class ImportInekoController {
 
     async import ({request, response, params}) {

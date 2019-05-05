@@ -3,8 +3,14 @@
 const Database = use('Database')
 const Admission = use('App/Models/Admission')
 
+/**
+ * Tento controller obsahuje API endpointy, ktoré slúžia na manipuláciu s dátami z INEKO a s prihláškami
+ */
 class AdmissionController {
 
+  /**
+   * Endpoint zodpovedný na úpravu konkrétnej prihlášky podľa ID.
+   */
   async updateAdmission({ request }) {
     const updatedAdmission = await request.all()
     const id = updatedAdmission.id
@@ -32,6 +38,9 @@ class AdmissionController {
     }
   }
 
+  /**
+   *  Endpoint zodpovedný za vymazanie konkrétnej prihlášky podľa ID.
+   */
   async deleteAdmission({ params }) {
     const { id } = params
     const admission = await Admission.find(id)
@@ -53,6 +62,9 @@ class AdmissionController {
     }
   }
 
+  /**
+   * Endpoint, ktorý vracia všetky prihlášky podľa zvoleného priezviska.
+   */
   async getAdmissionsBySurname({ request }) {
     const queryParams = await request.all()
 
@@ -64,6 +76,9 @@ class AdmissionController {
     return { admissions }
   }
 
+  /**
+   * Endpoint, ktorý vymaže všetky prihlášky zo systému
+   */
   async deleteAllAdmissions() {
     try {
       await Database.truncate('ais_admissions')
@@ -79,6 +94,9 @@ class AdmissionController {
     }
   }
 
+  /**
+   * Endpoint, ktorý zmaže všetky prihlášky so zvoleným školským rokom
+   */
   async deleteAdmissionsForGivenYear({ params }) {
     try {
       await Database
@@ -98,6 +116,9 @@ class AdmissionController {
     }
   }
 
+  /**
+   * Endpoint, ktorý zmaže vybraný typ dát z INEKA pre zvolený rok.
+   */
   async deleteInekoDataForGivenYear({ params }) {
     try {
       await Database
@@ -117,6 +138,9 @@ class AdmissionController {
     }
   }
 
+  /**
+   * Endpoint, ktorý zmený školský rok pre prihlášky, pre zvolený  pôvodný školský rok,na zvolený cieľový školský rok.
+   */
   async changeYearForGivenYear({ request }) {
     const years = await request.all()
     let count = await Database
@@ -150,6 +174,9 @@ class AdmissionController {
     }
   }
 
+  /**
+   * Endpoint, ktorý slúži na zmenu pôvodného školského roku na cieľový školský rok pre zvolené dáta z INEKO.
+   */
   async changeYearForInekoData({ request }) {
     const data = await request.all()
     let count = await Database

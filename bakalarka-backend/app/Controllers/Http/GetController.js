@@ -11,6 +11,9 @@ const School = use('App/Models/School')
 const Pointer = use('App/Models/Pointer')
 const Admin = use('App/Models/Admin')
 
+/**
+ * Controller, ktorý slúži na sprostredkovávanie dát pre klientskú stranu.
+ */
 class GetController {
 
     async getStudents ({ response }) {
@@ -25,6 +28,9 @@ class GetController {
         return response.send(attendance)
     }
 
+    /**
+     * Endpoint, ktorý vráti buď všetky prihlášky, alebo prihlášky zo zvoleného školského roku
+     */
     async getAdmissions ({ response, params }) {
         let admissions
         if(params.year == 'all')
@@ -42,6 +48,10 @@ class GetController {
         return response.send(admissions)
     }
 
+    /**
+     * Endpoint, ktorý vráti prihlášku podľa zvoleného ID. Spolu s prihláškou sa vráti aj škola, ktorú navštevoval daný uchádzač, jeho ostatné prihlášky
+     * a ukazovatele kvality školy, ktorú navštevoval.
+     */
     async getAdmission ({ response, params }) {
         const admission = await Admission.find(params.id)
         const school = await School.find(admission.school_id)
@@ -179,7 +189,7 @@ class GetController {
      * ------------------------------------------------------------------------
      */
 
-    // data z druhej tabuky mi to vrati len ked v prvej už nic nie je 
+    // data z druhej tabuky mi to vrati len ked v prvej už nic nie je
     async getDateYears({request, response}) {
       let rawData = [];
       const data = await Database.raw(`
@@ -335,7 +345,7 @@ class GetController {
           .send(e)
       }
     }
-    
+
     /**
      * Final Exam Params Configuration for BC
      */
@@ -428,7 +438,7 @@ class GetController {
      * ------------------------------------------------------------------------
      */
 
-    // data z druhej tabuky mi to vrati len ked v prvej už nic nie je 
+    // data z druhej tabuky mi to vrati len ked v prvej už nic nie je
     async getDateYearsIng({request, response}) {
       let rawData = [];
       const data = await Database.raw(`
@@ -520,7 +530,7 @@ class GetController {
           .send(e)
       }
     }
-    // testovacie 
+    // testovacie
 
     async getStateFinalExamsIng ({ request, response }) {
       const datum = request.body.year;
@@ -760,13 +770,21 @@ class GetController {
         return response.send(subjects)
     }
 
+    /**
+     * Endpoint, ktorý vráti dáta o všetkých školách, ktoré sú naimportované v systéme
+     */
     async getSchools({ response }) {
         const schools = await School.all()
 
         return response.send(schools)
     }
 
-    // API endpoints for usecases
+    /**
+     * Feature Endpoint, ktorý vracia dáta pre sekciu Prijímacie konanie - Všeobecný prehľad. Výstupom je:
+     * - všetky školy naimportované v systéme spolu s ich hodnotením podľa INEKO
+     * - všetky prihlášky spojené so školami, ktoré navštevovali uchádzači
+     * - metriky podľa krajov
+     */
     async getAdmissionsOverview ({ request, response }) {
       const queryParams = await request.all()
 
@@ -839,6 +857,15 @@ class GetController {
       return response.send({ schools, admissions, regionMetrics: regionMetrics.rows })
     }
 
+    /**
+     * Feature Endpoint, ktorý vracia dáta pre sekciu Prijímacie konanie - Porovnanie školských rokov. Výstupom je:
+     * - všetky roky, pre ktoré boli naimportované prihlášky
+     * - všetky študijné programy, na ktoré sa uchádzači hlásili
+     * - metriky pre uchádzačov
+     *   - bakalárskeho stupňa
+     *   - inžinierskeho stupňa
+     *   - oboch stupňov dohromady
+     */
     async getAdmissionsYearComparison ({ response }) {
       const admissions = await Database
         .select('*')
@@ -926,6 +953,11 @@ class GetController {
       return response.send({ admissions, years, studyProgrammes, ratios, masterRatios, bachelorRatios })
     }
 
+    /**
+     * Feature Endpoint, ktorý vracia dáta pre sekciu Prijímacie konanie - Bakalársky stupeň. Výstupom je:
+     * - všetky školy spojené s prihláškami a spojené s hodnoteniami podľa INEKO
+     * - všetky prihlášky bakalárskeho stupňa spojené so školami
+     */
     async getAdmissionsBachelor ({ request, response }) {
       const queryParams = await request.all()
 
@@ -968,6 +1000,11 @@ class GetController {
       return response.send({ schools: schools.rows, admissions })
     }
 
+    /**
+     * Feature Endpoint, ktorý vracia dáta pre sekciu Prijímacie konanie - Inžiniersky stupeň. Výstupom je:
+     * - všetky univerzity, z ktorých sa hlásili uchádzači spolu s metrikami medián bodov, priemer bodov a počtom prihlášok z jednotlivých univerzít
+     * - všetky prihlášky inžinierskeho stupňa
+     */
     async getAdmissionsMaster({ request, response }) {
       const queryParams = await request.all()
 
@@ -1000,6 +1037,9 @@ class GetController {
       return response.send({ admissions, universities: universities.rows })
     }
 
+    /**
+     * Endpoint, ktorý vracia všetky atribúty per zadanú tabuľku v databáze
+     */
     async getAttrNames({ request, response }) {
       let queryParams = await request.all()
 
