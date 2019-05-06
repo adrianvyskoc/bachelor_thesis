@@ -75,7 +75,6 @@ Route
         Route.get('finalexamconfig/get', 'GetController.getFinalExamConfiguration')
         Route.post('finalexamconfig/update', 'GetController.updateFinalExamConfiguration')
 
-        Route.get('statefinalexamsing', 'getController.getState')
         Route.post('statefinalexamsing', 'getController.getStateFinalExamsIng')
         Route.post('statefinalexamsing/update', 'getController.updateStateFinalExamsIng')
         Route.post('statefinalexamsing/delete', 'getController.deleteStateFinalExamsIng')
@@ -86,7 +85,16 @@ Route
           api endpoints end
         */
 
-
+        /*
+          Statistics api endpoints start
+        */
+        Route.post('statistics', 'getController.getStatistics')
+        Route.get('statistics/year', 'getController.getDateYearsStart')
+        Route.get('statistics/yearForDelete', 'getController.getDateYearsForDelete')
+        Route.post('statistics/delete', 'getController.deleteStatistics')
+        /*
+          api endpoints end
+        */
 
         /*
           Login LDAP

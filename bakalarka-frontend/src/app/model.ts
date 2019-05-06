@@ -77,3 +77,36 @@ export interface Param {
   clOponent: string;
   clCelkovo: string;
 }
+
+export interface Student {
+  id: number;
+  obdobie: string;
+  semester: string;
+  aisId: number;
+  celeMenoSTitulmi: string;
+  rokAbsVs: number;
+  stat: string;
+  dlzkaPrerusMesiac: number;
+  datumPrerusenia: string;
+  datumSplnenia: string;
+  roky: number;
+  kodFinancovania: number;
+  identifikStud: string;
+  nastup: string;
+  obhajoba: string;
+  obdobie2: string;
+  semester2: string;
+  aisId2: number;
+  celeMenoSTitulmi2: string;
+  pohlavie: string;
+  predmetyVysvedVysledky: string;
+  studProg: string;
+  prveStudium: string;
+  rocnik: number;
+  znamkaSZS: string;
+  studPlan: string;
+  titul: string;
+  typUkoncenia: string;
+  vyradenieDatum: string;
+  druhZaverecnejPrace: string;
+}

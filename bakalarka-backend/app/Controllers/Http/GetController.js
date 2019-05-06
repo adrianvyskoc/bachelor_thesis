@@ -450,78 +450,6 @@ class GetController {
         .send(rawData)
     }
 
-    // testovacie
-    async getState ({ request, response }) {
-      try {
-        const data = await Database.raw(`
-          select
-            ais_state_exams_overview_ings.id as id,
-            ais_state_exams_overview_ings."OBDOBIE" as "obdobie",
-            ais_state_exams_overview_ings."Celé_meno_s_titulmi" as "celeMenoSTitulmi",
-            ais_state_exams_overview_ings."AIS_ID" as "aisId",
-            ais_state_exams_overview_ings."Identifikácia_štúdia" as "identifikaciaStudia",
-            ais_state_exams_overview_ings."Obhajoba" as "obhajoba",
-            ais_state_exams_overview_ings."Záverečná_práca_názov" as "zaverecnaPracaNazov",
-            ais_state_exams_overview_ings."Vedúci" as "veduci",
-            ais_state_exams_overview_ings."Oponent" as "oponent",
-            ais_state_exams_overview_ings."Stav" as "stav",
-            ais_state_exams_overview_ings."VŠP_štúdium" as "vspStudium",
-            ais_state_exams_overview_ings."VŠP_štud_bpo" as "vspStudBpo",
-
-            ais_state_exams_scenario_ings."študent" as "student",
-            ais_state_exams_scenario_ings."názov_diplomovej_práce" as "nazovDiplomPrace",
-            ais_state_exams_scenario_ings."vedúci" as "veduciY",
-            ais_state_exams_scenario_ings."oponent" as "oponentY",
-            ais_state_exams_scenario_ings."študijný_program" as "studProg",
-            ais_state_exams_scenario_ings."Komisia" as "komisia",
-            ais_state_exams_scenario_ings."datum_šs" as "datum",
-            ais_state_exams_scenario_ings."Predseda" as "predseda",
-            ais_state_exams_scenario_ings."tajomník" as "tajomnik",
-
-            ais_state_exams_overview_ings."uzavreteStudium",
-            ais_state_exams_overview_ings."oponentHodnotenie",
-            ais_state_exams_overview_ings."vysledneHodnotenie",
-            ais_state_exams_overview_ings."hlasi_sa_na_phd",
-            ais_state_exams_overview_ings."dp3_v_aj",
-            ais_state_exams_overview_ings."ssOpravnyTermin",
-            ais_state_exams_overview_ings."navrhPoradie",
-            ais_state_exams_overview_ings."clanokIny",
-            ais_state_exams_overview_ings."clanokIITSRC",
-            ais_state_exams_overview_ings."navrhDoRSP1",
-            ais_state_exams_overview_ings."konecneRozhodnutie1",
-            ais_state_exams_overview_ings."navrhDoRSP2",
-            ais_state_exams_overview_ings."konecneRozhodnutie2",
-            ais_state_exams_overview_ings."konecneRozhodnutie3",
-            ais_state_exams_overview_ings."potvrdenieIET",
-            ais_state_exams_overview_ings."poznamky"
-          from
-            ais_state_exams_overview_ings
-          full outer join
-            ais_state_exams_scenario_ings
-          on
-            REGEXP_REPLACE(lower(ais_state_exams_overview_ings."Záverečná_práca_názov"), '[ \\s]*', '', 'g') = REGEXP_REPLACE(lower(ais_state_exams_scenario_ings."názov_diplomovej_práce"), '[ \\s]*', '', 'g')
-          and
-            ais_state_exams_overview_ings."Celé_meno_s_titulmi" like '%' || ais_state_exams_scenario_ings."študent" || '%'
-          and
-            ais_state_exams_overview_ings."OBDOBIE" like ais_state_exams_scenario_ings."OBDOBIE"
-          order by id ASC
-        `);
-
-        console.log('dlzka dat', data.rows.length);
-
-        return response
-          .status(200)
-          .send(data.rows)
-
-      } catch(e) {
-        console.log('error', e);
-        return response
-          .status(500)
-          .send(e)
-      }
-    }
-    // testovacie 
-
     async getStateFinalExamsIng ({ request, response }) {
       const datum = request.body.year;
       try {
@@ -742,6 +670,246 @@ class GetController {
           .status(500)
           .send(e)
       }
+    }
+
+    /**
+     * Statistics --- --- --- --- --- --- --- 
+     */
+
+    async getStatistics ({ request, response }) {
+      let rokNastupu = request.body.rokNastup;
+      let rokObdobia = request.body.rokObdobia;
+      const duration = request.body.duration;
+
+      let statObj = {}; 
+      
+      try {
+        const data = await Database.raw(`
+          select
+            ais_students_data_pt_1.id as id,
+            ais_students_data_pt_1."OBDOBIE" as "obdobie",
+            ais_students_data_pt_1."SEMESTER" as "semester",
+            ais_students_data_pt_1."ID" as "aisId",
+            ais_students_data_pt_1."Celé_meno_s_titulmi" as "celeMenoSTitulmi",
+            ais_students_data_pt_1."Rok_abs_VŠ" as "rokAbsVs",
+            ais_students_data_pt_1."Štát" as "stat",
+            ais_students_data_pt_1."Dĺžka_prerušenia_mes" as "dlzkaPrerusMesiac",
+            ais_students_data_pt_1."Dátum_prerušenia" as "datumPrerusenia",
+            ais_students_data_pt_1."Dátum_splnenia" as "datumSplnenia",
+            ais_students_data_pt_1."Roky" as "roky",
+            ais_students_data_pt_1."Kód_fin" as "kodFinancovania",
+            ais_students_data_pt_1."Identifikácia_štúdia" as "identifikStud",
+            ais_students_data_pt_1."Nástup" as "nastup",
+            ais_students_data_pt_1."Obhajoba_1" as "obhajoba",
+            ais_students_data_pt_2."OBDOBIE" as "obdobie2",
+            ais_students_data_pt_2."SEMESTER" as "semester2",
+            ais_students_data_pt_2."ID" as "aisId2", 
+            ais_students_data_pt_2."Celé_meno_s_titulmi" as "celeMenoSTitulmi2",
+            ais_students_data_pt_2."Pohlavie" as "pohlavie",
+            ais_students_data_pt_2."Predmety_vysvedčení_výsledky" as "predmetyVysvedVysledky",
+            ais_students_data_pt_2."Program_2" as "studProg",
+            ais_students_data_pt_2."Prvé_štúdium" as "prveStudium",
+            ais_students_data_pt_2."Roč" as "rocnik",
+            ais_students_data_pt_2."Známka_ŠZS" as "znamkaSZS",
+            ais_students_data_pt_2."Študijný_plán" as "studPlan",
+            ais_students_data_pt_2."Titul" as "titul",
+            ais_students_data_pt_2."Typ_ukončenia" as "typUkoncenia",
+            ais_students_data_pt_2."Vyradenie" as "vyradenieDatum",
+            ais_students_data_pt_2."ZP_druh" as "druhZaverecnejPrace"
+          from
+            ais_students_data_pt_1
+          left join
+            ais_students_data_pt_2
+          on
+            ais_students_data_pt_1."Celé_meno_s_titulmi" like '%' || ais_students_data_pt_2."Celé_meno_s_titulmi" || '%'
+          and
+            ais_students_data_pt_1."OBDOBIE" like ais_students_data_pt_2."OBDOBIE"
+          where
+            ais_students_data_pt_1."rokNastupu" = '${rokNastupu}'
+          and
+            ais_students_data_pt_1."OBDOBIE" = '${rokObdobia}'
+          and
+            ais_students_data_pt_1."SEMESTER" = 'winter'
+          order by id ASC
+        `);
+
+        statObj[rokObdobia] = {winter: null, summer: null};
+        statObj[rokObdobia].winter = data.rows;
+        let actIds = this.getIds(data.rows);
+
+        statObj[rokObdobia].summer =  await this.getNextYearStatistics(actIds, rokNastupu, rokObdobia, 'summer');
+        
+        for (let i = 1; i < duration; i++) {
+          rokObdobia++;
+          let winterResult = await this.getNextYearStatistics(actIds, rokNastupu, rokObdobia, 'winter');
+          let summerResult = await this.getNextYearStatistics(actIds, rokNastupu, rokObdobia, 'summer');
+          statObj[rokObdobia] = {winter: null, summer: null};
+          // statObj[rokObdobia]['winter'] = [];
+          // statObj[rokObdobia]['summer'] = [];
+          statObj[rokObdobia].winter = winterResult;
+          statObj[rokObdobia].summer = summerResult;
+        }
+        return response
+          .status(200)
+          .send(statObj)
+      } catch(e) {
+        console.log('error', e);
+        return response
+          .status(500)
+          .send(e)
+      }
+    }
+
+    /**
+     * 
+     * @param {*} arr Array of results obtained from 
+     * statistics table according selected year
+     */
+    getIds(arr) {
+      let ids = [];
+      arr.forEach(e => {
+        ids.push(e.aisId);
+      });
+      return ids;
+    }
+    
+    /**
+     * 
+     * @param {*} actIds array with student`s actual AIS ids
+     * @param {*} rokNastupu start year of study
+     * @param {*} rokObdobia current year of statistic
+     */
+    async getNextYearStatistics(actIds, rokNastupu, rokObdobia, semeter) {
+      const queryIds = `(${actIds})`;
+      let result = [];
+
+      try {
+        result = await Database.raw(`
+          select
+            ais_students_data_pt_1.id as id,
+            ais_students_data_pt_1."OBDOBIE" as "obdobie",
+            ais_students_data_pt_1."SEMESTER" as "semester",
+            ais_students_data_pt_1."ID" as "aisId",
+            ais_students_data_pt_1."Celé_meno_s_titulmi" as "celeMenoSTitulmi",
+            ais_students_data_pt_1."Rok_abs_VŠ" as "rokAbsVs",
+            ais_students_data_pt_1."Štát" as "stat",
+            ais_students_data_pt_1."Dĺžka_prerušenia_mes" as "dlzkaPrerusMesiac",
+            ais_students_data_pt_1."Dátum_prerušenia" as "datumPrerusenia",
+            ais_students_data_pt_1."Dátum_splnenia" as "datumSplnenia",
+            ais_students_data_pt_1."Roky" as "roky",
+            ais_students_data_pt_1."Kód_fin" as "kodFinancovania",
+            ais_students_data_pt_1."Identifikácia_štúdia" as "identifikStud",
+            ais_students_data_pt_1."Nástup" as "nastup",
+            ais_students_data_pt_1."Obhajoba_1" as "obhajoba",
+            ais_students_data_pt_2."OBDOBIE" as "obdobie2",
+            ais_students_data_pt_2."SEMESTER" as "semester2",
+            ais_students_data_pt_2."ID" as "aisId2", 
+            ais_students_data_pt_2."Celé_meno_s_titulmi" as "celeMenoSTitulmi2",
+            ais_students_data_pt_2."Pohlavie" as "pohlavie",
+            ais_students_data_pt_2."Predmety_vysvedčení_výsledky" as "predmetyVysvedVysledky",
+            ais_students_data_pt_2."Program_2" as "studProg",
+            ais_students_data_pt_2."Prvé_štúdium" as "prveStudium",
+            ais_students_data_pt_2."Roč" as "rocnik",
+            ais_students_data_pt_2."Známka_ŠZS" as "znamkaSZS",
+            ais_students_data_pt_2."Študijný_plán" as "studPlan",
+            ais_students_data_pt_2."Titul" as "titul",
+            ais_students_data_pt_2."Typ_ukončenia" as "typUkoncenia",
+            ais_students_data_pt_2."Vyradenie" as "vyradenieDatum",
+            ais_students_data_pt_2."ZP_druh" as "druhZaverecnejPrace"
+          from
+            ais_students_data_pt_1
+          left join
+            ais_students_data_pt_2
+          on
+            ais_students_data_pt_1."Celé_meno_s_titulmi" like '%' || ais_students_data_pt_2."Celé_meno_s_titulmi" || '%'
+          and
+            ais_students_data_pt_1."OBDOBIE" like ais_students_data_pt_2."OBDOBIE"
+          where
+            ais_students_data_pt_1."rokNastupu" = '${rokNastupu}'
+          and
+            ais_students_data_pt_1."OBDOBIE" = '${rokObdobia}'
+          and 
+            ais_students_data_pt_1."ID" in ${queryIds}
+          and
+            ais_students_data_pt_1."SEMESTER" = '${semeter}'
+          order by id ASC
+        `);
+
+        return result.rows;
+      } catch(e) {
+        console.log(e);
+        return [];
+      }
+    }
+
+    async getDateYearsStart({request, response}) {
+      let rawData = [];
+      const data = await Database.raw(`
+        select distinct
+          ais_students_data_pt_1."rokNastupu"
+        from
+          ais_students_data_pt_1
+        order by
+          ais_students_data_pt_1."rokNastupu" ASC
+      `);
+
+      // odstranenie nezelaneho tvaru ziskanych dat
+      data.rows.map(e => {
+        rawData.push(e['rokNastupu']);
+      })
+
+      return response
+        .status(200)
+        .send(rawData)
+    }
+
+    async deleteStatistics({request, response}) {
+      const datum = request.body.year;
+
+      try{
+        await Database
+        .query()
+        .table('ais_students_data_pt_1')
+        .where('OBDOBIE', datum)
+        .delete()
+
+        await Database
+        .query()
+        .table('ais_students_data_pt_2')
+        .where('OBDOBIE', datum)
+        .delete()
+
+        return response
+          .status(200)
+          .send(true)
+
+      } catch(e) {
+        console.log('error', e);
+        return response
+          .status(500)
+          .send(e)
+      }
+    }
+
+    async getDateYearsForDelete({request, response}) {
+      let rawData = [];
+      const data = await Database.raw(`
+        select distinct
+          ais_students_data_pt_1."OBDOBIE"
+        from
+          ais_students_data_pt_1
+        order by
+          ais_students_data_pt_1."OBDOBIE" ASC
+      `);
+
+      // odstranenie nezelaneho tvaru ziskanych dat
+      data.rows.map(e => {
+        rawData.push(e['OBDOBIE']);
+      })
+
+      return response
+        .status(200)
+        .send(rawData)
     }
 
     /**

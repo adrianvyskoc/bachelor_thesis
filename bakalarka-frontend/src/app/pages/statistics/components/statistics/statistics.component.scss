@@ -1,0 +1,55 @@
+table {
+  width: 100%;
+  padding: 0 15px;
+  margin-bottom: 30px; 
+}
+
+td {
+  border: 1px solid #0e0e0e;
+  padding: 10px 15px;
+
+  p {
+    margin: 0;
+  }
+}
+
+thead {
+  td,
+  p {
+    font-weight: 700;
+  }
+}
+
+h2 {
+  margin: 20px 0 30px;
+}
+
+h3 {
+  margin-top: 50px;
+  font-size: 25px;
+}
+
+form {
+  padding-left: 10px;
+
+  .custom-select {
+    margin: 10px 0 0;
+  }
+
+  button {
+    margin-top: 10px;
+    margin-left: -10px;
+  }
+}
+
+.table--head {
+  font-weight: 700;
+  max-width: 130px;
+}
+
+p {
+  &.warning {
+    color: red;
+    font-size: 11px;
+  }
+}

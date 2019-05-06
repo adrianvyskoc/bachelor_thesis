@@ -132,6 +132,8 @@ class AisStudentsDataPt1Schema extends Schema {
       table.integer("Zruš_prerušenie")
       table.integer("Zruš_iné_dôv")
       table.integer("Zruš_štud_dôv")
+      table.string('rokNastupu')
+      table.string('rokSplnenia')
     })
   }
 

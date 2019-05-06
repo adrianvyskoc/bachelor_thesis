@@ -435,6 +435,19 @@ class ImportAisController {
 
             row['OBDOBIE'] = data.year
             row['SEMESTER'] = data.semester
+            
+            // let tmp2 = [];
+            // if (row.Dátum_splnenia !== undefined || row.Dátum_splnenia !== null) {
+            //   tmp2 = row.Dátum_splnenia.trim().split('.');
+            // }
+            // console.log(row.Dátum_splnenia)
+            // row['rokSplnenia'] = tmp2.pop();
+
+            let tmp = [];
+            if (row.Nástup !== undefined || row.Nástup !== null) {
+              tmp = row.Nástup.split('.');
+            }
+            row['rokNastupu'] = tmp.pop();
 
             delete row['Por']
 

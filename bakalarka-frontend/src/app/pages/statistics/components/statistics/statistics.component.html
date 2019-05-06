@@ -1,4 +1,114 @@
-<p>
-  statistics works!
+<div>
+  <h2>Štatistiky o vývoji počtu kohort</h2>
+  <p>Táto stránka poskytuje vývoj kohort bakalárskeho a inžinierskeho stupňa v zimnom (ZS) a letnom (LS) semestri.</p>
+</div>
+
+<!-- <p>Tabuľka obsahuje údaje z roku: {{ data ? data[0].obdobie : 'Dáta nie sú importované' }}</p> -->
+<form class="col-sm-2" [formGroup]="filterForm" (ngSubmit)="onFilterFormSubmit()">
+  <label>
+    Vybrať rok nástupu <br> a počet sledovaných rokov
+    <select class="custom-select" name="year" formControlName="yearOption">
+      <option [value]="year" *ngFor="let year of yearOptions">{{ year }}</option>
+    </select>
+
+    <select class="custom-select" name="year" formControlName="duration">
+      <option [value]="opt" *ngFor="let opt of durationOptions">{{ opt }}</option>
+    </select>
+  </label>
+  <button class="btn btn-raised btn-primary" type="submit">Uložiť zmeny</button>
+</form>
+
+<hr>
+
+<ng-container *ngIf="bakArr">
+  <h3>Vývoj kohorty pre bakalársky ročník</h3>
+  <table>
+    <thead>
+      <tr> 
+        <td class="table--head">Rok</td>
+        <td class="table--year" colspan="2" *ngFor="let item of bakArr.count | keyvalue">
+          <p>{{ item.key }}</p>
+        </td>
+      </tr>
+      <tr>
+        <td class="table--head">Semester</td>
+        <ng-container *ngFor="let item of bakArr.count | keyvalue">
+          <td class="table--semester" *ngFor="let v of item.value | keyvalue">
+            <p *ngIf="v.key == 1">ZS</p>
+            <p *ngIf="v.key == 2">LS</p>
+          </td>
+        </ng-container>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="table--head">Počet</td>
+        <ng-container *ngFor="let item of bakArr.count | keyvalue">
+          <td class="table--data" *ngFor="let v of item.value | keyvalue">{{ v.value }}</td>
+        </ng-container>
+      </tr>
+      <tr>
+        <td class="table--head">Absolvovaní</td>
+        <td colspan="2" class="table--data" *ngFor="let item of bakArr.completed | keyvalue">{{ item.value }}</td>
+        <td>{{ bakArr.totalCompleted }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- <app-statistics-list [data]="data" [selectedYear]="selectedYear" ></app-statistics-list> -->
+</ng-container>
+<ng-container *ngIf="ingArr">
+  <h3>Vývoj kohorty pre inžiniersky ročník</h3>
+  <table>
+    <thead>
+      <tr>
+        <td class="table--head">Rok</td>
+        <td class="table--year" colspan="2" *ngFor="let item of ingArr.count | keyvalue">
+          <p>{{ item.key }}</p>
+        </td>
+      </tr>
+      <tr>
+        <td class="table--head">Semester</td>
+        <ng-container *ngFor="let item of bakArr.count | keyvalue">
+          <td class="table--semester" *ngFor="let v of item.value | keyvalue">
+            <p *ngIf="v.key == 1">ZS</p>
+            <p *ngIf="v.key == 2">LS</p>
+          </td>
+        </ng-container>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="table--head">Počet</td>
+        <ng-container *ngFor="let item of ingArr.count | keyvalue">
+          <td class="table--data" *ngFor="let v of item.value | keyvalue">{{ v.value }}</td>
+        </ng-container>
+      </tr>
+      <tr>
+        <td class="table--head">Absolvovaní</td>
+        <td colspan="2" class="table--data" *ngFor="let item of ingArr.completed | keyvalue">{{ item.value }}</td>
+        <td>{{ ingArr.totalCompleted }}</td>
+      </tr>
+    </tbody>
+  </table>
+</ng-container>
+
+<hr>
+<button class="btn btn-raised btn-primary" matTooltip="Exportuje sa tabuľka štatistík." (click)="exportAll()">
+  Exportovať štatistiky
+</button>
+<hr>
+
+<h5>Vymazanie údajov pre konkrétny rok</h5>
+<p class="warning">Upozornenie: Touto akciou sa vymažú všetky dáta o študentoch ZS a LS daného roku a bude potrebné ich
+  opäť importovať.
 </p>
-<app-statistics-list></app-statistics-list>
+<form class="col-sm-3" [formGroup]="filterFormDelete" (ngSubmit)="onFilterFormDelete()">
+  <label>
+    Vybrať rok
+    <select class="custom-select" name="year" formControlName="yearOptionDelete">
+      <option [value]="year" *ngFor="let year of yearOptionsForDelete">{{ year }}</option>
+    </select>
+  </label>
+  <button class="btn btn-raised btn-primary" type="submit">Vymazať všetky importy daného roku</button>
+  <p class="warning">*je potrebné znovu načítanie stránky</p>
+</form>
