@@ -126,9 +126,9 @@
   </div>
   <div class="col-lg-6">
     <app-chart
-      [title]="'Znázornenie pomeru prihlásených, prijatých a neprijatých študentov celkovo na škole'"
-      [data]="[filteredAdmissions.length, admissionCounts.approved, admissionCounts.rejected]"
-      [labels]="['Prihlásený', 'Prijatý', 'Neprijatý']"
+      [title]="'Znázornenie počtov prihlásených, prijatých, nastúpených a neprijatých študentov celkovo na škole'"
+      [data]="[filteredAdmissions.length, admissionCounts.approved, admissionCounts.beganStudy, admissionCounts.rejected]"
+      [labels]="['Prihlásený', 'Prijatý', 'Nastúpený', 'Neprijatý']"
       [type]="'bar'"
       [legend]="false"
     ></app-chart>

@@ -207,9 +207,14 @@ export class AdmissionsComponent implements OnInit {
   _calculateAdmissionsCounts() {
     this.admissionCounts = this.filteredAdmissions.reduce((acc, admission) => {
       admission.stupen_studia == "Bakalársky" ? acc.bachelor++ : acc.master++
-      admission.Rozh == 10 || admission.Rozh == 11 || admission.Rozh == 13 ? acc.approved++ : acc.rejected++
+      if(admission.Rozh == 10 || admission.Rozh == 11 || admission.Rozh == 13) {
+        if(admission['Štúdium'] == 'áno')
+          acc.beganStudy++
+        acc.approved++
+      } else
+        acc.rejected++
       return acc
-    }, {'bachelor': 0, 'master': 0, 'approved': 0, 'rejected': 0})
+    }, {'bachelor': 0, 'master': 0, 'approved': 0, 'rejected': 0, 'beganStudy': 0})
 
     setTimeout(() => {
       this.chartsLoaded = true
