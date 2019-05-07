@@ -49,6 +49,9 @@ export class StateFinalExamsBcComponent implements OnInit {
     return allRight
   }
 
+  /**
+   * Získanie hodnôt parametrov na oceňovanie študentov bakalárskeho ročníka
+   */
   getFinalStateConfig(): void {
     this.stateFinalExamsService.getFinalExamConfiguration()
       .subscribe(
@@ -61,6 +64,7 @@ export class StateFinalExamsBcComponent implements OnInit {
         }
       );
   }
+
   /**
   * Získanie všetkých rokov, ktoré sa importovali s dátami
   * a načítanie údajov z najaktuálnejšieho importu
@@ -95,15 +99,18 @@ export class StateFinalExamsBcComponent implements OnInit {
     );
   }
 
+  /**
+   * Vymazanie súborov pre ŠZS daného roku (z dôvodu, že importované zdrojové súbory obsahovali chybu, ktorá sa opravila a je potrebné tieto chybné dáta vymazať)
+   * @param selectedYear - rok podľa ktorého sa majú vymazať súbory
+   */
   deleteStateFinalExams(selectedYear: string): void{
     this.stateFinalExamsService.deleteStateFinalExams(selectedYear)
       .subscribe(data => console.log(data))
       // this.router.navigate(['import'])
   }
 
-
   /**
-   * Získanie všetkých údajov na Vyhodnotenie ŠZS BC a upravenie dát pre komisiu (z komisie vybrate čísla a spojenie so štud. prog.)
+   * Získanie všetkých údajov na Vyhodnotenie ŠZS BC a upravenie dát pre komisiu (z komisie sa vyberie číslo a spojí sa so štud. prog.)
    */
   getStateFinalExams(selectedYear: string): void {
     this.stateFinalExamsService.getAllStateFinalExams(selectedYear)
@@ -142,6 +149,9 @@ export class StateFinalExamsBcComponent implements OnInit {
             }
             if (!e.celeMenoSTitulmi && e.riesitel !== null) {
               e.podozrenie += 'Študent ' + e.riesitel + ' sa nenachádza v súbore z AIS-u. '
+            }
+            if (!e.celeMenoSTitulmi && !e.riesitel) {
+              e.podozrenie += 'V importovanom súbore sa nachádzal neprázdny riadok, ktorý neobsahoval dáta študenta. '
             }
             /**
              * Pokial by sa poznámka 2x nachádzala inde ako v dátach podľa kt. spájame, dalo by sa to využiť

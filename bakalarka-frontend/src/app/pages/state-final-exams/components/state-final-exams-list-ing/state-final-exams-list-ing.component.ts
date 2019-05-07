@@ -13,18 +13,17 @@ import { FormGroup, FormControl, ValidatorFn } from '@angular/forms';
 export class StateFinalExamsListIngComponent implements OnInit, OnChanges {
 
   dataSource: MatTableDataSource <any>
-    // meno rozdelit do 3;
-    displayedColumns: string[] = [
-      'id', 'uzavreteStudium', 'meno', 'studProgram', 'datumSS', 'komisia', 'predsenaKomisie',
-      'tajomnik', 'nazovDP', 'veduci', 'oponent', 'OH-oponent', 'OH-komisia', 'P-vspBez',
-      'P-vspCele', 'DI-hlasiSaNaPhd', 'DI-DP3vAJ', 'DI-SSOpravnyTermin', 'NCA-autoNavrh', 
-      'NOKP-navrhPoradie', 'NOKP-clanokIny', 'NOKP-clanokIITSRC', 'NOKP-autoNavrh', 
-      'NOKP-navrhDoRSP1', 'NOKP-konecneRozhodnutie1', 'OP-autoNavrh', 'OP-navrhDoRSP2', 
-      'OP-konecneRozhodnutie2', 'S-konecneRozhodnutie', 'potvrdenieIET', 'poznamky', 'podozrenie'
-    ]
+  displayedColumns: string[] = [
+    'id', 'uzavreteStudium', 'meno', 'studProgram', 'datumSS', 'komisia', 'predsenaKomisie',
+    'tajomnik', 'nazovDP', 'veduci', 'oponent', 'OH-oponent', 'OH-komisia', 'P-vspBez',
+    'P-vspCele', 'DI-hlasiSaNaPhd', 'DI-DP3vAJ', 'DI-SSOpravnyTermin', 'NCA-autoNavrh', 
+    'NOKP-navrhPoradie', 'NOKP-clanokIny', 'NOKP-clanokIITSRC', 'NOKP-autoNavrh', 
+    'NOKP-navrhDoRSP1', 'NOKP-konecneRozhodnutie1', 'OP-autoNavrh', 'OP-navrhDoRSP2', 
+    'OP-konecneRozhodnutie2', 'S-konecneRozhodnutie', 'potvrdenieIET', 'poznamky', 'podozrenie'
+  ]
 
   @Input() dataIng: Array <ExamIng>
-    @Input() examConfigIng: Param
+  @Input() examConfigIng: Param
 
   configFormIng = new FormGroup({
     crCelkovo: new FormControl('', this.isLegitString),

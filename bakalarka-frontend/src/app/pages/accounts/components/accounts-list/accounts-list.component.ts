@@ -28,7 +28,10 @@ export class AccountsListComponent implements OnInit, OnChanges {
     console.log(this.dataSource)
   }
 
-// nastavi používateľovi práva admina
+  /**
+   * Nastavi používateľovi práva admina
+   * @param accountName - e-mail používateľa
+   */
   onAddAdminClickNotify(accountName: string) {
     this.accountsService.addAdmin(accountName).subscribe(
       data => {
@@ -40,6 +43,10 @@ export class AccountsListComponent implements OnInit, OnChanges {
     );
   }
 
+   /**
+   * Odstráni používateľovi práva admina
+   * @param accountName - e-mail používateľa
+   */
   onRemoveAdminClickNotify(accountName: string) {
     this.accountsService.removeAdmin(accountName).subscribe(
       data => {
@@ -51,6 +58,10 @@ export class AccountsListComponent implements OnInit, OnChanges {
     );
   }
 
+   /**
+   * Odstráni používateľovi prístup do systému
+   * @param accountName - e-mail používateľa
+   */
   onRemoveAccountClickNotify(accountName: string) {
       this.accountsService.removeAccount(accountName).subscribe(
       data => {

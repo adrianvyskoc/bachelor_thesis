@@ -15,6 +15,9 @@ export class AccountsFormComponent implements OnInit {
 
   ngOnInit() {}
 
+  /**
+   * Pridanie používateľského prihlasovacieho e-mailu do databázy
+   */
   submitForm() {
     this.accountsService.addAccount(this.username.toLocaleLowerCase()).subscribe(
       () => {

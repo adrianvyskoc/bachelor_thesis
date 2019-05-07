@@ -1,3 +1,6 @@
+/**
+ * Model používaný pri práci s overovaním prístupu a admin práv používateľov
+ */
 export interface User {
   access: boolean
   admin?: boolean
@@ -7,6 +10,9 @@ export interface User {
   updated_at?: any
 }
 
+/**
+ * Model používaný pri dátach o štátnych záverečných skúškach bakalárskeho ročníka  (model na údaje o študentovi)
+ */
 export interface Exam {
   id: number;
   obdobie: string;
@@ -33,6 +39,9 @@ export interface Exam {
   podozrenie?: string;
 }
 
+/**
+ * Model používaný pri dátach o štátnych záverečných skúškach inžinierskeho ročníka  (model na údaje o študentovi)
+ */
 export interface ExamIng {
   id: number;
   obdobie: string;
@@ -61,6 +70,9 @@ export interface ExamIng {
   podozrenie?: string;
 }
 
+/**
+ * Model používaný pri parametroch na ocenovanie štátnyc záverečných skúšok
+ */
 export interface Param {
   crVsp: number;
   crCelkovo: string
@@ -78,6 +90,9 @@ export interface Param {
   clCelkovo: string;
 }
 
+/**
+ * Model používaný pri dátach o štatistikách študentov
+ */
 export interface Student {
   id: number;
   obdobie: string;

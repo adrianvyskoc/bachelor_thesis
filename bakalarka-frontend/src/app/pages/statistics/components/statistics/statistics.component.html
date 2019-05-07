@@ -3,7 +3,6 @@
   <p>Táto stránka poskytuje vývoj kohort bakalárskeho a inžinierskeho stupňa v zimnom (ZS) a letnom (LS) semestri.</p>
 </div>
 
-<!-- <p>Tabuľka obsahuje údaje z roku: {{ data ? data[0].obdobie : 'Dáta nie sú importované' }}</p> -->
 <form class="col-sm-2" [formGroup]="filterForm" (ngSubmit)="onFilterFormSubmit()">
   <label>
     Vybrať rok nástupu <br> a počet sledovaných rokov
@@ -54,7 +53,6 @@
       </tr>
     </tbody>
   </table>
-  <!-- <app-statistics-list [data]="data" [selectedYear]="selectedYear" ></app-statistics-list> -->
 </ng-container>
 <ng-container *ngIf="ingArr">
   <h3>Vývoj kohorty pre inžiniersky ročník</h3>

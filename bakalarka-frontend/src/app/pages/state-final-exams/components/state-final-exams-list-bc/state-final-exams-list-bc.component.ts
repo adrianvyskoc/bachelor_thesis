@@ -22,7 +22,6 @@ export class StateFinalExamsListBcComponent implements OnInit, OnChanges {
 
   @Input() data: Array<Exam>
   @Input() examConfig: Param
-  // @Input() examConfig: any = {}
 
   configForm = new FormGroup({
     crCelkovo: new FormControl('', this.isLegitString), 

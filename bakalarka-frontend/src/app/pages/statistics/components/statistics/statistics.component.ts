@@ -38,7 +38,7 @@ export class StatisticsComponent implements OnInit {
     this.getYearDates();
   }
   /**
-   * Získanie všetkých rokov nástupu
+   * Získanie všetkých rokov nástupu a zíkanie všetkých rokov zadávaných pri importovaní súborov o dátach študentov
    */
   getYearDates(): void {
     this.statisticsService.getYearDatesStart()
@@ -73,13 +73,17 @@ export class StatisticsComponent implements OnInit {
     );
   }
 
+  /**
+   * Vymazanie všetkých údajov o študentoch na základe vybraného roku
+   * @param selectedYear - vybraný rok z form na vymazanie súborov alebo najaktuálnejší z rokov
+   */
   deleteStatisticsYear(selectedYear: string): void {
     this.statisticsService.deleteStatisticsYear(selectedYear)
       .subscribe(data => console.log(data))
   }
 
   /**
-   * Získanie dát o študentoch
+   * Získanie dát o študentoch, rozdelenie podľa BC a ING, rozdelenie podľa zimného a letného semestra a získanie počtu študentov
    * @param selectedYear - vybraný rok z form alebo najaktuálnejší rok nástupu
    */
   getStatistics(selectedYear: string, duration: string): void {
@@ -176,6 +180,9 @@ export class StatisticsComponent implements OnInit {
       );
   }
 
+  /**
+   * Exportovanie obidvoch tabuliek o kohortách
+   */
   exportAll() {
     const tables = document.querySelectorAll('table:not([mat-table])')
     this.exportService.exportMultipleTablesToExcel(tables, 'Štatistika', [{

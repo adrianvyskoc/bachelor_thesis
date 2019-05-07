@@ -48,6 +48,9 @@ export class StateFinalExamsIngComponent implements OnInit {
     return allRight
   }
 
+  /**
+   * Získanie hodnôt parametrov na oceňovanie študentov inžinierskeho ročníka
+   */
   getFinalStateConfigIng(): void {
     this.stateFinalExamsService.getFinalExamConfigurationIng()
       .subscribe(
@@ -95,12 +98,15 @@ export class StateFinalExamsIngComponent implements OnInit {
     );
   }
 
+  /**
+   * Vymazanie súborov pre ŠZS daného roku (z dôvodu, že importované zdrojové súbory obsahovali chybu, ktorá sa opravila a je potrebné tieto chybné dáta vymazať)
+   * @param selectedYear - rok podľa ktorého sa majú vymazať súbory
+   */
   deleteStateFinalExamsIng(selectedYear: string): void {
     this.stateFinalExamsService.deleteStateFinalExamsIng(selectedYear)
       .subscribe(dataIng => console.log(dataIng))
     // this.router.navigate(['import'])
   }
-
 
   /**
    * Získanie všetkých údajov na Vyhodnotenie ŠZS ING a detekcia chýb dát
@@ -127,6 +133,9 @@ export class StateFinalExamsIngComponent implements OnInit {
             }
             if (!e.celeMenoSTitulmi && e.student !== null) {
               e.podozrenie += 'Študent ' + e.student + ' sa nenachádza v súbore z AIS-u. '
+            }
+            if (!e.celeMenoSTitulmi && !e.student) {
+              e.podozrenie += 'V importovanom súbore sa nachádzal neprázdny riadok, ktorý neobsahoval dáta študenta. '
             }
           })
 
