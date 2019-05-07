@@ -59,11 +59,9 @@ Route
         Route.post('administrators/addAdmin', 'GetController.addAdmin')
         Route.post('administrators/removeAdmin', 'GetController.removeAdmin')
         Route.post('administrators/removeUser', 'GetController.removeUser')
-        // Route.get('administrators/getIfIsAdmin/:user', 'GetController.getIfIsAdmin')
         /*
           Administrators api endpoints end
         */
-
 
        /*
           State Final Exams BC and ING api endpoints start

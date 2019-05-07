@@ -68,13 +68,16 @@ class GetController {
     }
 
     // ---
-    // vrati userov ktori maju pristup do aplikácie
+
+    /**
+     * Endpoint, ktorý vráti používateľov, ktorí majú povolený prístup do systému 
+     */
     async getUsers({ response }) {
       try {
         const data = await Database
           .table('admins')
           .where({access: 'true'})
-          .orderBy('id', 'desc') // zoradim to, aby ked pridam niekoho bol stale na vrchu v tabulke
+          .orderBy('id', 'desc')
 
           return response
           .status(200)
@@ -86,7 +89,9 @@ class GetController {
       }
     }
 
-    // prida usera a pristup do appky
+    /**
+     * Endpoint, ktorý pridá nového používateľa do databázy, alebo len existujúcemu používateľovi povolí prístup
+     */
     async addUser({ request, response}) {
       const user = request.body.name
 
@@ -116,7 +121,9 @@ class GetController {
       }
     }
 
-    // prida prava admina
+    /**
+     * Endpoint, ktorý pridá existujúcemu používateľovi admin práva, alebo vytvorí používateľa s admin právom 
+     */
     async addAdmin({ request, response }) {
       const user = request.body.name
 
@@ -146,7 +153,9 @@ class GetController {
       }
     }
 
-    // vymaze prava admina
+    /**
+     * Endpoint, ktorý odstráni existujúcemu používateľovi admin práva 
+     */
     async removeAdmin({ request, response }) {
       const user = request.body.name
       try {
@@ -165,7 +174,9 @@ class GetController {
       }
     }
 
-    // vymaze pristup do appky
+    /**
+     * Endpoint, ktorý odstráni používateľovi povolený prístup do systému
+     */
     async removeUser({ request, response}) {
       const user = request.body.name
       try {
@@ -188,8 +199,9 @@ class GetController {
      * State Final Exams BC
      * ------------------------------------------------------------------------
      */
-
-    // data z druhej tabuky mi to vrati len ked v prvej už nic nie je
+    /**
+     * Endpoint, ktorý vráti všetky importované roky, ktoré používateľ zadal pri importovaní súborov z AIS-u pre štátne záverečné skúšky (ŠZS) vo web. aplikácii
+     */
     async getDateYears({request, response}) {
       let rawData = [];
       const data = await Database.raw(`
@@ -211,6 +223,10 @@ class GetController {
         .send(rawData)
     }
 
+    /**
+     * Endpoint, ktorý získa všetky potrebné dáta z importovaných súborov z AIS-u a z YonBan-u pre Vyhodnotenie štátnych skúšok bakalárskeho ročníka.
+     * Dáta sú vrátené z vyžiadaného roku
+     */
     async getStateFinalExamsBc ({ request, response }) {
       const datum = request.body.year;
       try {
@@ -280,7 +296,9 @@ class GetController {
       }
     }
 
-    // ---
+    /**
+     * Endpoint, ktorý uloží všetky údaje o ŠZS BC, ktoré sa dopĺňajú na stránke do tabuľky ručne
+     */
     async updateStateFinalExamsBc ({ response, request }) {
       const data = request.body
       try{
@@ -318,6 +336,9 @@ class GetController {
       }
     }
 
+    /**
+     * Endpoint, ktorý vymaže všetky importované údaje pre ŠZS BC vybraného roku
+     */
     async deleteStateFinalExamsBc ({ request, response }) {
       const datum = request.body.year;
 
@@ -349,13 +370,16 @@ class GetController {
     /**
      * Final Exam Params Configuration for BC
      */
-
+    /**
+     * Endpoint, ktorý získa všetky parametre na vyhodnotenie ocenení pre ŠZS BC
+     * Ak v databáze žiadne nie sú, vložia sa prednastavené hodnoty aktuálne pre rok 2018/19
+     */
     async getFinalExamConfiguration ({ response }) {
       const data = await Database
         .table('state_exams_params')
 
         if (data[0] == undefined) {
-          console.log('tralaalal som tu' + data[0])
+          console.log(data[0])
 
           await Database.raw(`
             ALTER SEQUENCE
@@ -395,10 +419,11 @@ class GetController {
         .send(data[0]);
     }
 
+    /**
+     * Endpoint, ktorý aktualizuje zmeny vykonané vo web. aplikácii pri zmene parametrov na vyhodnotenie ocenení
+     */
     async updateFinalExamConfiguration ({ response, request }) {
       const data = request.body;
-      // console.log('dataaaa')
-      // console.log(data);
       try {
         await Database
           .table('state_exams_params')
@@ -437,8 +462,10 @@ class GetController {
      * State Final Exams ING
      * ------------------------------------------------------------------------
      */
-
-    // data z druhej tabuky mi to vrati len ked v prvej už nic nie je
+    /**
+     * Endpoint, ktorý vráti všetky importované roky, ktoré používateľ zadal pri importovaní súborov z AIS-u pre štátne záverečné skúšky (ŠZS) vo web. aplikácii 
+     * pre ing
+     */
     async getDateYearsIng({request, response}) {
       let rawData = [];
       const data = await Database.raw(`
@@ -460,6 +487,10 @@ class GetController {
         .send(rawData)
     }
 
+    /**
+     * Endpoint, ktorý získa všetky potrebné dáta z importovaných súborov z AIS-u a z YonBan-u pre Vyhodnotenie štátnych skúšok inžinierskeho ročníka.
+     * Dáta sú vrátené z vyžiadaného roku
+     */
     async getStateFinalExamsIng ({ request, response }) {
       const datum = request.body.year;
       try {
@@ -533,6 +564,9 @@ class GetController {
       }
     }
 
+    /**
+     * Endpoint, ktorý uloží všetky údaje o ŠZS ING, ktoré sa dopĺňajú na stránke do tabuľky ručne
+     */
     async updateStateFinalExamsIng ({ response, request }) {
       const data = request.body
       try{
@@ -573,6 +607,9 @@ class GetController {
       }
     }
 
+    /**
+     * Endpoint, ktorý vymaže všetky importované údaje pre ŠZS ING vybraného roku
+     */
     async deleteStateFinalExamsIng ({ request, response }) {
       const datum = request.body.year;
 
@@ -604,13 +641,16 @@ class GetController {
      /**
      * Final Exam Params Configuration for ING
      */
-
+    /**
+     * Endpoint, ktorý získa všetky parametre na vyhodnotenie ocenení pre ŠZS ING
+     * Ak v databáze žiadne nie sú, vložia sa prednastavené hodnoty aktuálne pre rok 2018/19
+     */
     async getFinalExamConfigurationIng ({ response }) {
       const data = await Database
         .table('state_exams_params_ings')
 
         if (data[0] == undefined) {
-          console.log('tralaalal som tu' + data[0])
+          console.log(data[0])
 
           await Database.raw(`
             ALTER SEQUENCE
@@ -647,10 +687,11 @@ class GetController {
         .send(data[0]);
     }
 
+    /**
+     * Endpoint, ktorý aktualizuje zmeny vykonané vo web. aplikácii pri zmene parametrov na vyhodnotenie ocenení pre ING
+     */
     async updateFinalExamConfigurationIng ({ response, request }) {
       const data = request.body;
-      // console.log('dataaaa')
-      // console.log(data);
       try {
         await Database
           .table('state_exams_params_ings')
@@ -682,10 +723,13 @@ class GetController {
       }
     }
 
-    /**
-     * Statistics --- --- --- --- --- --- --- 
+    /** -----------------------------------------------------------------------
+     * Statistics
+     * ------------------------------------------------------------------------
      */
-
+    /**
+     * Endpoint, ktorý vráti pre zvolený rok a nasledujúce sledované roky všetký údaje o študentoch, ktorí majú rovnaký rok nástupu 
+     */
     async getStatistics ({ request, response }) {
       let rokNastupu = request.body.rokNastup;
       let rokObdobia = request.body.rokObdobia;
@@ -771,9 +815,8 @@ class GetController {
     }
 
     /**
-     * 
-     * @param {*} arr Array of results obtained from 
-     * statistics table according selected year
+     * Vráti AIS ID študentov s rovnakým rokom nástupu, ktorých sme získali v prvom zvolenom roku
+     * @param {*} arr Pole výsledkov získaných zo štatistickej tabuľky podľa vybraného roka
      */
     getIds(arr) {
       let ids = [];
@@ -784,10 +827,10 @@ class GetController {
     }
     
     /**
-     * 
-     * @param {*} actIds array with student`s actual AIS ids
-     * @param {*} rokNastupu start year of study
-     * @param {*} rokObdobia current year of statistic
+     * Získanie údajov o študentoch z prvého roku nástupu z nasledujúcich rokov
+     * @param {*} actIds pole s aktuálnymi ID študentmi
+     * @param {*} rokNastupu rok nástupu študentov na štúdium
+     * @param {*} rokObdobia aktuálny rok štatistiky
      */
     async getNextYearStatistics(actIds, rokNastupu, rokObdobia, semeter) {
       const queryIds = `(${actIds})`;
@@ -852,6 +895,9 @@ class GetController {
       }
     }
 
+    /**  
+     * Endpoint, ktorý vráti všetky roky nástupu z importovaných súborov o údajoch študentov časť 1, LS a ZS
+    */
     async getDateYearsStart({request, response}) {
       let rawData = [];
       const data = await Database.raw(`
@@ -873,6 +919,9 @@ class GetController {
         .send(rawData)
     }
 
+    /**  
+     * Endpoint, ktorý vymaže všetky údaje o študentoch zo zvoleného roku
+    */
     async deleteStatistics({request, response}) {
       const datum = request.body.year;
 
@@ -901,6 +950,9 @@ class GetController {
       }
     }
 
+    /**  
+     * Endpoint, ktorý vráti všetky roky z importovaných súborov o údajoch študentov časť 1, LS a ZS
+    */
     async getDateYearsForDelete({request, response}) {
       let rawData = [];
       const data = await Database.raw(`
@@ -922,9 +974,7 @@ class GetController {
         .send(rawData)
     }
 
-    /**
-     * End --- --- --- --- --- --- --- --- ---
-     */
+    // ---
 
     async getGrades ({ response }) {
         const grades = await Grade.all()

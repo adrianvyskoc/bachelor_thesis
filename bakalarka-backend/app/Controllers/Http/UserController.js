@@ -6,6 +6,9 @@ const Admin = use('App/Models/Admin')
 
 class UserController {
 
+  /**
+   * Overenie prístupu používateľa do systému (či má povolený prístup od administrátora systému), ak má prístup povolený, začne sa overovanie pomocou druhej metódy.
+   */
   async verifyEmail({ request, response }) {
     const email = request.body.email
     let auth = {
@@ -30,19 +33,11 @@ class UserController {
       if (auth.access) {
         if (await this.loginWithLDAP({ request, response })) {
           user[0].admin ? auth.admin = true : null
-          // if (auth.admin) {
-            return response.send({
-              type: 'success',
-              message: 'Prihlásenie úspešné',
-              auth: auth
-            });
-          // } else {
-          //   return response.send({
-          //     type: 'error',
-          //     message: 'Nie ste pripojeny na univerzitnu siet',
-          //     auth: auth
-          //   });
-          // }
+          return response.send({
+            type: 'success',
+            message: 'Prihlásenie úspešné',
+            auth: auth
+          });
         } else {
           return response.send({
             type: 'error',
@@ -60,6 +55,9 @@ class UserController {
     }
   }
 
+  /**
+   * Overenie pomocou LDAP správne prihlasovacie meno a heslo zo systému AIS
+   */
   async loginWithLDAP({ request, response }) {
     return new Promise((resolve, reject) => {
       let data = request.all()
