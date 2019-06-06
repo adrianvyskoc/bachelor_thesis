@@ -14,13 +14,13 @@ import { AdmissionsUtil } from './admissions.util';
   styleUrls: ['./admissions.component.scss']
 })
 export class AdmissionsComponent implements OnInit {
-  @ViewChild('paginator')
+  @ViewChild('paginator', {static: false})
   set setPaginator(paginator: MatPaginator) {
     if(this.chosenSchool)
       this.chosenSchool.admissions.paginator = paginator
   }
 
-  @ViewChild(MatSort) sort: MatSort
+  @ViewChild(MatSort, {static: false}) sort: MatSort
 
   subscription: Subscription
 

@@ -13,8 +13,8 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./admission.component.scss']
 })
 export class AdmissionComponent implements OnInit, OnDestroy {
-  @ViewChild('paginator') paginator: MatPaginator
-  @ViewChild(MatSort) sort: MatSort
+  @ViewChild('paginator', {static: false}) paginator: MatPaginator
+  @ViewChild(MatSort, {static: false}) sort: MatSort
 
   id
   admission = {}

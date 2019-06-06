@@ -13,7 +13,7 @@ import { TocUtil } from 'src/app/plugins/utils/toc.utll';
   styleUrls: ['./import.component.scss']
 })
 export class ImportComponent implements OnInit {
-  @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild('fileInput', {static: false}) fileInput: ElementRef;
 
 
   selectedFile: File = null

@@ -13,8 +13,8 @@ import { TocUtil } from 'src/app/plugins/utils/toc.utll';
   styleUrls: ['./admissions-master.component.scss']
 })
 export class AdmissionsMasterComponent implements OnInit, OnDestroy {
-  @ViewChild('paginator') paginator: MatPaginator
-  @ViewChild(MatSort) sort: MatSort
+  @ViewChild('paginator', {static: false}) paginator: MatPaginator
+  @ViewChild(MatSort, {static: false}) sort: MatSort
 
   showFilter = true
   showLabels = false

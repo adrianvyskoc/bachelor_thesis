@@ -6,43 +6,43 @@ import { AdminGuard } from './shared/guards/admin.guard';
 const routes: Routes = [
   {
     path: 'dashboard',
-    loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
+    loadChildren: () => import('./pages/dashboard/dashboard.module').then(mod => mod.DashboardModule),
     pathMatch: 'full',
     canActivate: [AuthGuard]
   },
   {
     path: 'import',
-    loadChildren: './pages/import/import.module#ImportModule',
+    loadChildren: () => import('./pages/import/import.module').then(mod => mod.ImportModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'admissions',
-    loadChildren: './pages/admissions/admissions.module#AdmissionsModule',
+    loadChildren: () => import('./pages/admissions/admissions.module').then(mod => mod.AdmissionsModule),
     canActivate: [AuthGuard],
     runGuardsAndResolvers: 'always',
   },
   {
     path: 'login',
-    loadChildren: './login/login.module#LoginModule'
+    loadChildren: () => import('./login/login.module').then(mod => mod.LoginModule),
   },
   {
     path: 'accounts',
-    loadChildren: './pages/accounts/accounts.module#AccountsModule',
+    loadChildren: () => import('./pages/accounts/accounts.module').then(mod => mod.AccountsModule),
     canActivate: [AdminGuard]
   },
   {
     path: 'statefinalexams',
-    loadChildren: './pages/state-final-exams/state-final-exams.module#StateFinalExamsModule',
+    loadChildren: () => import('./pages/state-final-exams/state-final-exams.module').then(mod => mod.StateFinalExamsModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'statistics',
-    loadChildren: './pages/statistics/statistics.module#StatisticsModule',
+    loadChildren: () => import('./pages/statistics/statistics.module').then(mod => mod.StatisticsModule),
     canActivate: [AuthGuard]
   },
   {
     path: '**',
-    loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
+    loadChildren: () => import('./pages/dashboard/dashboard.module').then(mod => mod.DashboardModule),
     canActivate: [AuthGuard]
   }
 ];

@@ -20,8 +20,8 @@ export class ChartComponent implements OnInit, OnChanges {
   @Input() secondYAxisType
   @Input() secondYAxisDataLabel: string
 
-  @ViewChild('canvas') canvas
-  @ViewChild('download') download
+  @ViewChild('canvas', {static: false}) canvas
+  @ViewChild('download', {static: false}) download
   chart
 
   yAxes:any[] = [

@@ -14,10 +14,10 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./admissions-bachelor.component.scss']
 })
 export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
-  @ViewChild('paginator') paginator: MatPaginator
-  @ViewChild('schoolsPaginator') schoolsPaginator: MatPaginator
-  @ViewChild('admSort') admSort: MatSort
-  @ViewChild('schoolsSort') schoolsSort: MatSort
+  @ViewChild('paginator', {static: false}) paginator: MatPaginator
+  @ViewChild('schoolsPaginator', {static: false}) schoolsPaginator: MatPaginator
+  @ViewChild('admSort', {static: false}) admSort: MatSort
+  @ViewChild('schoolsSort', {static: false}) schoolsSort: MatSort
 
   showFilter = true
   showLabels = false
