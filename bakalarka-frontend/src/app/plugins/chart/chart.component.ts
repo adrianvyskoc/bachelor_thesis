@@ -20,7 +20,7 @@ export class ChartComponent implements OnInit, OnChanges {
   @Input() secondYAxisType
   @Input() secondYAxisDataLabel: string
 
-  @ViewChild('canvas', {static: false}) canvas
+  @ViewChild('canvas', {static: true}) canvas
   @ViewChild('download', {static: false}) download
   chart
 
