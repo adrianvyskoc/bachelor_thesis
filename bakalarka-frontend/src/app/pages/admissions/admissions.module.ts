@@ -14,6 +14,7 @@ import { AdmissionsComparisonComponent } from './admissions-comparison/admission
 import { StatisticsTableComponent } from './admissions-bachelor/statistics-table/statistics-table.component';
 import { TimeChartModule } from 'src/app/plugins/time-chart/time-chart.module';
 import { AdmissionsManagementComponent } from './admissions-management/admissions-management.component';
+import { NewComponent } from './new/new.component';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { AdmissionsManagementComponent } from './admissions-management/admission
     AdmissionComponent,
     AdmissionsComparisonComponent,
     AdmissionsManagementComponent,
-    StatisticsTableComponent
+    StatisticsTableComponent,
+    NewComponent
   ]
 })
 export class AdmissionsModule { }
