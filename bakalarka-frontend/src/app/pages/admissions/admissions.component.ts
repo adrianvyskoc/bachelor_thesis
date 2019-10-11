@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/shared/data.service';
 import { AdmissionsFilterService } from './admissions-filter.service';
 import { FormGroup, FormControl } from '@angular/forms';
-import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
 import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 import { Title } from '@angular/platform-browser';
 import { AdmissionsUtil } from './admissions.util';
@@ -14,13 +13,6 @@ import { AdmissionsUtil } from './admissions.util';
   styleUrls: ['./admissions.component.scss']
 })
 export class AdmissionsComponent implements OnInit {
-  @ViewChild('paginator', {static: false})
-  set setPaginator(paginator: MatPaginator) {
-    if(this.chosenSchool)
-      this.chosenSchool.admissions.paginator = paginator
-  }
-
-  @ViewChild(MatSort, {static: false}) sort: MatSort
 
   subscription: Subscription
 
@@ -28,14 +20,12 @@ export class AdmissionsComponent implements OnInit {
   filteredAdmissions = []
   schools = []
   filteredSchools = []
-
   regionMetrics = {}
 
   // charts data
   admissionCounts = {}
 
-  chosenSchool
-  displayedAdmissionsColumns = ['id', 'Meno', 'Priezvisko', 'E_mail', 'Program_1']
+
 
   loading: boolean = true
 
@@ -104,25 +94,6 @@ export class AdmissionsComponent implements OnInit {
     this._calculateAdmissionsCounts()
   }
 
-  onSchoolChoose(event) {
-    this.chosenSchool = {}
-    this.chosenSchool = event
-    this.chosenSchool.admissions = new MatTableDataSource<any[]>(event.admissions.data ? event.admissions.data : event.admissions)
-    this.chosenSchool.admissions.sort = this.sort
-  }
-
-  closeChosenSchoolWindow() {
-    this.chosenSchool = null
-  }
-
-  isAccepted(rozh) {
-    if(rozh == 10 || rozh == 11 || rozh == 13) {
-      return "Prijatý"
-    } else {
-      return "Neprijatý"
-    }
-  }
-
   _getSchoolsAdmissions() {
     this.schools = this.schools.map((school) => {
       school.approved = 0
@@ -140,10 +111,6 @@ export class AdmissionsComponent implements OnInit {
 
       return school
     })
-  }
-
-  _displayedColumnsAndActions() {
-    return [...this.displayedAdmissionsColumns, 'Rozh', 'Akcie']
   }
 
   _calculateAdmissionsCounts() {

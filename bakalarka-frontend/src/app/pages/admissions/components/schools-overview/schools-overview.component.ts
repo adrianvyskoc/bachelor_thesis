@@ -1,5 +1,6 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 import { AdmissionsFilterService } from '../../admissions-filter.service';
+import { MatSort, MatPaginator, MatSortBase, MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-schools-overview',
@@ -7,6 +8,13 @@ import { AdmissionsFilterService } from '../../admissions-filter.service';
   styleUrls: ['./schools-overview.component.scss']
 })
 export class SchoolsOverviewComponent implements OnChanges {
+
+  @ViewChild('paginator', {static: false})
+  set setPaginator(paginator: MatPaginator) {
+    if(this.chosenSchool)
+      this.chosenSchool.admissions.paginator = paginator
+  }
+  @ViewChild(MatSort, {static: false}) sort: MatSortBase
 
   @Input() schools = []
 
@@ -17,6 +25,8 @@ export class SchoolsOverviewComponent implements OnChanges {
 
   filteredSchoolId
   filteredSchoolStreet
+
+  displayedAdmissionsColumns = ['id', 'Meno', 'Priezvisko', 'E_mail', 'Program_1']
 
   constructor(
     private admissionsFilterService: AdmissionsFilterService
@@ -65,6 +75,29 @@ export class SchoolsOverviewComponent implements OnChanges {
       this.filteredSchools = this.schools
     else
       this.filteredSchools = this.admissionsFilterService.filterSchoolsByStreet(this.filteredSchools, this.filteredSchoolStreet)
+  }
+
+  onSchoolChoose(event) {
+    this.chosenSchool = {}
+    this.chosenSchool = event
+    this.chosenSchool.admissions = new MatTableDataSource<any[]>(event.admissions.data ? event.admissions.data : event.admissions)
+    this.chosenSchool.admissions.sort = this.sort
+  }
+
+  closeChosenSchoolWindow() {
+    this.chosenSchool = null
+  }
+
+  isAccepted(rozh) {
+    if(rozh == 10 || rozh == 11 || rozh == 13) {
+      return "Prijatý"
+    } else {
+      return "Neprijatý"
+    }
+  }
+
+  _displayedColumnsAndActions() {
+    return [...this.displayedAdmissionsColumns, 'Rozh', 'Akcie']
   }
 
 }
