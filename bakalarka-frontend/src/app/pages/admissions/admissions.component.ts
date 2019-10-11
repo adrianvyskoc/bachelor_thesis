@@ -29,26 +29,13 @@ export class AdmissionsComponent implements OnInit {
   schools = []
   filteredSchools = []
 
-  // zahraničné prihlášky a ich počty
-  abroadAdmissions = {}
-
-    // data pre graf
-    abroadAdmissionsLabels = []
-    abroadAdmissionsChartDatasets = []
-
   regionMetrics = {}
-
-  filteredSchoolId
-  filteredSchoolStreet
 
   // charts data
   admissionCounts = {}
-  chartsLoaded = false
 
   chosenSchool
   displayedAdmissionsColumns = ['id', 'Meno', 'Priezvisko', 'E_mail', 'Program_1']
-  schoolsToShow: string = 'all'
-  schoolQuality: string = 'all'
 
   loading: boolean = true
 
@@ -86,8 +73,6 @@ export class AdmissionsComponent implements OnInit {
           this.filteredAdmissions = data['admissions']
           this._getSchoolsAdmissions()
           this._calculateAdmissionsCounts()
-          this.abroadAdmissions = this.admissionsUtil._calculateAbroadStudents(this.filteredAdmissions)
-          this.filterSchools()
         }
       )
   }
@@ -115,51 +100,8 @@ export class AdmissionsComponent implements OnInit {
     if(this.filterForm.value.gender !== 'all')
       this.filteredAdmissions = this.admissionsFilterService.filterByGender(this.filteredAdmissions, this.filterForm.value.gender)
 
-    this.abroadAdmissions = this.admissionsUtil._calculateAbroadStudents(this.filteredAdmissions)
     this._getSchoolsAdmissions()
     this._calculateAdmissionsCounts()
-    this.filterSchools()
-  }
-
-  /**
-   * Funkcia, ktorá aplikuje filtrovanie na školy podľa zvolených kritérií
-   */
-  filterSchools() {
-    if (this.schoolsToShow == 'all') {
-      this.filteredSchools = this.schools
-    } else if (this.schoolsToShow == 'some') {
-      this.filteredSchools = this.schools.filter(school => school.admissions.length)
-    } else {
-      this.filteredSchools = this.schools.filter(school => !school.admissions.length)
-    }
-
-    if (this.schoolQuality == 'all') {
-
-    } else if (this.schoolQuality == 'high') {
-      this.filteredSchools = this.filteredSchools.filter(school => school.celkove_hodnotenie > 5.9)
-    } else if (this.schoolQuality == 'medium') {
-      this.filteredSchools = this.filteredSchools.filter(school => school.celkove_hodnotenie <= 5.9 && school.celkove_hodnotenie > 3.9)
-    } else if (this.schoolQuality == 'low') {
-      this.filteredSchools = this.filteredSchools.filter(school => school.celkove_hodnotenie && school.celkove_hodnotenie <= 3.9)
-    } else if (this.schoolQuality == 'none') {
-      this.filteredSchools = this.filteredSchools.filter(school => !school.celkove_hodnotenie)
-    }
-
-    this.chosenSchool = null
-  }
-
-  onFilterSchoolsBySchoolId() {
-    if(this.filteredSchoolId == "")
-      this.filteredSchools = this.schools
-    else
-      this.filteredSchools = this.admissionsFilterService.filterSchoolsBySchoolId(this.filteredSchools, this.filteredSchoolId)
-  }
-
-  onFilterSchoolsByStreet() {
-    if(this.filteredSchoolStreet == "")
-      this.filteredSchools = this.schools
-    else
-      this.filteredSchools = this.admissionsFilterService.filterSchoolsByStreet(this.filteredSchools, this.filteredSchoolStreet)
   }
 
   onSchoolChoose(event) {
@@ -215,9 +157,5 @@ export class AdmissionsComponent implements OnInit {
         acc.rejected++
       return acc
     }, {'bachelor': 0, 'master': 0, 'approved': 0, 'rejected': 0, 'beganStudy': 0})
-
-    setTimeout(() => {
-      this.chartsLoaded = true
-    }, 1000)
   }
 }

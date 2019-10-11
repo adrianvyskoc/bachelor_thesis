@@ -1,0 +1,35 @@
+app-map {
+  flex-grow: 1;
+}
+
+h2 {
+  margin: 16px -16px;
+  background-color: #e9ecef;
+}
+
+.schoolMap {
+  &__filter {
+    & > select {
+      width: auto;
+    }
+  }
+
+  &__schoolDetail {
+    width: 30%;
+    background-color: #e9ecef;
+    position: relative;
+
+    &__closeButton {
+      cursor: pointer;
+      font-size: 20px;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+
+      &:hover {
+        transition: 0.3s;
+        color: #009688;
+      }
+    }
+  }
+}

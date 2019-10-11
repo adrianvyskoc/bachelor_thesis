@@ -14,7 +14,10 @@ import { AdmissionsComparisonComponent } from './admissions-comparison/admission
 import { StatisticsTableComponent } from './admissions-bachelor/statistics-table/statistics-table.component';
 import { TimeChartModule } from 'src/app/plugins/time-chart/time-chart.module';
 import { AdmissionsManagementComponent } from './admissions-management/admissions-management.component';
-import { NewComponent } from './new/new.component';
+import { SchoolsOverviewComponent } from './components/schools-overview/schools-overview.component';
+import { StudentsOriginComponent } from './components/students-origin/students-origin.component';
+import { AbroadStudentsComponent } from './components/abroad-students/abroad-students.component';
+import { RegionsComponent } from './components/regions/regions.component';
 
 @NgModule({
   imports: [
@@ -44,7 +47,10 @@ import { NewComponent } from './new/new.component';
     AdmissionsComparisonComponent,
     AdmissionsManagementComponent,
     StatisticsTableComponent,
-    NewComponent
+    SchoolsOverviewComponent,
+    StudentsOriginComponent,
+    AbroadStudentsComponent,
+    RegionsComponent
   ]
 })
 export class AdmissionsModule { }
