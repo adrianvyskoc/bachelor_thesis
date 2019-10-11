@@ -18,6 +18,9 @@ import { SchoolsOverviewComponent } from './components/schools-overview/schools-
 import { StudentsOriginComponent } from './components/students-origin/students-origin.component';
 import { AbroadStudentsComponent } from './components/abroad-students/abroad-students.component';
 import { RegionsComponent } from './components/regions/regions.component';
+import { HighSchoolInfoComponent } from './admission/components/high-school-info/high-school-info.component';
+import { OtherAdmissionsComponent } from './admission/components/other-admissions/other-admissions.component';
+import { GeneralInfoComponent } from './admission/components/general-info/general-info.component';
 
 @NgModule({
   imports: [
@@ -50,7 +53,10 @@ import { RegionsComponent } from './components/regions/regions.component';
     SchoolsOverviewComponent,
     StudentsOriginComponent,
     AbroadStudentsComponent,
-    RegionsComponent
+    RegionsComponent,
+    HighSchoolInfoComponent,
+    OtherAdmissionsComponent,
+    GeneralInfoComponent
   ]
 })
 export class AdmissionsModule { }

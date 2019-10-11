@@ -25,7 +25,6 @@ const ABROAD_MOCKS = [{ Občianstvo: 'Slovenská republika' }, { Občianstvo: 'A
 
 describe('AdmissionsFilterService', () => {
   let service: AdmissionsFilterService
-  let httpMock: HttpTestingController
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -38,7 +37,6 @@ describe('AdmissionsFilterService', () => {
     })
 
     service = TestBed.get(AdmissionsFilterService)
-    httpMock = TestBed.get(HttpTestingController)
   });
 
   it('filter by gender returns correct values', () => {

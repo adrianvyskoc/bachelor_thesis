@@ -1,0 +1,107 @@
+<div class="row">
+  <div class="col-lg-6">
+    <table #table1 class="table table-borderless table-sm">
+      <thead>
+        <tr>
+          <th colspan="2" scope="col">Informácie o prihláške</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Študijný program</th>
+          <td>{{ admission['Program_2'] }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Predošlá vysoká škola</th>
+          <td *ngIf="admission['Absolvovaná_VŠ']">{{ admission['Absolvovaná_VŠ'] }} ({{ admission['Abs_VŠ'] }})</td>
+          <td *ngIf="!admission['Absolvovaná_VŠ']">Žiadna</td>
+        </tr>
+        <tr [ngClass]="{ 'table-success': admission.Rozh != 45, 'table-danger': admission.Rozh > 20 }">
+          <th scope="row">Rozhodnutie o prijatí</th>
+          <td>{{ admission['Rozhodnutie_o_prijatí'] }}</td>
+        </tr>
+        <tr *ngIf="admission['Prijatie_na_program']" class="table-success">
+          <th scope="row">Prijatie na program</th>
+          <td>{{ admission['Prijatie_na_program'] }}</td>
+        </tr>
+        <tr
+          [ngClass]="{ 'table-success': admission['Štúdium'] == 'áno', 'table-danger': admission['Štúdium'] == 'nie' }"
+          class="table-success"
+        >
+          <th scope="row">Nastúpil uchádzač na fakultu?</th>
+          <td>{{ admission['Štúdium'] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table #table2 class="table table-borderless table-sm">
+      <thead>
+        <tr>
+          <th colspan="2" scope="col">Osobné informácie</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Rodné číslo</th>
+          <td>{{ admission['Rodné_číslo'] }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Občianstvo</th>
+          <td>{{ admission['Občianstvo'] }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Maturoval v roku</th>
+          <td>{{ admission['Maturita_1'] }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Dátum a miesto narodenia</th>
+          <td>{{ admission.Narodenie }} ({{ admission.Miesto_narodenia }})</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="table table-borderless table-sm">
+      <thead>
+        <tr>
+          <th colspan="2" scope="col">Kontaktné informácie</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Telefónne číslo</th>
+          <td>{{ admission['Kontaktný_tel'] }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Email</th>
+          <td>{{ admission.E_mail }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Adresa</th>
+          <td>{{ admission.Kont_adresa_ulica }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Mesto</th>
+          <td>{{ admission.Kont_adresa_obec }} ({{ admission['PSČ'] }})</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-lg-6">
+    <app-chart
+      *ngIf="admission['Externá_maturita_z_cudzieho_jazyka_ECJ'] || admission['Externá_maturita_z_matematiky_EM'] || admission['Písomný_test_z_matematiky_SCIO_PTM'] || admission['Všeobecné_študijné_predpoklady_SCIO_VŠP'] || admission['Body_celkom']"
+      [title]="'Body v prijímacom konaní podľa typu testu, ktorý uchádzač absolvoval'"
+      [data]="[admission['Externá_maturita_z_cudzieho_jazyka_ECJ'], admission['Externá_maturita_z_matematiky_EM'], admission['Písomný_test_z_matematiky_SCIO_PTM'], admission['Všeobecné_študijné_predpoklady_SCIO_VŠP'], admission['Body_celkom']]"
+      [labels]="['Ext. maturita z CJ', 'Ext. mat. z matematiky',  'SCIO z matematiky', 'SCIO VŠP', 'Celkové body']"
+      [type]="'bar'"
+      [legend]="false"
+    ></app-chart>
+    <app-chart
+      *ngIf="admission.Body_celkom || admission.Body"
+      [title]="'Body v prijímacom konaní'"
+      [data]="[admission.Body, (admission.Body_celkom - admission.Body) | number:'2.2-2']"
+      [labels]="['Body zo strednej školy', 'Doplňkové body']"
+      [type]="'pie'"
+      [legend]="false"
+    ></app-chart>
+  </div>
+</div>

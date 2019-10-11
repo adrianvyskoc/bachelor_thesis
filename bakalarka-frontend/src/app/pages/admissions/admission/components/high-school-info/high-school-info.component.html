@@ -1,0 +1,57 @@
+<h2 id="high-school" padding>Stredná škola</h2>
+
+<div class="row">
+  <div class="col-lg-6">
+    <table class="table table-borderless table-sm">
+      <thead>
+        <tr>
+          <th colspan="2" scope="col">Informácie o škole</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Kód školy</th>
+          <td>{{ school ? school.kod_kodsko : 'Neuvedené' }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Názov</th>
+          <td>{{ admission['Stredná_škola_1'] }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Adresa</th>
+          <td>{{ admission['Stredná_škola_adresa'] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="table table-borderless table-sm">
+      <thead>
+        <tr>
+          <th colspan="2" scope="col">Študent</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Študijný odbor</th>
+          <td>{{ admission['Odbor_na_SŠ'] }} ({{ admission['Odbor_SŠ'] }})</td>
+        </tr>
+        <tr>
+          <th scope="row">Priemer na strednej škole</th>
+          <td>{{ admission['Priemer_SŠ'] ? admission['Priemer_SŠ'] : 'Neuvedené' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <app-map *ngIf="school" [markers]="[school]" [height]="400" [showSettingsButton]="false"></app-map>
+  </div>
+  <div class="col-lg-6">
+    <app-chart
+      *ngIf="school"
+      [title]="'Hodnoty za jednotlivé ukazovatele školy'"
+      [data]="[pointers.Mat_SJ, pointers.Mat_M, pointers.Mat_AJB1, pointers.Mat_AJB2]"
+      [labels]="['Slovenský jazyk', 'Matematika', 'Anglický jazyk B1', 'Anglický jazyk B2']"
+      [type]="'horizontalBar'"
+      [legend]="false"
+    ></app-chart>
+  </div>
+</div>
