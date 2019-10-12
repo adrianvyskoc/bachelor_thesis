@@ -188,7 +188,7 @@ export class DataService {
           }, 5000)
         },
         error => {
-          console.log(error)
+          console.error(error)
           this.loading = false
           this.showErrorMessage = true
 

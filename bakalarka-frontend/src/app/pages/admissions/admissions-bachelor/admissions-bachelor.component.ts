@@ -76,9 +76,6 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
           this.admissionsTimes = this.admissionsUtil._getAdmissionsDates(this.admissions.data)
           this.admissionsPerDay = this.admissionsUtil._getAdmissionsPerDay(this.admissions.data)
 
-          console.log(this.admissionsTimes)
-          console.log(this.admissionsPerDay)
-
           this._getSchoolsData()
         }
       )
