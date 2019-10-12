@@ -10,7 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AdmissionsBachelorComponent } from './admissions-bachelor.component';
 import { TimeChartModule } from 'src/app/plugins/time-chart/time-chart.module';
-import { StatisticsTableComponent } from './statistics-table/statistics-table.component';
+import { StatisticsTableComponent } from './components/statistics/statistics-table/statistics-table.component';
 
 describe('AdmissionsBachelorComponent', () => {
   let component: AdmissionsBachelorComponent;

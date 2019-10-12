@@ -11,7 +11,7 @@ import { ChartModule } from 'src/app/plugins/chart/chart.module';
 import { GeoChartModule } from 'src/app/plugins/geo-chart/geo-chart.module';
 import { MapModule } from 'src/app/plugins/map/map.module';
 import { AdmissionsComparisonComponent } from './admissions-comparison/admissions-comparison.component';
-import { StatisticsTableComponent } from './admissions-bachelor/statistics-table/statistics-table.component';
+import { StatisticsTableComponent } from './admissions-bachelor/components/statistics/statistics-table/statistics-table.component';
 import { TimeChartModule } from 'src/app/plugins/time-chart/time-chart.module';
 import { AdmissionsManagementComponent } from './admissions-management/admissions-management.component';
 import { SchoolsOverviewComponent } from './components/schools-overview/schools-overview.component';
@@ -23,6 +23,8 @@ import { OtherAdmissionsComponent } from './admission/components/other-admission
 import { GeneralInfoComponent } from './admission/components/general-info/general-info.component';
 import { OtherUniversitiesInfoComponent } from './admissions-master/components/other-universities-info/other-universities-info.component';
 import { StatisticsChartsComponent } from './admissions-master/components/statistics-charts/statistics-charts.component';
+import { StatisticsComponent } from './admissions-bachelor/components/statistics/statistics.component';
+import { SchoolsLeaderboardComponent } from './admissions-bachelor/components/schools-leaderboard/schools-leaderboard.component';
 
 @NgModule({
   imports: [
@@ -60,7 +62,9 @@ import { StatisticsChartsComponent } from './admissions-master/components/statis
     OtherAdmissionsComponent,
     GeneralInfoComponent,
     OtherUniversitiesInfoComponent,
-    StatisticsChartsComponent
+    StatisticsChartsComponent,
+    StatisticsComponent,
+    SchoolsLeaderboardComponent
   ]
 })
 export class AdmissionsModule { }

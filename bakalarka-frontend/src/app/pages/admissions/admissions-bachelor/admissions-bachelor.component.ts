@@ -3,8 +3,6 @@ import { Subscription } from 'rxjs';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { ExportService } from 'src/app/plugins/utils/export.service';
 import { DataService } from 'src/app/shared/data.service';
-import { AdmissionsFilterService } from '../admissions-filter.service';
-import { AdmissionsUtil } from '../admissions.util';
 import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 import { Title } from '@angular/platform-browser';
 
@@ -15,23 +13,15 @@ import { Title } from '@angular/platform-browser';
 })
 export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   @ViewChild('paginator', {static: false}) paginator: MatPaginator
-  @ViewChild('schoolsPaginator', {static: false}) schoolsPaginator: MatPaginator
-  @ViewChild('admSort', {static: false}) admSort: MatSort
-  @ViewChild('schoolsSort', {static: false}) schoolsSort: MatSort
+  @ViewChild('admSort', {static: false}) admSort: MediaStreamErrorEventInit
 
   showFilter = true
   showLabels = false
   subscription: Subscription
 
   admissions
-  schools
+  schools = []
   filteredAdmissions = []
-
-  admissionsTimes = []
-  admissionsPerDay = []
-
-  graduationYear: number
-  numberOfGroups: number = 10
 
   displayedSchoolsColumns = ['kod_kodsko', 'nazov', 'pocet_prihlasok', 'pocet_prijatych', 'pocet_nastupenych', 'prijaty/prihlasky', 'nastupeny/prihlasky', 'nastupeny/prijaty']
 
@@ -55,8 +45,6 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
   constructor(
     private dataService: DataService,
     private exportService: ExportService,
-    private admissionsFilterService: AdmissionsFilterService,
-    private admissionsUtil: AdmissionsUtil,
     private tocUtil: TocUtil,
     private titleService: Title
   ) { }
@@ -73,10 +61,6 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
           this.admissions = new MatTableDataSource<any[]>(data['admissions'])
           this.admissions.paginator = this.paginator
           this.admissions.sort = this.admSort
-          this.admissionsTimes = this.admissionsUtil._getAdmissionsDates(this.admissions.data)
-          this.admissionsPerDay = this.admissionsUtil._getAdmissionsPerDay(this.admissions.data)
-
-          this._getSchoolsData()
         }
       )
   }
@@ -91,10 +75,6 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
 
   filterLabels(value: string) {
     this.filteredColumns = this.allColumns.filter(col => col.indexOf(value) > -1)
-  }
-
-  filterByGraduationYear() {
-    this.filteredAdmissions = this.admissionsFilterService.filterByGraduationYear(this.admissions.data, this.graduationYear)
   }
 
   toggleColumn(column) {
@@ -156,62 +136,6 @@ export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
    */
   exportAll() {
     this.exportService.exportArrayOfObjectToExcel(this.admissions.data, 'all_admissions');
-  }
-
-  /**
-   * Výpočet dát, ktoré hovoria o počte prihlášok, nastúpených a prijatých uchádzačoch a pomermi medzi týmito hodnotami
-   */
-  _getSchoolsData() {
-    let schoolMap = {}
-
-    // tvorba mapy škôl (objekt, kde key je school_id a jeho hodnotu je objekt s jednotlivými počtami a pomermi)
-    this.schools.map(school => {
-      schoolMap[school.kod_kodsko] = {}
-      schoolMap[school.kod_kodsko].kod_kodsko = school.kod_kodsko
-      schoolMap[school.kod_kodsko].nazov = school.nazov
-      schoolMap[school.kod_kodsko].pocet_nastupenych = 0
-      schoolMap[school.kod_kodsko].pocet_prijatych = 0
-      schoolMap[school.kod_kodsko].pocet_prihlasok = 0
-    })
-    schoolMap['neuvedené'] = { pocet_prihlasok: 0, pocet_nastupenych: 0, pocet_prijatych: 0 }
-
-    // výpočet počtu prihlášok, nastúpených a prijatých
-    this.admissions.data.forEach(admission => {
-      if(schoolMap[admission.school_id])
-        schoolMap[admission.school_id].pocet_prihlasok++
-      else
-        schoolMap['neuvedené'].pocet_prihlasok++
-
-      if((admission.Rozh == 10 || admission.Rozh == 11 || admission.Rozh == 13)) {
-        if(schoolMap[admission.school_id]) {
-          if(admission.Štúdium == "áno")
-            schoolMap[admission.school_id].pocet_nastupenych++
-          schoolMap[admission.school_id].pocet_prijatych++
-        }
-        else {
-          if(admission.Štúdium == "áno")
-            schoolMap['neuvedené'].pocet_nastupenych++
-          schoolMap['neuvedené'].pocet_prijatych++
-        }
-      }
-    })
-
-    // Výpočet pomerov
-    for(let school in schoolMap) {
-      schoolMap[school]['prijaty/prihlasky'] = schoolMap[school].pocet_prijatych ?
-        (100 * schoolMap[school].pocet_prijatych / schoolMap[school].pocet_prihlasok).toFixed(2) :
-        0
-      schoolMap[school]['nastupeny/prihlasky'] = schoolMap[school].pocet_nastupenych ?
-        (100 * schoolMap[school].pocet_nastupenych / schoolMap[school].pocet_prihlasok).toFixed(2) :
-        0
-      schoolMap[school]['nastupeny/prijaty'] = schoolMap[school].pocet_prijatych ?
-        (100 * schoolMap[school].pocet_nastupenych / schoolMap[school].pocet_prijatych).toFixed(2) :
-        0
-    }
-
-    this.schools = new MatTableDataSource<any[]>(Object.values(schoolMap))
-    this.schools.paginator = this.schoolsPaginator
-    this.schools.sort = this.schoolsSort
   }
 
   /**

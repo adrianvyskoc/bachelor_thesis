@@ -1,0 +1,14 @@
+<h2 id="schools-leaderboard" class="section-header" padding>Rebríček škôl</h2>
+
+<div class="schoolsQualityBar">
+  <table mat-table #schoolsSort="matSort" matSort [dataSource]="tableData" full-width>
+    <ng-container [matColumnDef]="column" *ngFor="let column of displayedSchoolsColumns">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{column}} </th>
+      <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedSchoolsColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedSchoolsColumns;"></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons #schoolsPaginator></mat-paginator>
+</div>

@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { AdmissionsUtil } from '../../admissions.util';
-import { AdmissionsFilterService } from '../../admissions-filter.service';
+import { AdmissionsUtil } from '../../../../admissions.util';
+import { AdmissionsFilterService } from '../../../../admissions-filter.service';
 
 @Component({
   selector: 'app-statistics-table',

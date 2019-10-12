@@ -1,0 +1,53 @@
+<h2 id="statistics" class="section-header" padding>Štatistiky</h2>
+
+<div class="row">
+  <div class="col-lg-6 col-sm-6">
+      <app-time-chart
+      *ngIf="admissionsTimes.length"
+      [title]="'Dátumy zadávania jednotlivých prihlášok'"
+      [data]="admissionsTimes"
+      [type]="'line'"
+      [legend]="false"
+    ></app-time-chart>
+  </div>
+  <div class="col-lg-6 col-sm-6">
+      <app-time-chart
+      *ngIf="admissionsPerDay.length"
+      [title]="'Počet prihlášok za konkrétne dni'"
+      [data]="admissionsPerDay"
+      [type]="'line'"
+      [legend]="false"
+    ></app-time-chart>
+  </div>
+</div>
+
+<div class="groups" margin-top>
+  <label for="numberOfGroups">Počet skupín</label>
+  <input
+    id="numberOfGroups"
+    [(ngModel)]="numberOfGroups"
+    class="form-control"
+    type="number"
+    name="numberOfGroups"
+    min="1"
+  >
+  <div class="row" padding-top>
+    <div class="col-lg-6 col-md-12">
+      <app-statistics-table
+        *ngIf="admissions"
+        [numberOfGroups]="numberOfGroups"
+        [data]="admissions"
+        [type]="'groups'"
+      ></app-statistics-table>
+    </div>
+
+    <div class="col-lg-6 col-md-12">
+      <app-statistics-table
+        *ngIf="admissions"
+        [numberOfGroups]="numberOfGroups"
+        [data]="admissions"
+        [type]="'groups'"
+      ></app-statistics-table>
+    </div>
+  </div>
+</div>

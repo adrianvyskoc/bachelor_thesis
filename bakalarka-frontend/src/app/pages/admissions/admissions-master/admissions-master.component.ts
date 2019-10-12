@@ -23,9 +23,6 @@ export class AdmissionsMasterComponent implements OnInit, OnDestroy {
   admissions
   universities = []
 
-  admissionsTimes = []
-  admissionsPerDay = []
-
   displayedAdmissionsColumns = ['id', 'Meno', 'Priezvisko', 'E_mail', 'Rozhodnutie_o_prijatí']
   allColumns = [
     "AIS_ID", "school_id", "Por", "Priezvisko", "Meno", "Absolvovaná_VŠ", "Abs_VŠ_program_odbor_text", "Abs_VŠ_program_odbor",
@@ -45,7 +42,6 @@ export class AdmissionsMasterComponent implements OnInit, OnDestroy {
   constructor(
     private dataService: DataService,
     private exportService: ExportService,
-    private admissionsUtil: AdmissionsUtil,
     private titleService: Title,
     private tocUtil: TocUtil
   ) { }
