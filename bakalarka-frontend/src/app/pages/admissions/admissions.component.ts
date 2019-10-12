@@ -25,8 +25,6 @@ export class AdmissionsComponent implements OnInit {
   // charts data
   admissionCounts = {}
 
-
-
   loading: boolean = true
 
   // FILTER PROPERTIES
