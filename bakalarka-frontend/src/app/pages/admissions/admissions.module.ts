@@ -21,6 +21,8 @@ import { RegionsComponent } from './components/regions/regions.component';
 import { HighSchoolInfoComponent } from './admission/components/high-school-info/high-school-info.component';
 import { OtherAdmissionsComponent } from './admission/components/other-admissions/other-admissions.component';
 import { GeneralInfoComponent } from './admission/components/general-info/general-info.component';
+import { OtherUniversitiesInfoComponent } from './admissions-master/components/other-universities-info/other-universities-info.component';
+import { StatisticsChartsComponent } from './admissions-master/components/statistics-charts/statistics-charts.component';
 
 @NgModule({
   imports: [
@@ -56,7 +58,9 @@ import { GeneralInfoComponent } from './admission/components/general-info/genera
     RegionsComponent,
     HighSchoolInfoComponent,
     OtherAdmissionsComponent,
-    GeneralInfoComponent
+    GeneralInfoComponent,
+    OtherUniversitiesInfoComponent,
+    StatisticsChartsComponent
   ]
 })
 export class AdmissionsModule { }

@@ -1,0 +1,20 @@
+<h2 id="other-high-schools" class="section-header" padding>Ostatné vysoké školy</h2>
+
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">Fakulta</th>
+      <th scope="col">Počet prihlášok</th>
+      <th scope="col">Priemerný počet bodov</th>
+      <th scope="col">Medián bodov</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let uni of universities">
+      <th scope="row">{{ uni['Absolvovaná_VŠ'] ? uni['Absolvovaná_VŠ'] : 'Nešpecifikované' }}</th>
+      <td>{{ uni.count }}</td>
+      <td>{{ uni.mean | number : '1.2-2' }}</td>
+      <td>{{ uni.median }}</td>
+    </tr>
+  </tbody>
+</table>

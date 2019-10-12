@@ -1,0 +1,22 @@
+<h2 id="statistics" class="section-header" padding>Štatistiky</h2>
+
+<div class="row">
+  <div class="col-lg-6 col-sm-6">
+      <app-time-chart
+      *ngIf="admissionsTimes.length"
+      [title]="'Dátumy zadávania jednotlivých prihlášok'"
+      [data]="admissionsTimes"
+      [type]="'line'"
+      [legend]="false"
+    ></app-time-chart>
+  </div>
+  <div class="col-lg-6 col-sm-6">
+      <app-time-chart
+      *ngIf="admissionsPerDay.length"
+      [title]="'Počet prihlášok za konkrétne dni'"
+      [data]="admissionsPerDay"
+      [type]="'line'"
+      [legend]="false"
+    ></app-time-chart>
+  </div>
+</div>
