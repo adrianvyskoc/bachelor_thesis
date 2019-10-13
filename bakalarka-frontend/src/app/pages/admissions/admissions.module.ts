@@ -25,6 +25,7 @@ import { OtherUniversitiesInfoComponent } from './admissions-master/components/o
 import { StatisticsChartsComponent } from './admissions-master/components/statistics-charts/statistics-charts.component';
 import { StatisticsComponent } from './admissions-bachelor/components/statistics/statistics.component';
 import { SchoolsLeaderboardComponent } from './admissions-bachelor/components/schools-leaderboard/schools-leaderboard.component';
+import { StatisticsPerYearsComponent } from './admissions-comparison/components/statistics-per-years/statistics-per-years.component';
 
 @NgModule({
   imports: [
@@ -64,7 +65,8 @@ import { SchoolsLeaderboardComponent } from './admissions-bachelor/components/sc
     OtherUniversitiesInfoComponent,
     StatisticsChartsComponent,
     StatisticsComponent,
-    SchoolsLeaderboardComponent
+    SchoolsLeaderboardComponent,
+    StatisticsPerYearsComponent
   ]
 })
 export class AdmissionsModule { }

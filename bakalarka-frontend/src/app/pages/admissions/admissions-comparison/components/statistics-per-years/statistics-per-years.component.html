@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-xl-7">
+    <table *ngIf="adm" class="table">
+      <thead>
+        <tr>
+          <th scope="col">Školský rok</th>
+          <th scope="col">Prijatý</th>
+          <th scope="col">Nastúpený</th>
+          <th scope="col">Pomer nastúpený/prijatý (%)</th>
+          <th scope="col">Bodový priemer (prijatý/nastúpený)</th>
+          <th scope="col">Medián bodov (prijatý/nastúpený)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ratio of admCountsAndRatios.admRatiosPerYear | keyvalue">
+          <th scope="row">{{ ratio.key }}</th>
+          <td>{{ admCountsAndRatios.admCountsPerYear[ratio.key].approved }}</td>
+          <td>{{ admCountsAndRatios.admCountsPerYear[ratio.key].beganStudy }}</td>
+          <td>{{ ratio.value }}</td>
+          <td>{{ admCountsAndRatios.approvedMap[ratio.key].mean + " / " + admCountsAndRatios.beganStudyMap[ratio.key].mean }}</td>
+          <td>{{ admCountsAndRatios.approvedMap[ratio.key].median + " / " + admCountsAndRatios.beganStudyMap[ratio.key].median }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-xl-5">
+    <app-chart
+      [title]="'Počet prijatých/neprijatých uchádzačov za školské roky'"
+      [data]="admCountsAndRatios.admCountsPerYearArr"
+      [labels]="schoolYears"
+      [groupLabels]="['Prijatý', 'Nastúpený']"
+      [type]="'bar'"
+      [legend]="true"
+      [group]="true"
+      [secondYAxis]="true"
+      [secondYAxisData]="admCountsAndRatios.admRatiosPerYearArr"
+      [secondYAxisType]="'line'"
+      [secondYAxisDataLabel]="'Pomery'"
+    ></app-chart>
+  </div>
+</div>
+
+
+
