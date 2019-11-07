@@ -22,6 +22,12 @@ const routes: Routes = [
     runGuardsAndResolvers: 'always',
   },
   {
+    path: 'students',
+    loadChildren: () => import('./pages/students/students.module').then(mod => mod.StudentsModule),
+    canActivate: [AuthGuard],
+    runGuardsAndResolvers: 'always',
+  },
+  {
     path: 'login',
     loadChildren: () => import('./login/login.module').then(mod => mod.LoginModule),
   },

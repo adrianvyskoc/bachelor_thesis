@@ -127,6 +127,10 @@ export class DataService {
       .subscribe(data => this.admissionsYearComparisonChanged.next(data))
   }
 
+  getStudent(id: number) {
+    return this.http.get(`http://localhost:3333/api/student/${id}`)
+  }
+
   /**
    * Nasledonvých 9 funkcií vracia listener na zmenu dát pre jednotlivé typy dát
    */

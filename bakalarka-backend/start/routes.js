@@ -52,6 +52,16 @@ Route
          */
 
         /*
+          Students api endpoints start
+         */
+
+        Route.get('student/:id', 'StudentController.getStudent')
+
+        /*
+          Students api endpoints end
+         */
+
+        /*
           Administrators api endpoints start
         */
         Route.get('administrators', 'GetController.getUsers')  // getAllAccounts

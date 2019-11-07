@@ -5,7 +5,6 @@ import { AdmissionsFilterService } from './admissions-filter.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 import { Title } from '@angular/platform-browser';
-import { AdmissionsUtil } from './admissions.util';
 
 @Component({
   selector: 'app-admissions',
@@ -34,8 +33,7 @@ export class AdmissionsComponent implements OnInit {
     private dataService: DataService,
     private admissionsFilterService: AdmissionsFilterService,
     private tocUtil: TocUtil,
-    private titleService: Title,
-    private admissionsUtil: AdmissionsUtil
+    private titleService: Title
   ) { }
 
   ngOnInit() {
