@@ -15,6 +15,7 @@ const Admission = use('App/Models/Admission')
 class ImportAisController {
 
     async import ({ request, params }) {
+        console.log("DASASDASDASDASDASASDASDAS")
 
         const config = {
             type: "string",
@@ -104,17 +105,34 @@ class ImportAisController {
         // Grades
         // -------------------------------------------------------------------
 
-        const attrsToDeleteGrades = [ 'KOD', 'KREDITY', 'STAV_ZAPISU', 'UKONCENIE', 'PREDMET' ]
+        const attrsToDeleteGrades = [ 'STAV_ZAPISU' ]
 
         if (params.selectedImport == 'Grades') {
             for (let row of rows) {
-                const { PRIEZVISKO, MENO, STUDIUM, ROCNIK, ...gradeRow } = row
+                const { PRIEZVISKO, MENO, STUDIUM, ROCNIK, PREDMET, KREDITY, KOD, UKONCENIE, ...gradeRow } = row
 
                 gradeRow.OBDOBIE = data.year
 
                 for(const prop of attrsToDeleteGrades) {
                     delete gradeRow[prop]
                 }
+
+                const SUBJECT = await Database.table('ais_subjects').where('KOD', KOD).first()
+                let PREDMET_ID = SUBJECT ? SUBJECT.id : null
+
+                // ak predmet ešte nie je v databáze, pridáme ho
+                if(!SUBJECT) {
+                  try {
+                    PREDMET_ID = await Database.table('ais_subjects').insert({
+                      KOD,
+                      PREDMET,
+                      KREDITY,
+                      UKONCENIE
+                    }).returning('id')
+                  } catch(err) { console.log(err) }
+                }
+
+                gradeRow.PREDMET_ID =  PREDMET_ID
 
                 const studentData = {
                     AIS_ID: gradeRow.AIS_ID,
@@ -123,9 +141,11 @@ class ImportAisController {
                     STUDIUM,
                     ROCNIK
                 }
+
                 let student = new Student()
                 student.fill(studentData)
 
+                // ak študent už existuje, updatneme jeho dáta
                 try {
                     await student.save()
                 } catch(err) {
@@ -438,7 +458,7 @@ class ImportAisController {
 
             row['OBDOBIE'] = data.year
             row['SEMESTER'] = data.semester
-            
+
             // let tmp2 = [];
             // if (row.Dátum_splnenia !== undefined || row.Dátum_splnenia !== null) {
             //   tmp2 = row.Dátum_splnenia.trim().split('.');
