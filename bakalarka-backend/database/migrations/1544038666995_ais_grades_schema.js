@@ -10,6 +10,7 @@ class AisGradesSchema extends Schema {
       table.integer("PREDMET_ID").references("id").inTable("ais_subjects")
 
       table.string("OBDOBIE")
+      table.string("SEMESTER")
       table.string("RCS")
       table.string("ZAP_VYSLEDOK")
       table.string("PREDMET_VYSLEDOK")

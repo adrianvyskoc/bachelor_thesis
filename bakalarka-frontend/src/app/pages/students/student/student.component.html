@@ -2,3 +2,56 @@
   <h1 class="display-3">Študent - <strong>{{ student.MENO }} {{ student.PRIEZVISKO }}</strong></h1>
 </div>
 <hr>
+
+<div class="row mt-4">
+  <div class="col-lg-7">
+    <mat-accordion>
+
+      <mat-expansion-panel
+        *ngFor="let period of grades | keyvalue"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ period.key }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <mat-tab-group dynamicHeight>
+          <mat-tab
+            *ngFor="let semester of period.value | keyvalue"
+            [label]="semester.key === 'summer' ? 'Letný semester' : 'Zimný semester'"
+          >
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">Názov predmetu</th>
+                  <th scope="col">Kód predmetu</th>
+                  <th scope="col">Získaný zápočet</th>
+                  <th scope="col">Známka</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let grade of semester.value"
+                  [ngStyle]="{
+                    'border-left': '5px solid ' + (grade.PREDMET_VYSLEDOK === 'FX' || grade.PREDMET_VYSLEDOK === 'FN'  || grade.PREDMET_VYSLEDOK === 'N' ? 'red' : 'green' )
+                  }"
+                >
+                  <th scope="row">{{grade.PREDMET}}</th>
+                  <td>{{grade.KOD}}</td>
+                  <td>{{grade.ZAP_VYSLEDOK}}</td>
+                  <td>{{grade.PREDMET_VYSLEDOK}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </mat-tab>
+        </mat-tab-group>
+
+      </mat-expansion-panel>
+
+    </mat-accordion>
+  </div>
+  <div class="col-lg-5"></div>
+</div>
+
+

@@ -112,6 +112,7 @@ class ImportAisController {
                 const { PRIEZVISKO, MENO, STUDIUM, ROCNIK, PREDMET, KREDITY, KOD, UKONCENIE, ...gradeRow } = row
 
                 gradeRow.OBDOBIE = data.year
+                gradeRow.SEMESTER = data.semester
 
                 for(const prop of attrsToDeleteGrades) {
                     delete gradeRow[prop]
@@ -132,7 +133,7 @@ class ImportAisController {
                   } catch(err) { console.log(err) }
                 }
 
-                gradeRow.PREDMET_ID =  PREDMET_ID
+                gradeRow.PREDMET_ID = PREDMET_ID
 
                 const studentData = {
                     AIS_ID: gradeRow.AIS_ID,

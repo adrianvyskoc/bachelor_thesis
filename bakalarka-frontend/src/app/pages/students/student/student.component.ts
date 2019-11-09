@@ -11,6 +11,7 @@ export class StudentComponent implements OnInit {
 
   id: number
   student = {}
+  grades = {}
 
   constructor(
     private route: ActivatedRoute,
@@ -21,9 +22,9 @@ export class StudentComponent implements OnInit {
     this.id = Number(this.route.snapshot.paramMap.get('id'))
     this.dataService.getStudent(this.id)
       .subscribe(
-        student => {
-          console.log(student)
-          this.student = student['student']
+        data => {
+          this.student = data['student']
+          this.grades = data['grades']
         }
       );
   }
