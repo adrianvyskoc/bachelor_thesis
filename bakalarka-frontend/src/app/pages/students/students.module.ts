@@ -5,7 +5,7 @@ import { StudentComponent } from './student/student.component';
 import { StudentsRoutingModule } from './students-routing.module';
 
 import {MatExpansionModule} from '@angular/material/expansion';
-import { MatTabsModule } from '@angular/material';
+import { MatTabsModule, MatButtonModule } from '@angular/material';
 
 
 @NgModule({
@@ -13,6 +13,7 @@ import { MatTabsModule } from '@angular/material';
   imports: [
     MatExpansionModule,
     MatTabsModule,
+    MatButtonModule,
 
     CommonModule,
     StudentsRoutingModule

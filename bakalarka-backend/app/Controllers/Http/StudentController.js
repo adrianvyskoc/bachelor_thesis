@@ -15,6 +15,9 @@ class StudentController {
       JOIN ais_subjects as sbj ON grd."PREDMET_ID" = sbj.id
       WHERE grd."AIS_ID" = ${params.id}
     `)
+    const admissions = await Database
+      .table('ais_admissions')
+      .where('AIS_ID', params.id)
 
     // group by obdobie
     grades = grades.rows.reduce((acc, grade) => {
@@ -40,9 +43,13 @@ class StudentController {
       }, {})
     })
 
+    // výpočet váženého študijného priemeru za jednotlivé semestre
+    // TODO:
+
     return response.send({
       student,
-      grades
+      grades,
+      admissions
     })
   }
 

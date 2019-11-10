@@ -1,5 +1,17 @@
 <div flex justify-content-between align-items-center>
   <h1 class="display-3">Študent - <strong>{{ student.MENO }} {{ student.PRIEZVISKO }}</strong></h1>
+  <button
+    *ngFor="let admission of admissions"
+    [routerLink]="[
+      '/admissions',
+      (admission.stupen_studia === 'Bakalársky' ? 'bachelor' : 'master'),
+      admission.id
+    ]"
+    mat-flat-button
+    color="primary"
+  >
+    Príhláška - {{ admission.stupen_studia }} stupeň
+  </button>
 </div>
 <hr>
 
