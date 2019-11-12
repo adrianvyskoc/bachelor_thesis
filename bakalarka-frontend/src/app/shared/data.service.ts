@@ -146,9 +146,6 @@ export class DataService {
   getAdmissionsMasterUpdateListener() {
     return this.admissionsMasterChanged.asObservable()
   }
-  getAttendanceUpdateListener() {
-    return this.attendanceChanged.asObservable()
-  }
   getAdmissionsUpdateListener() {
     return this.admissionsChanged.asObservable()
   }

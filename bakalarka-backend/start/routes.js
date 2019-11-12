@@ -26,8 +26,7 @@ Route
         Route.post('import/ineko/:selectedImport', 'ImportInekoController.import')
 
         // api endpoints
-        Route.get('getStudents/:year', 'GetController.getStudents')
-        Route.get('getAttendance/:year', 'GetController.getAttendance')
+        Route.get('getStudents/:year', 'StudentController.getStudents')
         Route.get('getGrades/:year', 'GetController.getGrades')
         Route.get('getSchools', 'GetController.getSchools')
         Route.get('getSubjects/:year', 'GetController.getSubjects')
@@ -35,9 +34,8 @@ Route
         /*
           Admissions api endpoints start
          */
-
-        Route.get('getAdmission/:id', 'GetController.getAdmission')
-        Route.get('getAdmissions/:year', 'GetController.getAdmissions')
+        Route.get('getAdmission/:id', 'AdmissionController.getAdmission')
+        Route.get('getAdmissions/:year', 'AdmissionController.getAdmissions')
         Route.put('admissions/:id/update', 'AdmissionController.updateAdmission')
         Route.delete('admissions/:id/delete', 'AdmissionController.deleteAdmission')
         Route.delete('admissions/delete/all', 'AdmissionController.deleteAllAdmissions')
@@ -115,7 +113,7 @@ Route
         */
 
         // Admissions overview
-        Route.get('admissionsOverview', 'GetController.getAdmissionsOverview')
+        Route.get('admissionsOverview', 'AdmissionController.getAdmissionsOverview')
 
         // Admissions year comparison
         Route.get('admissionsYearComparison', 'GetController.getAdmissionsYearComparison')

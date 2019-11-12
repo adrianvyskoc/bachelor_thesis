@@ -8,7 +8,6 @@ const Admission = use('App/Models/Admission')
 const Grade = use('App/Models/Grade')
 const Subject = use('App/Models/Subject')
 const School = use('App/Models/School')
-const Pointer = use('App/Models/Pointer')
 const Admin = use('App/Models/Admin')
 
 /**
@@ -16,61 +15,8 @@ const Admin = use('App/Models/Admin')
  */
 class GetController {
 
-    async getStudents ({ response }) {
-        const students = await Student.all()
-
-        return response.send(students)
-    }
-
-    async getAttendance ({ response }) {
-        const attendance = await Attendance.all()
-
-        return response.send(attendance)
-    }
-
     /**
-     * Endpoint, ktorý vráti buď všetky prihlášky, alebo prihlášky zo zvoleného školského roku
-     */
-    async getAdmissions ({ response, params }) {
-        let admissions
-        if(params.year == 'all')
-          admissions = await Database
-            .select('*')
-            .from('ais_admissions')
-            .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
-        else
-          admissions = await Database
-            .select('*')
-            .from('ais_admissions')
-            .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
-            .where('OBDOBIE', params.year)
-
-        return response.send(admissions)
-    }
-
-    /**
-     * Endpoint, ktorý vráti prihlášku podľa zvoleného ID. Spolu s prihláškou sa vráti aj škola, ktorú navštevoval daný uchádzač, jeho ostatné prihlášky
-     * a ukazovatele kvality školy, ktorú navštevoval.
-     */
-    async getAdmission ({ response, params }) {
-        const admission = await Admission.find(params.id)
-        const school = await School.find(admission.school_id)
-        const pointers = await Database.table('ineko_individual_pointer_values').where('school_id', admission.school_id)
-        const otherAdmissions = await Database.table('ais_admissions')
-          .where('Rodné_číslo', admission.Rodné_číslo)
-
-        return response.send({
-            admission,
-            school,
-            pointers,
-            otherAdmissions
-        })
-    }
-
-    // ---
-
-    /**
-     * Endpoint, ktorý vráti používateľov, ktorí majú povolený prístup do systému 
+     * Endpoint, ktorý vráti používateľov, ktorí majú povolený prístup do systému
      */
     async getUsers({ response }) {
       try {
@@ -122,7 +68,7 @@ class GetController {
     }
 
     /**
-     * Endpoint, ktorý pridá existujúcemu používateľovi admin práva, alebo vytvorí používateľa s admin právom 
+     * Endpoint, ktorý pridá existujúcemu používateľovi admin práva, alebo vytvorí používateľa s admin právom
      */
     async addAdmin({ request, response }) {
       const user = request.body.name
@@ -154,7 +100,7 @@ class GetController {
     }
 
     /**
-     * Endpoint, ktorý odstráni existujúcemu používateľovi admin práva 
+     * Endpoint, ktorý odstráni existujúcemu používateľovi admin práva
      */
     async removeAdmin({ request, response }) {
       const user = request.body.name
@@ -463,7 +409,7 @@ class GetController {
      * ------------------------------------------------------------------------
      */
     /**
-     * Endpoint, ktorý vráti všetky importované roky, ktoré používateľ zadal pri importovaní súborov z AIS-u pre štátne záverečné skúšky (ŠZS) vo web. aplikácii 
+     * Endpoint, ktorý vráti všetky importované roky, ktoré používateľ zadal pri importovaní súborov z AIS-u pre štátne záverečné skúšky (ŠZS) vo web. aplikácii
      * pre ing
      */
     async getDateYearsIng({request, response}) {
@@ -728,15 +674,15 @@ class GetController {
      * ------------------------------------------------------------------------
      */
     /**
-     * Endpoint, ktorý vráti pre zvolený rok a nasledujúce sledované roky všetký údaje o študentoch, ktorí majú rovnaký rok nástupu 
+     * Endpoint, ktorý vráti pre zvolený rok a nasledujúce sledované roky všetký údaje o študentoch, ktorí majú rovnaký rok nástupu
      */
     async getStatistics ({ request, response }) {
       let rokNastupu = request.body.rokNastup;
       let rokObdobia = request.body.rokObdobia;
       const duration = request.body.duration;
 
-      let statObj = {}; 
-      
+      let statObj = {};
+
       try {
         const data = await Database.raw(`
           select
@@ -757,7 +703,7 @@ class GetController {
             ais_students_data_pt_1."Obhajoba_1" as "obhajoba",
             ais_students_data_pt_2."OBDOBIE" as "obdobie2",
             ais_students_data_pt_2."SEMESTER" as "semester2",
-            ais_students_data_pt_2."ID" as "aisId2", 
+            ais_students_data_pt_2."ID" as "aisId2",
             ais_students_data_pt_2."Celé_meno_s_titulmi" as "celeMenoSTitulmi2",
             ais_students_data_pt_2."Pohlavie" as "pohlavie",
             ais_students_data_pt_2."Predmety_vysvedčení_výsledky" as "predmetyVysvedVysledky",
@@ -792,7 +738,7 @@ class GetController {
         let actIds = this.getIds(data.rows);
 
         statObj[rokObdobia].summer =  await this.getNextYearStatistics(actIds, rokNastupu, rokObdobia, 'summer');
-        
+
         for (let i = 1; i < duration; i++) {
           rokObdobia++;
           let winterResult = await this.getNextYearStatistics(actIds, rokNastupu, rokObdobia, 'winter');
@@ -825,7 +771,7 @@ class GetController {
       });
       return ids;
     }
-    
+
     /**
      * Získanie údajov o študentoch z prvého roku nástupu z nasledujúcich rokov
      * @param {*} actIds pole s aktuálnymi ID študentmi
@@ -856,7 +802,7 @@ class GetController {
             ais_students_data_pt_1."Obhajoba_1" as "obhajoba",
             ais_students_data_pt_2."OBDOBIE" as "obdobie2",
             ais_students_data_pt_2."SEMESTER" as "semester2",
-            ais_students_data_pt_2."ID" as "aisId2", 
+            ais_students_data_pt_2."ID" as "aisId2",
             ais_students_data_pt_2."Celé_meno_s_titulmi" as "celeMenoSTitulmi2",
             ais_students_data_pt_2."Pohlavie" as "pohlavie",
             ais_students_data_pt_2."Predmety_vysvedčení_výsledky" as "predmetyVysvedVysledky",
@@ -881,7 +827,7 @@ class GetController {
             ais_students_data_pt_1."rokNastupu" = '${rokNastupu}'
           and
             ais_students_data_pt_1."OBDOBIE" = '${rokObdobia}'
-          and 
+          and
             ais_students_data_pt_1."ID" in ${queryIds}
           and
             ais_students_data_pt_1."SEMESTER" = '${semeter}'
@@ -895,7 +841,7 @@ class GetController {
       }
     }
 
-    /**  
+    /**
      * Endpoint, ktorý vráti všetky roky nástupu z importovaných súborov o údajoch študentov časť 1, LS a ZS
     */
     async getDateYearsStart({request, response}) {
@@ -919,7 +865,7 @@ class GetController {
         .send(rawData)
     }
 
-    /**  
+    /**
      * Endpoint, ktorý vymaže všetky údaje o študentoch zo zvoleného roku
     */
     async deleteStatistics({request, response}) {
@@ -950,7 +896,7 @@ class GetController {
       }
     }
 
-    /**  
+    /**
      * Endpoint, ktorý vráti všetky roky z importovaných súborov o údajoch študentov časť 1, LS a ZS
     */
     async getDateYearsForDelete({request, response}) {
@@ -995,84 +941,6 @@ class GetController {
         const schools = await School.all()
 
         return response.send(schools)
-    }
-
-    /**
-     * Feature Endpoint, ktorý vracia dáta pre sekciu Prijímacie konanie - Všeobecný prehľad. Výstupom je:
-     * - všetky školy naimportované v systéme spolu s ich hodnotením podľa INEKO
-     * - všetky prihlášky spojené so školami, ktoré navštevovali uchádzači
-     * - metriky podľa krajov
-     */
-    async getAdmissionsOverview ({ request, response }) {
-      const queryParams = await request.all()
-
-      const admissionsAttrs = [
-        'ais_admissions.id',
-        'ais_admissions.Meno',
-        'ais_admissions.Priezvisko',
-        'ais_admissions.E_mail',
-        'ais_admissions.Všeobecné_študijné_predpoklady_SCIO_VŠP',
-        'ais_admissions.Písomný_test_z_matematiky_SCIO_PTM',
-        'ais_admissions.Externá_maturita_z_matematiky_EM',
-        'ais_admissions.Externá_maturita_z_cudzieho_jazyka_ECJ',
-        'ais_admissions.Program_1',
-        'ais_admissions.Pohlavie',
-        'ais_admissions.Maturita_1',
-        'ais_admissions.school_id',
-        'ais_admissions.stupen_studia',
-        'ais_admissions.Body_celkom',
-        'ais_admissions.Rozh',
-        'ais_admissions.Štúdium',
-        'ais_admissions.Občianstvo'
-      ]
-      const schoolsAttrs = ['ineko_schools.typ_skoly', 'ineko_schools.sur_y', 'ineko_schools.sur_x', 'ineko_schools.kraj']
-
-      const schools = await Database
-        .select(...schoolsAttrs, 'ineko_schools.ulica', 'ineko_schools.nazov', 'ineko_schools.kod_kodsko', 'ineko_schools.email', 'ineko_total_ratings.celkove_hodnotenie')
-        .from('ineko_schools')
-        .leftJoin('ineko_total_ratings', 'ineko_total_ratings.school_id', 'ineko_schools.kod_kodsko')
-
-      let admissions
-      let regionMetrics
-
-      if(queryParams.year == 'all') {
-        admissions = await Database
-          .select(...admissionsAttrs, ...schoolsAttrs)
-          .from('ais_admissions')
-          .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
-        regionMetrics = await Database.raw(`
-          SELECT
-            COUNT(ais_admissions.id),
-            AVG(ais_admissions."Body_celkom") as mean,
-            percentile_disc(0.5) within group (order by ais_admissions."Body_celkom") as median,
-            ineko_schools.kraj
-          FROM ais_admissions
-          JOIN ineko_schools ON ais_admissions.school_id = ineko_schools.kod_kodsko
-          GROUP BY ineko_schools.kraj
-          `
-        )
-      }
-      else {
-        admissions = await Database
-          .select(...admissionsAttrs, ...schoolsAttrs)
-          .from('ais_admissions')
-          .leftJoin('ineko_schools', 'ais_admissions.school_id', 'ineko_schools.kod_kodsko')
-          .where('OBDOBIE', queryParams.year)
-        regionMetrics = await Database.raw(`
-          SELECT
-            COUNT(ais_admissions.id),
-            AVG(ais_admissions."Body_celkom") as mean,
-            percentile_disc(0.5) within group (order by ais_admissions."Body_celkom") as median,
-            ineko_schools.kraj
-          FROM ais_admissions
-          JOIN ineko_schools ON ais_admissions.school_id = ineko_schools.kod_kodsko
-          WHERE ais_admissions."OBDOBIE" = ?
-          GROUP BY ineko_schools.kraj
-          `, [queryParams.year]
-        )
-      }
-
-      return response.send({ schools, admissions, regionMetrics: regionMetrics.rows })
     }
 
     /**

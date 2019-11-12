@@ -24,7 +24,6 @@ export class StudentComponent implements OnInit {
     this.dataService.getStudent(this.id)
       .subscribe(
         data => {
-          console.log(data)
           this.student = data['student']
           this.grades = data['grades']
           this.admissions = data['admissions']

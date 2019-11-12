@@ -3,10 +3,21 @@
 const Database = use('Database')
 
 const Student = use('App/Models/Student')
-const Grade = use('App/Models/Grade')
 
 class StudentController {
 
+  /**
+   * Endpoint, ktorý vráti všetkých študentov v systéme
+   */
+  async getStudents ({ response }) {
+    const students = await Student.all()
+
+    return response.send(students)
+  }
+
+  /**
+   * Endpoint, ktorý vráti všetky informácie týkajúce sa jedného študenta. Študent je v systéme podľa AIS_ID.
+   */
   async getStudent({ params, response }) {
 
     const student = await Student.find(params.id)
@@ -16,7 +27,8 @@ class StudentController {
       WHERE grd."AIS_ID" = ${params.id}
     `)
     const admissions = await Database
-      .table('ais_admissions')
+      .select('id')
+      .from('ais_admissions')
       .where('AIS_ID', params.id)
 
     // group by obdobie
