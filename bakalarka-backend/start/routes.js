@@ -26,7 +26,9 @@ Route
         Route.post('import/ineko/:selectedImport', 'ImportInekoController.import')
 
         // api endpoints
-        Route.get('getStudents/:year', 'StudentController.getStudents')
+
+        Route.get('students', 'StudentController.getStudents')
+
         Route.get('getGrades/:year', 'GetController.getGrades')
         Route.get('getSchools', 'GetController.getSchools')
         Route.get('getSubjects/:year', 'GetController.getSubjects')

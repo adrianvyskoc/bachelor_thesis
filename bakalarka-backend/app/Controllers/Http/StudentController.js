@@ -9,8 +9,16 @@ class StudentController {
   /**
    * Endpoint, ktorý vráti všetkých študentov v systéme
    */
-  async getStudents ({ response }) {
-    const students = await Student.all()
+  async getStudents ({ response , request}) {
+    const queryParams = await request.all()
+
+    let students = '';
+    if (queryParams.name) {
+      students = await Database.table('ais_students').where('MENO', queryParams.name)
+    } else {
+      students = await Student.all()
+    }
+
 
     return response.send(students)
   }

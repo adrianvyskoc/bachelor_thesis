@@ -15,7 +15,6 @@ const Admission = use('App/Models/Admission')
 class ImportAisController {
 
     async import ({ request, params }) {
-        console.log("DASASDASDASDASDASASDASDAS")
 
         const config = {
             type: "string",
@@ -46,11 +45,6 @@ class ImportAisController {
         const mapping = JSON.parse(data.mapping)
 
         if(mapping && mapping.length) {
-          mapping.reduce((acc, item) => {
-            acc[item.from] = item.to
-            return acc
-          }, {})
-
           rows.forEach((row, idx) => {
             rows[idx] = adjustKeys(rows[idx])
             for(let mp of mapping) {

@@ -51,6 +51,11 @@ export class DataService {
     return this.year
   }
 
+  getStudents(name = '') {
+
+    return this.http.get(`http://localhost:3333/api/students?name=${name}`);
+  }
+
   /**
    * Funkcia zodpovedná za získanie dát zo servera.
    * @param selectedImport - typ importu, pre ktorý chceme získať dáta (Admissions, Schools...)

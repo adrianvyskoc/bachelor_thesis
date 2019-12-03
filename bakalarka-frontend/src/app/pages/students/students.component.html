@@ -1,3 +1,36 @@
-<p>
-  students works!
-</p>
+<!--<table mat-table [dataSource]="students" class="mat-elevation-z8">
+
+
+
+  <ng-container matColumnDef="MENO">
+    <th mat-header-cell *matHeaderCellDef> Meno </th>
+    <td mat-cell *matCellDef="let element"> {{element.MENO}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="PRIEZVISKO">
+    <th mat-header-cell *matHeaderCellDef> Priezvisko </th>
+    <td mat-cell *matCellDef="let element"> {{element.PRIEZVISKO}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>-->
+
+<input [(ngModel)]="name" type="text" class="form-control" placeholder="Enter name">
+
+<button (click)="onClick()">Click me</button>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Meno</th>
+      <th scope="col">Priezvisko</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let student of students">
+      <td>{{ student.MENO }}</td>
+      <td>{{ student.PRIEZVISKO }}</td>
+    </tr>
+  </tbody>
+</table>

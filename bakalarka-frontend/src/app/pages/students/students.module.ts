@@ -5,18 +5,22 @@ import { StudentComponent } from './student/student.component';
 import { StudentsRoutingModule } from './students-routing.module';
 
 import {MatExpansionModule} from '@angular/material/expansion';
-import { MatTabsModule, MatButtonModule } from '@angular/material';
+import { MatTabsModule, MatButtonModule, MatTableModule } from '@angular/material';
+import { DemoComponent } from './demo/demo.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
-  declarations: [StudentsComponent, StudentComponent],
+  declarations: [StudentsComponent, StudentComponent, DemoComponent],
   imports: [
     MatExpansionModule,
     MatTabsModule,
     MatButtonModule,
+    MatTableModule,
 
     CommonModule,
-    StudentsRoutingModule
+    StudentsRoutingModule,
+    FormsModule
   ]
 })
 export class StudentsModule { }
