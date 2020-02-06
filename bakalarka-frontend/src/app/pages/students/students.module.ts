@@ -8,10 +8,11 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import { MatTabsModule, MatButtonModule, MatTableModule } from '@angular/material';
 import { DemoComponent } from './demo/demo.component';
 import { FormsModule } from '@angular/forms';
+import { PredictionComponent } from './prediction/prediction.component';
 
 
 @NgModule({
-  declarations: [StudentsComponent, StudentComponent, DemoComponent],
+  declarations: [StudentsComponent, StudentComponent, DemoComponent, PredictionComponent],
   imports: [
     MatExpansionModule,
     MatTabsModule,

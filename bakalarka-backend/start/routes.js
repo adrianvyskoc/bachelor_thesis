@@ -128,5 +128,8 @@ Route
 
         // Get attributes for table
         Route.get('tableColumns', 'GetController.getAttrNames')
+
+        // 
+        Route.get('predictions', 'PredictionController.index')
     })
     .prefix('/api')
