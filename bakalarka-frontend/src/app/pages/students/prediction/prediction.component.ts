@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PredictionService } from './prediction.service';
 
 @Component({
   selector: 'app-prediction',
@@ -7,9 +8,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PredictionComponent implements OnInit {
 
-  constructor() { }
+  text = 'Veronika'
+  pozn = ""
+  
+  constructor(
+    private dataService: PredictionService
+  ) { }
 
   ngOnInit() {
+  }
+
+  communicatePython() {
+    this.pozn = "som tu"
+    this.dataService.helloPython()
+    .subscribe(data => {
+      this.pozn = "dostala som data"
+      this.text = data.toString()
+    })
+    
   }
 
 }

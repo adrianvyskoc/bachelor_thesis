@@ -8,7 +8,9 @@ export class PredictionService {
 
   constructor(private http: HttpClient) { }
 
-  loadData() {
-    
+  helloPython(meno = '') {
+   
+    return this.http.get(`http://localhost:3333/api/predictions`);
+   
   }
 }

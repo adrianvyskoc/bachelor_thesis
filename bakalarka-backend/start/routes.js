@@ -131,5 +131,6 @@ Route
 
         // 
         Route.get('predictions', 'PredictionController.index')
+
     })
     .prefix('/api')
