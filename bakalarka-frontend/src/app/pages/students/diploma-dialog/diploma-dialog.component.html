@@ -1,0 +1,29 @@
+<div class="wrapper">
+  <p>
+    Názov:
+  </p>
+  
+  <select [(ngModel)]="diploma_title" class="custom-select" name="diploma_title" >
+    <option value="olympiada">Olympiada</option>
+    <option value="klokan">Klokan</option>
+    <option value="ibobor">iBobor</option>
+    <option value="ksks">ksks</option>
+  </select>  
+</div>
+
+<div class="wrapper">
+  <p>
+    Umiestnenie:
+  </p>
+  
+  <select [(ngModel)]="position" class="custom-select" name="position" >
+    <option value="1">1.miesto</option>
+    <option value="2">2.miesto</option>
+    <option value="3">3.miesto</option>
+    <option value="uspesny riesitel">úspešný riešiteľ</option>
+  </select>
+</div>
+
+
+
+<button class="btn btn-primary" (click)="onAddDiploma()">PRIDAŤ</button>

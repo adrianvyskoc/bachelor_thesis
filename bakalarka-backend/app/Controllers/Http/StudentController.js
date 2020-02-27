@@ -11,6 +11,7 @@ class StudentController {
    */
   async getStudents ({ response , request}) {
     const queryParams = await request.all()
+    
 
     let students = '';
     if (queryParams.name) {
@@ -19,8 +20,15 @@ class StudentController {
       students = await Student.all()
     }
 
+      let years = await Database.raw(`
+        SELECT DISTINCT "OBDOBIE" from ais_admissions
+      `);
+      
 
-    return response.send(students)
+    return response.send({
+      students, 
+      years
+    })
   }
 
   /**

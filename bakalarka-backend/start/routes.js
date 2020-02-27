@@ -128,5 +128,10 @@ Route
 
         // Get attributes for table
         Route.get('tableColumns', 'GetController.getAttrNames')
+
+
+        // diplomas
+        Route.post("students/diploma/add", "DiplomaController.addDiploma")
+
     })
     .prefix('/api')

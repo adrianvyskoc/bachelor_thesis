@@ -16,21 +16,74 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>-->
 
-<input [(ngModel)]="name" type="text" class="form-control" placeholder="Enter name">
 
-<button (click)="onClick()">Click me</button>
+<div class="jumbotron">
+  <h1 class="display-3">Prijímacie konadiplomovnie</h1>
+  <p class="lead">Pridávanie </p>
+  <hr class="my-4">
+
+  <select class="custom-select" name="year" (change)="onYearSelect()">
+    <option value="all">Všetko</option>
+    <option
+      *ngFor="let year of years"
+      [value]="year.OBDOBIE"
+    >
+      {{ year.OBDOBIE }}
+    </option>
+  </select>
+
+  <input [(ngModel)]="name" type="text" class="form-control" placeholder="Enter name">
+ 
+  <button (click)="onClick()">Click me</button>
+  
+
+
+  <button (click)="onClick()">Filtrovať</button>
+
+  <div>
+    <mat-checkbox>Zaškrtni</mat-checkbox>
+  </div>
+  
+</div>
+
+<div>
+  <form >
+    <select
+     
+      margin-bottom
+    >
+      <option value="all">Všetky stupne štúdia</option>
+      <option value="Bakalársky">Bakalársky stupeň</option>
+      <option value="Inžiniersky">Inžiniersky stupeň</option>
+    </select>
+  
+   
+  </form>
+</div>
+
 
 <table class="table">
   <thead>
     <tr>
+      <th scope="col">AIS_ID</th>
       <th scope="col">Meno</th>
-      <th scope="col">Priezvisko</th>
+      <th scope="col">Priezvisko</th>      
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let student of students">
+    <tr *ngFor="let student of students" (click)="openDiplomaDialog(student)">
+      <td>{{ student.AIS_ID }}</td>
       <td>{{ student.MENO }}</td>
       <td>{{ student.PRIEZVISKO }}</td>
     </tr>
   </tbody>
 </table>
+
+
+
+
+
+
+
+
+
