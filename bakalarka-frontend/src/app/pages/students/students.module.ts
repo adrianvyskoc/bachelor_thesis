@@ -5,9 +5,9 @@ import { StudentComponent } from './student/student.component';
 import { StudentsRoutingModule } from './students-routing.module';
 
 import {MatExpansionModule} from '@angular/material/expansion';
-import { MatTabsModule, MatButtonModule, MatTableModule } from '@angular/material';
+import { MatTabsModule, MatButtonModule, MatTableModule, MatInputModule, MatSelectModule } from '@angular/material';
 import { DemoComponent } from './demo/demo.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PredictionComponent } from './prediction/prediction.component';
 
 
@@ -18,10 +18,13 @@ import { PredictionComponent } from './prediction/prediction.component';
     MatTabsModule,
     MatButtonModule,
     MatTableModule,
+    MatInputModule,
+    MatSelectModule,
 
     CommonModule,
     StudentsRoutingModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class StudentsModule { }
