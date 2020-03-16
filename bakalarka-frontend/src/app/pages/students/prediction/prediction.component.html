@@ -1,14 +1,15 @@
+<div id="left">
 <h1 class="display-3">Predikcie</h1>
 
 <form>
   <mat-form-field>
     <mat-label>Rok nastupu: </mat-label>
-    <input matInput type ="text" placeholder="RRRR-RRRR" ng-model="school_year"/>
+    <input matInput type ="text" placeholder="RRRR-RRRR" [formControl] = "school_year"/>
   </mat-form-field>
   <br>
   <mat-form-field>
     <mat-label>Predmet: </mat-label>
-    <mat-select [(ngModel)]="selected_subject">
+    <mat-select [(value)]="selected_subject" [formControl]="selected_subject">
       <mat-option *ngFor="let subject of imported_models" [value]="subject">
         {{ subject }}
       </mat-option>
@@ -23,6 +24,11 @@ color="primary"
 >
 SPUSTI PREDIKCIU
 </button>
+</div>
+
+<div id="right">
+
+<app-model-import></app-model-import>
 
 
 <p> rok nastupu: {{ school_year }} </p>
@@ -40,3 +46,4 @@ Komunikuj s Pythonom
 </button>
 <h3>Textik: {{ text }}</h3>
 <p>poznamka: {{ pozn }}</p>
+</div>

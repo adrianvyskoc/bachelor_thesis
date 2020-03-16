@@ -9,10 +9,11 @@ import { MatTabsModule, MatButtonModule, MatTableModule, MatInputModule, MatSele
 import { DemoComponent } from './demo/demo.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PredictionComponent } from './prediction/prediction.component';
+import { ModelImportComponent } from './prediction/model-import/model-import.component';
 
 
 @NgModule({
-  declarations: [StudentsComponent, StudentComponent, DemoComponent, PredictionComponent],
+  declarations: [StudentsComponent, StudentComponent, DemoComponent, PredictionComponent, ModelImportComponent],
   imports: [
     MatExpansionModule,
     MatTabsModule,

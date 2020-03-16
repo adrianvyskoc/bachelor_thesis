@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PredictionService } from './prediction.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-prediction',
@@ -8,8 +9,8 @@ import { PredictionService } from './prediction.service';
 })
 export class PredictionComponent implements OnInit {
 
-  public school_year: string;
-  selected_subject = ""
+  school_year = new FormControl('');
+  selected_subject = ''
   imported_models = ["Matematicka analyza", "Vsetko"]
   text = 'Veronika'
   pozn = ""
@@ -23,7 +24,14 @@ export class PredictionComponent implements OnInit {
 
 
   start_prediction() {
-    this.text = this.school_year
+    this.dataService.predict(this.school_year.value, this.selected_subject)
+    .subscribe(data => {
+      this.pozn = "mam odpoved"
+    })
+
+    this.text = this.school_year.value
+    //this.pozn = this.selected_subject.value
+    this.pozn = this.selected_subject
   }
 
   communicatePython() {
