@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from 'src/app/shared/data.service';
 import { MatDialog } from '@angular/material';
 import { DiplomaDialogComponent } from './diploma-dialog/diploma-dialog.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-students',
@@ -10,13 +11,17 @@ import { DiplomaDialogComponent } from './diploma-dialog/diploma-dialog.componen
 })
 export class StudentsComponent implements OnInit {
 
-  name: string = ''
+  
+  admissions = []
 
+  name: string = ''
+  allDataAdmissions: any = []
   students: any = []
   years = []
   //displayedColumns: string[] = ['MENO', 'PRIEZVISKO'];
 
   constructor(
+    private route: ActivatedRoute,
     private dataService: DataService,
     public dialog: MatDialog
   ) { }
@@ -35,15 +40,21 @@ export class StudentsComponent implements OnInit {
       .subscribe((data) => {
         this.students = data["students"];
         this.years = data["years"].rows;
+        this.allDataAdmissions = data["allDataAdmissions"].rows;
       });
   }
 
   onClick() {
-    console.log("klik")
+    
     this.dataService.getStudents(this.name)
-      .subscribe((students) => {
-        this.students = students;
+      .subscribe((data) => {
+        this.students = data["students"];
+        this.years = data["years"].rows;
+        this.allDataAdmissions = data["allDataAdmissions"].rows;
       });
   }
+
+  
+  
 
 }

@@ -14,8 +14,10 @@ class DiplomaController {
                 .table('diplomas')
                 .insert({
                     AIS_ID: data.AIS_ID,
+                    
                     diploma_title: data.diploma_title,
                     position: data.position
+
                     
                 })
 

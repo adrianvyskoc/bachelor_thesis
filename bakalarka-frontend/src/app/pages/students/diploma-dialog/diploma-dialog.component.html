@@ -1,14 +1,72 @@
 <div class="wrapper">
   <p>
+    Zameranie:
+  </p>
+
+  <select [(ngModel)]="zameranie" class="custom-select" name="zameranie">
+    <option value="matematicke">Matematické súťaže</option>
+    <option value="informaticke">Informatické súťaže</option>
+    <option value="fyzikalne">Fyzikálne súťaže</option>
+    <option value="soc">SOČ</option>
+    <option value="ine">Iné</option>
+  </select>
+</div>
+
+<div class="wrapper">
+  <p>
     Názov:
   </p>
   
   <select [(ngModel)]="diploma_title" class="custom-select" name="diploma_title" >
-    <option value="olympiada">Olympiada</option>
-    <option value="klokan">Klokan</option>
+    
+    <option value="olympiada">Matematická olympiáda - medzinárodné kolo</option>
+    <option value="olympiada">Matematická olympiáda - celoštátne kolo</option>
+    <option value="olympiada">Matematická olympiáda - krajské kolo</option>
     <option value="ibobor">iBobor</option>
-    <option value="ksks">ksks</option>
+    <option value="olympiada">Pangea - celoštátne kolo</option>
+   
+    <option value="olympiada">ProFIIT</option>
+    <option value="olympiada">Net@FIIT</option>
+    <option value="olympiada">IIT.SRC Junior</option>
+    <option value="olympiada">Medzinárodná olympiáda v informatike</option>
+    <option value="olympiada">Stredoeurópska olympiáda v informatike (CEOI)</option>
+    <option value="olympiada">Olympiáda v informatike - celoštátne kolo</option>
+    <option value="olympiada">Olympiáda v informatike - krajské kolo</option>
+    <option value="olympiada">NAG (súťaž Sieťových akadémií) - medzinárodné kolo</option>
+    <option value="olympiada">NAG (súťaž Sieťových akadémií) - celoštátne kolo</option>
+    <option value="olympiada">Junior Internet</option>
+    <option value="olympiada">Junior Internet - kateg. Junior APP</option>
+    <option value="olympiada">Junior Internet - kateg. Junior WEB, DESIGN, LEARN</option>
+    <option value="olympiada">Zenit - celoštátne kolo</option>
+    <option value="olympiada">Zenit - krajské kolo</option>
+    <option value="olympiada">RoboCupJunior - medzinárodné kolo</option>
+    <option value="olympiada">RoboCupJunior - celoštátne kolo</option> 
+
+    <option value="olympiada">Fyzikálna alympiáda - medzinárodné kolo</option>
+    <option value="olympiada">Fyzikálna alympiáda - celoštátne kolo</option>
+    <option value="olympiada">Fyzikálna alympiáda - krajské kolo</option>
+    <option value="olympiada">Turnaj mladých fyzikov - celoštátne kolo</option>
+    
+    <option value="olympiada">SOČ - Informatika - celoštátne kolo</option>
+    <option value="olympiada">SOČ - Informatika - krajské kolo</option>
+    <option value="olympiada">SOČ - Matematika a fyzika - celoštátne kolo</option>
+    <option value="olympiada">SOČ - Matematika a fyzika - krajské kolo</option>
+    <option value="olympiada">SOČ - Elektronika a hardvér - celoštátne kolo</option>
+    <option value="olympiada">SOČ - Elektronika a hardvér - krajské kolo</option>
+
+    <option value="olympiada">Oficálne IQ testy (spoločnosť Mensa)</option>
   </select>  
+</div>
+
+<div class="wrapper">
+  <p>
+    Kolo:
+  </p>
+  <select [(ngModel)]="kolo" class="custom-select" name="kolo">
+    <option value="medzinarodne">Medzinárodné kolo</option>
+    <option value="krajske">Krajské kolo</option>
+    <option value="celostatne">Celoštátne kolo</option>
+  </select>
 </div>
 
 <div class="wrapper">

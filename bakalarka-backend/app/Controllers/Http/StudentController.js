@@ -11,22 +11,33 @@ class StudentController {
    */
   async getStudents ({ response , request}) {
     const queryParams = await request.all()
+  
+    let allDataAdmissions = '';
+    let students = '';
+
+    //tento if je zatial nefunkčný 
+    if (queryParams.name) {
+      
+      students = await Database.table('ais_students').where('MENO', queryParams.name)
+    
+    } else {
     
 
-    let students = '';
-    if (queryParams.name) {
-      students = await Database.table('ais_students').where('MENO', queryParams.name)
-    } else {
       students = await Student.all()
     }
+    
+    allDataAdmissions = await Database.raw(`
+      SELECT "AIS_ID", "Priezvisko", "Meno", "OBDOBIE", "Štúdium", "Prijatie_na_program", "Exb_celk" from ais_admissions WHERE "Štúdium" = "áno"
+    `);
 
-      let years = await Database.raw(`
-        SELECT DISTINCT "OBDOBIE" from ais_admissions
-      `);
-      
+
+    let years = await Database.raw(`
+      SELECT DISTINCT "OBDOBIE"  from ais_admissions
+    `);
 
     return response.send({
-      students, 
+      students,
+      allDataAdmissions,
       years
     })
   }

@@ -1,29 +1,173 @@
-<!--<table mat-table [dataSource]="students" class="mat-elevation-z8">
-
-
-
-  <ng-container matColumnDef="MENO">
-    <th mat-header-cell *matHeaderCellDef> Meno </th>
-    <td mat-cell *matCellDef="let element"> {{element.MENO}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="PRIEZVISKO">
-    <th mat-header-cell *matHeaderCellDef> Priezvisko </th>
-    <td mat-cell *matCellDef="let element"> {{element.PRIEZVISKO}} </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>-->
 
 
 <div class="jumbotron">
-  <h1 class="display-3">Prijímacie konadiplomovnie</h1>
-  <p class="lead">Pridávanie </p>
+  <h1 class="display-3">Prijímacie konanie</h1>
+  <p class="lead">Pridávanie diplomov</p>
   <hr class="my-4">
 
+
+
+  <div class="row">
+    <div class="col-sm-3">
+      Rok prijatia
+    </div>
+    <div class="col-sm-4">
+
+      <select class="custom-select" name="year" (change)="onYearSelect()">
+        <option value="all">Všetky roky</option>
+        <option
+          *ngFor="let year of years"
+          [value]="year.OBDOBIE"
+        >
+          {{ year.OBDOBIE }}
+        </option>
+      </select>
+    </div>
+
+    <div class="col-sm-6">
+      <input [(ngModel)]="name" type="text" class="form-control" placeholder="Enter name"> 
+    </div>
+
+    <div class="col-sm-12">
+      <button (click)="onClick()">Vyhľadať študenta</button>
+    </div>
+  
+  </div>
+</div>
+
+<div class="col-lg-12">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col1">AIS_ID</th>
+        <th scope="col2">Meno</th>
+        <th scope="col3">Priezvisko</th>
+        <th scope="col4">Rok prijatia</th>
+        <th scope="col5">Študijný program</th>
+        <th scope="col6">Prijatie/neprijatie</th>
+        <th scope="col6">Body diplomy</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let allDataAdmission of allDataAdmissions" (click)="openDiplomaDialog(student)">
+        <td>{{ allDataAdmission["AIS_ID"] }}</td>
+        <td>{{ allDataAdmission["Meno"] }}</td>
+        <td>{{ allDataAdmission["Priezvisko"] }}</td>
+        <td>{{ allDataAdmission["OBDOBIE"] }}</td>
+        <td>{{ allDataAdmission.Prijatie_na_program }}</td>
+        <td>{{ allDataAdmission["Štúdium"] }}</td>
+        <td>{{ allDataAdmission.Exb_celk }}</td>
+        
+        
+      </tr>
+    </tbody>
+  </table>
+</div>
+  <!--
+    <form [formGroup]="filterForm" class="filterForm" (ngSubmit)="onFilter()">
+      <select
+        class="custom-select"
+        formControlName="degree"
+        margin-bottom
+      >
+        <option value="all">Všetky stupne štúdia</option>
+        <option value="Bakalársky">Bakalársky stupeň</option>
+        <option value="Inžiniersky">Inžiniersky stupeň</option>
+      </select>
+      <select
+        *ngIf="filterForm.controls.degree.value !== 'all'"
+        class="custom-select"
+        formControlName="studyType"
+        margin-bottom
+      >
+        <option value="all">Všetky typy štúdia</option>
+        <option *ngIf="filterForm.controls.degree.value == 'Inžiniersky'" value="2">Dvojročné štúdium</option>
+        <option value="3">Trojročné štúdium</option>
+        <option *ngIf="filterForm.controls.degree.value == 'Bakalársky'" value="4">Štvorročné štúdium</option>
+      </select>
+      <div [hidden]="filterForm.controls.degree.value !== 'Bakalársky'">
+        <select
+          class="custom-select"
+          formControlName="schoolType"
+          margin-bottom
+        >
+          <option value="all">Všetky typy škôl</option>
+          <option value="gymnasium">Gymnáziá</option>
+          <option value="technical">Odborné školy</option>
+          <option value="other">Ostatné</option>
+        </select>
+
+        <div flex margin-bottom>
+          <select
+            class="custom-select"
+            formControlName="pointsType"
+          >
+            <option value="all">Všetci</option>
+            <option value="Všeobecné_študijné_predpoklady_SCIO_VŠP">SCIO - Všeobecné študijné predpoklady</option>
+            <option value="Písomný_test_z_matematiky_SCIO_PTM">SCIO - Matematika</option>
+            <option value="Externá_maturita_z_matematiky_EM">Externá maturita - Matematika</option>
+            <option value="Externá_maturita_z_cudzieho_jazyka_ECJ">Externá maturita - Cudzie jazyky</option>
+            <option value="notprovided">Neuvedené hodnoty</option>
+          </select>
+
+          <div *ngIf="filterForm.value.pointsType !== 'all'" flex>
+            <input
+              formControlName="pointsValue"
+              type="range" min="0" max="100"
+              margin-left
+            >
+            <span padding-left>od {{ filterForm.get('pointsValue').value }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div
+        flex
+        margin-bottom
+      >
+        <div class="custom-control custom-radio" margin-right>
+          <input
+            id="customRadio3"
+            class="custom-control-input"
+            type="radio"
+            formControlName="gender"
+            value="all"
+          >
+          <label class="custom-control-label" for="customRadio3">Obe pohlavia</label>
+        </div>
+        <div class="custom-control custom-radio" margin-right>
+          <input
+            id="customRadio1"
+            class="custom-control-input"
+            type="radio"
+            formControlName="gender"
+            value="muž"
+          >
+          <label class="custom-control-label" for="customRadio1">Muži</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input
+            id="customRadio2"
+            class="custom-control-input"
+            type="radio"
+            formControlName="gender"
+            value="žena"
+          >
+          <label class="custom-control-label" for="customRadio2">Ženy</label>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-raised btn-primary">Filtrovať</button>
+    </form>
+
+    <div class="col-lg-4">
+      Počet prihlášok pre zvolené filtre: <strong>{{ filteredAdmissions.length }}</strong> z {{ admissions.length }}.
+    </div>
+  -->
+
+<!--
+   <p>Rok prijatia</p>
   <select class="custom-select" name="year" (change)="onYearSelect()">
-    <option value="all">Všetko</option>
+    <option value="all">Všetky roky</option>
     <option
       *ngFor="let year of years"
       [value]="year.OBDOBIE"
@@ -35,49 +179,15 @@
   <input [(ngModel)]="name" type="text" class="form-control" placeholder="Enter name">
  
   <button (click)="onClick()">Click me</button>
+-->
+ 
   
 
 
-  <button (click)="onClick()">Filtrovať</button>
-
-  <div>
-    <mat-checkbox>Zaškrtni</mat-checkbox>
-  </div>
-  
-</div>
-
-<div>
-  <form >
-    <select
-     
-      margin-bottom
-    >
-      <option value="all">Všetky stupne štúdia</option>
-      <option value="Bakalársky">Bakalársky stupeň</option>
-      <option value="Inžiniersky">Inžiniersky stupeň</option>
-    </select>
-  
-   
-  </form>
-</div>
 
 
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">AIS_ID</th>
-      <th scope="col">Meno</th>
-      <th scope="col">Priezvisko</th>      
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let student of students" (click)="openDiplomaDialog(student)">
-      <td>{{ student.AIS_ID }}</td>
-      <td>{{ student.MENO }}</td>
-      <td>{{ student.PRIEZVISKO }}</td>
-    </tr>
-  </tbody>
-</table>
+
+
 
 
 
