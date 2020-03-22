@@ -29,6 +29,7 @@
     "@adonisjs/session": "^1.0.25",
     "@adonisjs/shield": "^1.0.6",
     "browser-refresh": "^1.7.3",
+    "core-util-is": "^1.0.2",
     "fs": "0.0.1-security",
     "ldapjs": "^1.0.2",
     "npm": "^6.9.0",

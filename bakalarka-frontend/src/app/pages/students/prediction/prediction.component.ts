@@ -11,7 +11,7 @@ export class PredictionComponent implements OnInit {
 
   school_year = new FormControl('');
   selected_subject = ''
-  imported_models = ["Matematicka analyza", "Vsetko"]
+  imported_models = ["Matematická analýza", "Vsetko"]
   text = 'Veronika'
   pozn = ""
   

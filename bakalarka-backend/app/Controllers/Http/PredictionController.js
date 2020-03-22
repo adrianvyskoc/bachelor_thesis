@@ -88,15 +88,17 @@ class PredictionController {
         //kontrola, ci existuje taky predikcny model
         //POZOR urobit samostatnu kontrolu pri model vsetko
         
+        // const model = await Database
+        //         .from('prediction_models')
+        //         .join('ais_subjects', 'subject_id', 'ais_subjects.id')
+        //         .where('PREDMET', request_params.subject)
+        //zle to joinuje, treba dva selecty alebo to nejak opravit
         const model = await Database
-                .from('prediction_models')
-                .join('ais_subjects', 'id_predmetu', 'ais_subjects.id')
-                .where('PREDMET', request_params.subject)
-                .count()
-
-        const total = model[0]['count(*)']
+                    .from('prediction_models')
+                    .where('subject_id', 93)
+            
         
-        if (total == 0) {
+        if (model.length == 0) {
             //nenasiel sa ziaden model pre dany predmet
             console.log("nenasiel sa model");
             response.send("chyba model");
@@ -104,6 +106,10 @@ class PredictionController {
         else {
             console.log("mam model")
         }
+        console.log(model)
+
+        var model_id = model[0].id
+        console.log(model_id)
 
         //kontrola, ci su importovane data z daneho roku
         //TODO
@@ -112,7 +118,7 @@ class PredictionController {
 
         var request = require('request')
 
-        let request_string = "http://localhost:5000/prediction?school_year=" + school_year + "&model=" + "5";   //zatial napevno
+        let request_string = "http://localhost:5000/prediction?school_year=" + school_year + "&model=" + model_id;   
 
         function request_prediction() {
             return new Promise(function(fulfill, reject) {
