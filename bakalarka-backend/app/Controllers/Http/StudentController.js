@@ -6,6 +6,25 @@ const Student = use('App/Models/Student')
 
 class StudentController {
 
+  async getDiplomas ({ response , request}) {
+    const queryParams = await request.all()
+
+    let ownDiplomas  = '';
+      
+    //diplomas = await Database.table('diplomas').where('AIS_ID', queryParams.aisId)
+
+    
+
+    ownDiplomas = await Database.raw(`
+      SELECT * from diplomas
+    `);
+
+    return response.send({
+      ownDiplomas
+    })
+  }
+
+
   /**
    * Endpoint, ktorý vráti všetkých študentov v systéme
    */
@@ -27,7 +46,7 @@ class StudentController {
     }
     
     allDataAdmissions = await Database.raw(`
-      SELECT "AIS_ID", "Priezvisko", "Meno", "OBDOBIE", "Štúdium", "Prijatie_na_program", "Exb_celk" from ais_admissions WHERE "Štúdium" = "áno"
+      SELECT "AIS_ID", "Priezvisko", "Meno", "OBDOBIE", "Prijatie_na_program", "Exb_celk" from ais_admissions WHERE "AIS_ID" IS NOT NULL 
     `);
 
 

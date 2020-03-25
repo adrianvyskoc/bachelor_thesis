@@ -1,0 +1,26 @@
+<div class="wrapper">
+    <p>
+      Študent <strong>{{ oznam }}</strong> nemá pridaný žiadny diplom. 
+    </p>
+</div>
+
+<div class="col-lg-12">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col1">Zameranie</th>
+        <th scope="col2">Súťaž</th>
+        <th scope="col3">Kolo</th>
+        <th scope="col4">Umiestnenie</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let ownDdiploma of ownDiplomas" >
+        <td>{{ ownDiploma["type"] }}</td>
+        <td>{{ ownDiploma["diploma_title"] }}</td>
+        <td>{{ ownDiploma["round"] }}</td>
+        <td>{{ ownDiploma["position"] }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

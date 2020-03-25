@@ -14,11 +14,10 @@ class DiplomaController {
                 .table('diplomas')
                 .insert({
                     AIS_ID: data.AIS_ID,
-                    
+                    type: data.type,
                     diploma_title: data.diploma_title,
-                    position: data.position
-
-                    
+                    round: data.round,
+                    position: data.position  
                 })
 
             return response.send(true);
@@ -27,6 +26,7 @@ class DiplomaController {
         }
     }
 
+    
 }
 
 module.exports = DiplomaController

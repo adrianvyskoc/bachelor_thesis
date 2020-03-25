@@ -12,11 +12,13 @@ export class DataService {
   private students = []
   private schools = []
   private grades = []
+  private diplomas = []
   private attendanceChanged = new Subject<{}>()
   private admissionsChanged = new Subject<{}>()
   private studentsChanged = new Subject<{}>()
   private schoolsChanged = new Subject<{}>()
   private gradesChanged = new Subject<{}>()
+  private diplomasChanged = new Subject<{}>()
 
   private admissionsOverviewChanged = new Subject<{}>()
   private admissionsBachelorChanged = new Subject<{}>()
@@ -28,6 +30,7 @@ export class DataService {
   loading = false
   showErrorMessage = false
   showSuccessMessage = false
+ 
 
   constructor(
     private http: HttpClient
@@ -51,10 +54,16 @@ export class DataService {
     return this.year
   }
 
-  getStudents(name = '') {
+  getStudents(name = '') { 
 
     return this.http.get(`http://localhost:3333/api/students?name=${name}`);
   }
+
+  getDiplomas() { 
+
+    return this.http.get(`http://localhost:3333/api/students`);
+  }
+  
 
   /**
    * Funkcia zodpovedná za získanie dát zo servera.
@@ -95,6 +104,12 @@ export class DataService {
               this.schools = data
               this.schoolsChanged.next([...this.schools])
               break
+
+            case 'Diplomas':
+              this.diplomas = data
+              this.diplomasChanged.next([...this.diplomas])
+              break
+            
           }
         }
       )

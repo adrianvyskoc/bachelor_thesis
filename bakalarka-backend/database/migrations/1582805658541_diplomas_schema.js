@@ -10,7 +10,9 @@ class DiplomasSchema extends Schema {
       table.timestamps()
 
       table.integer("AIS_ID").references("AIS_ID").inTable("ais_students")
+      table.string("type")
       table.string("diploma_title")
+      table.string("round")
       table.string("position")
     })
   }

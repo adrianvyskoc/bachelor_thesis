@@ -15,6 +15,12 @@ class Student extends Model {
         return 'ais_admissions'
     }
 
+
+    static get table2 () {
+        return 'diplomas'
+    }
+    
+
 }
 
 module.exports = Student

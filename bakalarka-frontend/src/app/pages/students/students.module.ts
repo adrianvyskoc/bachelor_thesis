@@ -10,11 +10,13 @@ import { DemoComponent } from './demo/demo.component';
 import { FormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DiplomaDialogComponent } from './diploma-dialog/diploma-dialog.component';
+import { ListDiplomasDialogComponent } from './listDiplomas-dialog/listDiplomas-dialog.component';
+
 
 
 @NgModule({
-  declarations: [StudentsComponent, StudentComponent, DemoComponent, DiplomaDialogComponent],
-  entryComponents: [DiplomaDialogComponent],
+  declarations: [StudentsComponent, StudentComponent, DemoComponent, DiplomaDialogComponent, ListDiplomasDialogComponent],
+  entryComponents: [DiplomaDialogComponent, ListDiplomasDialogComponent],
   imports: [
     MatExpansionModule,
     MatTabsModule,

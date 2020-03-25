@@ -1,6 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { DiplomaService } from '../diploma.service';
+import { FormGroup, FormControl } from '@angular/forms';
+
+
+
 
 @Component({
   selector: 'app-diploma-dialog',
@@ -9,9 +13,14 @@ import { DiplomaService } from '../diploma.service';
 })
 export class DiplomaDialogComponent implements OnInit {
 
+  type: string = ""
   diploma_title: string = ""
   position: string = ""
+  round: string = ""
   student
+  oznam = ""
+
+  filterForm: FormGroup
 
   constructor(
     private diplomaService: DiplomaService,
@@ -23,6 +32,10 @@ export class DiplomaDialogComponent implements OnInit {
 
   onAddDiploma() {
     console.log("dadadasdasd")
-    this.diplomaService.addDiploma(this.data["student"].AIS_ID, this.diploma_title, this.position);
+    this.diplomaService.addDiploma(this.data["student"].AIS_ID, this.type, this.diploma_title, this.round, this.position);
+    this.oznam = "Diplom bol pridaný."
   }
+
+  
+  
 }
