@@ -91,8 +91,8 @@ def hello():
 def prediction():
     rok = request.args.get('school_year')
     model = request.args.get('model')
-    app.logger.error('%s rok', rok)
-    app.logger.error('model: %s', model)
+    print('%s rok', rok)
+    print('model: %s', model)
     conn = psycopg2.connect(host="localhost", port = database_port, database=database_name, user=database_user, password=database_password)
     cur = conn.cursor()
 
@@ -108,7 +108,7 @@ def prediction():
     """, (rok,))
     conn.commit()
 
-    app.logger.error('%d', cur.rowcount)
+    print('%d', cur.rowcount)
     data = DataFrame(cur.fetchall())
     data.columns = [desc[0] for desc in cur.description]
 
@@ -126,10 +126,28 @@ def prediction():
     predicted = loaded_model.predict(final_data)
     meno_priezvisko["predikovana_hodnota"] = predicted
     rizikovi = meno_priezvisko[meno_priezvisko['predikovana_hodnota'] == 1]
+    rizikovi.drop(columns = ["predikovana_hodnota"], inplace=True)
+
+    final_json = "{\"list\":" + json.dumps(rizikovi.to_dict('records')) + "}"
+    print(final_json)
+    return final_json
+    
 
 
-
-    return json.dumps (rizikovi.to_json(orient='records'))
+    # return json.dumps ( {
+    #     'list': [
+    #         {
+    #             'AIS_ID': '1',
+    #             'Meno': 'jozo',
+    #             'Priezvisko': 'mrkva'
+    #         },
+    #         {
+    #             'AIS_ID': '2',
+    #             'Meno': 'jozo',
+    #             'Priezvisko': 'mrkva'
+    #         }
+    #     ]
+    # })
     
 
 if __name__ == "__main__":

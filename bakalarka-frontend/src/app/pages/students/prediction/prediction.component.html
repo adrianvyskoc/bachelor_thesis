@@ -24,7 +24,36 @@ color="primary"
 >
 SPUSTI PREDIKCIU
 </button>
+
+<!-- {{risky_students[0].AIS_ID}} -->
+
+<div *ngIf="risky_students">
+  <p>{{risky_students[0].AIS_ID}}</p>
 </div>
+
+<div *ngIf="risky_students">
+<table mat-table [dataSource]="risky_students" class="mat-elevation-z8">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef> id </th>
+    <td mat-cell *matCellDef="let element"> {{element.AIS_ID}} </td>
+  </ng-container>
+  <ng-container matColumnDef="meno">
+    <th mat-header-cell *matHeaderCellDef> meno </th>
+    <td mat-cell *matCellDef="let element"> {{element.Meno}} </td>
+  </ng-container>
+  <ng-container matColumnDef="priezvisko">
+    <th mat-header-cell *matHeaderCellDef> priezvisko </th>
+    <td mat-cell *matCellDef="let element"> {{element.Priezvisko}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayed_columns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayed_columns"></tr>
+</table>
+</div>
+
+</div>
+
+
 
 <div id="right">
 

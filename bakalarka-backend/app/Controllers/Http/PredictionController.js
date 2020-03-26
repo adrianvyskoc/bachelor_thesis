@@ -93,6 +93,8 @@ class PredictionController {
         //         .join('ais_subjects', 'subject_id', 'ais_subjects.id')
         //         .where('PREDMET', request_params.subject)
         //zle to joinuje, treba dva selecty alebo to nejak opravit
+        
+        
         const model = await Database
                     .from('prediction_models')
                     .where('subject_id', 93)
@@ -139,8 +141,7 @@ class PredictionController {
         request_prediction().then(
             function(result) {
                 console.log("uspech v then");
-                console.log(result)
-                
+                console.log(result)                
                 response.send(result);
             },
             function(error) {

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PredictionService } from './prediction.service';
 import { FormControl } from '@angular/forms';
+import { IRiskyStudent } from './IRiskyStudent';
+import { IResponse } from './IResponse';
 
 @Component({
   selector: 'app-prediction',
@@ -14,6 +16,9 @@ export class PredictionComponent implements OnInit {
   imported_models = ["Matematická analýza", "Vsetko"]
   text = 'Veronika'
   pozn = ""
+
+  displayed_columns: string [] = ['id', 'meno', 'priezvisko'];
+  public risky_students: IRiskyStudent[]
   
   constructor(
     private dataService: PredictionService
@@ -25,9 +30,9 @@ export class PredictionComponent implements OnInit {
 
   start_prediction() {
     this.dataService.predict(this.school_year.value, this.selected_subject)
-    .subscribe(data => {
-      this.pozn = "mam odpoved"
-    })
+    .subscribe(
+      (data: IResponse) => this.risky_students = data.list
+      )
 
     this.text = this.school_year.value
     //this.pozn = this.selected_subject.value

@@ -10,6 +10,7 @@ import { DemoComponent } from './demo/demo.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PredictionComponent } from './prediction/prediction.component';
 import { ModelImportComponent } from './prediction/model-import/model-import.component';
+import { HttpClientModule } from '@angular/common/http'
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { ModelImportComponent } from './prediction/model-import/model-import.com
     CommonModule,
     StudentsRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ]
 })
 export class StudentsModule { }
