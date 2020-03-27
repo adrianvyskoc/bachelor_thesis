@@ -134,5 +134,9 @@ Route
 
         Route.get('predictions/predict', 'PredictionController.predict')
 
+        Route.get('predictions/get_subjects', 'PredictionController.get_subjects')
+
+        Route.get('predictions/get_all_models', 'PredictionController.get_all_models')
+
     })
     .prefix('/api')

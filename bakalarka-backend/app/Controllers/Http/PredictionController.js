@@ -154,6 +154,49 @@ class PredictionController {
 
     }
 
+    /**
+     * Funkcia, ktorá vráti zoznam predmetov, pre ktoré sú dostupné modely
+     * @param {*} param0 
+     */
+    async get_subjects ( { response }) {
+        const subjects = await Database.raw(`
+        SELECT distinct "PREDMET"
+        FROM prediction_models
+        JOIN ais_subjects "as" on prediction_models.subject_id = "as".id`)
+
+        let rawSubjects = []
+        subjects.rows.map(e => {
+            rawSubjects.push(e["PREDMET"]);
+        })
+
+        const data = await Database
+            .from('prediction_models')
+            .where('type', 'komplex')
+
+        if (data.length) {
+            rawSubjects.push("Celková predikcia")
+        }
+
+        return response
+        .status(200)
+        .send(rawSubjects)
+            
+    }
+
+    async get_all_models({ response }) {
+        const data = await Database
+        .select('prediction_models.id', 'name', 'PREDMET')
+        .from('prediction_models')
+        .leftJoin('ais_subjects', 'subject_id', 'ais_subjects.id')
+
+        console.log(data)
+        
+        return response
+        .status(200)
+        .send(data)
+
+    }
+
 
        
 }

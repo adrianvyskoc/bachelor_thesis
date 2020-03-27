@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PredictionService } from 'src/app/pages/students/prediction/prediction.service'
 
 @Component({
   selector: 'app-model-import',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ModelImportComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private dataService: PredictionService
+  ) { }
+
+  available_models
 
   ngOnInit() {
+    this.dataService.get_all_models()
+    .subscribe (
+      (data) => this.available_models = data
+    )
   }
 
 }
