@@ -22,6 +22,18 @@ export class PredictionService {
     return this.http.get(`http://localhost:3333/api/predictions/get_all_models`)
   }
 
+  get_model(model_id) {
+    return this.http.get(`http://localhost:3333/api/predictions/get_model?model_id=${model_id}`)
+  }
+
+  get_imputers(model_id) {
+    return this.http.get(`http://localhost:3333/api/predictions/get_imputers?model_id=${model_id}`)
+  }
+
+  delete_model(model_id) {
+    return this.http.get(`http://localhost:3333/api/predictions/delete_model?model_id=${model_id}`)
+  }
+
   helloPython() {
    
     var data = this.http.get(`http://localhost:3333/api/predictions`)

@@ -55,6 +55,8 @@ export class PredictionComponent implements OnInit {
     this.data_source_risky_students.filter = filterValue.trim().toLowerCase();
   }
 
+ 
+
   communicatePython() {
     this.pozn = "som tu"
     this.dataService.helloPython()

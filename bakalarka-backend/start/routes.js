@@ -138,5 +138,12 @@ Route
 
         Route.get('predictions/get_all_models', 'PredictionController.get_all_models')
 
+        Route.get('predictions/get_model', 'PredictionController.get_model')
+
+        Route.get('predictions/get_imputers', 'PredictionController.get_imputers')
+
+        Route.get('predictions/delete_model', 'PredictionController.delete_model')
+
+
     })
     .prefix('/api')

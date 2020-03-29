@@ -197,6 +197,55 @@ class PredictionController {
 
     }
 
+    async get_model( { request, response }) {
+        const request_params = await request.all()
+
+        const model_id = request_params.model_id
+        
+        const data = await Database
+            .from('prediction_models')
+            .where('id', model_id)
+
+        return response.status(200).send(data)
+    }
+
+    async get_imputers( {  request, response }) {
+        const request_params = await request.all()
+
+        const model_id = request_params.model_id
+
+        const data = await Database
+            .from('imputers')
+            .where('id_model', model_id)
+
+        return response.status(200).send(data)
+    }
+
+    async delete_model( {request, response}) {
+        const request_params = await request.all()
+
+        const model_id = request_params.model_id
+
+        try{
+            await Database
+            .table('prediction_models')
+            .where('id', model_id)
+            .delete()
+
+            return response
+              .status(200)
+              .send(true)
+    
+          } catch(e) {
+            console.log('error', e);
+            return response
+              .status(500)
+              .send(e)
+          }
+
+    
+    }
+
 
        
 }

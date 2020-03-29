@@ -6,6 +6,8 @@
         <th scope="col1">Názov modelu</th>
         <th scope="col2">Predmet</th>
         <th scope="col3">Akcia</th>
+        <th scope="col4">Akcia2</th>
+        <th scope="col5">Akcia3</th>
        
       </tr>
     </thead>
@@ -17,10 +19,57 @@
         <td>
           <button (click)="open_model_details(model)" >Detail</button>
         </td>
+
+        <td>
+          <button (click)="download_model(model)" >Stiahnuť</button>
+        </td>
+
+        <td>
+          <button (click)="delete_model(model)" >Odstrániť</button>
+        </td>
         
       </tr>
     </tbody>
   </table>
+
+  <section class="file-input">
+    <input id="fileInput" name="file" type="file" class="ng-hide" #fileInput (change)="onFileSelected($event)">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="addModel()"
+      [disabled]="selectedImport == ''"
+    >
+      Vybrať súbor
+    </button>
+    <span>{{ fileName }}</span>
+  </section>
+
+  <div flex flex-column margin-top>
+    <div
+      *ngIf="this.showErrorDelete"
+      class="alert alert-danger mt-3"
+      role="alert"
+      flex align-items-center
+    >
+      <div class="icon-wrapper danger" margin-right>
+        <i class="far fa-times-circle"></i>
+      </div>
+      Model sa nepodarilo vymazať
+    </div>
+  
+    <div
+      *ngIf="this.showSuccessDelete"
+      class="alert alert-success mt-3" role="alert"
+      flex align-items-center
+    >
+      <div class="icon-wrapper success" margin-right>
+        <i class="far fa-check-circle"></i>
+      </div>
+      Model je vymazaný.
+    </div>
+
+
 
 
 
