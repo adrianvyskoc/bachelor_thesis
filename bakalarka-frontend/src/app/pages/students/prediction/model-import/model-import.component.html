@@ -32,6 +32,10 @@
     </tbody>
   </table>
 
+  
+
+  <h3>Import modelu</h3>
+
   <section class="file-input">
     <input id="fileInput" name="file" type="file" class="ng-hide" #fileInput (change)="onFileSelected($event)">
     <button
@@ -40,7 +44,7 @@
       (click)="addModel()"
       [disabled]="selectedImport == ''"
     >
-      Vybrať súbor
+      Importovať model
     </button>
     <span>{{ fileName }}</span>
   </section>

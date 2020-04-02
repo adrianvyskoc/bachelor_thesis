@@ -24,21 +24,7 @@ a v routes je >
 class PredictionController {
 
     async index ({ response , request }) {
-        /*
-        const zadane_meno = await request.all()
-        console.log("som v indexe2")
-        const odpoved = "z backendu" + zadane_meno.meno
-        return response.send( {
-            odpoved
-        })
-        v route je
-        Route.get('predictions', 'PredictionController.index')
-
-        a v http requeste potom http://localhost:3333/api/predictions?meno=magdik
-        */
-      //  const odpoved = "meeheh"
-        //return response.send({odpoved})
-
+      
         response.implicitEnd = false
 
         var request = require('request')
@@ -183,6 +169,10 @@ class PredictionController {
             
     }
 
+    /**
+     * Funkcia, ktorá vráti všetky modely spolu s predmetmi, pre ktoré sú vytvorené
+     * @param {*} param0 
+     */
     async get_all_models({ response }) {
         const data = await Database
         .select('prediction_models.id', 'name', 'PREDMET')
@@ -221,12 +211,21 @@ class PredictionController {
         return response.status(200).send(data)
     }
 
+    /**
+     * Funkcia, ktorá v databáze vymaže vybraný model a všetky imputery, ktoré k nemu patria
+     * @param {*} id modelu, ktorý má byť vymazaný
+     */
     async delete_model( {request, response}) {
         const request_params = await request.all()
 
         const model_id = request_params.model_id
 
         try{
+            await Database
+            .table('imputers')
+            .where('id_model', model_id)
+            .delete()
+            
             await Database
             .table('prediction_models')
             .where('id', model_id)
