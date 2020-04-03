@@ -142,7 +142,15 @@ Route
 
         Route.get('predictions/get_imputers', 'PredictionController.get_imputers')
 
+        Route.get('predictions/get_years', 'PredictionController.get_years')
+
+        Route.get('predictions/get_tables', 'PredictionController.get_tables')
+
+        Route.get('predictions/get_all_subjects', 'PredictionController.get_all_subjects')
+
         Route.get('predictions/delete_model', 'PredictionController.delete_model')
+
+        Route.post('prediction/create_model', 'PredictionController.create_model')
 
 
     })

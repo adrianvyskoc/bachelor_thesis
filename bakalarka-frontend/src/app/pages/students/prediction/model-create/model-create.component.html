@@ -1,0 +1,35 @@
+<h1>Vytvorenie nového modelu</h1>
+
+<form [formGroup] = "new_model" *ngIf = "this.complete_form" (ngSubmit)="onSubmit()">
+<!-- *ngIf = "this.complete_form"  -->
+<mat-form-field>
+  <mat-label>Názov modelu: </mat-label>
+  <input matInput type ="text" placeholder="" ([value])="selected_name"/>
+</mat-form-field>
+
+  <div formGroupName="years">
+    <div *ngFor="let year of available_years; let i = index">
+      <mat-checkbox [value] = "year" (change)="onChange_years($event)"> {{year}} </mat-checkbox>
+    </div>
+  </div>
+
+  <div formGroupName="tables">
+    <div *ngFor="let table of available_tables; let i = index">
+      <mat-checkbox [value] = "table" (change)="onChange_tables($event)"> {{table}} </mat-checkbox>
+    </div>
+  </div>
+
+  <mat-form-field>
+    <mat-label>Predmet: </mat-label>
+    <mat-select [(value)]="this.selected_subject" [formControl]="all_subjects">
+      <mat-option *ngFor="let subject of all_subjects" [value]="subject">
+        {{ subject }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>  
+
+  <button type="submit">Submit</button>
+
+
+
+</form>

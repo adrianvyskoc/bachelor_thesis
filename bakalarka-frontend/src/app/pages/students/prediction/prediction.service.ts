@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { IResponse } from './IResponse';
 
 @Injectable({
@@ -32,6 +32,17 @@ export class PredictionService {
 
   delete_model(model_id) {
     return this.http.get(`http://localhost:3333/api/predictions/delete_model?model_id=${model_id}`)
+  }
+
+  // get_available_years() {
+  //   return this.http.get(`http://localhost:3333/api/predictions/get_years`)
+  // }
+
+  get_data_for_create_form() {
+    let years = this.http.get(`http://localhost:3333/api/predictions/get_years`);
+    let tables = this.http.get(`http://localhost:3333/api/predictions/get_tables`);
+    let subjects = this.http.get(`http://localhost:3333/api/predictions/get_all_subjects`);
+    return forkJoin([years, tables, subjects])
   }
 
   helloPython() {

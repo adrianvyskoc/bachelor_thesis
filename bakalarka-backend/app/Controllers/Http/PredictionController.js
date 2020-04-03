@@ -245,6 +245,42 @@ class PredictionController {
     
     }
 
+    async get_years( { response}) {
+        let rawData = []
+        const data = await Database
+            .from('ais_grades')
+            .distinct('OBDOBIE')
+
+            //prevod z json na pole
+        data.map(e => {
+            rawData.push(e['OBDOBIE']);
+           })
+
+        return response.status(200).send(rawData)
+    }
+
+    /**
+     * Funkcia vráti všetky tabuľky v DB, ktoré obsahujú nejaké importované dáta
+     * @param {*} param0 
+     */
+    async get_tables( { response } ) {
+
+        let mock_data = ['ais_admissions', 'ineko_schools', 'ineko_total_ratings', 'ineko_percentils']
+        return response.status(200).send(mock_data)
+    }
+
+    async get_all_subjects ( { response }) {
+
+        let mock_data = ['Matematická analýza', 'Predmet 2', 'Predmet 3']
+        return response.status(200).send(mock_data)
+    }
+
+    async create_model ( { request, response }) {
+        const request_params = await request.all()
+        //skontrolovat ci uz nahodou neexistuje model s rovnakym nazvom
+
+        //ostatne data by mali byť okej, lebo sa zobrazujú len tie, ktoré sú dostupné v dB
+    }
 
        
 }
