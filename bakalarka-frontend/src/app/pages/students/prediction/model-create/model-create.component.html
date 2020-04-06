@@ -1,19 +1,20 @@
 <h1>Vytvorenie nového modelu</h1>
 
-<form [formGroup] = "new_model" *ngIf = "this.complete_form" (ngSubmit)="onSubmit()">
+<form (ngSubmit)="onSubmit()">
 <!-- *ngIf = "this.complete_form"  -->
-<mat-form-field>
+<mat-form-field >
   <mat-label>Názov modelu: </mat-label>
-  <input matInput type ="text" placeholder="" ([value])="selected_name"/>
+  <input matInput type ="text" placeholder="" [formControl] = "name_of_model" [(ngModel)] = "this.selected_name"/>
+  <mat-error *ngIf="name_of_model.invalid">Meno je povinný údaj</mat-error>
 </mat-form-field>
 
-  <div formGroupName="years">
+  <div [formGroup]="years">
     <div *ngFor="let year of available_years; let i = index">
       <mat-checkbox [value] = "year" (change)="onChange_years($event)"> {{year}} </mat-checkbox>
     </div>
   </div>
 
-  <div formGroupName="tables">
+  <div [formGroup]="tables">
     <div *ngFor="let table of available_tables; let i = index">
       <mat-checkbox [value] = "table" (change)="onChange_tables($event)"> {{table}} </mat-checkbox>
     </div>
@@ -21,7 +22,7 @@
 
   <mat-form-field>
     <mat-label>Predmet: </mat-label>
-    <mat-select [(value)]="this.selected_subject" [formControl]="all_subjects">
+    <mat-select [formControl]="subjects">
       <mat-option *ngFor="let subject of all_subjects" [value]="subject">
         {{ subject }}
       </mat-option>
@@ -33,3 +34,34 @@
 
 
 </form>
+
+<div flex flex-column margin-top>
+  <div
+    *ngIf="dataService.showErrorMessage"
+    class="alert alert-danger mt-3"
+    role="alert"
+    flex align-items-center
+  >
+    <div class="icon-wrapper danger" margin-right>
+      <i class="far fa-times-circle"></i>
+    </div>
+    Pri vytváraní modelu sa vyskytla chyba. {{dataService.ErrorMessage}}
+  </div>
+
+  <div
+    *ngIf="dataService.showSuccessMessage"
+    class="alert alert-success mt-3" role="alert"
+    flex align-items-center
+  >
+    <div class="icon-wrapper success" margin-right>
+      <i class="far fa-check-circle"></i>
+    </div>
+    Model bol úspešne vytvorený.
+  </div>
+
+  <div *ngIf="dataService.loading" flex flex-column align-items-center>
+    <h4>Prebieha vytváranie modelu, počkajte prosím.</h4>
+    <!-- <mat-spinner></mat-spinner> -->
+  </div>
+
+</div>

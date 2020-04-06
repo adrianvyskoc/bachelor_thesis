@@ -12,6 +12,7 @@ class PredictionModelsSchema extends Schema {
       table.string("type")
       table.string("used_years")
       table.string("used_tables")
+      table.decimal("size_of_training_set")
       table.decimal("accuracy")
       table.decimal("f1")
       table.decimal("precision")

@@ -5,7 +5,7 @@ import { StudentComponent } from './student/student.component';
 import { StudentsRoutingModule } from './students-routing.module';
 
 import {MatExpansionModule} from '@angular/material/expansion';
-import { MatTabsModule, MatButtonModule, MatTableModule, MatInputModule, MatSelectModule, MatPaginatorModule, MatCheckboxModule } from '@angular/material';
+import { MatTabsModule, MatButtonModule, MatTableModule, MatInputModule, MatSelectModule, MatPaginatorModule, MatCheckboxModule, MatFormFieldModule } from '@angular/material';
 import { DemoComponent } from './demo/demo.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PredictionComponent } from './prediction/prediction.component';
@@ -25,7 +25,8 @@ import { ModelCreateComponent } from './prediction/model-create/model-create.com
     MatSelectModule,
     MatPaginatorModule,
     MatCheckboxModule,
-
+    MatFormFieldModule,
+    
     CommonModule,
     StudentsRoutingModule,
     FormsModule,

@@ -265,21 +265,122 @@ class PredictionController {
      */
     async get_tables( { response } ) {
 
-        let mock_data = ['ais_admissions', 'ineko_schools', 'ineko_total_ratings', 'ineko_percentils']
-        return response.status(200).send(mock_data)
+        const possible_tables = ['ais_admissions', 'ineko_schools', 'ineko_total_ratings', 'ineko_percentils', 'ineko_individual_pointer_values', 'ineko_additional_data', 'ais_attendances']
+        let available_tables = []
+
+        console.log('zacinam get tables')
+
+        for(var i = 0; i<possible_tables.length; i++)
+        {
+            
+            let sql_string = 'select count(*) from ' + possible_tables[i]
+            
+            const count = await Database
+                .raw(sql_string)
+            
+            console.log(count)
+           // return count.rows[0].count
+           
+
+            if (count.rows[0].count > 0) {
+                available_tables.push(possible_tables[i])
+            }
+        }
+
+
+        
+        console.log(available_tables)
+        return response.status(200).send(available_tables)
     }
 
+    /**
+     * Funkcia vráti všetky predmety z prvého ročníka zimný semester.
+     * @param {*} param0 
+     */
     async get_all_subjects ( { response }) {
 
-        let mock_data = ['Matematická analýza', 'Predmet 2', 'Predmet 3']
+        let mock_data = ['Matematická analýza', 'Algebra a diskrétna matematika', 'Anglický jazyk', 'Procedurálne programovanie', 'Metódy inžinierskej práce']
         return response.status(200).send(mock_data)
     }
 
     async create_model ( { request, response }) {
         const request_params = await request.all()
         //skontrolovat ci uz nahodou neexistuje model s rovnakym nazvom
+        const models = await Database
+        .select('name')
+        .from('prediction_models')
 
+        let models_array = []
+        models.map(e => {
+            models_array.push(e['name']);
+           })
+
+
+        if (models_array.includes(request_params.name)) {
+            console.log("Zly nazov" + request_params.name)
+            return response.status(505).send("Zadaný názov modelu už existuje. Zadajte prosím iný.")
+        }
+          
         //ostatne data by mali byť okej, lebo sa zobrazujú len tie, ktoré sú dostupné v dB
+        
+        let model_type = ''
+        let id_subject = 0
+
+        if(request_params.subject == 'Všeobecný model') {
+            model_type = 'komplex'
+        }
+        else {
+            model_type = 'simple'
+            var id_subject_data = await Database
+            .select('id')
+            .from('ais_subjects')
+            .where('PREDMET', request_params.subject)
+    
+            id_subject = id_subject_data[0].id
+        }
+    
+
+        response.implicitEnd = false
+
+        var request = require('request')
+
+        let request_string = "http://localhost:5000/create_model?selected_tables=" + request_params.tables + "&years=" + request_params.years + "&subject_id=" + id_subject + "&name_of_model=" + request_params.name + "&type_of_model=" + model_type;    
+
+        function request_create_model() {
+            return new Promise(function(fulfill, reject) {
+                request.get(request_string, function(error, response, body) {
+                    if (!error) {
+                        fulfill(body);
+                        console.log("telo" + body)
+                    }
+                    else {
+                        reject(error, response)
+                    }
+                });
+            });
+        }
+
+        request_create_model().then(
+            function(result) {
+                
+                console.log(result)  
+                if(result != "OK") {
+                   return response.status(505).send("Chyba v Pythone 33")
+                    
+                }
+                response.send()              
+            },
+            function(error) {
+                console.log(error);
+                console.log()
+                if(error.code == 'ECONNREFUSED') {
+                    return response.status(505).send("Skontrolujte, či máte spustený Flask")
+                }
+                return response.status(505).send("Chyba v Pythone")
+            }
+        );
+
+        
     }
 
        

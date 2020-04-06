@@ -23,8 +23,8 @@ database_port = 5432
 #globalne premenne
 slovnik = [ ('ais_admissions', '', ', "Body_celkom", "Body", "Pohlavie"'),
            ('ineko_schools', 'FULL OUTER JOIN ineko_schools on ais_admissions.school_id = ineko_schools.kod_kodsko', ', okres, kraj, typ_skoly'),
-           ('ineko_total_ratings', 'FULL OUTER JOIN ineko_total_ratings on ineko_schools.kod_kodsko = ineko_total_ratings.school_id', ', celkove_hodnotenie, maturity, matematika, vyucovaci_jazyk, mimoriadne_vysledky, nezamestnanost_absolventov, "prijimanie_na_VS", pedagogicky_zbor, financne_zdroje'),
-           ('ineko_percentils', 'FULL OUTER JOIN ineko_percentils on ineko_schools.kod_kodsko = ineko_percentils.school_id', ', "Mat_SJ", "Mat_M", poc_ucitelov')
+           ('ineko_total_ratings', 'FULL OUTER JOIN ineko_total_ratings on ais_admissions.school_id = ineko_total_ratings.school_id', ', celkove_hodnotenie, maturity, matematika, vyucovaci_jazyk, mimoriadne_vysledky, nezamestnanost_absolventov, "prijimanie_na_VS", pedagogicky_zbor, financne_zdroje'),
+           ('ineko_percentils', 'FULL OUTER JOIN ineko_percentils on ais_admissions.school_id = ineko_percentils.school_id', ', "Mat_SJ", "Mat_M", poc_ucitelov')
           ]
 
 #POMOCNE FUNKCIE
@@ -199,8 +199,10 @@ def create_simple_model(pole_vybranych_tabuliek, predmet_id, obdobia, nazov_mode
     #ulozenie modelu do DB
     encoder_ulozenie = pickle.dumps(one_hot_encoder)
     model_ulozenie = pickle.dumps(strom)
+
+    pocet_trenovacich_zaznamov = len(y_train.index)
     
-    cur.execute('UPDATE prediction_models SET accuracy = %s, f1 = %s, precision = %s, recall = %s, model = %s, encoder=%s WHERE id = %s', (accuracy, f1, precision, recall, model_ulozenie, encoder_ulozenie, id_modelu))
+    cur.execute('UPDATE prediction_models SET size_of_training_set = %s, accuracy = %s, f1 = %s, precision = %s, recall = %s, model = %s, encoder=%s WHERE id = %s', (pocet_trenovacich_zaznamov, accuracy, f1, precision, recall, model_ulozenie, encoder_ulozenie, id_modelu))
     conn.commit()
     if (cur.rowcount == 1):
         return "OK"
@@ -284,7 +286,7 @@ def prediction():
     # })
     
 
-@app.route('/create_model', methods=['POST'])
+@app.route('/create_model', methods=['GET'])
 def create_model():
     selected_tables_string = request.args.get('selected_tables')
     years_string = request.args.get('years')

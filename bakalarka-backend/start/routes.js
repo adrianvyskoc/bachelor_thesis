@@ -150,7 +150,7 @@ Route
 
         Route.get('predictions/delete_model', 'PredictionController.delete_model')
 
-        Route.post('prediction/create_model', 'PredictionController.create_model')
+        Route.post('predictions/create_model', 'PredictionController.create_model')
 
 
     })

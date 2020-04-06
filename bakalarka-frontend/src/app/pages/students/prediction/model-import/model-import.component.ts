@@ -30,6 +30,17 @@ export class ModelImportComponent implements OnInit {
 
 
   ngOnInit() {
+    this.get_all_models()
+    if(this.dataService.subsVar==undefined) {
+      this.dataService.subsVar = this.dataService.invokeRefreshModelImport.subscribe(
+        (data) => {
+          this.get_all_models()
+        }
+      )
+    }
+  }
+
+  get_all_models() {
     this.dataService.get_all_models()
     .subscribe (
       (data) => this.available_models = data
