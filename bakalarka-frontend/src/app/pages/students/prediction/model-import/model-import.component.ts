@@ -27,6 +27,9 @@ export class ModelImportComponent implements OnInit {
   new_model
   new_imputers: any []
 
+  model_details
+  showDetails = false
+
 
 
   ngOnInit() {
@@ -99,6 +102,21 @@ export class ModelImportComponent implements OnInit {
           this.showErrorDelete = false
         }, 5000)
       } // error path
+    )
+  }
+
+  open_model_details(selected_model) {
+    let model_id = selected_model.id
+    this.dataService.get_model_details(model_id)
+    .subscribe ( 
+      (data) => {
+        this.model_details = data
+        this.showDetails = true
+        console.log(this.model_details)
+      },
+      error => {
+
+      }
     )
   }
 

@@ -43,6 +43,10 @@ export class PredictionService {
     return this.http.get(`http://localhost:3333/api/predictions/get_model?model_id=${model_id}`)
   }
 
+  get_model_details(model_id) {
+    return this.http.get(`http://localhost:3333/api/predictions/get_model_details?model_id=${model_id}`)
+  }
+
   get_imputers(model_id) {
     return this.http.get(`http://localhost:3333/api/predictions/get_imputers?model_id=${model_id}`)
   }

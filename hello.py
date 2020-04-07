@@ -136,6 +136,24 @@ def vytvorenie_sql_stringu_simple_model(pole_vybranych_tabuliek, obdobia):
     sql_query_string = sql_query_string + ')'
     return sql_query_string
 
+def zisti_obdobia_na_trenovanie(sql_string, predmet_id):
+    sql_1 = sql_string.replace('SELECT', 'SELECT ais_admissions."OBDOBIE", ')
+    sql_obdobia = 'SELECT distinct a."OBDOBIE" FROM (' + sql_1 + ") as a"
+    conn = psycopg2.connect(host="localhost", port = database_port, database=database_name, user=database_user, password=database_password)
+    cur = conn.cursor()
+    cur.execute(sql_obdobia, (predmet_id,))
+    
+    pole_obdobi = []
+    data = cur.fetchall()
+    for row in data:
+        pole_obdobi.append(row[0])
+    print(pole_obdobi)
+    conn.commit()
+    conn.close()
+    return ','.join(pole_obdobi)
+
+
+
 def create_simple_model(pole_vybranych_tabuliek, predmet_id, obdobia, nazov_modelu):
     sql_string = vytvorenie_sql_stringu_simple_model(pole_vybranych_tabuliek, obdobia)
     print(sql_string)
@@ -150,7 +168,7 @@ def create_simple_model(pole_vybranych_tabuliek, predmet_id, obdobia, nazov_mode
     data.columns = colnames
     
     #prve vlozenie modelu do dB
-    cur.execute('INSERT INTO prediction_models (id, name, subject_id, type, used_years, used_tables) VALUES (DEFAULT, %s, %s, %s, %s, %s)', (nazov_modelu, predmet_id, 'simple', ','.join(obdobia), ','.join(pole_vybranych_tabuliek)))
+    cur.execute('INSERT INTO prediction_models (id, name, subject_id, type, used_years, used_tables) VALUES (DEFAULT, %s, %s, %s, %s, %s)', (nazov_modelu, predmet_id, 'simple', zisti_obdobia_na_trenovanie(sql_string, predmet_id), ','.join(pole_vybranych_tabuliek)))
     conn.commit()
     if (cur.rowcount == 0):
         return "nepodarilo sa vlozit model do DB"

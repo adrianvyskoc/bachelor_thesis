@@ -1,58 +1,58 @@
-<h1>Vytvorenie nového modelu</h1>
+<h2 id="general-info" class="section-header" padding>Vytvorenie nového modelu</h2>
 
 <form (ngSubmit)="onSubmit()">
-<!-- *ngIf = "this.complete_form"  -->
-<mat-form-field >
-  <mat-label>Názov modelu: </mat-label>
-  <input matInput type ="text" placeholder="" [formControl] = "name_of_model" [(ngModel)] = "this.selected_name"/>
-  <mat-error *ngIf="name_of_model.invalid">Meno je povinný údaj</mat-error>
-</mat-form-field>
-
-  <div [formGroup]="years">
-    <div *ngFor="let year of available_years; let i = index">
-      <mat-checkbox [value] = "year" (change)="onChange_years($event)"> {{year}} </mat-checkbox>
-    </div>
-  </div>
-
-  <div [formGroup]="tables">
-    <div *ngFor="let table of available_tables; let i = index">
-      <mat-checkbox [value] = "table" (change)="onChange_tables($event)"> {{table}} </mat-checkbox>
-    </div>
-  </div>
-
+  <!-- *ngIf = "this.complete_form"  -->
   <mat-form-field>
-    <mat-label>Predmet: </mat-label>
-    <mat-select [formControl]="subjects">
-      <mat-option *ngFor="let subject of all_subjects" [value]="subject">
-        {{ subject }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>  
+    <mat-label>Názov modelu: </mat-label>
+    <input matInput type="text" placeholder="" [formControl]="name_of_model" [(ngModel)]="this.selected_name" />
+    <mat-error *ngIf="name_of_model.invalid">Meno je povinný údaj</mat-error>
+  </mat-form-field>
+  <div class="row">
+    <div class="col">
+      <div [formGroup]="years">
+        <p>Vyberte obdobia, na ktorých sa bude model testovať:</p>
 
-  <button type="submit">Submit</button>
-
-
+        <div *ngFor="let year of available_years; let i = index">
+          <mat-checkbox [value]="year" (change)="onChange_years($event)"> {{year}} </mat-checkbox>
+        </div>
+        <span class="text-muted">Zobrazujú sa školské roky, pre ktoré sú naiportované známky.</span>
+      </div>
+    </div>
+    <div class="col">
+      <div [formGroup]="tables">
+        <p>Vyberte dáta, ktoré sa majú použiť na trénovanie modelu:</p>
+        <div *ngFor="let table of available_tables; let i = index">
+          <mat-checkbox [value]="table" (change)="onChange_tables($event)"> {{table}} </mat-checkbox>
+        </div>
+        <span class="text-muted">Zobrazujú sa tabuľky, v ktorých sú naimportované dáta.</span>
+      </div>
+    </div>
+    <div class="col">
+      <p>Vyberte predmet, pre ktorý chcete vytvoriť model.</p>
+      <span class="text-muted">Ak chcete vytvoriť model celkovej predikcie, vyberte možnosť <strong>Celkový model</strong></span>
+      <mat-form-field>
+        <mat-label>Predmet: </mat-label>
+        <mat-select [formControl]="subjects">
+          <mat-option *ngFor="let subject of all_subjects" [value]="subject">
+            {{ subject }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <button mat-raised-button color="primary">Spustiť trénovanie modelu</button>
 
 </form>
 
 <div flex flex-column margin-top>
-  <div
-    *ngIf="dataService.showErrorMessage"
-    class="alert alert-danger mt-3"
-    role="alert"
-    flex align-items-center
-  >
+  <div *ngIf="dataService.showErrorMessage" class="alert alert-danger mt-3" role="alert" flex align-items-center>
     <div class="icon-wrapper danger" margin-right>
       <i class="far fa-times-circle"></i>
     </div>
     Pri vytváraní modelu sa vyskytla chyba. {{dataService.ErrorMessage}}
   </div>
 
-  <div
-    *ngIf="dataService.showSuccessMessage"
-    class="alert alert-success mt-3" role="alert"
-    flex align-items-center
-  >
+  <div *ngIf="dataService.showSuccessMessage" class="alert alert-success mt-3" role="alert" flex align-items-center>
     <div class="icon-wrapper success" margin-right>
       <i class="far fa-check-circle"></i>
     </div>
