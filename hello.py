@@ -29,40 +29,40 @@ slovnik = [ ('ais_admissions', '', ', "Body_celkom", "Body", "Pohlavie"'),
 
 #POMOCNE FUNKCIE
 
+# -------------SPOLOCNE----------------------------
 def odstranenie_None(val):
     if val is None:
         val = np.nan
     return val
 
-def prediction_predspracovanie(data):
+def zakladne_predspracovanie(data, pole_tabuliek):
     data = data.apply(pd.to_numeric, errors='ignore')
-    data.reset_index(inplace=True)
-    data["Body_navyse"] = data["Body_celkom"] - data["Body"]
-    data.drop(columns = "Body_celkom", inplace=True)
-    data["okres"] = data["okres"].apply(odstranenie_None)
-    data["kraj"] = data["kraj"].apply(odstranenie_None)
-    data["typ_skoly"] = data["typ_skoly"].apply(odstranenie_None)
-    data.drop(columns = ["index"], inplace=True)
+    if('ais_admissions' in pole_tabuliek):
+        data["Body_navyse"] = data["Body_celkom"] - data["Body"]
+        data.drop(columns = "Body_celkom", inplace=True)
+    for column in data.columns:
+        data[column] = data[column].apply(odstranenie_None)
     return data
 
-def prediction_imputers_transform(data, id_model, conn):
-    for column in data.columns:
-        cur = conn.cursor()
-        cur.execute('SELECT imputer FROM imputers WHERE column_name = %s AND id_model = %s', (column, id_model))
-        conn.commit()
-        if (cur.rowcount == 0):
-            print("nenasiel sa imputer")
-            return 0
-        loaded_imputer = pickle.loads(cur.fetchone()[0].tobytes())
-        data[column] = loaded_imputer.transform(data[[column]])
+# ----------------pre predikciu-------------------------
 
-def prediction_uprava_kategoricke_na_numericke(data, conn, id_modelu):
-    cur = conn.cursor()
+def predikcia_vytvorenie_sql_stringu(pouzite_tabulky):
+    sql_query_string = 'SELECT ais_admissions."AIS_ID"'
+    for tabulka in slovnik:
+        if (tabulka[0] in pouzite_tabulky):
+            sql_query_string = sql_query_string + tabulka[2]
+            
+    sql_query_string = sql_query_string + ' FROM ais_admissions '
+    for tabulka in slovnik:
+        if (tabulka[0] in pouzite_tabulky):
+            sql_query_string = sql_query_string + tabulka[1] + " "
+    sql_query_string = sql_query_string + ' WHERE ais_admissions."OBDOBIE" = %s AND (ais_admissions."Rozh" = 10 OR ais_admissions."Rozh" = 11) AND ais_admissions."Štúdium" = \'áno\' AND ais_admissions.stupen_studia = \'Bakalársky\' '
+    return sql_query_string
+
+def prediction_uprava_kategoricke_na_numericke(data, cur, id_modelu):
     cur.execute('SELECT encoder FROM prediction_models WHERE id = %s', (id_modelu,))
-    conn.commit()
     if (cur.rowcount == 0):
         print("Nepodarilo sa najst encoder")
-        return 1
     encoder = pickle.loads(cur.fetchone()[0].tobytes())
     
     kategoricke = data.select_dtypes(include = ['object'])
@@ -73,6 +73,7 @@ def prediction_uprava_kategoricke_na_numericke(data, conn, id_modelu):
     final_data = pd.merge(numericke, transf_data_df, left_index=True, right_index=True)
     return final_data
 
+# -------------pre vytvaranie modelu----------------------------
 def uprava_znamok_pre_binarnu_klas(vyber):
     vyber.loc[vyber["PREDMET_VYSLEDOK"] == 'A', ["PREDMET_VYSLEDOK"]] = 0.0
     vyber.loc[vyber["PREDMET_VYSLEDOK"] == 'B', ["PREDMET_VYSLEDOK"]] = 0.0
@@ -153,7 +154,6 @@ def zisti_obdobia_na_trenovanie(sql_string, predmet_id):
     return ','.join(pole_obdobi)
 
 
-
 def create_simple_model(pole_vybranych_tabuliek, predmet_id, obdobia, nazov_modelu):
     sql_string = vytvorenie_sql_stringu_simple_model(pole_vybranych_tabuliek, obdobia)
     print(sql_string)
@@ -178,12 +178,7 @@ def create_simple_model(pole_vybranych_tabuliek, predmet_id, obdobia, nazov_mode
     print(id_modelu)
     
     #zakladne_predspracovanie
-    data = data.apply(pd.to_numeric, errors='ignore')
-    if('ais_admissions' in pole_vybranych_tabuliek):
-        data["Body_navyse"] = data["Body_celkom"] - data["Body"]
-        data.drop(columns = "Body_celkom", inplace=True)
-    for column in data.columns:
-        data[column] = data[column].apply(odstranenie_None)
+    data = zakladne_predspracovanie(data, pole_vybranych_tabuliek)
     
     print(data.info())
 
@@ -244,64 +239,52 @@ def hello():
 @app.route('/prediction')
 def prediction():
     rok = request.args.get('school_year')
-    model = request.args.get('model')
+    id_model = request.args.get('model')
     print('%s rok', rok)
-    print('model: %s', model)
+    print('id_model: %s', id_model)
     conn = psycopg2.connect(host="localhost", port = database_port, database=database_name, user=database_user, password=database_password)
     cur = conn.cursor()
 
-    #vytiahnutie dat o studentoch z databazy
-    cur.execute("""
-        SELECT ais_admissions."AIS_ID", "Meno", "Priezvisko", "Body_celkom", "Body", "Pohlavie", okres, kraj, typ_skoly, celkove_hodnotenie, maturity, matematika, vyucovaci_jazyk, mimoriadne_vysledky, nezamestnanost_absolventov, "prijimanie_na_VS", pedagogicky_zbor, financne_zdroje, "Mat_SJ", "Mat_M", poc_ucitelov
-        FROM ais_admissions
-        LEFT JOIN ineko_schools i on ais_admissions.school_id = i.kod_kodsko
-        LEFT JOIN ineko_total_ratings on i.kod_kodsko = ineko_total_ratings.school_id
-        LEFT JOIN ineko_percentils ip on i.kod_kodsko = ip.school_id
-        WHERE ais_admissions."OBDOBIE" = %s AND (ais_admissions."Rozh" = 10 OR ais_admissions."Rozh" = 11) AND ais_admissions."Štúdium" = 'áno' AND ais_admissions.stupen_studia = 'Bakalársky'
-
-    """, (rok,))
-    conn.commit()
-
-    print('%d', cur.rowcount)
-    data = DataFrame(cur.fetchall())
-    data.columns = [desc[0] for desc in cur.description]
-
-    meno_priezvisko = data[["AIS_ID", "Meno", "Priezvisko"]]    #toto si z dat odlozim a na konci k tomu prilepim predikciu
-    data.drop(columns = ["AIS_ID", "Meno", "Priezvisko"], inplace=True)
-    data = prediction_predspracovanie(data)
-    prediction_imputers_transform(data, model, conn)        #pouzitie imputerov
-    final_data = prediction_uprava_kategoricke_na_numericke(data, conn, model)
-
-    cur.execute('SELECT model FROM prediction_models WHERE id = %s', (model,))
-    conn.commit()
-
-    loaded_model = pickle.loads(cur.fetchone()[0].tobytes())
-
-    predicted = loaded_model.predict(final_data)
-    meno_priezvisko["predikovana_hodnota"] = predicted
-    rizikovi = meno_priezvisko[meno_priezvisko['predikovana_hodnota'] == 1]
-    rizikovi.drop(columns = ["predikovana_hodnota"], inplace=True)
-
-    final_json = "{\"list\":" + json.dumps(rizikovi.to_dict('records')) + "}"
-    print(final_json)
-    return final_json
+    #vytiahnutie modelu z DB
+    cur.execute("SELECT * FROM prediction_models WHERE id = %s", (id_model,))
+    if (cur.rowcount == 0):
+        print("neexistujuci model")
     
+    model_z_databazy = DataFrame(cur.fetchall())
+    model_z_databazy.columns = [desc[0] for desc in cur.description]
+    pouzite_tabulky = model_z_databazy.used_tables[0].split(",")
 
+    #vytiahnutie dat o studentoch z DB
+    sql_string = predikcia_vytvorenie_sql_stringu(pouzite_tabulky)
+    cur.execute(sql_string, (rok,))
+    data_studenti = DataFrame(cur.fetchall())
+    data_studenti.columns = [desc[0] for desc in cur.description]
+    
+    #predspracovanie dat
+    data_studenti = zakladne_predspracovanie(data_studenti, pouzite_tabulky)
+    
+    #pouzitie imputerov
+    for column in data_studenti.columns:
+        if (column != 'AIS_ID'):
+            cur.execute('SELECT imputer FROM imputers WHERE column_name = %s AND id_model = %s', (column, id_model))
+            if (cur.rowcount == 0):
+                print("nenasiel sa imputer")
+            loaded_imputer = pickle.loads(cur.fetchone()[0].tobytes())
+            data_studenti[column] = loaded_imputer.transform(data_studenti[[column]])
 
-    # return json.dumps ( {
-    #     'list': [
-    #         {
-    #             'AIS_ID': '1',
-    #             'Meno': 'jozo',
-    #             'Priezvisko': 'mrkva'
-    #         },
-    #         {
-    #             'AIS_ID': '2',
-    #             'Meno': 'jozo',
-    #             'Priezvisko': 'mrkva'
-    #         }
-    #     ]
-    # })
+    ais_id = DataFrame(data_studenti.loc[:, "AIS_ID"])
+
+    data_studenti.drop(columns = ['AIS_ID'], inplace = True)
+    data_studenti_enc = prediction_uprava_kategoricke_na_numericke(data_studenti, cur, id_model)
+    
+    #predikcia
+    predikcny_model = pickle.loads(model_z_databazy.model[0].tobytes())
+    predicted = predikcny_model.predict(data_studenti_enc)
+    ais_id["predikovana_hodnota"] = predicted
+    rizikovi = ais_id[ais_id['predikovana_hodnota'] == 1]
+    rizikovi['AIS_ID'] = rizikovi["AIS_ID"].astype(str)
+    return ','.join(rizikovi['AIS_ID'].to_list())
+
     
 
 @app.route('/create_model', methods=['GET'])

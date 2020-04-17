@@ -2,6 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, Subscription } from 'rxjs';
 import { IResponse } from './IResponse';
+import { IRiskyStudent } from './IRiskyStudent';
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +28,9 @@ export class PredictionService {
 
   //http volania
 
-  predict(school_year, subject): Observable<IResponse> {
-    return this.http.get<IResponse>(`http://localhost:3333/api/predictions/predict?school_year=${school_year}&subject=${subject}`, {responseType: 'json'})
+  predict(school_year, model_id) {
+    return this.http.get<IRiskyStudent[]>(`http://localhost:3333/api/predictions/predict?school_year=${school_year}&model_id=${model_id}`)
+
   }
 
   get_subjects() {
@@ -37,6 +39,10 @@ export class PredictionService {
 
   get_all_models() {
     return this.http.get(`http://localhost:3333/api/predictions/get_all_models`)
+  }
+
+  get_models(subject) {
+    return this.http.get(`http://localhost:3333/api/predictions/get_models?subject=${subject}`)
   }
 
   get_model(model_id) {

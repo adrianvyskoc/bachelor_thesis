@@ -23,6 +23,8 @@ a v routes je >
 
 class PredictionController {
 
+
+
     async index({ response, request }) {
 
         response.implicitEnd = false
@@ -59,48 +61,62 @@ class PredictionController {
 
     }
 
+
     async predict({ response, request }) {
         const request_params = await request.all()
 
         let school_year = '';
-        let subject = '';
+        let model_id = 0;
 
         school_year = request_params.school_year
-        subject = request_params.subject
+        model_id = request_params.model_id
 
         console.log(school_year)
-        console.log(subject)
-
-        //kontrola, ci existuje taky predikcny model
-        //POZOR urobit samostatnu kontrolu pri model vsetko
-
-        // const model = await Database
-        //         .from('prediction_models')
-        //         .join('ais_subjects', 'subject_id', 'ais_subjects.id')
-        //         .where('PREDMET', request_params.subject)
-        //zle to joinuje, treba dva selecty alebo to nejak opravit
-
-
-        const model = await Database
-            .from('prediction_models')
-            .where('subject_id', 93)
-
-
-        if (model.length == 0) {
-            //nenasiel sa ziaden model pre dany predmet
-            console.log("nenasiel sa model");
-            response.send("chyba model");
-        }
-        else {
-            console.log("mam model")
-        }
-        console.log(model)
-
-        var model_id = model[0].id
         console.log(model_id)
 
+        //predikcny model musi existovat, lebo sa zobrazuju len modely, ktore su v DB
+
         //kontrola, ci su importovane data z daneho roku
-        //TODO
+        //ais_admission musi byt vzdy
+        // const ais_admissions = await Database.raw(`SELECT count(*)
+        //                                     FROM ais_admissions
+        //                                     WHERE "OBDOBIE" = '2018-2019' and stupen_studia = 'Bakalársky'`)
+
+        const count_admissions = await Database
+            .from('ais_admissions')
+            .where('OBDOBIE', '2018-2019')
+            .where('stupen_studia', 'Bakalársky')
+            .getCount()
+
+        if (count_admissions == 0) {
+            console.log("chyba ais_admissions")
+            return response
+                .status(500)
+                .send("Pre vybraný rok nie je importovaná tabuľka ais_admissions")
+        }
+
+        //kontrola vsetkych potrebnych tabuliek
+        const tables = await Database
+            .select('used_tables')
+            .from('prediction_models')
+            .where('id', model_id)
+
+        console.log(tables[0].used_tables)
+        let used_tables = tables[0].used_tables.split(',')
+
+        for (var i = 0; i < used_tables.length; i++) {
+            const table = used_tables[i]
+            let count = await Database
+                .from(table)
+                .getCount()
+
+            if (count == 0) {
+                console.log("chyba v " + table)
+                return response
+                    .status(500)
+                    .send("Pre vybraný rok nie je importovaná tabuľka" + table)
+            }
+        }
 
         response.implicitEnd = false
 
@@ -111,27 +127,39 @@ class PredictionController {
         function request_prediction() {
             return new Promise(function (fulfill, reject) {
                 request.get(request_string, function (error, response, body) {
-                    if (!error) {
+                    
+                    if (response.statusCode == 200) {
                         fulfill(body);
-                        console.log(body)
-                        console.log("uspech")
                     }
                     else {
                         reject(error, response)
-                        console.log("chyba")
                     }
                 });
             });
         }
 
         request_prediction().then(
-            function (result) {
+            async function (result) {
                 console.log("uspech v then");
-                console.log(result)
-                response.send(result);
+                const pole_ais_id = result.split(',')
+                const data = []
+
+                for (var i = 0; i < pole_ais_id.length; i++) {
+                    let student = await Database.select('AIS_ID', 'Meno', 'Priezvisko')
+                        .from('ais_admissions')
+                        .where('AIS_ID', pole_ais_id[i])
+                    console.log(student)
+        
+                    data.push(student[0])
+                }
+                
+                response.send(data);
             },
             function (error) {
                 console.log("error v then");
+                return response
+                    .status(500)
+                    .send("chyba v Pythone")
             }
         );
 
@@ -185,6 +213,30 @@ class PredictionController {
             .status(200)
             .send(data)
 
+    }
+
+    async get_models({ request, response }) {
+        const request_params = await request.all()
+        let subject = request_params.subject
+        let data
+
+        if (subject == 'Celková predikcia') {
+            data = await Database
+                .select('prediction_models.id', 'prediction_models.name')
+                .from('prediction_models')
+                .where('prediction_models.type', 'komplex')
+        }
+
+        else {
+            data = await Database
+                .select('prediction_models.id', 'prediction_models.name')
+                .from('prediction_models')
+                .join('ais_subjects', 'subject_id', 'ais_subjects.id')
+                .where('ais_subjects.PREDMET', request_params.subject)
+        }
+        return response
+            .status(200)
+            .send(data)
     }
 
     async get_model({ request, response }) {

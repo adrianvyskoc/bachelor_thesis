@@ -140,6 +140,8 @@ Route
 
         Route.get('predictions/get_model', 'PredictionController.get_model')
 
+        Route.get('predictions/get_models', 'PredictionController.get_models')
+
         Route.get('predictions/get_model_details', 'PredictionController.get_model_details')
 
         Route.get('predictions/get_imputers', 'PredictionController.get_imputers')

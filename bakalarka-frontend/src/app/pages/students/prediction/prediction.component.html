@@ -9,11 +9,24 @@
     <input matInput type ="text" placeholder="RRRR-RRRR" [formControl] = "school_year"/>
   </mat-form-field>
   <br>
+
   <mat-form-field>
     <mat-label>Predmet: </mat-label>
-    <mat-select [(value)]="selected_subject" [formControl]="selected_subject">
+    <mat-select name="subject" [(ngModel)]="selected_subject" (ngModelChange)="onFormChange()">
       <mat-option *ngFor="let subject of imported_subjects" [value]="subject">
         {{ subject }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>  
+
+  <p>vybrany predmet: {{ selected_subject }}</p>
+
+
+  <mat-form-field *ngIf="show_models">
+    <mat-label>Model: </mat-label>
+    <mat-select [(value)]="selected_model">
+      <mat-option *ngFor="let model of available_models" [value]="model">
+        {{ model.name }}
       </mat-option>
     </mat-select>
   </mat-form-field>  
