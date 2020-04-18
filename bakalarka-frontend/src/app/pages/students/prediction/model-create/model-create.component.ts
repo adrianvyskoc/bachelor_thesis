@@ -25,6 +25,8 @@ export class ModelCreateComponent implements OnInit {
   selected_subject = ''
   selected_name = ''
 
+  serverError = false
+
 
   constructor(private fb: FormBuilder, private dataService: PredictionService) {
 
@@ -59,6 +61,9 @@ export class ModelCreateComponent implements OnInit {
     
     
         this.complete_form = true
+      },
+      (error) => {
+        this.serverError = true
       }
     )
 

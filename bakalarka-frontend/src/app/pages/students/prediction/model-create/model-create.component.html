@@ -1,6 +1,14 @@
 <h2 id="general-info" class="section-header" padding>Vytvorenie nového modelu</h2>
 
-<form (ngSubmit)="onSubmit()">
+<div *ngIf="serverError" class="alert alert-danger mt-3" role="alert" flex align-items-center>
+  <div class="icon-wrapper danger" margin-right>
+    <i class="far fa-times-circle"></i>
+  </div>
+  Nepodarilo sa pripojiť k serveru.
+</div>
+
+
+<form (ngSubmit)="onSubmit()" *ngIf = "!serverError">
   <!-- *ngIf = "this.complete_form"  -->
   <mat-form-field>
     <mat-label>Názov modelu: </mat-label>

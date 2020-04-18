@@ -84,7 +84,7 @@ class PredictionController {
 
         const count_admissions = await Database
             .from('ais_admissions')
-            .where('OBDOBIE', '2018-2019')
+            .where('OBDOBIE', school_year)
             .where('stupen_studia', 'Bakalársky')
             .getCount()
 
@@ -128,7 +128,7 @@ class PredictionController {
             return new Promise(function (fulfill, reject) {
                 request.get(request_string, function (error, response, body) {
                     
-                    if (response.statusCode == 200) {
+                    if (!error && response.statusCode == 200) {
                         fulfill(body);
                     }
                     else {
@@ -145,10 +145,10 @@ class PredictionController {
                 const data = []
 
                 for (var i = 0; i < pole_ais_id.length; i++) {
-                    let student = await Database.select('AIS_ID', 'Meno', 'Priezvisko')
+                    let student = await Database.select('AIS_ID', 'Meno', 'Priezvisko', 'Body', 'Body_celkom', 'Prijatie_na_program_1', 'Stredná_škola_1', 'Stredná_škola_adresa', 'Trv_pobyt_obec')
                         .from('ais_admissions')
                         .where('AIS_ID', pole_ais_id[i])
-                    console.log(student)
+                    
         
                     data.push(student[0])
                 }
@@ -157,9 +157,10 @@ class PredictionController {
             },
             function (error) {
                 console.log("error v then");
-                return response
-                    .status(500)
-                    .send("chyba v Pythone")
+                if (error.code == 'ECONNREFUSED') {
+                    return response.status(505).send("Skontrolujte, či máte spustený Flask")
+                }
+                return response.status(505).send("Chyba v Pythone")
             }
         );
 

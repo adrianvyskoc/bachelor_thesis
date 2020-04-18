@@ -30,6 +30,8 @@ export class ModelImportComponent implements OnInit {
   model_details
   showDetails = false
 
+  serverError = false
+
 
 
   ngOnInit() {
@@ -38,6 +40,9 @@ export class ModelImportComponent implements OnInit {
       this.dataService.subsVar = this.dataService.invokeRefreshModelImport.subscribe(
         (data) => {
           this.get_all_models()
+        },
+        (error) => {
+          this.serverError = true
         }
       )
     }
@@ -46,7 +51,8 @@ export class ModelImportComponent implements OnInit {
   get_all_models() {
     this.dataService.get_all_models()
     .subscribe (
-      (data) => this.available_models = data
+      (data) => this.available_models = data,
+      (error) => this.serverError = true
     )
   }
 

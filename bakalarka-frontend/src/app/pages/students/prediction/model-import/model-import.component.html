@@ -1,6 +1,13 @@
 <h2 id="general-info" class="section-header" padding>Dostupné modely</h2>
 
-<div class="row">
+<div *ngIf="serverError" class="alert alert-danger mt-3" role="alert" flex align-items-center>
+  <div class="icon-wrapper danger" margin-right>
+    <i class="far fa-times-circle"></i>
+  </div>
+  Nepodarilo sa načítať dostupné modely.
+</div>
+
+<div class="row" *ngIf="!serverError">
   <div class="col-lg-6">
     <table class="table">
       <thead>

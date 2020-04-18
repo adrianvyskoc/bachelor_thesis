@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PredictionService } from './prediction.service';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { IRiskyStudent } from './IRiskyStudent';
-import { IResponse } from './IResponse';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
+import { ExportService } from 'src/app/plugins/utils/export.service';
 
 @Component({
   selector: 'app-prediction',
@@ -12,12 +12,19 @@ import { MatTableDataSource, MatPaginator } from '@angular/material';
 })
 export class PredictionComponent implements OnInit {
 
-  school_year = new FormControl('');
+  public myreg = /[0-9]{4}-[0-9]{4}/
+  school_year: FormControl
   selected_subject = ''
   imported_subjects: any = []
   selected_model
   available_models: any = []
   show_models = false
+  loading = false
+  showErrorMessage = false
+  showSuccessMessage = false
+
+  ErrorMessage = ''
+
 
 
   displayed_columns: string [] = ['id', 'meno', 'priezvisko'];
@@ -29,10 +36,12 @@ export class PredictionComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   
   constructor(
-    private dataService: PredictionService
+    private dataService: PredictionService,
+    private exportService: ExportService
   ) { }
 
   ngOnInit() {
+    this.school_year = new FormControl('');
     this.dataService.get_subjects()
     .subscribe (
       (data) => this.imported_subjects = data
@@ -58,17 +67,39 @@ export class PredictionComponent implements OnInit {
     }
   }
 
+  // markTouched() {
+  //   this.school_year.markAsTouched();
+  //   this.school_year.updateValueAndValidity();
+  // }
+
+  // getErrorMessage() {
+  //   return this.school_year.hasError('email') ? 'Not a valid url' :
+  //       '';
+  // }
+
   start_prediction() {
+    this.risky_students = null
     this.dataService.predict(this.school_year.value, this.selected_model.id)
     .subscribe( 
       (data) => {
         this.risky_students = data
         this.data_source_risky_students = new MatTableDataSource<IRiskyStudent>(this.risky_students)
         this.data_source_risky_students.paginator = this.paginator;
+      },
+      (error) => {
+        console.error(error)
+        this.ErrorMessage = error.error
+        
+       
+        this.loading = false
+        this.showErrorMessage = true
       }
     )
   }
 
+  export_data_excel() {
+    this.exportService.exportArrayOfObjectToExcel(this.risky_students, 'export')
+  }
   
 
   applyFilter(event: Event) {
