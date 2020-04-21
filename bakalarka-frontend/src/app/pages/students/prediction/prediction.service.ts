@@ -19,12 +19,17 @@ export class PredictionService {
 
   ErrorMessage = ''
 
-  //refresh dostupnych modelov
+  //refresh dostupnych modelov 
   invokeRefreshModelImport = new EventEmitter();    
   subsVar: Subscription;
 
+   //refresh dostupnych modelov v spustani predikcie
+   invokeRefreshModelPrediction = new EventEmitter();    
+   subsVarPrediction: Subscription;
+
   RefreshAvailableModels() {
     this.invokeRefreshModelImport.emit()
+    this.invokeRefreshModelPrediction.emit()
   }
 
 

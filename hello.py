@@ -84,7 +84,7 @@ def uprava_znamok_pre_binarnu_klas(vyber):
     vyber.loc[vyber["PREDMET_VYSLEDOK"] == 'FN', ["PREDMET_VYSLEDOK"]] = 1.0
     return vyber
 
-def fit_transform_save_imputers(data, model_id, conn):
+def fit_transform_save_imputers(data, model_id, cur):
     counter = 0
     for column in data.columns:
         if (data[column].dtype == np.float64):
@@ -96,11 +96,11 @@ def fit_transform_save_imputers(data, model_id, conn):
             imp.fit(data[[column]])
             data[column] = imp.transform(data[[column]])
         imp_ulozenie = pickle.dumps(imp)
-        cur = conn.cursor()
+        #cur = conn.cursor()
         cur.execute('INSERT INTO imputers VALUES (DEFAULT, %s, %s, %s)', (model_id, column, imp_ulozenie))
         if (cur.rowcount == 1):
             counter += 1
-        conn.commit()
+        #conn.commit()
     if (counter == len(data.columns)):
         return True
     else:
@@ -154,27 +154,27 @@ def zisti_obdobia_na_trenovanie(sql_string, predmet_id):
     return ','.join(pole_obdobi)
 
 
-def create_simple_model(pole_vybranych_tabuliek, predmet_id, obdobia, nazov_modelu):
+def create_simple_model(pole_vybranych_tabuliek, predmet_id, obdobia, nazov_modelu, cur):
     sql_string = vytvorenie_sql_stringu_simple_model(pole_vybranych_tabuliek, obdobia)
     print(sql_string)
     #pripojenie na databazu
-    conn = psycopg2.connect(host="localhost", port = database_port, database=database_name, user=database_user, password=database_password)
-    cur = conn.cursor()
+    
     #vytiahnutie trenovacich dat
     cur.execute(sql_string, (predmet_id, ))
-    conn.commit()
+    
     data = DataFrame(cur.fetchall())
     colnames = [desc[0] for desc in cur.description]
     data.columns = colnames
     
     #prve vlozenie modelu do dB
     cur.execute('INSERT INTO prediction_models (id, name, subject_id, type, used_years, used_tables) VALUES (DEFAULT, %s, %s, %s, %s, %s)', (nazov_modelu, predmet_id, 'simple', zisti_obdobia_na_trenovanie(sql_string, predmet_id), ','.join(pole_vybranych_tabuliek)))
-    conn.commit()
+    #conn.commit()
     if (cur.rowcount == 0):
-        return "nepodarilo sa vlozit model do DB"
+        raise ValueError
     cur.execute('SELECT id FROM prediction_models WHERE name = %s', (nazov_modelu,))
-    conn.commit()
+    #conn.commit()
     id_modelu = cur.fetchone()[0]
+    print("Id modelu")
     print(id_modelu)
     
     #zakladne_predspracovanie
@@ -183,8 +183,9 @@ def create_simple_model(pole_vybranych_tabuliek, predmet_id, obdobia, nazov_mode
     print(data.info())
 
     #imputery
-    if (fit_transform_save_imputers(data, id_modelu, conn) == False):
-        return "chyba v imputeroch"
+    if (fit_transform_save_imputers(data, id_modelu, cur) == False):
+        print("IMPUTERY")
+        raise ValueError
     
     #encoder
     final_data, one_hot_encoder = create_model_categoric_to_num(data)
@@ -214,15 +215,30 @@ def create_simple_model(pole_vybranych_tabuliek, predmet_id, obdobia, nazov_mode
     model_ulozenie = pickle.dumps(strom)
 
     pocet_trenovacich_zaznamov = len(y_train.index)
+   
+    dolezitost = pd.DataFrame(strom.feature_importances_)
+    dolezitost.columns = ["col1"]
+    dolezitost["stlpec"] = X_train.columns
+
+    dolezitost.sort_values(by=['col1'], ascending=False, inplace=True)
+    dolezitost.reset_index(inplace=True)
+    dolezitost.drop(columns = ["index"], inplace = True)
     
-    cur.execute('UPDATE prediction_models SET size_of_training_set = %s, accuracy = %s, f1 = %s, precision = %s, recall = %s, model = %s, encoder=%s WHERE id = %s', (pocet_trenovacich_zaznamov, accuracy, f1, precision, recall, model_ulozenie, encoder_ulozenie, id_modelu))
-    conn.commit()
+    print(dolezitost)
+    print("DOLEZITOST DLZKA")
+    print(dolezitost.size)
+
+
+    cur.execute('UPDATE prediction_models SET size_of_training_set = %s, best_feature_1_name = %s, best_feature_1_importance = %s, best_feature_2_name = %s, best_feature_2_importance = %s, best_feature_3_name = %s, best_feature_3_importance = %s, best_feature_4_name = %s, best_feature_4_importance = %s, best_feature_5_name = %s, best_feature_5_importance = %s, accuracy = %s, f1 = %s, precision = %s, recall = %s, model = %s, encoder=%s WHERE id = %s', (pocet_trenovacich_zaznamov, dolezitost["stlpec"][0] if dolezitost.size >= 2 else "DEFAULT", dolezitost["col1"][0] if dolezitost.size >= 2 else 0,  dolezitost["stlpec"][1] if dolezitost.size >= 4 else "DEFAULT", dolezitost["col1"][1] if dolezitost.size >= 4 else 0, dolezitost["stlpec"][2] if dolezitost.size >= 6 else "DEFAULT", dolezitost["col1"][2] if dolezitost.size >= 6 else 0, dolezitost["stlpec"][3] if dolezitost.size >= 8 else "DEFAULT", dolezitost["col1"][3] if dolezitost.size >= 8 else 0, dolezitost["stlpec"][4] if dolezitost.size >= 10 else "DEFAULT", dolezitost["col1"][4] if dolezitost.size >= 10 else 0, accuracy, f1, precision, recall, model_ulozenie, encoder_ulozenie, id_modelu))
+
+    #conn.commit()
     if (cur.rowcount == 1):
+        print("Model vytvoreny")
         return "OK"
     else:
-        return "dajaka chyba"
+        print("nepodarilo sa updatnut")
+        raise ValueError
     
-    conn.close()
 
 
 app = Flask(__name__)
@@ -295,14 +311,34 @@ def create_model():
     name_of_model = request.args.get('name_of_model')
     type_of_model = request.args.get('type_of_model')    
 
+    #nadviazanie spojenia s databazou
+    conn = psycopg2.connect(host="localhost", port = database_port, database=database_name, user=database_user, password=database_password)
+    cur = conn.cursor()
+
+    vysledok = ''
     #rozdelenie na simple a komplex
-    if (type_of_model == 'simple'):
-        selected_tables = selected_tables_string.split(',')
-        years = years_string.split(',')
-        print(selected_tables)
-        print(years)
-        
-        return (create_simple_model(selected_tables, subject_id, years, name_of_model))
+    try:
+        if (type_of_model == 'simple'):
+            selected_tables = selected_tables_string.split(',')
+            years = years_string.split(',')
+            print(selected_tables)
+            print(years)
+            vysledok = create_simple_model(selected_tables, subject_id, years, name_of_model, cur)
+            if (vysledok == 'OK'):
+                conn.commit()
+        elif (type_of_model == 'komplex'):
+            return "komplex"
+    except Exception as e:
+        conn.rollback()
+        print(e)
+        vysledok = "chyba v pythone"
+    finally:
+        conn.close()
+        return vysledok
+
+   
+
+
 
 if __name__ == "__main__":
     app.run()

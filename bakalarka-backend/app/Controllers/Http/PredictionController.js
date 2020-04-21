@@ -257,7 +257,7 @@ class PredictionController {
 
         const model_id = request_params.model_id
         const data = await Database
-            .select('prediction_models.id', 'name', 'type', 'PREDMET', 'used_years', 'used_tables', 'size_of_training_set', 'accuracy', 'f1', 'precision', 'recall')
+            .select('prediction_models.id', 'name', 'type', 'PREDMET', 'used_years', 'used_tables', 'size_of_training_set', 'accuracy', 'f1', 'precision', 'recall', 'best_feature_1_name', 'best_feature_1_importance',  'best_feature_2_name', 'best_feature_2_importance',  'best_feature_3_name', 'best_feature_3_importance',  'best_feature_4_name', 'best_feature_4_importance',  'best_feature_5_name', 'best_feature_5_importance')
             .from('prediction_models')
             .leftJoin('ais_subjects', 'subject_id', 'ais_subjects.id')
             .where('prediction_models.id', model_id)
@@ -368,7 +368,7 @@ class PredictionController {
      */
     async get_all_subjects({ response }) {
 
-        let mock_data = ['Matematická analýza', 'Algebra a diskrétna matematika', 'Anglický jazyk', 'Procedurálne programovanie', 'Metódy inžinierskej práce']
+        let mock_data = ['Matematická analýza', 'Algebra a diskrétna matematika', 'Procedurálne programovanie', 'Metódy inžinierskej práce']
         return response.status(200).send(mock_data)
     }
 
@@ -431,8 +431,6 @@ class PredictionController {
 
         request_create_model().then(
             function (result) {
-
-                console.log(result)
                 if (result != "OK") {
                     return response.status(505).send("Chyba v Pythone 33")
 

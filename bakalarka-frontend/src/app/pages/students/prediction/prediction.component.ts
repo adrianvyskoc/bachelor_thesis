@@ -47,6 +47,20 @@ export class PredictionComponent implements OnInit {
       (data) => this.imported_subjects = data
     )
 
+    if(this.dataService.subsVarPrediction==undefined) {
+      this.dataService.subsVarPrediction = this.dataService.invokeRefreshModelPrediction.subscribe(
+        (data) => {
+          this.dataService.get_subjects()
+            .subscribe (
+              (data) => this.imported_subjects = data
+    )
+        },
+        (error) => {
+          
+        }
+      )
+    }
+
     
   }
 
@@ -78,6 +92,7 @@ export class PredictionComponent implements OnInit {
   // }
 
   start_prediction() {
+    this.showErrorMessage = false
     this.risky_students = null
     this.dataService.predict(this.school_year.value, this.selected_model.id)
     .subscribe( 

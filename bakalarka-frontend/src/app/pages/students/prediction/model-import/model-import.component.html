@@ -94,7 +94,7 @@
           <td>{{model_details.size_of_training_set}}</td>
         </tr>
         <tr>
-          <th>presnosť (accuracy) </th>
+          <th>správnosť (accuracy) </th>
           <td>{{model_details.accuracy}}</td>
         </tr>
         <tr>
@@ -112,6 +112,15 @@
         <tr>
           <th>použité tabuľky </th>
           <td>{{model_details.used_tables}}</td>
+        </tr>
+        <tr>
+          <th>najdôležitejšie atribúty</th>
+          <td>{{model_details.best_feature_1_name}}: {{model_details.best_feature_1_importance}} <br>
+            {{model_details.best_feature_2_name}}: {{model_details.best_feature_2_importance}} <br>
+            {{model_details.best_feature_3_name}}: {{model_details.best_feature_3_importance}} <br>
+            {{model_details.best_feature_4_name}}: {{model_details.best_feature_4_importance}} <br>
+            {{model_details.best_feature_5_name}}: {{model_details.best_feature_5_importance}} <br>
+          </td>
         </tr>
       </tbody>
     </table>
