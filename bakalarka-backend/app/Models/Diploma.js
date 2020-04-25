@@ -7,6 +7,10 @@ class Diploma extends Model {
     static get table () {
         return 'diplomas'
     }
+
+    static get table () {
+        return 'list_diplomas'
+    }
 }
 
 module.exports = Diploma

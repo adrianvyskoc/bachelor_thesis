@@ -24,6 +24,7 @@
           <mat-radio-button value="StateExamsScenariosIng">Štátnice ING - YonBan</mat-radio-button>
           <mat-radio-button value="StudentsDataPt1">Dáta o študentoch - časť 1</mat-radio-button>
           <mat-radio-button value="StudentsDataPt2">Dáta o študentoch - časť 2</mat-radio-button>
+          <mat-radio-button value="Diploma">Diplomy</mat-radio-button>
         </mat-radio-group>
       </div>
 
@@ -48,7 +49,7 @@
     <mat-divider></mat-divider>
   </ng-template>
 
-  <ng-template [ngIf]="selectedImport && selectedImport != 'Schools'">
+  <ng-template [ngIf]="selectedImport && (selectedImport != 'Schools' && selectedImport != 'Diploma')" >
     <mat-form-field>
       <input matInput placeholder="Školský rok" [(ngModel)]="schoolYear" (ngModelChange)="onFormChange()">
     </mat-form-field>

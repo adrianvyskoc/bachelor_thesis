@@ -19,6 +19,10 @@ class Student extends Model {
     static get table2 () {
         return 'diplomas'
     }
+
+    static get table3 () {
+        return 'list_diplomas'
+    }
     
 
 }

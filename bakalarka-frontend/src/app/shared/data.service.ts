@@ -26,6 +26,7 @@ export class DataService {
   private admissionsYearComparisonChanged = new Subject<{}>()
 
   private year = new BehaviorSubject('all')
+  private program = new BehaviorSubject('all')
 
   loading = false
   showErrorMessage = false
@@ -48,22 +49,37 @@ export class DataService {
   }
 
   /**
+   * Funkcia zodpovedná za nastavenie študijného programu, s ktorým chceme pracovať (dáta budú z tohto roku)
+   * @param program - študijný program, ktorý chceme nastaviť
+   */
+  setProgram(program) {
+    this.program.next(program)
+  }
+
+  /**
    * Funkcia, ktorá vracia daný školský rok
    */
   getYear() {
     return this.year
   }
 
-  getStudents(name = '') { 
-
-    return this.http.get(`http://localhost:3333/api/students?name=${name}`);
-  }
-
-  getDiplomas() { 
-
-    return this.http.get(`http://localhost:3333/api/students`);
-  }
   
+  
+  getStudents() { 
+    return this.http.get(`http://localhost:3333/api/students?year=${this.year.value}&program=${this.program.value}`);
+  }
+
+  getStudentsName(name) { 
+    return this.http.get(`http://localhost:3333/api/students/${name}?year=${this.year.value}&program=${this.program.value}`);
+  }
+
+  getDiplomaData() { 
+    return this.http.get(`http://localhost:3333/api/students/diploma`);
+  }
+
+  getDiplomas(id) { 
+    return this.http.get(`http://localhost:3333/api/students/${id}/diploma`);
+  }
 
   /**
    * Funkcia zodpovedná za získanie dát zo servera.

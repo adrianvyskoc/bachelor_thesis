@@ -1,9 +1,10 @@
 .wrapper {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     margin-bottom: 15px;
+    width: 1500px
 
-    select {
-        width: 300px;
+    table {
+        width: 600px;
     }
 }

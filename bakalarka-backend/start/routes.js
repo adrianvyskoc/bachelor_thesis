@@ -28,6 +28,11 @@ Route
         // api endpoints
 
         Route.get('students', 'StudentController.getStudents')
+        Route.get('students/:id/diploma', 'StudentController.getDiplomas')
+
+        Route.get('students/diploma', 'StudentController.getDiplomaData')
+        
+        Route.get('students/:name', 'StudentController.getStudentsName')
 
         Route.get('getGrades/:year', 'GetController.getGrades')
         Route.get('getSchools', 'GetController.getSchools')
@@ -132,6 +137,15 @@ Route
 
         // diplomas
         Route.post("students/diploma/add", "DiplomaController.addDiploma")
+
+        
+        Route.get("students/diploma/skuska", "DiplomaController.getSkuska")
+
+
+
+
+
+        Route.post("students/diploma/addExtra", "DiplomaController.addDiplomaExtra")
 
     })
     .prefix('/api')

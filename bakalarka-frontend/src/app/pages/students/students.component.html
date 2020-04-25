@@ -8,36 +8,52 @@
 
 
   <div class="row">
-    <div class="col-sm-3">
+    <div class="col-sm-2">
       Rok prijatia
     </div>
-    <div class="col-sm-4">
-
+    <div class="col-sm-3">
       <select [(ngModel)]="selectedYear" class="custom-select" name="year" (change)="onYearSelect()">
         <option value="all">Všetky roky</option>
-        <option
-          *ngFor="let year of years"
-          [value]="year.OBDOBIE"
-        >
-          {{ year.OBDOBIE }}
-        </option>
+        <option *ngFor="let year of years" [value]="year.OBDOBIE">{{ year.OBDOBIE }}</option>
       </select>
     </div>
-
-    <div class="col-sm-6">
-      <input [(ngModel)]="name" type="text" class="form-control" placeholder="Enter name"> 
-    </div>
-
-    <div class="col-sm-12">
-      <button (click)="onClick()">Vyhľadať študenta</button>
-    </div>
-  
   </div>
 
+  <br class="my-4">
+
+  <div class="row">
+    <div class="col-sm-2">
+      Študijný program
+    </div>
+    <div class="col-sm-3">
+      <select [(ngModel)]="selectedProgram" class="custom-select" name="program" (change)="onProgramSelect()">
+        <option value="all">Všetky št. programy</option>
+        <option *ngFor="let program of programs" [value]="program.Prijatie_na_program">{{ program.Prijatie_na_program }}</option>
+      </select>
+    </div>
+  </div>
+
+  <br class="my-4">
+
+  <div class="row">
+    <div class="col-sm-2">
+      <input [(ngModel)]="name" type="text" class="form-control" placeholder="Zadaj meno">
+    </div>
+  
+    <div class="col-sm-4">
+      <button (click)="onClick()">Vyhľadať študenta</button>
+    </div>
+
+    <div class="col-sm-4">
+      <button (click)="onClickAll()">Zobraz všetkých študentov</button>
+    </div>
+  </div>
+
+  <br class="my-4">
 </div>
 
 <div class="col-lg-12">
-  <table class="table">
+  <table class="table" id="myTable2">
     <thead>
       <tr>
         <th scope="col1">AIS_ID</th>
@@ -47,7 +63,7 @@
         <th scope="col5">Študijný program</th>
         <th scope="col6">Body diplomy</th>
         <th scope="col7">Diplomy</th>
-        <th scope="col8">Diplomy</th>
+        <th scope="col8">Diplomy ...</th>
       </tr>
     </thead>
     <tbody>
@@ -59,92 +75,18 @@
         <td>{{ allDataAdmission.Prijatie_na_program }}</td>
         <td>{{ allDataAdmission.Exb_celk }}</td>
         <td>
-          <button (click)="openDiplomaDialog(allDataAdmission)" >Pridať</button>
+          <button (click)="openDiplomaDialog(allDataAdmission)">Pridať</button>
         </td>
         <td>
-          <button (click)="openListDiplomasDialog(allDataAdmission)" >Zobraz diplomy</button>
+          <button (click)="openListDiplomasDialog(allDataAdmission)">Zobraz diplomy</button>
         </td>
       </tr>
     </tbody>
+    
   </table>
-</div>
-
-
-<!--
-<div class="tabs-wrapper">
-  <button
-    [ngClass]="{ 'active': showFilter }"
-    class="tabs-control__button"
-    (click)="switchTabs()"
-  >
-    Filter
-  </button>
-  <button
-    [ngClass]="{ 'active': showLabels }"
-    class="tabs-control__button"
-    (click)="switchTabs()"
-  >
-    Upravovať stĺpce
-  </button>
-
-  <div *ngIf="showLabels" class="tab">
-    <button class="btn btn-raised btn-primary" margin-right (click)="selectAll()">Označiť všetky</button>
-    <button class="btn btn-raised btn-primary" (click)="deselectAll()">Odznačiť všetky</button>
-    <hr>
-
-    <mat-form-field>
-      <input
-        matInput
-        type="text"
-        placeholder="Vyhľadávanie v stĺpcoch"
-        (input)="filterLabels($event.target.value)"
-      >
-    </mat-form-field>
-
-    <div flex flex-wrap>
-      <div
-        *ngFor="let col of filteredColumns"
-        [ngClass]="{ active: displayedAdmissionsColumns.indexOf(col) > -1 }"
-        class="label"
-        (click)="toggleColumn(col)"
-      >
-        {{ col }}
-      </div>
-    </div>
-  </div>
-
-  <div *ngIf="showFilter" class="tab">
-    <mat-form-field>
-      <input
-        matInput
-        type="text"
-        placeholder="Vyhľadávanie"
-        (input)="applyFilter($event.target.value)"
-      >
-    </mat-form-field>
-  </div>
-</div>
--->
-
-
-<!--
-   <p>Rok prijatia</p>
-  <select class="custom-select" name="year" (change)="onYearSelect()">
-    <option value="all">Všetky roky</option>
-    <option
-      *ngFor="let year of years"
-      [value]="year.OBDOBIE"
-    >
-      {{ year.OBDOBIE }}
-    </option>
-  </select>
-
-  <input [(ngModel)]="name" type="text" class="form-control" placeholder="Enter name">
- 
-  <button (click)="onClick()">Click me</button>
--->
- 
   
+  
+</div>
 
 
 
