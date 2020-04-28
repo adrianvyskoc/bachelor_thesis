@@ -46,6 +46,7 @@ export class AdmissionsComparisonComponent implements OnInit, OnDestroy {
         this.admBachelor = data['bachelorRatios']
         this.admMaster = data['masterRatios']
       })
+      
   }
 
   ngOnDestroy() {

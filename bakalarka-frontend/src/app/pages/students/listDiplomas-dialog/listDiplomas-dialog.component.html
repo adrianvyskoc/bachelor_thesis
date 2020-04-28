@@ -1,0 +1,46 @@
+<div id="para1" class="row justify-content-end">
+  <button id="para3" class="btn btn-primary" (click)="onNoClick()">Zavrieť</button>
+</div>
+<div *ngIf="premenna == 'vypis'" class="wrapper">
+    <p>
+      Študent <strong>{{ oznam }}</strong> nemá pridaný žiadny diplom. 
+    </p>
+</div>
+
+<div class="container" *ngIf="premenna !== 'vypis'">
+  <div id="para2" class="row justify-content-center">
+    <table class="table">
+      <thead>
+        <tr ALIGN="center">
+          <th scope="col1">Zameranie</th>
+          <th scope="col2">Súťaž</th>
+          <th scope="col3">Kolo</th>
+          <th scope="col4">Umiestnenie</th>
+          <!--<th scope="col4">Body</th>-->
+        </tr>
+      </thead>
+      <tbody>
+        <tr ALIGN="center" *ngFor="let ownDiploma of ownDiplomas" >
+          <td>{{ ownDiploma["type"] }}</td>
+          <td>{{ ownDiploma["diploma_title"] }}</td>
+          <td>{{ ownDiploma["round"] }}</td>
+          <td>{{ ownDiploma["position"] }}</td>
+          <!--<td>{{ ownDiploma["points"] }}</td>-->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+
+  <div class="row justify-content-start">
+    <button
+    class="btn btn-primary"
+    type="button"
+    (click)="exportAll()"
+    >Exportovať všetky údaje</button>
+  </div>
+
+  
+</div>
+
+

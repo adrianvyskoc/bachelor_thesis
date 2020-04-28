@@ -12,11 +12,13 @@ export class DataService {
   private students = []
   private schools = []
   private grades = []
+  private diplomas = []
   private attendanceChanged = new Subject<{}>()
   private admissionsChanged = new Subject<{}>()
   private studentsChanged = new Subject<{}>()
   private schoolsChanged = new Subject<{}>()
   private gradesChanged = new Subject<{}>()
+  private diplomasChanged = new Subject<{}>()
 
   private admissionsOverviewChanged = new Subject<{}>()
   private admissionsBachelorChanged = new Subject<{}>()
@@ -24,10 +26,15 @@ export class DataService {
   private admissionsYearComparisonChanged = new Subject<{}>()
 
   private year = new BehaviorSubject('all')
+  private program = new BehaviorSubject('all')
+  private studentsBachelorChanged = new Subject<{}>()
+
+  private admissionsDiplomasYearComparisonChanged = new Subject<{}>()
 
   loading = false
   showErrorMessage = false
   showSuccessMessage = false
+ 
 
   constructor(
     private http: HttpClient
@@ -45,15 +52,52 @@ export class DataService {
   }
 
   /**
+   * Funkcia zodpovedná za nastavenie študijného programu, s ktorým chceme pracovať (dáta budú z tohto roku)
+   * @param program - študijný program, ktorý chceme nastaviť
+   */
+  setProgram(program) {
+    this.program.next(program)
+  }
+
+  /**
    * Funkcia, ktorá vracia daný školský rok
    */
   getYear() {
     return this.year
   }
 
-  getStudents(name = '') {
+  getAdmissionsDiplomasYearComparison() {
+    this.http.get(`http://localhost:3333/students`)
+      .subscribe(data => this.admissionsDiplomasYearComparisonChanged.next(data))
+  }
 
-    return this.http.get(`http://localhost:3333/api/students?name=${name}`);
+  getAdmissionsDiplomasYearComparisonUpdateListener() {
+    return this.admissionsDiplomasYearComparisonChanged.asObservable()
+  }
+
+  getStudentsBachelor() {
+    this.http.get(`http://localhost:3333/api/students?year=${this.year.value}&program=${this.program.value}`)
+      .subscribe(data => this.studentsBachelorChanged.next(data))
+  }
+
+  getStudentsBachelorUpdateListener() {
+    return this.studentsBachelorChanged.asObservable()
+  }
+  
+  /*getStudents() { 
+    return this.http.get(`http://localhost:3333/api/students?year=${this.year.value}&program=${this.program.value}`);
+  }*/
+
+  getStudentsName(name) { 
+    return this.http.get(`http://localhost:3333/api/students/${name}?year=${this.year.value}&program=${this.program.value}`);
+  }
+
+  getDiplomaData() { 
+    return this.http.get(`http://localhost:3333/api/students/diploma`);
+  }
+
+  getDiplomas(id) { 
+    return this.http.get(`http://localhost:3333/api/students/${id}/diploma`);
   }
 
   /**
@@ -95,6 +139,12 @@ export class DataService {
               this.schools = data
               this.schoolsChanged.next([...this.schools])
               break
+
+            case 'Diplomas':
+              this.diplomas = data
+              this.diplomasChanged.next([...this.diplomas])
+              break
+            
           }
         }
       )

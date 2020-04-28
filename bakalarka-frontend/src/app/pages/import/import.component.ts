@@ -139,8 +139,10 @@ export class ImportComponent implements OnInit {
     if(this.selectedSource == 'ais') {
       if(this.selectedImport == 'Attendance' || this.selectedImport == 'Grades')
         this.disableImport = (!this.semester || !this.schoolYear)
-      else
-        this.disableImport = !this.schoolYear
+      else if(this.selectedImport == 'Diploma'){
+        this.disableImport = false
+      } else      
+          this.disableImport = !this.schoolYear
     } else if(this.selectedSource == 'ineko') {
       if(this.selectedImport == 'Schools')
         this.disableImport = false

@@ -6,22 +6,219 @@ const Student = use('App/Models/Student')
 
 class StudentController {
 
+  async getDiplomas ({ response , request, params}) {
+    
+
+    let ownDiplomas  = '';
+      
+    ownDiplomas = await Database.table('diplomas').where('AIS_ID', params.id)
+
+    return response.send({
+      ownDiplomas
+    })
+  }
+
+  /**
+   * Endpoint, ktorý vráti všetky data o diplomoch
+   */
+
+  async getDiplomaData ({ response}) {
+    let diplomasData = '';
+    
+    diplomasData = await Database.table('list_diplomas')
+
+    let objectZameranie = {
+      "matematika": await Database.distinct('nazov').from('list_diplomas').where('zameranie', 'matematika'),
+      "informatika": await Database.distinct('nazov').from('list_diplomas').where('zameranie', 'informatika'),
+      "SOČ": await Database.distinct('nazov').from('list_diplomas').where('zameranie', 'SOČ'),
+      "iné": await Database.distinct('nazov').from('list_diplomas').where('zameranie', 'iné'),
+      "fyzika": await Database.distinct('nazov').from('list_diplomas').where('zameranie', 'fyzika')
+    }
+
+    return response.send({
+      diplomasData,
+      objectZameranie
+    })
+  }
+
+
   /**
    * Endpoint, ktorý vráti všetkých študentov v systéme
    */
-  async getStudents ({ response , request}) {
+
+  async getStudents ({ request, response }) {
     const queryParams = await request.all()
 
-    let students = '';
-    if (queryParams.name) {
-      students = await Database.table('ais_students').where('MENO', queryParams.name)
-    } else {
-      students = await Student.all()
+    
+    let countS 
+    let countAll 
+    let countBez 
+    let countBezNull
+    let pocty
+    
+    let allDataAdmissions = '';
+
+    if(queryParams.year == 'all') {
+      if(queryParams.program == 'all'){
+        allDataAdmissions = await Database.table('ais_admissions').whereIn('Rozh', [10,11,13]).where('Štúdium', 'áno').where('stupen_studia', 'Bakalársky')
+
+       
+        countS = await Database.from('ais_admissions').whereNotNull('AIS_ID').where('stupen_studia', 'Bakalársky').whereNotNull('Exb_celk').where('Exb_celk', '>', 0).count() 
+        countAll = await Database.from('ais_admissions').whereIn('Rozh', [10,11,13]).where('Štúdium', 'áno').where('stupen_studia', 'Bakalársky').count()
+        countBezNull = await Database.from('ais_admissions').whereNotNull('AIS_ID').where('stupen_studia', 'Bakalársky').whereNull('Exb_celk').count() 
+        countBez = await Database.from('ais_admissions').whereNotNull('AIS_ID').where('stupen_studia', 'Bakalársky').whereNotNull('Exb_celk').where('Exb_celk', '<', 1).count() 
+        console.log(countS)
+        console.log(countAll)
+        console.log(countBezNull)
+        console.log(countBez)
+
+      }else{
+        allDataAdmissions = await Database.table('ais_admissions').whereIn('Rozh', [10,11,13]).where('Štúdium', 'áno').where('Prijatie_na_program', queryParams.program).where('stupen_studia', 'Bakalársky')
+      }
+    } else if(queryParams.program == 'all'){
+      allDataAdmissions = await Database.table('ais_admissions').where('OBDOBIE', queryParams.year).whereIn('Rozh', [10,11,13]).where('Štúdium', 'áno').where('stupen_studia', 'Bakalársky') 
+
+      console.log("-----------------")
+      console.log(queryParams.year)
+      console.log("-----------------")
+      countS = await Database.from('ais_admissions').whereIn('Rozh', [10,11,13]).where('Štúdium', 'áno').where('stupen_studia', 'Bakalársky').where('OBDOBIE', queryParams.year).whereNotNull('Exb_celk').where('Exb_celk', '>', 0).count() 
+      countAll = await Database.from('ais_admissions').whereIn('Rozh', [10,11,13]).where('Štúdium', 'áno').where('stupen_studia', 'Bakalársky').where('OBDOBIE', queryParams.year).count()
+      countBezNull = await Database.from('ais_admissions').whereIn('Rozh', [10,11,13]).where('Štúdium', 'áno').where('stupen_studia', 'Bakalársky').where('OBDOBIE', queryParams.year).whereNull('Exb_celk').count() 
+      countBez = await Database.from('ais_admissions').whereIn('Rozh', [10,11,13]).where('Štúdium', 'áno').where('stupen_studia', 'Bakalársky').where('OBDOBIE', queryParams.year).whereNotNull('Exb_celk').where('Exb_celk', '<', 1).count() 
+      console.log(countS)
+      console.log(countAll)
+      console.log(countBezNull)
+      console.log(countBez)
+
+      //.whereNotNull('AIS_ID')
+
+    }else{
+      allDataAdmissions = await Database.table('ais_admissions').whereIn('Rozh', [10,11,13]).where('Štúdium', 'áno').where('Prijatie_na_program', queryParams.program).where('OBDOBIE', queryParams.year).where('stupen_studia', 'Bakalársky')
     }
 
 
-    return response.send(students)
+    let years = await Database.raw(`
+      SELECT DISTINCT "OBDOBIE"  from ais_admissions
+      WHERE stupen_studia = 'Bakalársky'
+    `);
+
+   
+
+    let programs = await Database.table('ais_admissions').distinct('Prijatie_na_program').where('stupen_studia', 'Bakalársky').whereIn('Rozh', [10,11,13]).where('Štúdium', 'áno')
+    
+    
+
+
+    return response.send({ allDataAdmissions,
+      years,
+      programs,
+      countS, 
+      countAll,
+      countBez,
+      countBezNull
+    })
   }
+
+  //----------------------------------------------------------------------------------------------------------------
+
+  /*async getStudents ({ response , request}) {
+    
+
+    const queryParams = await request.all()
+    console.log(queryParams)
+    let allDataAdmissions = '';
+    let countS 
+    let countAll 
+    let countBez 
+    let countBezNull
+
+    
+    if(queryParams.year == 'all') {
+      if(queryParams.program == 'all'){
+        allDataAdmissions = await Database.table('ais_admissions').whereNotNull('AIS_ID').where('stupen_studia', 'Bakalársky')
+
+        countS = await Database.from('ais_admissions').whereNotNull('AIS_ID').where('stupen_studia', 'Bakalársky').whereNotNull('Exb_celk').where('Exb_celk', '>', 0).count() 
+        countAll = await Database.from('ais_admissions').whereNotNull('AIS_ID').where('stupen_studia', 'Bakalársky').count()
+        countBezNull = await Database.from('ais_admissions').whereNotNull('AIS_ID').where('stupen_studia', 'Bakalársky').whereNull('Exb_celk').count() 
+        countBez = await Database.from('ais_admissions').whereNotNull('AIS_ID').where('stupen_studia', 'Bakalársky').whereNotNull('Exb_celk').where('Exb_celk', '<', 1).count() 
+        console.log(countS)
+        console.log(countAll)
+        console.log(countBezNull)
+        console.log(countBez)
+
+      }else{
+        allDataAdmissions = await Database.table('ais_admissions').whereNotNull('AIS_ID').where('Prijatie_na_program', queryParams.program).where('stupen_studia', 'Bakalársky')
+      }
+    } else if(queryParams.program == 'all'){
+      allDataAdmissions = await Database.table('ais_admissions').where('OBDOBIE', queryParams.year).whereNotNull('AIS_ID').where('stupen_studia', 'Bakalársky') 
+
+      countS = await Database.from('ais_admissions').whereNotNull('AIS_ID').where('stupen_studia', 'Bakalársky').where('OBDOBIE', queryParams.year).whereNotNull('Exb_celk').where('Exb_celk', '>', 0).count() 
+      countAll = await Database.from('ais_admissions').whereNotNull('AIS_ID').where('stupen_studia', 'Bakalársky').where('OBDOBIE', queryParams.year).count()
+      countBezNull = await Database.from('ais_admissions').whereNotNull('AIS_ID').where('stupen_studia', 'Bakalársky').where('OBDOBIE', queryParams.year).whereNull('Exb_celk').count() 
+      countBez = await Database.from('ais_admissions').whereNotNull('AIS_ID').where('stupen_studia', 'Bakalársky').where('OBDOBIE', queryParams.year).whereNotNull('Exb_celk').where('Exb_celk', '<', 1).count() 
+      console.log(countS)
+      console.log(countAll)
+      console.log(countBezNull)
+      console.log(countBez)
+
+    }else{
+      allDataAdmissions = await Database.table('ais_admissions').whereNotNull('AIS_ID').where('Prijatie_na_program', queryParams.program).where('OBDOBIE', queryParams.year).where('stupen_studia', 'Bakalársky')
+    }
+
+
+    let years = await Database.raw(`
+      SELECT DISTINCT "OBDOBIE"  from ais_admissions
+    `);
+
+    let programs = await Database.table('ais_admissions').distinct('Prijatie_na_program').where('stupen_studia', 'Bakalársky').whereNotNull('AIS_ID')
+    
+
+    return response.send({
+      allDataAdmissions,
+      years,
+      programs
+      /*countS, 
+      countBez,
+      countAll
+    })
+  }*/
+
+
+  /**
+   * Endpoint, ktorý vráti všetkých študentov so zadanym menom
+   */
+  /*
+  async getStudentsName ({ response , request, params}) {
+    
+    const queryParams = await request.all()
+    console.log(queryParams)
+    let allDataAdmissions = '';
+
+    if(queryParams.year == 'all') {
+      if(queryParams.program == 'all'){
+        allDataAdmissions = await Database.table('ais_admissions').where('Meno', params.name).whereNotNull('AIS_ID').where('stupen_studia', 'Bakalársky')
+      }else{
+        allDataAdmissions = await Database.table('ais_admissions').where('Meno', params.name).whereNotNull('AIS_ID').where('Prijatie_na_program', queryParams.program).where('stupen_studia', 'Bakalársky')
+      } 
+    } else if (queryParams.program == 'all'){
+      allDataAdmissions = await Database.table('ais_admissions').where('Meno', params.name).where('OBDOBIE', queryParams.year).whereNotNull('AIS_ID').where('stupen_studia', 'Bakalársky') 
+    }else{
+      allDataAdmissions = await Database.table('ais_admissions').where('Meno', params.name).whereNotNull('AIS_ID').where('Prijatie_na_program', queryParams.program).where('OBDOBIE', queryParams.year).where('stupen_studia', 'Bakalársky')
+    }
+
+    let years = await Database.raw(`
+      SELECT DISTINCT "OBDOBIE"  from ais_admissions
+    `);
+
+    let programs = await Database.table('ais_admissions').distinct('Prijatie_na_program').where('stupen_studia', 'Bakalársky').whereNotNull('AIS_ID')
+
+    return response.send({
+      allDataAdmissions,
+      years,
+      programs
+    })
+  }*/
+
 
   /**
    * Endpoint, ktorý vráti všetky informácie týkajúce sa jedného študenta. Študent je v systéme podľa AIS_ID.

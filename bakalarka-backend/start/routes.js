@@ -28,6 +28,11 @@ Route
         // api endpoints
 
         Route.get('students', 'StudentController.getStudents')
+        Route.get('students/:id/diploma', 'StudentController.getDiplomas')
+
+        Route.get('students/diploma', 'StudentController.getDiplomaData')
+        
+        Route.get('students/:name', 'StudentController.getStudentsName')
 
         Route.get('getGrades/:year', 'GetController.getGrades')
         Route.get('getSchools', 'GetController.getSchools')
@@ -157,6 +162,12 @@ Route
         Route.post('predictions/create_model', 'PredictionController.create_model')
 
         Route.post('predictions/insert_model', 'PredictionController.insert_model')
+
+
+
+        // diplomas
+        Route.post("students/diploma/add", "DiplomaController.addDiploma")
+        Route.post("students/diploma/addExtra", "DiplomaController.addDiplomaExtra")
 
 
     })

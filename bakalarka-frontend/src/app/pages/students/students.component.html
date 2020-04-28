@@ -1,36 +1,246 @@
-<!--<table mat-table [dataSource]="students" class="mat-elevation-z8">
+
+
+<div class="jumbotron">
+  <h1 class="display-3">Prijímacie konanie</h1>
+  <p class="lead">Pridávanie diplomov</p>
+  <hr class="my-4">
 
 
 
-  <ng-container matColumnDef="MENO">
-    <th mat-header-cell *matHeaderCellDef> Meno </th>
-    <td mat-cell *matCellDef="let element"> {{element.MENO}} </td>
-  </ng-container>
+  <div class="row">
+    <div class="col-sm-2">
+      Rok prijatia
+    </div>
+    <div class="col-sm-3">
+      <select [(ngModel)]="selectedYear" class="custom-select" name="year" (change)="onYearSelect()">
+        <option value="all">Všetky roky</option>
+        <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+      </select>
+    </div>
+  </div>
 
-  <ng-container matColumnDef="PRIEZVISKO">
-    <th mat-header-cell *matHeaderCellDef> Priezvisko </th>
-    <td mat-cell *matCellDef="let element"> {{element.PRIEZVISKO}} </td>
-  </ng-container>
+  <br class="my-4">
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>-->
+  <div class="row">
+    <div class="col-sm-2">
+      Študijný program
+    </div>
+    <div class="col-sm-3">
+      <select [(ngModel)]="selectedProgram" class="custom-select" name="program" (change)="onProgramSelect()">
+        <option value="all">Všetky št. programy</option>
+        <option *ngFor="let program of programs" [value]="program.Prijatie_na_program">{{ program.Prijatie_na_program }}</option>
+      </select>
+    </div>
+  </div>
 
-<input [(ngModel)]="name" type="text" class="form-control" placeholder="Enter name">
+  <!--
 
-<button (click)="onClick()">Click me</button>
+  <div class="row">
+    <div class="col-sm-2">
+      <input [(ngModel)]="name" type="text" class="form-control" placeholder="Zadaj meno">
+    </div>
+  
+    <div class="col-sm-4">
+      <button (click)="onClick()">Vyhľadať študenta</button>
+    </div>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Meno</th>
-      <th scope="col">Priezvisko</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let student of students">
-      <td>{{ student.MENO }}</td>
-      <td>{{ student.PRIEZVISKO }}</td>
-    </tr>
-  </tbody>
-</table>
+    <div class="col-sm-4">
+      <button (click)="onClickAll()">Zobraz všetkých študentov</button>
+    </div>
+  </div>
+-->
+
+</div>
+
+<div class="tabs-wrapper">
+  <button
+    [ngClass]="{ 'active': showFilter }"
+    class="tabs-control__button"
+    (click)="switchTabs()"
+  >
+    Filter
+  </button>
+  <button
+    [ngClass]="{ 'active': showLabels }"
+    class="tabs-control__button"
+    (click)="switchTabs()"
+  >
+    Upravovať stĺpce
+  </button>
+
+  <!--
+  <div *ngIf="showLabels" class="tab">
+    <button class="btn btn-raised btn-primary" margin-right (click)="selectAll()">Označiť všetky</button>
+    <button class="btn btn-raised btn-primary" (click)="deselectAll()">Odznačiť všetky</button>
+    <hr>
+
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        placeholder="Vyhľadávanie v stĺpcoch"
+        (input)="filterLabels($event.target.value)"
+      >
+    </mat-form-field>
+
+    <div flex flex-wrap>
+      <div
+        *ngFor="let col of filteredColumns"
+        [ngClass]="{ active: displayedAdmissionsColumns.indexOf(col) > -1 }"
+        class="label"
+        (click)="toggleColumn(col)"
+      >
+        {{ col }}
+      </div>
+    </div>
+  </div>-->
+
+  <div *ngIf="showFilter" class="tab">
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        placeholder="Vyhľadávanie"
+        (input)="applyFilter($event.target.value)"
+      >
+    </mat-form-field>
+  </div>
+
+</div>
+
+<div *ngIf="showFilter">
+  <!--
+    Start table 
+  -->
+  <table mat-table #admSort="matSort" matSort [dataSource]="admissions" full-width>
+    <ng-container [matColumnDef]="column" *ngFor="let column of displayedAdmissionsColumns">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{column}} </th>
+      <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Diplom" stickyEnd>
+      <th mat-header-cell *matHeaderCellDef> Diplom </th>
+      <td mat-cell *matCellDef="let element">
+        <button class="btn btn-primary" (click)="openDiplomaDialog(element)" no-margin>Pridať</button>
+        <button class="btn btn-primary" no-margin (click)="openListDiplomasDialog(element)">Zobraz diplomy</button>
+      </td>
+    </ng-container>
+    
+    <!--<ng-container matColumnDef="Diplomy" stickyEnd>
+      <th mat-header-cell *matHeaderCellDef> Diplomy </th>
+      <td mat-cell *matCellDef="let element">
+        <button class="btn btn-primary" no-margin (click)="openListDiplomasDialog(element)">Zobraz diplomy</button>
+      </td>
+    </ng-container>-->
+  
+    <tr mat-header-row *matHeaderRowDef="_displayedColumnsAndActions()"></tr>
+    <tr mat-row *matRowDef="let row; columns: _displayedColumnsAndActions();"></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons #paginator></mat-paginator>
+
+  <!--
+    End table 
+  -->
+</div>
+
+
+
+
+
+
+<h2 id="ratios" class="section-header" padding>Štatistiky o diplomoch</h2>
+
+<div class="lastNYears" flex align-items-center>
+  <span>Zobraziť údaje z posledných </span>
+
+  <input
+    [(ngModel)]="lastNYears"
+    class="form-control lastNYears__input"
+    type="number"
+    min="1"
+    [max]="schoolYears.length"
+    margin-left margin-right
+    (ngModelChange)="onlastNYearsChange()"
+  >
+
+  <span>importovaných rokov.</span>
+</div>
+
+<h2 id="ratios" class="section-header" padding>Grafy</h2>
+
+<div class="row">
+  <div class="col-lg-6">
+    <app-chart
+      [title]="'Počet prihlášok na jednotlivé stupne'"
+      [data]="[ciselkoS, ciselkoBez, ciselkoBezNull]"
+      [labels]="['ano', 'nie', 'null']"
+      [type]="'doughnut'"
+      [legend]="false"
+    ></app-chart>
+  </div>
+  <div class="col-lg-6">
+    <app-chart
+      [title]="'Počty študentov, ktorý poslali diplomy'"
+      [data]="[ciselkoS, ciselkoBez, ciselkoBezNull]"
+      [labels]="['Uznané diplomy', 'Neuznané diplomy', 'Neposlali diplomy']"
+      [type]="'bar'"
+      [legend]="false"
+    ></app-chart>
+  </div>
+</div>
+
+
+
+
+
+<!--   povodna tabulka
+<div class="col-lg-12">
+  <table class="table" id="myTable2">
+    <thead>
+      <tr>
+        <th scope="col1">AIS_ID</th>
+        <th scope="col2">Meno</th>
+        <th scope="col3">Priezvisko</th>
+        <th scope="col4">Rok prijatia</th>
+        <th scope="col5">Študijný program</th>
+        <th scope="col6">Body diplomy</th>
+        <th scope="col7">Diplomy</th>
+        <th scope="col8">Diplomy ...</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let allDataAdmission of allDataAdmissions" >
+        <td>{{ allDataAdmission["AIS_ID"] }}</td>
+        <td>{{ allDataAdmission["Meno"] }}</td>
+        <td>{{ allDataAdmission["Priezvisko"] }}</td>
+        <td>{{ allDataAdmission["OBDOBIE"] }}</td>
+        <td>{{ allDataAdmission.Prijatie_na_program }}</td>
+        <td>{{ allDataAdmission.Exb_celk }}</td>
+        <td>
+          <button (click)="openDiplomaDialog(allDataAdmission)">Pridať</button>
+        </td>
+        <td>
+          <button (click)="openListDiplomasDialog(allDataAdmission)">Zobraz diplomy</button>
+        </td>
+      </tr>
+    </tbody>
+    
+  </table>
+  
+  
+</div>
+
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+

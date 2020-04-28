@@ -96,6 +96,32 @@ class ImportAisController {
         }
 
         // -------------------------------------------------------------------
+        // Diplomas
+        // -------------------------------------------------------------------
+
+        if(params.selectedImport == 'Diploma') {
+          for (let row of rows) {
+              const { id, zameranie, nazov, kolo, umiestnenie, body, ...diplomaRow } = row
+
+              const diplomaData = {
+                id,
+                zameranie,
+                nazov,
+                kolo,
+                umiestnenie,
+                body
+            }               
+
+              try {
+                  //await Database.table('list_diplomas').insert(diplomaRow)
+
+                  await Database.table('list_diplomas').where('id', diplomaData.id).update(diplomaData)
+                  console.log(diplomaRow)
+              } catch(err) { console.log(err) }
+          }
+      }
+
+        // -------------------------------------------------------------------
         // Grades
         // -------------------------------------------------------------------
 
