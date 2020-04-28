@@ -106,10 +106,11 @@ class ImportInekoController {
                     row.typ_skoly == "Základná umelecká škola") continue
 
                 let school = []
-                if(row.ulica && row.typ_skoly) {
+                if(row.ulica && row.typ_skoly && row.nazov) {
                     school = await Database.from("ineko_schools")
                         .where("typ_skoly", row.typ_skoly)
                         .where("ulica", row.ulica)
+                        .where("nazov", row.nazov)
                 }
 
                 if(school.length) {

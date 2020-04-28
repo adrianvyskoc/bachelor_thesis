@@ -31,11 +31,17 @@
     "chart.js": "^2.7.3",
     "core-js": "^2.5.4",
     "crypto": "^1.0.1",
+    "file-saver": "^2.0.2",
     "https": "^1.0.0",
     "jquery": "^3.4.1",
     "js": "^0.1.0",
+
+    "jszip": "^3.2.2",
+   
     "npm": "^6.13.1",
+
     "rxjs": "^6.4.0",
+    "stream": "0.0.2",
     "tslib": "^1.10.0",
     "xlsx": "^0.14.1",
     "zone.js": "~0.8.29"
@@ -45,8 +51,10 @@
     "@angular/cli": "^8.0.1",
     "@angular/compiler-cli": "^8.0.0",
     "@angular/language-service": "^7.2.7",
+    "@types/file-saver": "^2.0.1",
     "@types/jasmine": "~2.8.6",
     "@types/jasminewd2": "~2.0.3",
+    "@types/jszip": "^3.1.7",
     "@types/node": "~8.9.4",
     "codelyzer": "~4.2.1",
     "cypress": "^3.7.0",

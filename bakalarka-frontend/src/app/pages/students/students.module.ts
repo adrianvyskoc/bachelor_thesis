@@ -5,6 +5,14 @@ import { StudentComponent } from './student/student.component';
 import { StudentsRoutingModule } from './students-routing.module';
 
 import {MatExpansionModule} from '@angular/material/expansion';
+
+import { MatTabsModule, MatButtonModule, MatTableModule, MatInputModule, MatSelectModule, MatPaginatorModule, MatCheckboxModule, MatFormFieldModule, MatDividerModule } from '@angular/material';
+import { DemoComponent } from './demo/demo.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PredictionComponent } from './prediction/prediction.component';
+import { ModelImportComponent } from './prediction/model-import/model-import.component';
+import { HttpClientModule } from '@angular/common/http';
+import { ModelCreateComponent } from './prediction/model-create/model-create.component'
 import { ChartModule } from 'src/app/plugins/chart/chart.module';
 import { MatPaginatorModule, MatSortModule, MatTooltipModule, MatInputModule, MatIconModule, MatProgressSpinnerModule, MatSelectModule } from '@angular/material';
 import { MatTabsModule, MatButtonModule, MatTableModule, MatDialogModule } from '@angular/material';
@@ -14,16 +22,28 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DiplomaDialogComponent } from './diploma-dialog/diploma-dialog.component';
 import { ListDiplomasDialogComponent } from './listDiplomas-dialog/listDiplomas-dialog.component';
 
-
-
 @NgModule({
-  declarations: [StudentsComponent, StudentComponent, DemoComponent, DiplomaDialogComponent, ListDiplomasDialogComponent],
+  declarations: [StudentsComponent, StudentComponent, DemoComponent, PredictionComponent, ModelImportComponent, ModelCreateComponent, DiplomaDialogComponent, ListDiplomasDialogComponent],
   entryComponents: [DiplomaDialogComponent, ListDiplomasDialogComponent],
+
   imports: [
     MatExpansionModule,
     MatTabsModule,
     MatButtonModule,
     MatTableModule,
+
+    MatInputModule,
+    MatSelectModule,
+    MatPaginatorModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatDividerModule,
+    
+    CommonModule,
+    StudentsRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule,
     MatDialogModule,
 
     ChartModule,
@@ -39,6 +59,7 @@ import { ListDiplomasDialogComponent } from './listDiplomas-dialog/listDiplomas-
     StudentsRoutingModule,
     FormsModule,
     MatCheckboxModule
+
   ]
 })
 export class StudentsModule { }

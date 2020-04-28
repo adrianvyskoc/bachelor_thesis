@@ -1,0 +1,158 @@
+<h2 id="general-info" class="section-header" padding>Dostupné modely</h2>
+
+<div *ngIf="serverError" class="alert alert-danger mt-3" role="alert" flex align-items-center>
+  <div class="icon-wrapper danger" margin-right>
+    <i class="far fa-times-circle"></i>
+  </div>
+  Nepodarilo sa načítať dostupné modely.
+</div>
+
+<div class="row" *ngIf="!serverError">
+  <div class="col-lg-6">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col1">Názov modelu</th>
+          <th scope="col2">Predmet</th>
+          <th scope="col3">Akcia</th>
+          <th scope="col4">Akcia2</th>
+          <th scope="col5">Akcia3</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let model of available_models">
+  
+          <td>{{ model["name"] }}</td>
+          <td>{{ model["PREDMET"] }}</td>
+
+          <td>
+            <button (click)="open_model_details(model)">Detail</button>
+          </td>
+
+          <td>
+            <button (click)="download_model(model)">Stiahnuť</button>
+          </td>
+
+          <td>
+            <button (click)="delete_model(model)">Odstrániť</button>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Import modelu</h3>
+
+    <section class="file-input">
+      <input id="fileInput" name="file" type="file" class="ng-hide" #fileInput (change)="onFileSelected($event)">
+      <button mat-raised-button color="primary" (click)="addModel()" [disabled]="new_model == null">
+        Importovať model
+      </button>
+  
+    </section>
+
+    <div flex flex-column margin-top>
+      <div *ngIf="this.showErrorDelete" class="alert alert-danger mt-3" role="alert" flex align-items-center>
+        <div class="icon-wrapper danger" margin-right>
+          <i class="far fa-times-circle"></i>
+        </div>
+        Model sa nepodarilo vymazať
+      </div>
+
+      <div *ngIf="this.showErrorFile" class="alert alert-danger mt-3" role="alert" flex align-items-center>
+        <div class="icon-wrapper danger" margin-right>
+          <i class="far fa-times-circle"></i>
+        </div>
+        Nesprávny formát súboru.
+      </div>
+
+      <div *ngIf="this.showErrorName" class="alert alert-danger mt-3" role="alert" flex align-items-center>
+        <div class="icon-wrapper danger" margin-right>
+          <i class="far fa-times-circle"></i>
+        </div>
+        Už existuje model s menom {{new_model[0].name}}
+      </div>
+
+      <div *ngIf="this.showErrorImport" class="alert alert-danger mt-3" role="alert" flex align-items-center>
+        <div class="icon-wrapper danger" margin-right>
+          <i class="far fa-times-circle"></i>
+        </div>
+        Model sa nepodarilo importovať.
+      </div>
+
+      <div *ngIf="this.showSuccessDelete" class="alert alert-success mt-3" role="alert" flex align-items-center>
+        <div class="icon-wrapper success" margin-right>
+          <i class="far fa-check-circle"></i>
+        </div>
+        Model je vymazaný.
+      </div>
+
+      <div *ngIf="this.showSuccesImport" class="alert alert-success mt-3" role="alert" flex align-items-center>
+        <div class="icon-wrapper success" margin-right>
+          <i class="far fa-check-circle"></i>
+        </div>
+        Model bol úspešne importovaný.
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6" *ngIf="showDetails">
+    <h3 padding>Detail modelu</h3>
+    <table class="table">
+      <tbody>
+        <tr>
+          <th>id</th>
+          <td>{{model_details.id}}</td>
+        </tr>
+        <tr>
+          <th>názov</th>
+          <td>{{model_details.name}}</td>
+        </tr>
+        <tr>
+          <th>predmet</th>
+          <td>{{model_details.PREDMET}}</td>
+        </tr>
+        <tr>
+          <th>trénované na dátach z rokov</th>
+          <td>{{model_details.used_years}}</td>
+        </tr>
+        <tr>
+          <th>počet záznamov na trénovanie</th>
+          <td>{{model_details.size_of_training_set}}</td>
+        </tr>
+        <tr>
+          <th>správnosť (accuracy) </th>
+          <td>{{model_details.accuracy}}</td>
+        </tr>
+        <tr>
+          <th>pokrytie (recall) </th>
+          <td>{{model_details.recall}}</td>
+        </tr>
+        <tr>
+          <th>presnosť (precision) </th>
+          <td>{{model_details.precision}}</td>
+        </tr>
+        <tr>
+          <th>f1 makro</th>
+          <td>{{model_details.f1}}</td>
+        </tr>
+        <tr>
+          <th>použité tabuľky </th>
+          <td>{{model_details.used_tables}}</td>
+        </tr>
+        <tr>
+          <th>najdôležitejšie atribúty</th>
+          <td>{{model_details.best_feature_1_name}}: {{model_details.best_feature_1_importance}} <br>
+            {{model_details.best_feature_2_name}}: {{model_details.best_feature_2_importance}} <br>
+            {{model_details.best_feature_3_name}}: {{model_details.best_feature_3_importance}} <br>
+            {{model_details.best_feature_4_name}}: {{model_details.best_feature_4_importance}} <br>
+            {{model_details.best_feature_5_name}}: {{model_details.best_feature_5_importance}} <br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+  </div>
+
+</div>

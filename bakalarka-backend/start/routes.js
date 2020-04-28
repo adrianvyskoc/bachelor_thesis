@@ -134,10 +134,41 @@ Route
         // Get attributes for table
         Route.get('tableColumns', 'GetController.getAttrNames')
 
+        // 
+        Route.get('predictions', 'PredictionController.index')
+
+        Route.get('predictions/predict', 'PredictionController.predict')
+
+        Route.get('predictions/get_subjects', 'PredictionController.get_subjects')
+
+        Route.get('predictions/get_all_models', 'PredictionController.get_all_models')
+
+        Route.get('predictions/get_model', 'PredictionController.get_model')
+
+        Route.get('predictions/get_models', 'PredictionController.get_models')
+
+        Route.get('predictions/get_model_details', 'PredictionController.get_model_details')
+
+        Route.get('predictions/get_imputers', 'PredictionController.get_imputers')
+
+        Route.get('predictions/get_years', 'PredictionController.get_years')
+
+        Route.get('predictions/get_tables', 'PredictionController.get_tables')
+
+        Route.get('predictions/get_all_subjects', 'PredictionController.get_all_subjects')
+
+        Route.get('predictions/delete_model', 'PredictionController.delete_model')
+
+        Route.post('predictions/create_model', 'PredictionController.create_model')
+
+        Route.post('predictions/insert_model', 'PredictionController.insert_model')
+
+
 
         // diplomas
         Route.post("students/diploma/add", "DiplomaController.addDiploma")
         Route.post("students/diploma/addExtra", "DiplomaController.addDiplomaExtra")
+
 
     })
     .prefix('/api')
