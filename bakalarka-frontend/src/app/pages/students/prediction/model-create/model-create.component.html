@@ -18,7 +18,7 @@
   <div class="row">
     <div class="col">
       <div [formGroup]="years">
-        <p>Vyberte obdobia, na ktorých sa bude model testovať:</p>
+        <p>Vyberte obdobia, na ktorých sa bude model trénovať:</p>
 
         <div *ngFor="let year of available_years; let i = index">
           <mat-checkbox [value]="year" (change)="onChange_years($event)"> {{year}} </mat-checkbox>
@@ -33,6 +33,8 @@
           <mat-checkbox [value]="table" (change)="onChange_tables($event)"> {{table}} </mat-checkbox>
         </div>
         <span class="text-muted">Zobrazujú sa tabuľky, v ktorých sú naimportované dáta.</span>
+        <br>
+        <span class="text-muted">POZOR! Ak vyberiete tabuľku entry_tests, model sa bude trénovať iba na rokoch, pre ktoré máte importované vstupné testy. Sú to roky: {{ entry_tests_years }} </span>
       </div>
     </div>
     <div class="col">

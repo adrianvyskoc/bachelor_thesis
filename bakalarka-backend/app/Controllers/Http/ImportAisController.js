@@ -96,6 +96,35 @@ class ImportAisController {
         }
 
         // -------------------------------------------------------------------
+        // Entry tests
+        // -------------------------------------------------------------------    
+
+        if(params.selectedImport == 'entry_tests') {
+          const OBDOBIE = data.year
+          for (let row of rows) {
+            const {AIS_ID, Body, ...testRow} = row
+
+            const id_student = AIS_ID
+            const body = Body
+
+            const entry_test_data = {
+                id_student,
+                body,
+                OBDOBIE
+            }      
+
+            try {
+              await Database.table('entry_tests').insert(entry_test_data)
+          
+            }
+            catch(err) {
+              console.log(err)
+            }
+
+          }
+        }
+
+        // -------------------------------------------------------------------
         // Diplomas
         // -------------------------------------------------------------------
 

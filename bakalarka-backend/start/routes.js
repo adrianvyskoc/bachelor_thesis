@@ -153,6 +153,8 @@ Route
 
         Route.get('predictions/get_years', 'PredictionController.get_years')
 
+        Route.get('predictions/get_years_entry_tests', 'PredictionController.get_years_entry_tests')
+
         Route.get('predictions/get_tables', 'PredictionController.get_tables')
 
         Route.get('predictions/get_all_subjects', 'PredictionController.get_all_subjects')

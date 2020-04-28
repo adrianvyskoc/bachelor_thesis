@@ -72,7 +72,8 @@ export class PredictionService {
     let years = this.http.get(`http://localhost:3333/api/predictions/get_years`);
     let tables = this.http.get(`http://localhost:3333/api/predictions/get_tables`);
     let subjects = this.http.get(`http://localhost:3333/api/predictions/get_all_subjects`);
-    return forkJoin([years, tables, subjects])
+    let entry_tests_years = this.http.get(`http://localhost:3333/api/predictions/get_years_entry_tests`)
+    return forkJoin([years, tables, subjects, entry_tests_years])
   }
 
   async create_model(name, subject, years, tables) {

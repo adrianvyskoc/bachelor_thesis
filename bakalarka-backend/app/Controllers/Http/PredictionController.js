@@ -154,7 +154,7 @@ class PredictionController {
                 response.send(data);
             },
             function (error) {
-                if (error.code == 'ECONNREFUSED') {
+                if (error != null && error.code == 'ECONNREFUSED') {
                     return response.status(505).send("Skontrolujte, či máte spustený Flask")
                 }
                 return response.status(505).send("Chyba v Pythone")
@@ -313,6 +313,21 @@ class PredictionController {
 
     }
 
+    async get_years_entry_tests({ response }) {
+        let rawData = []
+
+        const data = await Database
+            .from('entry_tests')
+            .distinct('OBDOBIE')
+
+        //prevod z json na pole
+        data.map(e => {
+            rawData.push(e['OBDOBIE']);
+        })
+
+        return response.status(200).send(rawData)
+    }
+
     async get_years({ response }) {
         let rawData = []
 
@@ -334,7 +349,7 @@ class PredictionController {
      */
     async get_tables({ response }) {
 
-        const possible_tables = ['ais_admissions', 'ineko_schools', 'ineko_total_ratings', 'ineko_percentils', 'ineko_individual_pointer_values', 'ineko_additional_data', 'ais_attendances']
+        const possible_tables = ['ais_admissions', 'ineko_schools', 'ineko_total_ratings', 'ineko_percentils', 'ineko_individual_pointer_values', 'ineko_additional_data', 'ais_attendances', 'entry_tests']
         let available_tables = []
 
         for (var i = 0; i < possible_tables.length; i++) {

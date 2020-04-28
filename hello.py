@@ -24,7 +24,9 @@ database_port = 5432
 slovnik = [ ('ais_admissions', '', ', "Body_celkom", "Body", "Pohlavie"'),
            ('ineko_schools', 'FULL OUTER JOIN ineko_schools on ais_admissions.school_id = ineko_schools.kod_kodsko', ', okres, kraj, typ_skoly'),
            ('ineko_total_ratings', 'FULL OUTER JOIN ineko_total_ratings on ais_admissions.school_id = ineko_total_ratings.school_id', ', celkove_hodnotenie, maturity, matematika, vyucovaci_jazyk, mimoriadne_vysledky, nezamestnanost_absolventov, "prijimanie_na_VS", pedagogicky_zbor, financne_zdroje'),
-           ('ineko_percentils', 'FULL OUTER JOIN ineko_percentils on ais_admissions.school_id = ineko_percentils.school_id', ', "Mat_SJ", "Mat_M", poc_ucitelov')
+           ('ineko_percentils', 'FULL OUTER JOIN ineko_percentils on ais_admissions.school_id = ineko_percentils.school_id', ', "Mat_SJ", "Mat_M", poc_ucitelov'),
+           ('entry_tests', 'FULL OUTER JOIN entry_tests on ais_admissions."AIS_ID" = entry_tests.id_student', ', entry_tests.Body as vstupny_test_body')
+
           ]
 
 #POMOCNE FUNKCIE
@@ -57,6 +59,8 @@ def predikcia_vytvorenie_sql_stringu(pouzite_tabulky):
         if (tabulka[0] in pouzite_tabulky):
             sql_query_string = sql_query_string + tabulka[1] + " "
     sql_query_string = sql_query_string + ' WHERE ais_admissions."OBDOBIE" = %s AND (ais_admissions."Rozh" = 10 OR ais_admissions."Rozh" = 11) AND ais_admissions."Štúdium" = \'áno\' AND ais_admissions.stupen_studia = \'Bakalársky\' '
+    if('entry_tests' in pouzite_tabulky):
+        sql_query_string = sql_query_string + ' AND entry_tests."OBDOBIE" = ais_admissions."OBDOBIE" '
     return sql_query_string
 
 def prediction_uprava_kategoricke_na_numericke(data, cur, id_modelu):
@@ -128,7 +132,11 @@ def vytvorenie_sql_stringu_simple_model(pole_vybranych_tabuliek, obdobia):
     for tabulka in slovnik:
         if (tabulka[0] in pole_vybranych_tabuliek):
             sql_query_string = sql_query_string + tabulka[1] + " "
-    sql_query_string = sql_query_string + """WHERE "PREDMET_ID" = %s AND ais_admissions."OBDOBIE" = ag."OBDOBIE" AND ag."SEMESTER" = 'winter' AND ("""
+    sql_query_string = sql_query_string + """WHERE "PREDMET_ID" = %s AND ais_admissions."OBDOBIE" = ag."OBDOBIE" AND ag."SEMESTER" = 'winter' AND """
+    if('entry_tests' in pole_vybranych_tabuliek):
+        sql_query_string = sql_query_string + """entry_tests."OBDOBIE" = ais_admissions."OBDOBIE" AND ("""
+    else:
+        sql_query_string = sql_query_string + "("
     for i, obdobie in enumerate(obdobia):
         if (i == (len(obdobia) - 1)):
             sql_query_string = sql_query_string + 'ais_admissions."OBDOBIE" = \'' + obdobie + '\''
@@ -137,21 +145,24 @@ def vytvorenie_sql_stringu_simple_model(pole_vybranych_tabuliek, obdobia):
     sql_query_string = sql_query_string + ')'
     return sql_query_string
 
-def zisti_obdobia_na_trenovanie(sql_string, predmet_id):
-    sql_1 = sql_string.replace('SELECT', 'SELECT ais_admissions."OBDOBIE", ')
-    sql_obdobia = 'SELECT distinct a."OBDOBIE" FROM (' + sql_1 + ") as a"
-    conn = psycopg2.connect(host="localhost", port = database_port, database=database_name, user=database_user, password=database_password)
-    cur = conn.cursor()
-    cur.execute(sql_obdobia, (predmet_id,))
+    def zisti_obdobia_na_trenovanie(sql_string, predmet_id):
+        sql_1 = sql_string.replace('SELECT', 'SELECT ais_admissions."OBDOBIE", ')
+        sql_obdobia = 'SELECT distinct a."OBDOBIE" FROM (' + sql_1 + ") as a"
+        conn = psycopg2.connect(host="localhost", port = database_port, database=database_name, user=database_user, password=database_password)
+        cur = conn.cursor()
+        if (predmet_id):
+            cur.execute(sql_obdobia, (predmet_id,))
+        else:
+            cur.execute(sql_obdobia)
     
-    pole_obdobi = []
-    data = cur.fetchall()
-    for row in data:
-        pole_obdobi.append(row[0])
-    print(pole_obdobi)
-    conn.commit()
-    conn.close()
-    return ','.join(pole_obdobi)
+        pole_obdobi = []
+        data = cur.fetchall()
+        for row in data:
+            pole_obdobi.append(row[0])
+        print(pole_obdobi)
+        conn.commit()
+        conn.close()
+        return ','.join(pole_obdobi)
 
 
 def create_simple_model(pole_vybranych_tabuliek, predmet_id, obdobia, nazov_modelu, cur):

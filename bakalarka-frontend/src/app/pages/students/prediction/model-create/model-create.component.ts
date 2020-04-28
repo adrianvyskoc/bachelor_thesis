@@ -19,6 +19,7 @@ export class ModelCreateComponent implements OnInit {
   available_years: any = []
   available_tables: any = []
   all_subjects: any = []
+  entry_tests_years: any = []
 
   complete_form = false
 
@@ -49,6 +50,7 @@ export class ModelCreateComponent implements OnInit {
         this.available_years = data[0];
         this.available_tables = data[1];
         this.all_subjects = data[2]
+        this.entry_tests_years = data[3]
 
         this.years = this.fb.group( {
             available_years: this.fb.array([])
