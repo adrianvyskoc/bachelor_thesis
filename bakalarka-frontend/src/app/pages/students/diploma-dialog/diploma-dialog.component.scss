@@ -1,9 +1,31 @@
-.wrapper {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
 
-    select {
-        width: 300px;
-    }
+
+#para1{
+    background-color: #e9ecef;
+    padding-bottom: 5px;
+    padding-top: 10px;
+
+    margin-top: -5px;
+    margin-right: -10px;
+    margin-bottom: -10px;
+    margin-left: -10px;
+}
+
+#para2{
+    background-color: #e9ecef;
+    padding-bottom: 15px;
+    padding-top: 5px;
+
+    margin-top: -10px;
+    margin-right: -10px;
+    margin-bottom: 5px;
+    margin-left: -10px;
+}
+
+#para3{
+    margin-right:10px;
+}
+
+#para4{
+    margin-left:10px;
 }

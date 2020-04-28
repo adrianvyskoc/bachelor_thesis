@@ -5,6 +5,8 @@ import { StudentComponent } from './student/student.component';
 import { StudentsRoutingModule } from './students-routing.module';
 
 import {MatExpansionModule} from '@angular/material/expansion';
+import { ChartModule } from 'src/app/plugins/chart/chart.module';
+import { MatPaginatorModule, MatSortModule, MatTooltipModule, MatInputModule, MatIconModule, MatProgressSpinnerModule, MatSelectModule } from '@angular/material';
 import { MatTabsModule, MatButtonModule, MatTableModule, MatDialogModule } from '@angular/material';
 import { DemoComponent } from './demo/demo.component';
 import { FormsModule } from '@angular/forms';
@@ -23,6 +25,15 @@ import { ListDiplomasDialogComponent } from './listDiplomas-dialog/listDiplomas-
     MatButtonModule,
     MatTableModule,
     MatDialogModule,
+
+    ChartModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatTooltipModule,
+    MatInputModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatSelectModule,
 
     CommonModule,
     StudentsRoutingModule,

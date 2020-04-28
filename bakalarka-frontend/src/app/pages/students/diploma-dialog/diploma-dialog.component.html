@@ -1,193 +1,333 @@
-<div class="wrapper">
-  <p></p>
-  <p></p>
-  <button class="btn btn-primary" (click)="onNoClick()">Zavrieť</button>
+
+
+<div  class="container">
+  <div id="para1" class="row justify-content-end">
+    <button id="para3" class="btn btn-primary" (click)="onNoClick()">Zavrieť</button>
+  </div>
+  <div id="para2" class="row justify-content-start">
+    <div id="para4" class="col-4">
+      <input [(ngModel)]="diplom_typ" type="radio" id="diploma_basic" name="diploma" value="diploma_basic" checked>
+      <label for="diploma_basic">Pridať diplom</label>
+    </div>
+    <div class="col-5">
+      <input [(ngModel)]="diplom_typ" type="radio" id="diploma_extra" name="diploma" value="diploma_extra">
+      <label for="diploma_extra">Pridať extra diplom</label>
+    </div>
+  </div>
 </div>
 
-<form name="diplomas" #f="ngForm" (ngSubmit)="onSubmit()">
-  <input type="radio" id="diploma_basic" name="diploma" value="diploma_basic" checked>
-  <label for="diploma_basic">Pridať diplom</label><br>
-  <input type="radio" id="diploma_extra" name="diploma" value="diploma_extra">
-  <label for="diploma_extra">Pridať extra diplom</label><br>
- </form>
+<br>
 
+<div *ngIf="diplom_typ == 'diploma_basic'" class="container">
+  <div class="row justify-content-center">
+    <div class="col-3">
+      <p>Zameranie:</p>
+    </div>
+    <div class="col-6">
+      <select [(ngModel)]="type" class="custom-select" name="type">
+        <option value="matematika">Matematické súťaže</option>
+        <option value="informatika">Informatické súťaže</option>
+        <option value="fyzika">Fyzikálne súťaže</option>
+        <option value="SOČ">SOČ</option>
+        <option value="iné">Iné</option>
+      </select>
+    </div>
+  </div>
 
+  <br class=container>
 
-<div class="wrapper">
-  <p>
-    Zameranie:
-  </p>
-  <select [(ngModel)]="type" class="custom-select" name="type">
-    <option value="matematika">Matematické súťaže</option>
-    <option value="informatika">Informatické súťaže</option>
-    <option value="fyzika">Fyzikálne súťaže</option>
-    <option value="SOČ">SOČ</option>
-    <option value="iné">Iné</option>
-  </select>
-</div>
+  <div *ngIf="type">
+    <div class="row justify-content-center">
+      <div class="col-3">
+        <p>Názov:</p> 
+      </div>
+      <div class="col-6">
+        <select [(ngModel)]="diploma_title" class="custom-select" name="diploma_title" >
+          <option *ngFor="let objectZameranie of objectZameranies[type]" value="{{objectZameranie.nazov}}">{{ objectZameranie.nazov }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
 
-<div  class="wrapper">
-  <p>
-    Názov:
-  </p>
+  <br class=container>  
   
-  <select [(ngModel)]="diploma_title" class="custom-select" name="diploma_title" >
-    <option *ngFor="let objectZameranie of objectZameranies[type]" value="{{objectZameranie.nazov}}">{{ objectZameranie.nazov }}</option>
-  </select>  
+  <div *ngIf="type == 'SOČ' || diploma_title == 'Zenit'">
+    <div class="row justify-content-center">
+      <div class="col-3">
+        <p>Kolo:</p> 
+      </div>
+      <div class="col-6">
+        <select [(ngModel)]="round" class="custom-select" name="round">
+          <option value="krajské">Krajské kolo</option>
+          <option value="celoštátne">Celoštátne kolo</option>
+        </select>
+      </div>
+    </div>
+
+    <br class=container>
+
+    <div class="row justify-content-center">
+      <div class="col-3">
+        <p>Umiestnenie:</p> 
+      </div>
+      <div class="col-6">
+        <select [(ngModel)]="position" class="custom-select" name="position" >
+          <option value="1">1.miesto</option>
+          <option value="2">2.miesto</option>
+          <option value="3">3.miesto</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="(type == 'iné' && diploma_title !== 'Oficiálne IQ testy (spol. Mensa)') || diploma_title == 'NAG - súťaž sieťových akadémií'">
+    <div class="row justify-content-center">
+      <div class="col-3">
+        <p>Kolo:</p> 
+      </div>
+      <div class="col-6">
+        <select [(ngModel)]="round" class="custom-select" name="round">
+          <option value="celoštátne">Celoštátne kolo</option>
+          <option value="medzinárodné">Medzinárodné kolo</option>
+        </select>
+      </div>
+    </div>
+
+    <br class=container>
+
+    <div class="row justify-content-center">
+      <div class="col-3">
+        <p>Umiestnenie:</p> 
+      </div>
+      <div class="col-6">
+        <select [(ngModel)]="position" class="custom-select" name="position" >
+          <option *ngIf="round !== 'medzinárodné' || diploma_title !== 'NAG - súťaž sieťových akadémií'" value="1">1.miesto</option>
+          <option *ngIf="round !== 'medzinárodné' || diploma_title !== 'NAG - súťaž sieťových akadémií'" value="2">2.miesto</option>
+          <option *ngIf="round !== 'medzinárodné' || diploma_title !== 'NAG - súťaž sieťových akadémií'" value="3">3.miesto</option>
+          <option *ngIf="round == 'celoštátne' && diploma_title == 'NAG - súťaž sieťových akadémií'" value="4">4.miesto</option>
+          <option *ngIf="round == 'celoštátne' && diploma_title == 'NAG - súťaž sieťových akadémií'" value="5">5.miesto</option>
+          <option *ngIf="round == 'medzinárodné' && diploma_title == 'NAG - súťaž sieťových akadémií'" value="úspešný riešiteľ">úspešný riešiteľ</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="diploma_title == 'Fyzikálna olympiáda' || diploma_title == 'Matematická olympiáda' || diploma_title == 'Informatická olympiáda'">
+    <div class="row justify-content-center">
+      <div class="col-3">
+        <p>Kolo:</p> 
+      </div>
+      <div class="col-6">
+        <select [(ngModel)]="round" class="custom-select" name="round">
+          <option value="krajské">Krajské kolo</option>
+          <option value="celoštátne">Celoštátne kolo</option>
+          <option value="medzinárodné">Medzinárodné kolo</option>
+          <option *ngIf="diploma_title == 'Informatická olympiáda'" value="stredoeurópske">Stredoeurópske kolo</option>
+        </select>
+      </div>
+    </div>
+
+    <br class=container>
+
+    <div class="row justify-content-center">
+      <div class="col-3">
+        <p>Umiestnenie:</p> 
+      </div>
+      <div class="col-6">
+        <select [(ngModel)]="position" class="custom-select" name="position" >
+          <option *ngIf="round == 'celoštátne'" value="1">1.miesto</option>
+          <option *ngIf="round == 'celoštátne'" value="2">2.miesto</option>
+          <option *ngIf="round == 'celoštátne'" value="3">3.miesto</option>
+          <option value="úspešný riešiteľ">úspešný riešiteľ</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="diploma_title == 'Turnaj mladých fyzikov' || diploma_title == 'Pangea' || diploma_title == 'RoboCupJunior'">
+    <div class="row justify-content-center">
+      <div class="col-3">
+        <p>Kolo:</p> 
+      </div>
+      <div class="col-6">
+        <select [(ngModel)]="round" class="custom-select" name="round">
+          <option value="celoštátne">Celoštátne kolo</option>
+          <option *ngIf="diploma_title == 'RoboCupJunior'" value="medzinárodné">Medzinárodné kolo</option>
+        </select>
+      </div>
+    </div>
+
+    <br class=container>
+
+    <div class="row justify-content-center">
+      <div class="col-3">
+        <p>Umiestnenie:</p> 
+      </div>
+      <div class="col-6">
+        <select [(ngModel)]="position" class="custom-select" name="position" >
+          <option *ngIf="diploma_title == 'Turnaj mladých fyzikov' || diploma_title == 'Pangea'" value="úspešný riešiteľ">úspešný riešiteľ</option>
+          <option *ngIf="diploma_title == 'RoboCupJunior' && round == 'celoštátne'" value="1">1.miesto</option>
+          <option *ngIf="diploma_title == 'RoboCupJunior' && round == 'celoštátne'" value="2">2.miesto</option>
+          <option *ngIf="diploma_title == 'RoboCupJunior' && round == 'celoštátne'" value="3">3.miesto</option>
+          <option *ngIf="diploma_title == 'RoboCupJunior' && round == 'medzinárodné'" value="účasť">účasť</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="diploma_title == 'Oficiálne IQ testy (spol. Mensa)' || diploma_title == 'iBobor'">
+    <div class="row justify-content-center">
+      <div class="col-3">
+        <p>Umiestnenie:</p> 
+      </div>
+      <div class="col-6">
+        <select [(ngModel)]="position" class="custom-select" name="position" >
+          <option *ngIf="diploma_title == 'Oficiálne IQ testy (spol. Mensa)'" value="110b">110b</option>
+          <option *ngIf="diploma_title == 'iBobor'" value="v 10.% najlepších">v 10.% najlepších</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="diploma_title == 'ProFIIT' || diploma_title == 'Net@FIIT' || diploma_title == 'IIT.SRC Junior'">
+    <div class="row justify-content-center">
+      <div class="col-3">
+        <p>Umiestnenie:</p> 
+      </div>
+      <div class="col-6">
+        <select [(ngModel)]="position" class="custom-select" name="position" >
+          <option *ngIf="diploma_title !== 'IIT.SRC Junior'" value="1">1.miesto</option>
+          <option *ngIf="diploma_title !== 'IIT.SRC Junior'" value="2">2.miesto</option>
+          <option *ngIf="diploma_title !== 'IIT.SRC Junior'" value="3">3.miesto</option>
+          <option *ngIf="diploma_title !== 'IIT.SRC Junior'" value="úspešný riešiteľ">úspešný riešiteľ</option>
+          <option *ngIf="diploma_title == 'IIT.SRC Junior'" value="aktívna prezentácia">aktívna prezentácia</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="diploma_title == 'Junior Internet' || diploma_title == 'Junior Internet - kateg. Junior APP' || diploma_title == 'Junior Internet - kateg. Junior WEB, DESIGN, LEARN'">
+    <div class="row justify-content-center">
+      <div class="col-3">
+        <p>Umiestnenie:</p> 
+      </div>
+      <div class="col-6">
+        <select [(ngModel)]="position" class="custom-select" name="position" >
+          <option *ngIf="diploma_title !== 'Junior Internet'" value="1">1.miesto</option>
+          <option *ngIf="diploma_title !== 'Junior Internet'" value="2">2.miesto</option>
+          <option *ngIf="diploma_title !== 'Junior Internet'" value="3">3.miesto</option>
+          <option *ngIf="diploma_title == 'Junior Internet'" value="celkový víťaz">celkový víťaz</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <br class=container>
+
+  <div *ngIf="position">
+    <div class="row justify-content-center">
+      <button class="btn btn-primary" (click)="onAddDiploma()">PRIDAŤ</button>
+    </div>
+  </div>
+  <br> 
 </div>
 
-<div *ngIf="type == 'SOČ' || diploma_title == 'Zenit'">
-  <div class="wrapper">
-    <p>
-      Kolo:
-    </p>
-    <select [(ngModel)]="round" class="custom-select" name="round">
-      <option value="krajské">Krajské kolo</option>
-      <option value="celoštátne">Celoštátne kolo</option>
-    </select>
+
+
+<div *ngIf="diplom_typ == 'diploma_extra'" class="container">
+  <div class="row justify-content-start">
+    <div class="col-3">
+      <p>Zameranie:</p>
+    </div>
+    <div class="col-5">
+      <select [(ngModel)]="type" class="custom-select" name="type">
+        <option value="matematika">Matematické súťaže</option>
+        <option value="informatika">Informatické súťaže</option>
+        <option value="fyzika">Fyzikálne súťaže</option>
+        <option value="SOČ">SOČ</option>
+        <option value="iné">Iné</option>
+      </select>
+    </div>
+  </div>
+  <br class=container>
+
+  <div class="row justify-content-start">
+    <div class="col-3">
+      <p>Názov:</p>
+    </div>
+    <div class="col-5">
+      <input [(ngModel)]="diploma_title" type="text" class="form-control">
+    </div>
+  </div>
+  <br class=container>
+
+  <div class="row justify-content-start">
+    <div class="col-3">
+      <p>Kolo:</p>
+    </div>
+    <div class="col-5">
+      <select [(ngModel)]="round" class="custom-select" name="round">
+        <option value=null>-</option>
+        <option value="iné">ani jedna z možností</option>
+        <option value="krajské">Krajské kolo</option>
+        <option value="celoštátne">Celoštátne kolo</option>
+        <option value="medzinárodné">Medzinárodné kolo</option>
+        <option value="stredoeurópske">Stredoeurópske kolo</option>
+      </select>
+    </div>
+    
+    <div *ngIf="round == 'iné'" class="col-4">
+      <input [(ngModel)]="round_text" type="text" class="form-control" placeholder="iné">
+    </div>
+    
+  </div>
+  <br class=container>
+
+  <div class="row justify-content-start">
+    <div class="col-3">
+      <p>Umiestnenie:</p> 
+    </div>
+    <div class="col-5">
+      <select [(ngModel)]="position" class="custom-select" name="position" >
+        <option value=null>-</option>
+        <option value="iné">ani jedna z možností</option>
+        <option value="1">1.miesto</option>
+        <option value="2">2.miesto</option>
+        <option value="3">3.miesto</option>
+        <option value="celkový víťaz">celkový víťaz</option>
+        <option value="úspešný riešiteľ">úspešný riešiteľ</option>
+        <option value="aktívna prezentácia">aktívna prezentácia</option>
+        <option value="účasť">účasť</option>
+      </select>
+    </div>
+    <div *ngIf="position == 'iné'" class="col-4">
+      <input [(ngModel)]="position_text" type="text" class="form-control" placeholder="iné">
+    </div>
+  </div>
+  <br class=container>
+
+  <div class="row justify-content-start">
+    <div class="col-3">
+      <p>Body:</p>
+    </div>
+    <div class="col-5">
+      <input [(ngModel)]="points" type="number" class="form-control">
+    </div>
   </div>
 
-  <div class="wrapper">
-    <p>
-      Umiestnenie:
-    </p>
-    <select [(ngModel)]="position" class="custom-select" name="position" >
-      <option value="1">1.miesto</option>
-      <option value="2">2.miesto</option>
-      <option value="3">3.miesto</option>
-    </select>
+  <br class=container>
+
+  <div *ngIf="points">
+    <div class="row justify-content-center">
+      <button class="btn btn-primary" (click)="onAddDiplomaExtra()">PRIDAŤ Extra diplom</button>
+    </div>
   </div>
+
+  <br>
 </div>
 
-
-<div *ngIf="(type == 'iné' && diploma_title !== 'Oficiálne IQ testy (spol. Mensa)') || diploma_title == 'NAG - súťaž sieťových akadémií'">
-  <div class="wrapper">
-    <p>
-      Kolo:
-    </p>
-    <select [(ngModel)]="round" class="custom-select" name="round">
-      <option value="celoštátne">Celoštátne kolo</option>
-      <option value="medzinárodné">Medzinárodné kolo</option>
-    </select>
-  </div>
-
-  <div class="wrapper">
-    <p>
-      Umiestnenie:
-    </p>
-    <select [(ngModel)]="position" class="custom-select" name="position" >
-      <option *ngIf="round !== 'medzinárodné' || diploma_title !== 'NAG - súťaž sieťových akadémií'" value="1">1.miesto</option>
-      <option *ngIf="round !== 'medzinárodné' || diploma_title !== 'NAG - súťaž sieťových akadémií'" value="2">2.miesto</option>
-      <option *ngIf="round !== 'medzinárodné' || diploma_title !== 'NAG - súťaž sieťových akadémií'" value="3">3.miesto</option>
-      <option *ngIf="round == 'celoštátne' && diploma_title == 'NAG - súťaž sieťových akadémií'" value="4">4.miesto</option>
-      <option *ngIf="round == 'celoštátne' && diploma_title == 'NAG - súťaž sieťových akadémií'" value="5">5.miesto</option>
-      <option *ngIf="round == 'medzinárodné' && diploma_title == 'NAG - súťaž sieťových akadémií'" value="úspešný riešiteľ">úspešný riešiteľ</option>
-    </select>
-  </div>
-</div>
-
-<div *ngIf="diploma_title == 'Fyzikálna olympiáda' || diploma_title == 'Matematická olympiáda' || diploma_title == 'Informatická olympiáda'">
-  <div class="wrapper">
-    <p>
-      Kolo:
-    </p>
-    <select [(ngModel)]="round" class="custom-select" name="round">
-      <option value="krajské">Krajské kolo</option>
-      <option value="celoštátne">Celoštátne kolo</option>
-      <option value="medzinárodné">Medzinárodné kolo</option>
-      <option *ngIf="diploma_title == 'Informatická olympiáda'" value="stredoeurópske">Stredoeurópske kolo</option>
-    </select>
-  </div>
-
-  <div class="wrapper">
-    <p>
-      Umiestnenie:
-    </p>
-    <select [(ngModel)]="position" class="custom-select" name="position" >
-      <option *ngIf="round == 'celoštátne'" value="1">1.miesto</option>
-      <option *ngIf="round == 'celoštátne'" value="2">2.miesto</option>
-      <option *ngIf="round == 'celoštátne'" value="3">3.miesto</option>
-      <option value="úspešný riešiteľ">úspešný riešiteľ</option>
-    </select>
-  </div>
-</div>
-
-
-<div *ngIf="diploma_title == 'Turnaj mladých fyzikov' || diploma_title == 'Pangea' || diploma_title == 'RoboCupJunior'">
-  <div class="wrapper">
-    <p>
-      Kolo:
-    </p>
-    <select [(ngModel)]="round" class="custom-select" name="round">
-      <option value="celoštátne">Celoštátne kolo</option>
-      <option *ngIf="diploma_title == 'RoboCupJunior'" value="medzinárodné">Medzinárodné kolo</option>
-    </select>
-  </div>
-
-  <div class="wrapper">
-    <p>
-      Umiestnenie:
-    </p>
-    <select [(ngModel)]="position" class="custom-select" name="position" >
-      <option *ngIf="diploma_title == 'Turnaj mladých fyzikov' || diploma_title == 'Pangea'" value="úspešný riešiteľ">úspešný riešiteľ</option>
-      <option *ngIf="diploma_title == 'RoboCupJunior' && round == 'celoštátne'" value="1">1.miesto</option>
-      <option *ngIf="diploma_title == 'RoboCupJunior' && round == 'celoštátne'" value="2">2.miesto</option>
-      <option *ngIf="diploma_title == 'RoboCupJunior' && round == 'celoštátne'" value="3">3.miesto</option>
-      <option *ngIf="diploma_title == 'RoboCupJunior' && round == 'medzinárodné'" value="účasť">účasť</option>
-    </select>
-  </div>
-</div>
-
-<div *ngIf="diploma_title == 'Oficiálne IQ testy (spol. Mensa)' || diploma_title == 'iBobor'">
-  <div class="wrapper">
-    <p>
-      Umiestnenie:
-    </p>
-    <select [(ngModel)]="position" class="custom-select" name="position" >
-      <option *ngIf="diploma_title == 'Oficiálne IQ testy (spol. Mensa)'" value="110b">110b</option>
-      <option *ngIf="diploma_title == 'iBobor'" value="v 10.% najlepších">v 10.% najlepších</option>
-    </select>
-  </div>
-</div>
-
-<div *ngIf="diploma_title == 'ProFIIT' || diploma_title == 'Net@FIIT' || diploma_title == 'IIT.SRC Junior'">
-  <div class="wrapper">
-    <p>
-      Umiestnenie:
-    </p>
-    <select [(ngModel)]="position" class="custom-select" name="position" >
-      <option *ngIf="diploma_title !== 'IIT.SRC Junior'" value="1">1.miesto</option>
-      <option *ngIf="diploma_title !== 'IIT.SRC Junior'" value="2">2.miesto</option>
-      <option *ngIf="diploma_title !== 'IIT.SRC Junior'" value="3">3.miesto</option>
-      <option *ngIf="diploma_title !== 'IIT.SRC Junior'" value="úspešný riešiteľ">úspešný riešiteľ</option>
-      <option *ngIf="diploma_title == 'IIT.SRC Junior'" value="aktívna prezentácia">aktívna prezentácia</option>
-    </select>
-  </div>
-</div>
-
-<div *ngIf="diploma_title == 'Junior Internet' || diploma_title == 'Junior Internet - kateg. Junior APP' || diploma_title == 'Junior Internet - kateg. Junior WEB, DESIGN, LEARN'">
-  <div class="wrapper">
-    <p>
-      Umiestnenie:
-    </p>
-    <select [(ngModel)]="position" class="custom-select" name="position" >
-      <option *ngIf="diploma_title !== 'Junior Internet'" value="1">1.miesto</option>
-      <option *ngIf="diploma_title !== 'Junior Internet'" value="2">2.miesto</option>
-      <option *ngIf="diploma_title !== 'Junior Internet'" value="3">3.miesto</option>
-      <option *ngIf="diploma_title == 'Junior Internet'" value="celkový víťaz">celkový víťaz</option>
-    </select>
-  </div>
-</div>
-
-
-<div class="wrapper">
-  <button class="btn btn-primary" (click)="onAddDiploma()">PRIDAŤ</button>
-  <button class="btn btn-primary" (click)="onAddDiplomaExtra()">PRIDAŤ Extra diplom</button>
-</div>
-
-<div class="wrapper">
-  <p></p>
-  <p>{{oznam}}</p>
+<div *ngIf="oznam" class="alert alert-success">
+  {{oznam}}
 </div>
 
 

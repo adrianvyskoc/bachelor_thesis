@@ -13,10 +13,13 @@ import { MatDialog } from '@angular/material';
 })
 export class DiplomaDialogComponent implements OnInit {
 
+  diplom_typ: string = "diploma_basic"
   type: string = ""
   diploma_title: string = ""
   position: string = ""
+  position_text: string = ""
   round: string = ""
+  round_text: string = ""
   points
   student
   oznam = ""
@@ -49,17 +52,9 @@ export class DiplomaDialogComponent implements OnInit {
   }
 
   onAddDiploma() {
-    this.diplomaService.addDiploma(this.data["student"].AIS_ID, this.data["student"].OBDOBIE, this.data["student"].Prijatie_na_program, this.type, this.diploma_title, this.round, this.position);
-    
-    this.onSkuska();
-  }
-
-  
-
-  onSkuska() {
-    this.diplomaService.getSkuska()
+    this.diplomaService.addDiploma(this.data["student"].AIS_ID, this.data["student"].OBDOBIE, this.data["student"].Prijatie_na_program, this.type, this.diploma_title, this.round, this.position)
       .subscribe((data) => {
-        this.oznam = data["oznam"];
+        this.oznam = data["message"];
       });
   }
 
@@ -68,9 +63,17 @@ export class DiplomaDialogComponent implements OnInit {
   }
 
   onAddDiplomaExtra() {
-    this.diplomaService.addDiplomaExtra(this.data["student"].AIS_ID, this.data["student"].OBDOBIE, this.data["student"].Prijatie_na_program, this.type, this.diploma_title, this.round, this.position, this.points);
+    if(this.round == "iné"){
+      this.round = this.round_text
+    }
+    if(this.position == "iné"){
+      this.position = this.position_text
+    }
+    this.diplomaService.addDiplomaExtra(this.data["student"].AIS_ID, this.data["student"].OBDOBIE, this.data["student"].Prijatie_na_program, this.type, this.diploma_title, this.round, this.position, this.points)
+      .subscribe((data) => {
+        this.oznam = data["message"];
+      });
     
-    this.onSkuska();
   }
 
   

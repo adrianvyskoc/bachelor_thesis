@@ -61,7 +61,7 @@ class DiplomaController {
                 })
             return response.send({
                 type: 'success',
-                message: 'Priradenie diplomu úspešné'
+                message: 'Pridanie diplomu prebehlo úspešné'
               });
         } catch (err) {
             return response.send({
@@ -74,6 +74,29 @@ class DiplomaController {
     async addDiplomaExtra({ request, response }) {
 
         const data = await request.all();
+
+        let student = await Database.table('ais_admissions').where('AIS_ID', data.AIS_ID).where('OBDOBIE', data.OBDOBIE).where('Prijatie_na_program', data.Prijatie_na_program)
+        console.log(student)
+
+        if(student[0].Exb_celk == null) {
+            console.log("je tam null - mozes pridat body")
+            try {
+                await Database.table('ais_admissions')
+                    .where('AIS_ID', data.AIS_ID)
+                    .where('OBDOBIE', data.OBDOBIE)
+                    .where('Prijatie_na_program', data.Prijatie_na_program)
+                    .update('Exb_celk', data.points)
+                    
+                return response.send(true);
+            } catch (err) {
+                return response.send(err);
+            }
+            
+        } else if(student[0].Exb_celk == 0){
+            console.log("je tam 0")
+        } else {
+            console.log("je tam nejaky pocet bodov")
+        }
         
         try {
             await Database
@@ -90,7 +113,7 @@ class DiplomaController {
                 })
             return response.send({
                 type: 'success',
-                message: 'Priradenie diplomu úspešné'
+                message: 'Pridanie diplomu prebehlo úspešné'
               });
         } catch (err) {
             return response.send({
@@ -98,17 +121,6 @@ class DiplomaController {
                 message: 'Nepodarilo sa diplom priradiť'
               });
         }
-    }
-
-    async getSkuska ({ response}) {
-        
-        
-        let oznam = "Diplom pridaný"
-        
-    
-        return response.send({
-          oznam
-        })
     }
 
     

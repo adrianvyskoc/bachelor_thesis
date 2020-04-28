@@ -137,14 +137,6 @@ Route
 
         // diplomas
         Route.post("students/diploma/add", "DiplomaController.addDiploma")
-
-        
-        Route.get("students/diploma/skuska", "DiplomaController.getSkuska")
-
-
-
-
-
         Route.post("students/diploma/addExtra", "DiplomaController.addDiplomaExtra")
 
     })

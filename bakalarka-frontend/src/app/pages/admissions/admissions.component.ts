@@ -120,5 +120,6 @@ export class AdmissionsComponent implements OnInit {
         acc.rejected++
       return acc
     }, {'bachelor': 0, 'master': 0, 'approved': 0, 'rejected': 0, 'beganStudy': 0})
+    
   }
 }

@@ -27,6 +27,9 @@ export class DataService {
 
   private year = new BehaviorSubject('all')
   private program = new BehaviorSubject('all')
+  private studentsBachelorChanged = new Subject<{}>()
+
+  private admissionsDiplomasYearComparisonChanged = new Subject<{}>()
 
   loading = false
   showErrorMessage = false
@@ -63,11 +66,27 @@ export class DataService {
     return this.year
   }
 
-  
-  
-  getStudents() { 
-    return this.http.get(`http://localhost:3333/api/students?year=${this.year.value}&program=${this.program.value}`);
+  getAdmissionsDiplomasYearComparison() {
+    this.http.get(`http://localhost:3333/students`)
+      .subscribe(data => this.admissionsDiplomasYearComparisonChanged.next(data))
   }
+
+  getAdmissionsDiplomasYearComparisonUpdateListener() {
+    return this.admissionsDiplomasYearComparisonChanged.asObservable()
+  }
+
+  getStudentsBachelor() {
+    this.http.get(`http://localhost:3333/api/students?year=${this.year.value}&program=${this.program.value}`)
+      .subscribe(data => this.studentsBachelorChanged.next(data))
+  }
+
+  getStudentsBachelorUpdateListener() {
+    return this.studentsBachelorChanged.asObservable()
+  }
+  
+  /*getStudents() { 
+    return this.http.get(`http://localhost:3333/api/students?year=${this.year.value}&program=${this.program.value}`);
+  }*/
 
   getStudentsName(name) { 
     return this.http.get(`http://localhost:3333/api/students/${name}?year=${this.year.value}&program=${this.program.value}`);
