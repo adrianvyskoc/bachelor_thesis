@@ -112,6 +112,15 @@ export class PredictionService {
     )
   }
 
+  insert_model(model, imputers) {
+
+    let postData = {
+      "model" : model,
+      "imputers": imputers
+    }
+    return this.http.post(`http://localhost:3333/api/predictions/insert_model`, postData)
+  }
+
   helloPython() {
    
     var data = this.http.get(`http://localhost:3333/api/predictions`)

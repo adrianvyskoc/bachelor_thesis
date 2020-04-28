@@ -46,10 +46,10 @@
 
     <section class="file-input">
       <input id="fileInput" name="file" type="file" class="ng-hide" #fileInput (change)="onFileSelected($event)">
-      <button mat-raised-button color="primary" (click)="addModel()" [disabled]="selectedImport == ''">
+      <button mat-raised-button color="primary" (click)="addModel()" [disabled]="new_model == null">
         Importovať model
       </button>
-      <span>{{ fileName }}</span>
+  
     </section>
 
     <div flex flex-column margin-top>
@@ -60,11 +60,39 @@
         Model sa nepodarilo vymazať
       </div>
 
+      <div *ngIf="this.showErrorFile" class="alert alert-danger mt-3" role="alert" flex align-items-center>
+        <div class="icon-wrapper danger" margin-right>
+          <i class="far fa-times-circle"></i>
+        </div>
+        Nesprávny formát súboru.
+      </div>
+
+      <div *ngIf="this.showErrorName" class="alert alert-danger mt-3" role="alert" flex align-items-center>
+        <div class="icon-wrapper danger" margin-right>
+          <i class="far fa-times-circle"></i>
+        </div>
+        Už existuje model s menom {{new_model[0].name}}
+      </div>
+
+      <div *ngIf="this.showErrorImport" class="alert alert-danger mt-3" role="alert" flex align-items-center>
+        <div class="icon-wrapper danger" margin-right>
+          <i class="far fa-times-circle"></i>
+        </div>
+        Model sa nepodarilo importovať.
+      </div>
+
       <div *ngIf="this.showSuccessDelete" class="alert alert-success mt-3" role="alert" flex align-items-center>
         <div class="icon-wrapper success" margin-right>
           <i class="far fa-check-circle"></i>
         </div>
         Model je vymazaný.
+      </div>
+
+      <div *ngIf="this.showSuccesImport" class="alert alert-success mt-3" role="alert" flex align-items-center>
+        <div class="icon-wrapper success" margin-right>
+          <i class="far fa-check-circle"></i>
+        </div>
+        Model bol úspešne importovaný.
       </div>
     </div>
   </div>

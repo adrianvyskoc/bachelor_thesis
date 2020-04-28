@@ -44,12 +44,31 @@
 
       <button *ngIf = "risky_students" mat-raised-button color="primary" (click)="export_data_excel()">
         Exportuj tabuľku
-        
       </button>
       <br>
       <span *ngIf = "risky_students">Exportuje podrobnejšie údaje o študentoch</span>
 
-
+      <table class="table" *ngIf="model_details">
+        <tbody>
+          <tr>
+            <th>správnosť (accuracy) </th>
+            <td>{{model_details.accuracy}}</td>
+          </tr>
+          <tr>
+            <th>pokrytie (recall) </th>
+            <td>{{model_details.recall}}</td>
+          </tr>
+          <tr>
+            <th>presnosť (precision) </th>
+            <td>{{model_details.precision}}</td>
+          </tr>
+          <tr>
+            <th>f1 makro</th>
+            <td>{{model_details.f1}}</td>
+          </tr>
+         
+        </tbody>
+      </table>
 
     </div>
 

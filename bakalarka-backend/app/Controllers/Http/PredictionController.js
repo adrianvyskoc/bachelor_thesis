@@ -121,7 +121,6 @@ class PredictionController {
         response.implicitEnd = false
 
         var request = require('request')
-
         let request_string = "http://localhost:5000/prediction?school_year=" + school_year + "&model=" + model_id;
 
         function request_prediction() {
@@ -140,7 +139,6 @@ class PredictionController {
 
         request_prediction().then(
             async function (result) {
-                console.log("uspech v then");
                 const pole_ais_id = result.split(',')
                 const data = []
 
@@ -156,7 +154,6 @@ class PredictionController {
                 response.send(data);
             },
             function (error) {
-                console.log("error v then");
                 if (error.code == 'ECONNREFUSED') {
                     return response.status(505).send("Skontrolujte, či máte spustený Flask")
                 }
@@ -208,7 +205,7 @@ class PredictionController {
             .from('prediction_models')
             .leftJoin('ais_subjects', 'subject_id', 'ais_subjects.id')
 
-        console.log(data)
+        //console.log(data)
 
         return response
             .status(200)
@@ -347,7 +344,7 @@ class PredictionController {
             const count = await Database
                 .raw(sql_string)
 
-            console.log(count)
+            //console.log(count)
             // return count.rows[0].count
 
 
@@ -358,7 +355,7 @@ class PredictionController {
 
 
 
-        console.log(available_tables)
+        //console.log(available_tables)
         return response.status(200).send(available_tables)
     }
 
@@ -450,6 +447,35 @@ class PredictionController {
 
     }
 
+    async insert_model ( {request, response }) {
+        const data = request.body
+        const { id, ...model } = data.model
+
+        const modelId = await Database
+        .insert(model)
+        .into('prediction_models')
+        .returning('id')
+
+        var imputers = data.imputers
+     
+
+        for (var i = 0; i< imputers.length; i++)
+        {
+            
+            const {id, ...imputer1} = imputers[i]
+            imputer1.id_model = modelId[0]
+            
+            const imputerId = await Database
+            .insert(imputer1)
+            .into('imputers')
+            .returning('id')
+
+        }
+   
+
+
+        
+    }
 
 }
 

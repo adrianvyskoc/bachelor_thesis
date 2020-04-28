@@ -156,6 +156,8 @@ Route
 
         Route.post('predictions/create_model', 'PredictionController.create_model')
 
+        Route.post('predictions/insert_model', 'PredictionController.insert_model')
+
 
     })
     .prefix('/api')

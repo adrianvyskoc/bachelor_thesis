@@ -3,6 +3,7 @@ import { PredictionService } from 'src/app/pages/students/prediction/prediction.
 import * as JSZip from 'jszip'
 import { saveAs } from 'file-saver';
 import { PredictionComponent } from '../prediction.component';
+import { zip } from 'rxjs';
 
 @Component({
   selector: 'app-model-import',
@@ -10,6 +11,7 @@ import { PredictionComponent } from '../prediction.component';
   styleUrls: ['./model-import.component.scss']
 })
 export class ModelImportComponent implements OnInit {
+  
 
   constructor(
     private dataService: PredictionService
@@ -18,14 +20,20 @@ export class ModelImportComponent implements OnInit {
   available_models: any = []
   model
   imputers
-  selectedFile : File
-  fileName : string
+  selectedFile: File
+  fileName: string
 
+  //import_disabled = true
+
+  showErrorFile = false
   showErrorDelete = false
   showSuccessDelete = false
+  showErrorName = false
+  showErrorImport = false
+  showSuccesImport = false
 
-  new_model
-  new_imputers: any []
+  new_model: any = null
+  new_imputers: any = []
 
   model_details
   showDetails = false
@@ -36,7 +44,7 @@ export class ModelImportComponent implements OnInit {
 
   ngOnInit() {
     this.get_all_models()
-    if(this.dataService.subsVar==undefined) {
+    if (this.dataService.subsVar == undefined) {
       this.dataService.subsVar = this.dataService.invokeRefreshModelImport.subscribe(
         (data) => {
           this.get_all_models()
@@ -50,143 +58,165 @@ export class ModelImportComponent implements OnInit {
 
   get_all_models() {
     this.dataService.get_all_models()
-    .subscribe (
-      (data) => this.available_models = data,
-      (error) => this.serverError = true
-    )
+      .subscribe(
+        (data) => this.available_models = data,
+        (error) => this.serverError = true
+      )
   }
 
   download_model(selected_model) {
     let model_id = selected_model.id
-    let imputers:any = []
+    let imputers: any = []
     var zip = new JSZip()
 
-   this.dataService.get_model(model_id)
-    .subscribe (
-      (data) => {
-        this.model = data
-        console.log(this.model)
-        this.dataService.get_imputers(model_id).
-        subscribe (
-          (data1) => {
-            zip.file('model.json', JSON.stringify(this.model))
-            zip.folder('imputers')
-            imputers = data1
-            imputers.forEach(imputer => {
-              console.log(imputer)
-              zip.folder('imputers').file(imputer.column_name + ".json", JSON.stringify(imputer))
-            });
-            zip.generateAsync({type:"blob"}).then(function (blob) { // 1) generate the zip file
-              saveAs(blob, "model.zip");                          // 2) trigger the download
-            });
-          }
-        )
-        
-      }
-    )
+    this.dataService.get_model(model_id)
+      .subscribe(
+        (data) => {
+          this.model = data
+          this.dataService.get_imputers(model_id).
+            subscribe(
+              (data1) => {
+                zip.file('model.json', JSON.stringify(this.model))
+                zip.folder('imputers')
+                imputers = data1
+                imputers.forEach(imputer => {
+                  zip.folder('imputers').file(imputer.column_name + ".json", JSON.stringify(imputer))
+                });
+                zip.generateAsync({ type: "blob" }).then(function (blob) {
+                  saveAs(blob, "model.zip");
+                });
+              }
+            )
+
+        }
+      )
   }
 
   delete_model(selected_model) {
     let model_id = selected_model.id
 
     this.dataService.delete_model(model_id)
-    .subscribe (
-      (data) => {  
-        this.refresh_form()
-        this.showSuccessDelete = true
+      .subscribe(
+        (data) => {
+          // this.refresh_form()
+          this.showSuccessDelete = true
+          this.dataService.RefreshAvailableModels()
 
-        setTimeout(() => {
-          this.showSuccessDelete = false
-        }, 5000)
+          setTimeout(() => {
+            this.showSuccessDelete = false
+          }, 5000)
 
-      }, // success path
-      error => {
-        console.log(error)
-        this.showErrorDelete = true
+        }, // success path
+        error => {
+          console.log(error)
+          this.showErrorDelete = true
 
-        setTimeout(() => {
-          this.showErrorDelete = false
-        }, 5000)
-      } // error path
-    )
+          setTimeout(() => {
+            this.showErrorDelete = false
+          }, 5000)
+        } // error path
+      )
   }
 
   open_model_details(selected_model) {
     let model_id = selected_model.id
     this.dataService.get_model_details(model_id)
-    .subscribe ( 
-      (data) => {
-        this.model_details = data
-        this.showDetails = true
-        console.log(this.model_details)
-      },
-      error => {
+      .subscribe(
+        (data) => {
+          this.model_details = data
+          this.showDetails = true
+          console.log(this.model_details)
+        },
+        error => {
 
-      }
-    )
+        }
+      )
   }
 
   
 
   onFileSelected(event) {
+    this.new_model = null
+    this.showErrorFile = false
+    this.showErrorName = false
+    this.showErrorImport = false
+    this.showSuccesImport = false
+
     this.selectedFile = <File>event.target.files[0]
     this.fileName = event.target.files[0] ? event.target.files[0].name : ""
-    console.log(this.fileName)
+    var searchPattern = new RegExp('.zip$')
+    if (!searchPattern.test(this.fileName)) {
+      this.showErrorFile = true
+    }  
 
-    let new_model: any
-    let new_imputers: any = []
-    let models_in = this.available_models
-    console.log(models_in)
+   
+    var jszip = require('jszip')
 
-    var zip = new JSZip();
+    var _this = this
+    jszip.loadAsync(this.selectedFile)
+      .then(function (contents) {
+        Object.keys(contents.files).forEach(function (filename) {
+          contents.files[filename].async('string').then(function (fileData) {
+            //console.log(fileData)
+            if (filename != 'imputers/') {
+              var searchPattern = new RegExp('^imputers/')
+              if (searchPattern.test(filename)) {
+                let imputer = JSON.parse(fileData)
+                //ModelImportComponent.new_imputers.push(imputer)
+                _this.new_imputers.push(imputer)
+              }
+              else {
+                let model = JSON.parse(fileData)
+                _this.new_model = model
 
-    zip.loadAsync(this.selectedFile)
-    .then(function(contents) {
-      console.log(contents)
-      Object.keys(contents.files).forEach((filename)=> {
-       this.handleFile(filename)       
+              }
+            }
+          })
+        })
       })
-      console.log(new_model)
-      console.log(new_imputers)
-    })
 
 
-  
+
   }
 
-  handleFile(filename) {
-    console.log(filename)
-    if (filename != 'imputers/') {
+  addModel() {
 
-    var zip = new JSZip()
-    zip.file(filename).async('string').then( function(content) {
-      var searchPattern = new RegExp('^imputers/')
-      if (searchPattern.test(filename)) {
-        let imputer = JSON.parse(content)
-        this.new_imputers.push(imputer[0])
+   
+    //kontrola mena
+    for (var i = 0; i < this.available_models.length; i+=1)
+    {
+      if (this.available_models[i].name == this.new_model[0].name) {
+        this.showErrorName = true
+        return
       }
-      else {
-        console.log("SOM TU")
-        this.new_model = JSON.parse(content)
-        console.log(this.new_model)
-        this.available_models.forEach(element => {
-          if (element.name == this.new_model[0].name) {
-            this.showError = true
-            console.log("ERROR")
-            return
-          }
-        });
-      }
-    })
+    }
+
+    //var model_imputers = Object.assign(this.new)
+    this.dataService.insert_model(this.new_model[0], this.new_imputers).subscribe( 
+      data => {
+        this.showSuccesImport = true
+        //this.fileInput.nativeElement.value = ""
+        this.dataService.RefreshAvailableModels()
+        setTimeout(() => {
+          this.showSuccesImport = false
+        }, 5000)
+      },
+      (error) => {
+        this.showErrorImport = true
+        setTimeout(() => {
+          this.showErrorImport = false
+        }, 5000)
+      })
   }
-  }
+
+ 
 
 
   refresh_form() {
     this.dataService.get_all_models()
-    .subscribe (
-      (data) => this.available_models = data
-    )
+      .subscribe(
+        (data) => this.available_models = data
+      )
 
   }
 

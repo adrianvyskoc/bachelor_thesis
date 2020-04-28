@@ -25,6 +25,7 @@ export class PredictionComponent implements OnInit {
 
   ErrorMessage = ''
 
+  model_details
 
 
   displayed_columns: string [] = ['id', 'meno', 'priezvisko'];
@@ -52,7 +53,13 @@ export class PredictionComponent implements OnInit {
         (data) => {
           this.dataService.get_subjects()
             .subscribe (
-              (data) => this.imported_subjects = data
+              (data) =>  {
+                this.imported_subjects = data
+                this.selected_subject = ''
+                this.show_models = false
+                this.risky_students = undefined
+                this.model_details = undefined
+              }
     )
         },
         (error) => {
@@ -100,12 +107,18 @@ export class PredictionComponent implements OnInit {
         this.risky_students = data
         this.data_source_risky_students = new MatTableDataSource<IRiskyStudent>(this.risky_students)
         this.data_source_risky_students.paginator = this.paginator;
+        this.dataService.get_model_details(this.selected_model.id)
+        .subscribe(
+        (data) => {
+          this.model_details = data
+        },
+        error => {}
+      )
       },
       (error) => {
         console.error(error)
         this.ErrorMessage = error.error
-        
-       
+               
         this.loading = false
         this.showErrorMessage = true
       }
@@ -113,7 +126,7 @@ export class PredictionComponent implements OnInit {
   }
 
   export_data_excel() {
-    this.exportService.exportArrayOfObjectToExcel(this.risky_students, 'export')
+    this.exportService.exportArrayOfObjectToExcel(this.risky_students, 'export_' + this.school_year.value + '_' + this.selected_subject + '_' + this.selected_model.name);
   }
   
 
