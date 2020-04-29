@@ -380,7 +380,7 @@ class PredictionController {
      */
     async get_all_subjects({ response }) {
 
-        let mock_data = ['Matematická analýza', 'Algebra a diskrétna matematika', 'Procedurálne programovanie', 'Metódy inžinierskej práce']
+        let mock_data = ['Matematická analýza', 'Algebra a diskrétna matematika', 'Procedurálne programovanie', 'Metódy inžinierskej práce', 'Celková predikcia']
         return response.status(200).send(mock_data)
     }
 
@@ -407,7 +407,7 @@ class PredictionController {
         let model_type = ''
         let id_subject = 0
 
-        if (request_params.subject == 'Všeobecný model') {
+        if (request_params.subject == 'Celková predikcia') {
             model_type = 'komplex'
         }
         else {

@@ -28,14 +28,14 @@ export class PredictionComponent implements OnInit {
   model_details
 
 
-  displayed_columns: string [] = ['id', 'meno', 'priezvisko'];
-  data_source_risky_students : MatTableDataSource<IRiskyStudent>
+  displayed_columns: string[] = ['id', 'meno', 'priezvisko'];
+  data_source_risky_students: MatTableDataSource<IRiskyStudent>
 
-  risky_students: IRiskyStudent []
-  
+  risky_students: IRiskyStudent[]
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  
+
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
   constructor(
     private dataService: PredictionService,
     private exportService: ExportService
@@ -44,48 +44,45 @@ export class PredictionComponent implements OnInit {
   ngOnInit() {
     this.school_year = new FormControl('');
     this.dataService.get_subjects()
-    .subscribe (
-      (data) => this.imported_subjects = data
-    )
+      .subscribe(
+        (data) => this.imported_subjects = data
+      )
 
-    if(this.dataService.subsVarPrediction==undefined) {
+    if (this.dataService.subsVarPrediction == undefined) {
       this.dataService.subsVarPrediction = this.dataService.invokeRefreshModelPrediction.subscribe(
         (data) => {
           this.dataService.get_subjects()
-            .subscribe (
-              (data) =>  {
+            .subscribe(
+              (data) => {
                 this.imported_subjects = data
                 this.selected_subject = ''
                 this.show_models = false
                 this.risky_students = undefined
                 this.model_details = undefined
               }
-    )
+            )
         },
         (error) => {
-          
+
         }
       )
     }
 
-    
+
   }
 
   onFormChange() {
 
     // pri celkovej predikcii tiez moze byt viac modelov 
-    if (this.selected_subject != 'Celková predikcia') {
-      this.dataService.get_models(this.selected_subject)
-      .subscribe (
+
+    this.dataService.get_models(this.selected_subject)
+      .subscribe(
         (data) => {
           this.available_models = data
           this.show_models = true
-        } 
+        }
       )
-    }
-    else if (this.selected_subject == 'Celková predikcia') {
-      this.show_models = false
-    }
+
   }
 
   // markTouched() {
@@ -102,39 +99,39 @@ export class PredictionComponent implements OnInit {
     this.showErrorMessage = false
     this.risky_students = null
     this.dataService.predict(this.school_year.value, this.selected_model.id)
-    .subscribe( 
-      (data) => {
-        this.risky_students = data
-        this.data_source_risky_students = new MatTableDataSource<IRiskyStudent>(this.risky_students)
-        this.data_source_risky_students.paginator = this.paginator;
-        this.dataService.get_model_details(this.selected_model.id)
-        .subscribe(
+      .subscribe(
         (data) => {
-          this.model_details = data
+          this.risky_students = data
+          this.data_source_risky_students = new MatTableDataSource<IRiskyStudent>(this.risky_students)
+          this.data_source_risky_students.paginator = this.paginator;
+          this.dataService.get_model_details(this.selected_model.id)
+            .subscribe(
+              (data) => {
+                this.model_details = data
+              },
+              error => { }
+            )
         },
-        error => {}
+        (error) => {
+          console.error(error)
+          this.ErrorMessage = error.error
+
+          this.loading = false
+          this.showErrorMessage = true
+        }
       )
-      },
-      (error) => {
-        console.error(error)
-        this.ErrorMessage = error.error
-               
-        this.loading = false
-        this.showErrorMessage = true
-      }
-    )
   }
 
   export_data_excel() {
     this.exportService.exportArrayOfObjectToExcel(this.risky_students, 'export_' + this.school_year.value + '_' + this.selected_subject + '_' + this.selected_model.name);
   }
-  
+
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.data_source_risky_students.filter = filterValue.trim().toLowerCase();
   }
 
- 
+
 
 }
