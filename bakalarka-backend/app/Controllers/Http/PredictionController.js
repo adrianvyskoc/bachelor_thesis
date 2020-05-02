@@ -340,6 +340,8 @@ class PredictionController {
             rawData.push(e['OBDOBIE']);
         })
 
+        rawData.sort()
+
         return response.status(200).send(rawData)
     }
 

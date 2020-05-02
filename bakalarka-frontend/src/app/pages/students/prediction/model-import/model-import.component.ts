@@ -40,9 +40,18 @@ export class ModelImportComponent implements OnInit {
 
   serverError = false
 
+  map = new Map<string, string>()
 
 
   ngOnInit() {
+
+    this.map.set("ais_admissions", "prijímacie konanie")
+    this.map.set("ineko_percentils", "INEKO percentily")
+    this.map.set("ineko_additional_data", "INEKO doplnkové údaje")
+    this.map.set("ineko_total_ratings", "INEKO celkové hodnotenie")
+    this.map.set("ineko_schools", "INEKO školy")
+    this.map.set("entry_tests", "Vstupné testy")
+
     this.get_all_models()
     if (this.dataService.subsVar == undefined) {
       this.dataService.subsVar = this.dataService.invokeRefreshModelImport.subscribe(
@@ -124,6 +133,13 @@ export class ModelImportComponent implements OnInit {
       .subscribe(
         (data) => {
           this.model_details = data
+          let used_tables = this.model_details.used_tables.split(',')
+          console.log(used_tables)
+          for (var i = 0; i< used_tables.length; i+=1) {
+            used_tables[i] = this.map.get(used_tables[i])
+            this.model_details.used_tables = used_tables.join(',')
+          }
+          
           this.showDetails = true
           console.log(this.model_details)
         },

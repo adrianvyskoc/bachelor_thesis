@@ -22,10 +22,10 @@ database_port = 5432
 
 #globalne premenne
 slovnik = [ ('ais_admissions', '', ', "Body_celkom", "Body", "Pohlavie"'),
-           ('ineko_schools', 'FULL OUTER JOIN ineko_schools on ais_admissions.school_id = ineko_schools.kod_kodsko', ', okres, kraj, typ_skoly'),
-           ('ineko_total_ratings', 'FULL OUTER JOIN ineko_total_ratings on ais_admissions.school_id = ineko_total_ratings.school_id', ', celkove_hodnotenie, maturity, matematika, vyucovaci_jazyk, mimoriadne_vysledky, nezamestnanost_absolventov, "prijimanie_na_VS", pedagogicky_zbor, financne_zdroje'),
-           ('ineko_percentils', 'FULL OUTER JOIN ineko_percentils on ais_admissions.school_id = ineko_percentils.school_id', ', "Mat_SJ", "Mat_M", poc_ucitelov'),
-           ('entry_tests', 'FULL OUTER JOIN entry_tests on ais_admissions."AIS_ID" = entry_tests.id_student', ', entry_tests.Body as vstupny_test_body')
+           ('ineko_schools', 'LEFT JOIN ineko_schools on ais_admissions.school_id = ineko_schools.kod_kodsko', ', okres, kraj, typ_skoly'),
+           ('ineko_total_ratings', 'LEFT JOIN ineko_total_ratings on ais_admissions.school_id = ineko_total_ratings.school_id', ', celkove_hodnotenie, maturity, matematika, vyucovaci_jazyk, mimoriadne_vysledky, nezamestnanost_absolventov, "prijimanie_na_VS", pedagogicky_zbor, financne_zdroje'),
+           ('ineko_percentils', 'LEFT JOIN ineko_percentils on ais_admissions.school_id = ineko_percentils.school_id', ', "Mat_SJ", "Mat_M", poc_ucitelov'),
+           ('entry_tests', 'LEFT JOIN entry_tests on ais_admissions."AIS_ID" = entry_tests.id_student', ', entry_tests.Body as vstupny_test_body')
 
           ]
 
@@ -154,7 +154,7 @@ def vytvorenie_sql_stringu_simple_model(pole_vybranych_tabuliek, obdobia):
     for tabulka in slovnik:
         if (tabulka[0] in pole_vybranych_tabuliek):
             sql_query_string = sql_query_string + tabulka[2]
-    sql_query_string = sql_query_string + ' FROM ais_admissions JOIN ais_grades ag on ag."AIS_ID" = ais_admissions."AIS_ID"'
+    sql_query_string = sql_query_string + ' FROM ais_admissions LEFT JOIN ais_grades ag on ag."AIS_ID" = ais_admissions."AIS_ID"'
     for tabulka in slovnik:
         if (tabulka[0] in pole_vybranych_tabuliek):
             sql_query_string = sql_query_string + tabulka[1] + " "
@@ -261,16 +261,27 @@ def create_simple_model(pole_vybranych_tabuliek, predmet_id, obdobia, nazov_mode
 # ----------------- komplex model -----------------------------------
 
 def uprava_kreditov_pre_binarnu_klas(sucet_kreditov):
-    return 1 if sucet_kreditov < 25 else 0
+    return 1 if sucet_kreditov < 15 else 0
 
 def vytvorenie_sql_stringu_komplex_model(pole_vybranych_tabuliek, obdobia):
     sql_query_string = 'SELECT kredity.sucet_kreditov'
     for tabulka in slovnik:
         if (tabulka[0] in pole_vybranych_tabuliek):
             sql_query_string = sql_query_string + tabulka[2]
-    sql_query_string = sql_query_string + ' FROM (SELECT ais_admissions."AIS_ID" as AIS_ID, ais_admissions."OBDOBIE" AS OBDOBIE, sum("KREDITY") as sucet_kreditov '
-    sql_query_string = sql_query_string + ' FROM ais_admissions FULL OUTER JOIN ais_grades ag on ag."AIS_ID" = ais_admissions."AIS_ID" FULL OUTER JOIN ais_subjects on ag."PREDMET_ID" = ais_subjects.id '
-    sql_query_string = sql_query_string + ' WHERE ais_admissions."OBDOBIE" = ag."OBDOBIE" AND "PREDMET_VYSLEDOK" notnull AND "PREDMET_VYSLEDOK" != \'FN\' and "PREDMET_VYSLEDOK" != \'FX\' AND stupen_studia = \'Bakalársky\' AND ('
+    sql_query_string = sql_query_string + """ FROM (SELECT ais_admissions."AIS_ID" as AIS_ID, ais_admissions."OBDOBIE" AS OBDOBIE, sum(CASE "PREDMET_VYSLEDOK" WHEN 'A' THEN
+    "KREDITY"
+    WHEN 'B' THEN
+      "KREDITY"
+    WHEN 'C' THEN
+      "KREDITY"
+    WHEN 'D' THEN
+      "KREDITY"
+    WHEN 'E' THEN
+      "KREDITY"
+    ELSE 0   END) as sucet_kreditov """
+    sql_query_string = sql_query_string + ' FROM ais_admissions  '
+    sql_query_string = sql_query_string + ' LEFT JOIN ais_grades ag on ag."AIS_ID" = ais_admissions."AIS_ID" LEFT JOIN ais_subjects on ag."PREDMET_ID" = ais_subjects.id '
+    sql_query_string = sql_query_string + ' WHERE ais_admissions."OBDOBIE" = ag."OBDOBIE" AND stupen_studia = \'Bakalársky\' AND ag."SEMESTER" = \'winter\' ('
    
     for i, obdobie in enumerate(obdobia):
         if (i == (len(obdobia) - 1)):

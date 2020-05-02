@@ -26,6 +26,9 @@ export class ModelCreateComponent implements OnInit {
   selected_subject = ''
   selected_name = ''
 
+  map = new Map<string, string>()
+
+
   serverError = false
 
 
@@ -42,6 +45,15 @@ export class ModelCreateComponent implements OnInit {
   // })
 
   ngOnInit() {
+
+    this.map.set("ais_admissions", "prijímacie konanie")
+    this.map.set("ineko_percentils", "INEKO percentily")
+    this.map.set("ineko_additional_data", "INEKO doplnkové údaje")
+    this.map.set("ineko_total_ratings", "INEKO celkové hodnotenie")
+    this.map.set("ineko_schools", "INEKO školy")
+    this.map.set("entry_tests", "Vstupné testy")
+
+    
 
     //this.available_years = ['2017-2018', '2018-2019']
 
