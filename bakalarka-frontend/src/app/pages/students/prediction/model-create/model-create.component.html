@@ -8,7 +8,7 @@
 </div>
 
 
-<form (ngSubmit)="onSubmit()" *ngIf = "!serverError">
+<form (ngSubmit)="onSubmit()" *ngIf="!serverError">
   <!-- *ngIf = "this.complete_form"  -->
   <mat-form-field>
     <mat-label>Názov modelu: </mat-label>
@@ -35,12 +35,14 @@
         </div>
         <span class="text-muted">Zobrazujú sa tabuľky, v ktorých sú importované dáta.</span>
         <br>
-        <span *ngIf="available_tables.indexOf('entry_tests') !== -1" class="text-muted">POZOR! Ak vyberiete tabuľku Vstupné testy, model sa bude trénovať iba na dátach z rokov, pre ktoré máte importované vstupné testy. Sú to roky: {{ entry_tests_years }} </span>
+        <span *ngIf="available_tables.indexOf('entry_tests') !== -1" class="text-muted">POZOR! Vstupné testy máte
+          importované iba pre roky: {{ entry_tests_years }} </span>
       </div>
     </div>
     <div class="col">
       <p>Vyberte predmet, pre ktorý chcete vytvoriť model.</p>
-      <span class="text-muted">Ak chcete vytvoriť model celkovej predikcie, vyberte možnosť <strong>Celková predikcia</strong></span>
+      <span class="text-muted">Ak chcete vytvoriť model celkovej predikcie, vyberte možnosť <strong>Celková
+          predikcia</strong></span>
       <mat-form-field>
         <mat-label>Predmet: </mat-label>
         <mat-select [formControl]="subjects">
@@ -49,30 +51,31 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+
+      <div flex flex-column margin-top>
+        <div *ngIf="dataService.showErrorMessage" class="alert alert-danger mt-3" role="alert" flex align-items-center>
+          <div class="icon-wrapper danger" margin-right>
+            <i class="far fa-times-circle"></i>
+          </div>
+          Pri vytváraní modelu sa vyskytla chyba. {{dataService.ErrorMessage}}
+        </div>
+
+        <div *ngIf="dataService.showSuccessMessage" class="alert alert-success mt-3" role="alert" flex
+          align-items-center>
+          <div class="icon-wrapper success" margin-right>
+            <i class="far fa-check-circle"></i>
+          </div>
+          Model bol úspešne vytvorený.
+        </div>
+
+        <div *ngIf="dataService.loading" flex flex-column align-items-center>
+          <h4>Prebieha vytváranie modelu, počkajte prosím.</h4>
+          <!-- <mat-spinner></mat-spinner> -->
+        </div>
+      </div>
     </div>
+
   </div>
   <button mat-raised-button color="primary">Spustiť trénovanie modelu</button>
 
 </form>
-
-<div flex flex-column margin-top>
-  <div *ngIf="dataService.showErrorMessage" class="alert alert-danger mt-3" role="alert" flex align-items-center>
-    <div class="icon-wrapper danger" margin-right>
-      <i class="far fa-times-circle"></i>
-    </div>
-    Pri vytváraní modelu sa vyskytla chyba. {{dataService.ErrorMessage}}
-  </div>
-
-  <div *ngIf="dataService.showSuccessMessage" class="alert alert-success mt-3" role="alert" flex align-items-center>
-    <div class="icon-wrapper success" margin-right>
-      <i class="far fa-check-circle"></i>
-    </div>
-    Model bol úspešne vytvorený.
-  </div>
-
-  <div *ngIf="dataService.loading" flex flex-column align-items-center>
-    <h4>Prebieha vytváranie modelu, počkajte prosím.</h4>
-    <!-- <mat-spinner></mat-spinner> -->
-  </div>
-
-</div>

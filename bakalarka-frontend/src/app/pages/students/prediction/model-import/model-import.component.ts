@@ -136,9 +136,11 @@ export class ModelImportComponent implements OnInit {
           let used_tables = this.model_details.used_tables.split(',')
           console.log(used_tables)
           for (var i = 0; i< used_tables.length; i+=1) {
-            used_tables[i] = this.map.get(used_tables[i])
-            this.model_details.used_tables = used_tables.join(',')
+            used_tables[i] = this.map.get(used_tables[i].trim())
+    
           }
+          console.log(used_tables)
+          this.model_details.used_tables = used_tables.join(', ')
           
           this.showDetails = true
           console.log(this.model_details)

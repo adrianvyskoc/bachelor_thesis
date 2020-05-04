@@ -12,6 +12,8 @@ import pickle
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import cross_val_score
 #treba nainstalovat cez pip psycopg2 aj pandas aj scikit-learn
 
 #Toto doriesit asi nejak lepsie
@@ -59,8 +61,8 @@ def predikcia_vytvorenie_sql_stringu(pouzite_tabulky):
         if (tabulka[0] in pouzite_tabulky):
             sql_query_string = sql_query_string + tabulka[1] + " "
     sql_query_string = sql_query_string + ' WHERE ais_admissions."OBDOBIE" = %s AND (ais_admissions."Rozh" = 10 OR ais_admissions."Rozh" = 11) AND ais_admissions."Štúdium" = \'áno\' AND ais_admissions.stupen_studia = \'Bakalársky\' '
-    if('entry_tests' in pouzite_tabulky):
-        sql_query_string = sql_query_string + ' AND entry_tests."OBDOBIE" = ais_admissions."OBDOBIE" '
+    # if('entry_tests' in pouzite_tabulky):
+    #     sql_query_string = sql_query_string + ' AND entry_tests."OBDOBIE" = ais_admissions."OBDOBIE" '
     return sql_query_string
 
 def prediction_uprava_kategoricke_na_numericke(data, cur, id_modelu):
@@ -137,6 +139,15 @@ def zisti_obdobia_na_trenovanie(sql_string, predmet_id):
     conn.close()
     return ','.join(pole_obdobi)
 
+def optimalizuj_model(x, y):
+    clf = DecisionTreeClassifier
+    cv_params = {'max_depth': list(range(1, 30, 3)), 'criterion': ['gini'], 'class_weight':['balanced'], 'min_samples_split': [2, 3, 4, 5, 13, 14, 15, 16, 17, 20], 'min_samples_leaf': [1, 2, 3, 5]}
+    ind_params = {}
+    opt = GridSearchCV(clf(**ind_params), cv_params, scoring = 'f1', cv = 5, n_jobs = -1, verbose=True)
+    opt.fit(x, y)
+    strom = opt.best_estimator_
+    return strom
+
 # -------------------simple_model -------------------------------
 
 def uprava_znamok_pre_binarnu_klas(vyber):
@@ -158,11 +169,11 @@ def vytvorenie_sql_stringu_simple_model(pole_vybranych_tabuliek, obdobia):
     for tabulka in slovnik:
         if (tabulka[0] in pole_vybranych_tabuliek):
             sql_query_string = sql_query_string + tabulka[1] + " "
-    sql_query_string = sql_query_string + """WHERE "PREDMET_ID" = %s AND ais_admissions."OBDOBIE" = ag."OBDOBIE" AND ag."SEMESTER" = 'winter' AND """
-    if('entry_tests' in pole_vybranych_tabuliek):
-        sql_query_string = sql_query_string + """entry_tests."OBDOBIE" = ais_admissions."OBDOBIE" AND ("""
-    else:
-        sql_query_string = sql_query_string + "("
+    sql_query_string = sql_query_string + """WHERE "PREDMET_ID" = %s AND ais_admissions."OBDOBIE" = ag."OBDOBIE" AND ag."SEMESTER" = 'winter' AND ("""
+    # if('entry_tests' in pole_vybranych_tabuliek):
+    #     sql_query_string = sql_query_string + """entry_tests."OBDOBIE" = ais_admissions."OBDOBIE" AND ("""
+    # else:
+    #     sql_query_string = sql_query_string + "("
     for i, obdobie in enumerate(obdobia):
         if (i == (len(obdobia) - 1)):
             sql_query_string = sql_query_string + 'ais_admissions."OBDOBIE" = \'' + obdobie + '\''
@@ -215,10 +226,10 @@ def create_simple_model(pole_vybranych_tabuliek, predmet_id, obdobia, nazov_mode
     x.drop(columns = "PREDMET_VYSLEDOK", inplace=True)
     
     #rozdelenie dat na trenovacie a testovacie
-    X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.33, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.1, random_state=42)
     
-    #ZATIAL DEFAULTNY STROM
-    strom = DecisionTreeClassifier()
+    strom = optimalizuj_model(X_train, y_train)
+    
     strom.fit(X_train, y_train)
     y_pred = strom.predict(X_test)
     
@@ -281,7 +292,7 @@ def vytvorenie_sql_stringu_komplex_model(pole_vybranych_tabuliek, obdobia):
     ELSE 0   END) as sucet_kreditov """
     sql_query_string = sql_query_string + ' FROM ais_admissions  '
     sql_query_string = sql_query_string + ' LEFT JOIN ais_grades ag on ag."AIS_ID" = ais_admissions."AIS_ID" LEFT JOIN ais_subjects on ag."PREDMET_ID" = ais_subjects.id '
-    sql_query_string = sql_query_string + ' WHERE ais_admissions."OBDOBIE" = ag."OBDOBIE" AND stupen_studia = \'Bakalársky\' AND ag."SEMESTER" = \'winter\' ('
+    sql_query_string = sql_query_string + ' WHERE ais_admissions."OBDOBIE" = ag."OBDOBIE" AND stupen_studia = \'Bakalársky\' AND ag."SEMESTER" = \'winter\' AND ('
    
     for i, obdobie in enumerate(obdobia):
         if (i == (len(obdobia) - 1)):
@@ -293,8 +304,8 @@ def vytvorenie_sql_stringu_komplex_model(pole_vybranych_tabuliek, obdobia):
     for tabulka in slovnik:
         if (tabulka[0] in pole_vybranych_tabuliek):
             sql_query_string = sql_query_string + tabulka[1] + " "
-    if('entry_tests' in pole_vybranych_tabuliek):
-        sql_query_string = sql_query_string + 'WHERE entry_tests."OBDOBIE" = ais_admissions."OBDOBIE"'
+    # if('entry_tests' in pole_vybranych_tabuliek):
+    #     sql_query_string = sql_query_string + 'WHERE entry_tests."OBDOBIE" = ais_admissions."OBDOBIE"'
     print(sql_query_string)
     return sql_query_string
 
@@ -336,10 +347,9 @@ def create_komplex_model(pole_vybranych_tabuliek, obdobia, nazov_modelu, cur):
     x.drop(columns = "riziko", inplace=True)
     
     #rozdelenie dat na trenovacie a testovacie
-    X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.33, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.1, random_state=42)
     
-    #ZATIAL DEFAULTNY STROM
-    strom = DecisionTreeClassifier()
+    strom = optimalizuj_model(X_train, y_train)
     strom.fit(X_train, y_train)
     y_pred = strom.predict(X_test)
     
