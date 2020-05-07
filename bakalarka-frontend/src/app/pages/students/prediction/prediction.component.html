@@ -8,7 +8,8 @@
       <form>
         <mat-form-field>
           <mat-label>Rok nastupu: </mat-label>
-          <input matInput type="text" placeholder="RRRR-RRRR" [formControl]="school_year" pattern="[0-9]{4}-[0-9]{4}" required/>
+          <input matInput type="text" placeholder="RRRR-RRRR" [formControl]="school_year" pattern="[0-9]{4}-[0-9]{4}"
+            required />
           <mat-error *ngIf="school_year.errors">
             Zadajte rok vo formáte RRRR-RRRR.
           </mat-error>
@@ -42,12 +43,8 @@
       <br>
       <br>
 
-      <button *ngIf = "risky_students" mat-raised-button color="primary" (click)="export_data_excel()">
-        Exportuj tabuľku
-      </button>
-      <br>
-      <span *ngIf = "risky_students">Exportuje podrobnejšie údaje o študentoch</span>
-
+      <h3 *ngIf="model_details"> Metriky použitého modelu</h3>
+      
       <table class="table" *ngIf="model_details">
         <tbody>
           <tr>
@@ -66,7 +63,7 @@
             <th>f1 makro</th>
             <td>{{model_details.f1}}</td>
           </tr>
-         
+
         </tbody>
       </table>
 
@@ -74,7 +71,7 @@
 
     <div class="col-lg-8">
 
-      
+
 
       <div flex flex-column margin-top>
         <div *ngIf="showErrorMessage" class="alert alert-danger mt-3" role="alert" flex align-items-center>
@@ -83,19 +80,27 @@
           </div>
           Pri spúšťaní predikcie nastala chyba. {{ErrorMessage}}
         </div>
-      
- 
-      
+
+
+
       </div>
 
-      <h3 *ngIf = "risky_students">Študenti identifikovaní ako rizikoví</h3>
+      <h3 *ngIf="risky_students">Študenti identifikovaní ako rizikoví</h3>
 
-     
-      <mat-form-field [hidden]="!risky_students">
-        <mat-label>Filter</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="">
-      </mat-form-field>
-
+      <div class=row>
+        <div class="col-sm-8">
+          <mat-form-field [hidden]="!risky_students">
+            <mat-label>Filter</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="">
+          </mat-form-field>
+        </div>
+        <div class="flow-md-right" class="col-sm-4"> 
+          <button *ngIf="risky_students" mat-raised-button color="primary" (click)="export_data_excel()">
+            Exportuj podrobnejšie údaje
+          </button>
+          
+        </div>
+      </div>
 
       <table mat-table *ngIf="risky_students" [dataSource]="data_source_risky_students" class="mat-elevation-z8">
         <ng-container matColumnDef="id">

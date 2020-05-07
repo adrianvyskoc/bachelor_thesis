@@ -16,7 +16,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import cross_val_score
 #treba nainstalovat cez pip psycopg2 aj pandas aj scikit-learn
 
-#Toto doriesit asi nejak lepsie
+#nastavenie pristupovych udajov do databazy
 database_name = "bakalarka"
 database_user = "postgres"
 database_password = "elahop"

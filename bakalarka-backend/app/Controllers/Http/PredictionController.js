@@ -23,45 +23,6 @@ a v routes je >
 
 class PredictionController {
 
-
-
-    async index({ response, request }) {
-
-        response.implicitEnd = false
-
-        var request = require('request')
-
-        function ping() {
-            return new Promise(function (fulfill, reject) {
-                request.get('http://localhost:5000/', function (error, response, body) {
-                    if (!error) {
-                        fulfill(body);
-                        console.log(body)
-                        console.log("uspech")
-                    }
-                    else {
-                        reject(error, response)
-                        console.log("chyba")
-                    }
-                });
-            });
-        }
-
-        ping().then(
-            function (result) {
-                console.log("uspech v then");
-                console.log(result)
-
-                response.send(result);
-            },
-            function (error) {
-                console.log("error v then");
-            }
-        );
-
-    }
-
-
     async predict({ response, request }) {
         const request_params = await request.all()
 
@@ -71,10 +32,20 @@ class PredictionController {
         school_year = request_params.school_year
         model_id = request_params.model_id
 
-        console.log(school_year)
-        console.log(model_id)
+        //console.log(school_year)
+        //console.log(model_id)
 
         //predikcny model musi existovat, lebo sa zobrazuju len modely, ktore su v DB
+
+        //kontrola validity akademickeho roku
+        const roky = school_year.split('-')
+        
+        if (roky.length != 2 || (parseInt(roky[0]) + 1 != parseInt(roky[1]))) {
+            //console.log("zly rok")
+            return response
+                .status(500)
+                .send("Nezadali ste validný akademický rok.")
+        }
 
         //kontrola, ci su importovane data z daneho roku
         //ais_admission musi byt vzdy
@@ -155,9 +126,9 @@ class PredictionController {
             },
             function (error) {
                 if (error != null && error.code == 'ECONNREFUSED') {
-                    return response.status(505).send("Skontrolujte, či máte spustený Flask")
+                    return response.status(505).send("Skontrolujte, či máte spustenú predikčnú časť (Flask).")
                 }
-                return response.status(505).send("Chyba v Pythone")
+                return response.status(505).send("Chyba v predikčnej časti")
             }
         );
 
