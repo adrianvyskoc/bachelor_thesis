@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Form, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { PredictionService } from '../prediction.service';
+import {MatSelectionList, MatListOption} from '@angular/material/list';
 
 @Component({
   selector: 'app-model-create',
@@ -8,12 +9,15 @@ import { PredictionService } from '../prediction.service';
   styleUrls: ['./model-create.component.scss']
 })
 export class ModelCreateComponent implements OnInit {
+  @ViewChild('list_years', {static: false}) private list_years: MatSelectionList; 
+  @ViewChild('list_tables', {static: false}) private list_tables: MatSelectionList; 
 
   //new_model: FormGroup
   name_of_model = new FormControl('', [Validators.required])
   years: FormGroup
   tables: FormGroup
   subjects: FormControl
+  
 
   //z databazy
   available_years: any = []
@@ -25,6 +29,9 @@ export class ModelCreateComponent implements OnInit {
 
   selected_subject = ''
   selected_name = ''
+
+  selectedYears: string[] = []
+  selectedTables: string[] = []
 
   map = new Map<string, string>()
 
@@ -45,6 +52,17 @@ export class ModelCreateComponent implements OnInit {
   // })
 
   ngOnInit() {
+
+    if (this.dataService.subsVarReset == undefined) {
+      this.dataService.subsVarReset = this.dataService.invokeResetForm.subscribe(
+        (data)=>{
+          this.list_tables.deselectAll()
+          this.list_years.deselectAll()
+          this.name_of_model.reset()
+          this.subjects.reset()
+        }
+      )
+    }
 
     this.map.set("ais_admissions", "prijímacie konanie")
     this.map.set("ineko_percentils", "INEKO percentily")
@@ -96,45 +114,57 @@ export class ModelCreateComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log(this.selectedYears)
+    console.log(this.selectedTables)
     this.selected_name = this.name_of_model.value
     this.selected_subject = this.subjects.value
-    const selected_years = this.years.get('available_years').value
-    const selected_tables = this.tables.get('available_tables').value
+    
+    // const selected_years = this.years.get('available_years').value
+    // const selected_tables = this.tables.get('available_tables').value
 
-    console.log(this.selected_name + this.selected_subject + selected_years + selected_tables)
+    // console.log(this.selected_name + this.selected_subject + selected_years + selected_tables)
 
-    this.dataService.create_model(this.selected_name, this.selected_subject, selected_years, selected_tables)
+    this.dataService.create_model(this.selected_name, this.selected_subject, this.selectedYears, this.selectedTables)
+  
     this.dataService.loading = true
     
   }
 
-  onChange_years(event) {
-    const available_years = <FormArray>this.years.get('available_years') as FormArray
-
-    if(event.checked) {
-      available_years.push(new FormControl(event.source.value))
-    } else {
-      const i = available_years.controls.findIndex(x => x.value === event.source.value);
-      available_years.removeAt(i);
-    }
+  selectAllYears(){
+    this.list_years.selectAll();
   }
 
-  onChange_tables(event) {
-    const available_tables = <FormArray>this.tables.get('available_tables') as FormArray
-
-    if(event.checked) {
-      available_tables.push(new FormControl(event.source.value))
-    } else {
-      const i = available_tables.controls.findIndex(x => x.value === event.source.value);
-      available_tables.removeAt(i);
-    }
+  selectAllTables() {
+    this.list_tables.selectAll();
   }
 
-  reset_form() {
+  // onChange_years(event) {
+  //   const available_years = <FormArray>this.years.get('available_years') as FormArray
+
+  //   if(event.checked) {
+  //     available_years.push(new FormControl(event.source.value))
+  //   } else {
+  //     const i = available_years.controls.findIndex(x => x.value === event.source.value);
+  //     available_years.removeAt(i);
+  //   }
+  // }
+
+  // onChange_tables(event) {
+  //   const available_tables = <FormArray>this.tables.get('available_tables') as FormArray
+
+  //   if(event.checked) {
+  //     available_tables.push(new FormControl(event.source.value))
+  //   } else {
+  //     const i = available_tables.controls.findIndex(x => x.value === event.source.value);
+  //     available_tables.removeAt(i);
+  //   }
+  // }
+
+  // reset_form() {
     
-    this.ngOnInit()
-    //vsetko odznacit
-  }
+  //   this.ngOnInit()
+  //   //vsetko odznacit
+  // }
 
  
 }

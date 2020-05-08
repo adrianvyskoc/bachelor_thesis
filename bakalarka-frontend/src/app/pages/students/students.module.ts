@@ -13,7 +13,7 @@ import { ModelImportComponent } from './prediction/model-import/model-import.com
 import { HttpClientModule } from '@angular/common/http';
 import { ModelCreateComponent } from './prediction/model-create/model-create.component'
 import { ChartModule } from 'src/app/plugins/chart/chart.module';
-import { MatPaginatorModule, MatSortModule, MatTooltipModule, MatInputModule, MatIconModule, MatProgressSpinnerModule, MatSelectModule } from '@angular/material';
+import { MatPaginatorModule, MatSortModule, MatTooltipModule, MatInputModule, MatIconModule, MatProgressSpinnerModule, MatSelectModule, MatListModule } from '@angular/material';
 import { MatTabsModule, MatButtonModule, MatTableModule, MatDialogModule } from '@angular/material';
 import { DemoComponent } from './demo/demo.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -36,6 +36,7 @@ import { ListDiplomasDialogComponent } from './listDiplomas-dialog/listDiplomas-
     MatCheckboxModule,
     MatFormFieldModule,
     MatDividerModule,
+    MatListModule,
     
     CommonModule,
     StudentsRoutingModule,

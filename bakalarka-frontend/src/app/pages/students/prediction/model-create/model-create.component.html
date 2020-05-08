@@ -8,8 +8,8 @@
 </div>
 
 
-<form (ngSubmit)="onSubmit()" *ngIf="!serverError">
-  <!-- *ngIf = "this.complete_form"  -->
+<div *ngIf="!serverError">
+  <!-- (ngSubmit)="onSubmit()" -->
   <mat-form-field>
     <mat-label>Názov modelu: </mat-label>
     <input matInput type="text" placeholder="" [formControl]="name_of_model" [(ngModel)]="this.selected_name" />
@@ -17,7 +17,7 @@
   </mat-form-field>
   <div class="row">
     <div class="col">
-      <div [formGroup]="years">
+      <!-- <div [formGroup]="years">
         <p>Vyberte obdobia, na ktorých sa bude model trénovať:</p>
 
         <div *ngFor="let year of available_years; let i = index">
@@ -25,10 +25,19 @@
         </div>
         <span class="text-muted">Zobrazujú sa školské roky, pre ktoré sú importované známky.</span>
 
-      </div>
+      </div> -->
+      <p>Vyberte obdobia, na ktorých sa bude model trénovať:</p>
+      <button mat-raised-button class="btn-block" color="secondary" (click)="selectAllYears()">Vybrať všetky</button>
+
+      <mat-selection-list #list_years [(ngModel)]="selectedYears" [ngModelOptions]="{standalone: true}">
+        <mat-list-option *ngFor="let year of available_years" [value]="year" [checkboxPosition]="before">
+          {{year}}
+        </mat-list-option>
+      </mat-selection-list>
+      <span class="text-muted">Zobrazujú sa školské roky, pre ktoré sú importované známky.</span>
     </div>
     <div class="col">
-      <div [formGroup]="tables">
+      <!-- <div [formGroup]="tables">
         <p>Vyberte dáta, ktoré sa majú použiť na trénovanie modelu:</p>
         <div *ngFor="let table of available_tables; let i = index">
           <mat-checkbox [value]="table" (change)="onChange_tables($event)"> {{map.get(table)}} </mat-checkbox>
@@ -37,7 +46,19 @@
         <br>
         <span *ngIf="available_tables.indexOf('entry_tests') !== -1" class="text-muted">POZOR! Vstupné testy máte
           importované iba pre roky: {{ entry_tests_years }} </span>
-      </div>
+      </div> -->
+      <p>Vyberte dáta, ktoré sa majú použiť na trénovanie modelu:</p>
+      <button mat-raised-button class="btn-block" color="secondary" (click)="selectAllTables()">Vybrať všetky</button>
+
+      <mat-selection-list #list_tables [(ngModel)]="selectedTables" [ngModelOptions]="{standalone: true}">
+        <mat-list-option *ngFor="let table of available_tables" [value]="table" [checkboxPosition]="before">
+          {{map.get(table)}}
+        </mat-list-option>
+      </mat-selection-list>
+      <span class="text-muted">Zobrazujú sa tabuľky, v ktorých sú importované dáta.</span>
+      <br>
+      <span *ngIf="available_tables.indexOf('entry_tests') !== -1" class="text-muted">POZOR! Vstupné testy máte
+        importované iba pre roky: {{ entry_tests_years }} </span>
     </div>
     <div class="col">
       <p>Vyberte predmet, pre ktorý chcete vytvoriť model.</p>
@@ -76,6 +97,6 @@
     </div>
 
   </div>
-  <button mat-raised-button color="primary">Spustiť trénovanie modelu</button>
+  <button mat-raised-button [disabled]="selectedYears.length == 0 || selectedTables.length == 0 || name_of_model.value == '' || subjects.value == ''" color="primary" (click)="onSubmit()">Spustiť trénovanie modelu</button>
 
-</form>
+</div>

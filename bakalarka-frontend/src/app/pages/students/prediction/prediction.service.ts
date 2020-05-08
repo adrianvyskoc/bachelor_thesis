@@ -1,8 +1,9 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, Subscription } from 'rxjs';
 import { IResponse } from './IResponse';
 import { IRiskyStudent } from './IRiskyStudent';
+import { MatSelectionList } from '@angular/material';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class PredictionService {
   loading = false
   showErrorMessage = false
   showSuccessMessage = false
+ 
 
  
 
@@ -27,9 +29,15 @@ export class PredictionService {
    invokeRefreshModelPrediction = new EventEmitter();    
    subsVarPrediction: Subscription;
 
+   //reset formulara po vytvoreni noveho modelu
+  
+   invokeResetForm = new EventEmitter();    
+   subsVarReset: Subscription;
+
   RefreshAvailableModels() {
     this.invokeRefreshModelImport.emit()
     this.invokeRefreshModelPrediction.emit()
+    this.invokeResetForm.emit()
   }
 
 
@@ -88,12 +96,14 @@ export class PredictionService {
       res => {
         this.loading = false
         this.showSuccessMessage = true
+        
 
         setTimeout(() => {
           this.showSuccessMessage = false
         }, 5000)
 
         this.RefreshAvailableModels()
+       
 
       },
       error => {
