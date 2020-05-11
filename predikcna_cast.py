@@ -187,6 +187,9 @@ def create_simple_model(pole_vybranych_tabuliek, predmet_id, obdobia, nazov_mode
     cur.execute(sql_string, (predmet_id, ))
     
     data = DataFrame(cur.fetchall())
+    if (cur.rowcount == 0):
+        print("Ziadne data na trenovanie")
+        raise ValueError
     colnames = [desc[0] for desc in cur.description]
     data.columns = colnames
     
@@ -303,6 +306,9 @@ def create_komplex_model(pole_vybranych_tabuliek, obdobia, nazov_modelu, cur):
     cur.execute(sql_string)
     
     data = DataFrame(cur.fetchall())
+    if (cur.rowcount == 0):
+        print("Ziadne data na trenovanie")
+        raise ValueError
     colnames = [desc[0] for desc in cur.description]
     data.columns = colnames
     
