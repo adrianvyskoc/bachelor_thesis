@@ -43,14 +43,6 @@ export class ModelCreateComponent implements OnInit {
 
    }
 
-  
-
-
-  // new_model = new FormGroup( {
-  //   name_of_model: new FormControl(''),
-  //   years: FormGroup
-  // })
-
   ngOnInit() {
 
     if (this.dataService.subsVarReset == undefined) {
@@ -71,9 +63,7 @@ export class ModelCreateComponent implements OnInit {
     this.map.set("ineko_schools", "INEKO školy")
     this.map.set("entry_tests", "Vstupné testy")
 
-    
-
-    //this.available_years = ['2017-2018', '2018-2019']
+  
 
     this.dataService.get_data_for_create_form().subscribe(
       (data) => {
@@ -97,33 +87,14 @@ export class ModelCreateComponent implements OnInit {
       (error) => {
         this.serverError = true
       }
-    )
-
-    
-    // const formControls_years = this.available_years.map(control => new FormControl(false));
-
-
-    // this.new_model = new FormGroup ( {
-    //   name_of_model: new FormControl(''),
-    //   years: this.fb.group( {
-    //     available_years: new FormArray(formControls_years)
-    //   })
-    // })
-    
+    )  
  
   }
 
   onSubmit() {
-    console.log(this.selectedYears)
-    console.log(this.selectedTables)
+   
     this.selected_name = this.name_of_model.value
     this.selected_subject = this.subjects.value
-    
-    // const selected_years = this.years.get('available_years').value
-    // const selected_tables = this.tables.get('available_tables').value
-
-    // console.log(this.selected_name + this.selected_subject + selected_years + selected_tables)
-
     this.dataService.create_model(this.selected_name, this.selected_subject, this.selectedYears, this.selectedTables)
   
     this.dataService.loading = true
@@ -138,33 +109,5 @@ export class ModelCreateComponent implements OnInit {
     this.list_tables.selectAll();
   }
 
-  // onChange_years(event) {
-  //   const available_years = <FormArray>this.years.get('available_years') as FormArray
-
-  //   if(event.checked) {
-  //     available_years.push(new FormControl(event.source.value))
-  //   } else {
-  //     const i = available_years.controls.findIndex(x => x.value === event.source.value);
-  //     available_years.removeAt(i);
-  //   }
-  // }
-
-  // onChange_tables(event) {
-  //   const available_tables = <FormArray>this.tables.get('available_tables') as FormArray
-
-  //   if(event.checked) {
-  //     available_tables.push(new FormControl(event.source.value))
-  //   } else {
-  //     const i = available_tables.controls.findIndex(x => x.value === event.source.value);
-  //     available_tables.removeAt(i);
-  //   }
-  // }
-
-  // reset_form() {
-    
-  //   this.ngOnInit()
-  //   //vsetko odznacit
-  // }
-
- 
+  
 }

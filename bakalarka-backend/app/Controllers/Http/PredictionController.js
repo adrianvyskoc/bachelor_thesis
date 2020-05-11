@@ -59,6 +59,7 @@ class PredictionController {
             .where('stupen_studia', 'Bakalársky')
             .getCount()
 
+        console.log(count_admissions)
         if (count_admissions == 0) {
             console.log("chyba ais_admissions")
             return response
@@ -72,7 +73,7 @@ class PredictionController {
             .from('prediction_models')
             .where('id', model_id)
 
-        console.log(tables[0].used_tables)
+        //console.log(tables[0].used_tables)
         let used_tables = tables[0].used_tables.split(',')
 
         for (var i = 0; i < used_tables.length; i++) {
@@ -113,6 +114,8 @@ class PredictionController {
                 const pole_ais_id = result.split(',')
                 const data = []
 
+                //console.log(result)
+                //console.log(pole_ais_id)
                 for (var i = 0; i < pole_ais_id.length; i++) {
                     let student = await Database.select('AIS_ID', 'Meno', 'Priezvisko', 'Body', 'Body_celkom', 'Prijatie_na_program_1', 'Stredná_škola_1', 'Stredná_škola_adresa', 'Trv_pobyt_obec')
                         .from('ais_admissions')
@@ -405,7 +408,7 @@ class PredictionController {
                 request.get(request_string, function (error, response, body) {
                     if (!error) {
                         fulfill(body);
-                        console.log("telo" + body)
+                       
                     }
                     else {
                         reject(error, response)
@@ -424,7 +427,7 @@ class PredictionController {
             },
             function (error) {
                 console.log(error);
-                console.log()
+                
                 if (error.code == 'ECONNREFUSED') {
                     return response.status(505).send("Skontrolujte, či máte spustený Flask")
                 }

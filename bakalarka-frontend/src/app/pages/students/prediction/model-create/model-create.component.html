@@ -9,7 +9,6 @@
 
 
 <div *ngIf="!serverError">
-  <!-- (ngSubmit)="onSubmit()" -->
   <mat-form-field>
     <mat-label>Názov modelu: </mat-label>
     <input matInput type="text" placeholder="" [formControl]="name_of_model" [(ngModel)]="this.selected_name" />
@@ -17,15 +16,7 @@
   </mat-form-field>
   <div class="row">
     <div class="col">
-      <!-- <div [formGroup]="years">
-        <p>Vyberte obdobia, na ktorých sa bude model trénovať:</p>
-
-        <div *ngFor="let year of available_years; let i = index">
-          <mat-checkbox [value]="year" (change)="onChange_years($event)"> {{year}} </mat-checkbox>
-        </div>
-        <span class="text-muted">Zobrazujú sa školské roky, pre ktoré sú importované známky.</span>
-
-      </div> -->
+    
       <p>Vyberte obdobia, na ktorých sa bude model trénovať:</p>
       <button mat-raised-button class="btn-block" color="secondary" (click)="selectAllYears()">Vybrať všetky</button>
 
@@ -37,17 +28,7 @@
       <span class="text-muted">Zobrazujú sa školské roky, pre ktoré sú importované známky.</span>
     </div>
     <div class="col">
-      <!-- <div [formGroup]="tables">
         <p>Vyberte dáta, ktoré sa majú použiť na trénovanie modelu:</p>
-        <div *ngFor="let table of available_tables; let i = index">
-          <mat-checkbox [value]="table" (change)="onChange_tables($event)"> {{map.get(table)}} </mat-checkbox>
-        </div>
-        <span class="text-muted">Zobrazujú sa tabuľky, v ktorých sú importované dáta.</span>
-        <br>
-        <span *ngIf="available_tables.indexOf('entry_tests') !== -1" class="text-muted">POZOR! Vstupné testy máte
-          importované iba pre roky: {{ entry_tests_years }} </span>
-      </div> -->
-      <p>Vyberte dáta, ktoré sa majú použiť na trénovanie modelu:</p>
       <button mat-raised-button class="btn-block" color="secondary" (click)="selectAllTables()">Vybrať všetky</button>
 
       <mat-selection-list #list_tables [(ngModel)]="selectedTables" [ngModelOptions]="{standalone: true}">
@@ -90,8 +71,8 @@
         </div>
 
         <div *ngIf="dataService.loading" flex flex-column align-items-center>
+          <mat-spinner></mat-spinner>
           <h4>Prebieha vytváranie modelu, počkajte prosím.</h4>
-          <!-- <mat-spinner></mat-spinner> -->
         </div>
       </div>
     </div>
