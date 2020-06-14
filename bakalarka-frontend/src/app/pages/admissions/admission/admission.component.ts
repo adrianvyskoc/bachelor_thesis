@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { ExportService } from 'src/app/plugins/utils/export.service';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 import { DataService } from 'src/app/shared/data.service';
 import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 import { Subscription } from 'rxjs';

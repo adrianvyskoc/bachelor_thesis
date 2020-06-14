@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PredictionService } from './prediction.service';
 import { FormControl, Validators } from '@angular/forms';
 import { IRiskyStudent } from './IRiskyStudent';
-import { MatTableDataSource, MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { ExportService } from 'src/app/plugins/utils/export.service';
 
 @Component({

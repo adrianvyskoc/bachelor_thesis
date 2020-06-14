@@ -1,6 +1,8 @@
 import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 import { AdmissionsFilterService } from '../../admissions-filter.service';
-import { MatSort, MatPaginator, MatSortBase, MatTableDataSource } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-schools-overview',
@@ -9,12 +11,12 @@ import { MatSort, MatPaginator, MatSortBase, MatTableDataSource } from '@angular
 })
 export class SchoolsOverviewComponent implements OnChanges {
 
-  @ViewChild('paginator', {static: false})
+  @ViewChild('paginator')
   set setPaginator(paginator: MatPaginator) {
     if(this.chosenSchool)
       this.chosenSchool.admissions.paginator = paginator
   }
-  @ViewChild(MatSort, {static: false}) sort: MatSortBase
+  @ViewChild(MatSort) sort: MatSort
 
   @Input() schools = []
 
@@ -40,7 +42,7 @@ export class SchoolsOverviewComponent implements OnChanges {
    * Funkcia, ktorá aplikuje filtrovanie na školy podľa zvolených kritérií
    */
    filterSchools() {
-    if (this.schoolsToShow == 'all') {
+    if (this.schoolsToShow == 'all') {
       this.filteredSchools = this.schools
     } else if (this.schoolsToShow == 'some') {
       this.filteredSchools = this.schools.filter(school => school.admissions.length)

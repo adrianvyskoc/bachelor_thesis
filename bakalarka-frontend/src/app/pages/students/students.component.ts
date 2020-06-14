@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { DataService } from 'src/app/shared/data.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { DiplomaDialogComponent } from './diploma-dialog/diploma-dialog.component';
 import { ListDiplomasDialogComponent } from './listDiplomas-dialog/listDiplomas-dialog.component';
 
@@ -9,7 +9,9 @@ import { ExportService } from 'src/app/plugins/utils/export.service';
 import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 import { Title } from '@angular/platform-browser';
 
-import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -19,8 +21,8 @@ import { Subscription } from 'rxjs';
 })
 export class StudentsComponent implements OnInit, OnDestroy {
   
-  @ViewChild('paginator', {static: false}) paginator: MatPaginator
-  @ViewChild('admSort', {static: false}) admSort: MediaStreamErrorEventInit
+  @ViewChild('paginator') paginator: MatPaginator
+  @ViewChild('admSort') admSort: MediaStreamErrorEventInit
 
   showFilter = true
   showLabels = false

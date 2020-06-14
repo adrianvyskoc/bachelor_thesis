@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
   authResult: any  
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private accountService: AccountsService,
   ) { }
 

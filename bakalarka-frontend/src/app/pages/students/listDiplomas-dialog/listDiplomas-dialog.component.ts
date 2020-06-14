@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DataService } from 'src/app/shared/data.service';
 import { DiplomaService } from '../diploma.service';
 import { TocUtil } from 'src/app/plugins/utils/toc.utll';

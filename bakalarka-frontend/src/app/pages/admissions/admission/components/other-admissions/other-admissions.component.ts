@@ -1,5 +1,7 @@
 import { Component, Input, ViewChild, OnChanges } from '@angular/core';
-import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-other-admissions',
@@ -8,8 +10,8 @@ import { MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
 })
 export class OtherAdmissionsComponent implements OnChanges {
 
-  @ViewChild('paginator', {static: false}) paginator: MatPaginator
-  @ViewChild(MatSort, {static: false}) sort: MatSort
+  @ViewChild('paginator') paginator: MatPaginator
+  @ViewChild(MatSort) sort: MatSort
 
   @Input() admissions
 

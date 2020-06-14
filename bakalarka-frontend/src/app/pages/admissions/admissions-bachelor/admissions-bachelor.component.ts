@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { ExportService } from 'src/app/plugins/utils/export.service';
 import { DataService } from 'src/app/shared/data.service';
 import { TocUtil } from 'src/app/plugins/utils/toc.utll';
@@ -12,8 +14,8 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./admissions-bachelor.component.scss']
 })
 export class AdmissionsBachelorComponent implements OnInit, OnDestroy {
-  @ViewChild('paginator', {static: false}) paginator: MatPaginator
-  @ViewChild('admSort', {static: false}) admSort: MediaStreamErrorEventInit
+  @ViewChild('paginator') paginator: MatPaginator
+  @ViewChild('admSort') admSort: MediaStreamErrorEventInit
 
   showFilter = true
   showLabels = false

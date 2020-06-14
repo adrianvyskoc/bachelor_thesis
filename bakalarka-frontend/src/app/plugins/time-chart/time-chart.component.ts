@@ -18,7 +18,7 @@ export class TimeChartComponent implements OnChanges {
   @Input() group: boolean = false
 
   @ViewChild('canvas', {static: true}) canvas
-  @ViewChild('download', {static: false}) download
+  @ViewChild('download') download
   chart
 
   constructor() { }

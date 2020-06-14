@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, Inject } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 import { ExamIng, Param } from 'src/app/model';
 import { StateFinalExamsService } from '../../services/state-final-exams.service';
 import { ExportService } from 'src/app/plugins/utils/export.service';

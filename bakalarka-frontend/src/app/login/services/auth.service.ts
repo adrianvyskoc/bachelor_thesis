@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  loggedIn: boolean
-  isAdmin: boolean
+  public loggedIn: boolean
+  public isAdmin: boolean
 
   constructor(
     private http: HttpClient,

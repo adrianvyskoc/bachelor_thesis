@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ExportService } from 'src/app/plugins/utils/export.service';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { DataService } from 'src/app/shared/data.service';
 import { AdmissionsUtil } from '../admissions.util';
 import { Title } from '@angular/platform-browser';
@@ -13,8 +15,8 @@ import { TocUtil } from 'src/app/plugins/utils/toc.utll';
   styleUrls: ['./admissions-master.component.scss']
 })
 export class AdmissionsMasterComponent implements OnInit, OnDestroy {
-  @ViewChild('paginator', {static: false}) paginator: MatPaginator
-  @ViewChild(MatSort, {static: false}) sort: MatSort
+  @ViewChild('paginator') paginator: MatPaginator
+  @ViewChild(MatSort) sort: MatSort
 
   showFilter = true
   showLabels = false

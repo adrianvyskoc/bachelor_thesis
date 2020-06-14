@@ -31,10 +31,9 @@ export class DataService {
 
   private admissionsDiplomasYearComparisonChanged = new Subject<{}>()
 
-  loading = false
+  public loading = false
   showErrorMessage = false
   showSuccessMessage = false
- 
 
   constructor(
     private http: HttpClient

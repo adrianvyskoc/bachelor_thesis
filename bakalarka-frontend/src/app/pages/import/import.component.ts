@@ -3,7 +3,7 @@ import { DataService } from 'src/app/shared/data.service';
 import { Title } from '@angular/platform-browser';
 
 import * as XLSX from 'xlsx';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { MappingDialogComponent } from './mapping-dialog/mapping-dialog.component';
 import { TocUtil } from 'src/app/plugins/utils/toc.utll';
 
@@ -13,7 +13,7 @@ import { TocUtil } from 'src/app/plugins/utils/toc.utll';
   styleUrls: ['./import.component.scss']
 })
 export class ImportComponent implements OnInit {
-  @ViewChild('fileInput', {static: false}) fileInput: ElementRef;
+  @ViewChild('fileInput') fileInput: ElementRef;
 
 
   selectedFile: File = null
